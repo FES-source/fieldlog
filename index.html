@@ -1,4 +1,4 @@
-<!-- FieldLog v1.1.1 | Build: 2026-03-13 | Firebase Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.1.2 | Build: 2026-03-13 | Firebase Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,13 +6,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FieldLog</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@600;700;900&display=swap" rel="stylesheet">
-<!-- Firebase SDK -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
-import { getStorage, ref, uploadString, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-storage.js";
-
+<!-- Firebase SDK (compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+<script>
 const firebaseConfig = {
   apiKey: "AIzaSyAfbJ_RPrRNYjnd3VpxoxKC9NM6GBgbEFk",
   authDomain: "fieldlog-b8606.firebaseapp.com",
@@ -21,19 +20,31 @@ const firebaseConfig = {
   messagingSenderId: "348066593345",
   appId: "1:348066593345:web:f0cb61b92e38d135e964c0"
 };
+firebase.initializeApp(firebaseConfig);
+window.fbAuth = firebase.auth();
+window.fbDB = firebase.firestore();
+window.fbStorage = firebase.storage();
 
-const fbApp = initializeApp(firebaseConfig);
-window.fbAuth = getAuth(fbApp);
-window.fbDB = getFirestore(fbApp);
-window.fbStorage = getStorage(fbApp);
+// Wrap functions to match our API
 window.fbFns = {
-  signInWithEmailAndPassword, signOut, onAuthStateChanged,
-  collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, onSnapshot,
-  ref, uploadString, getDownloadURL, deleteObject
+  signInWithEmailAndPassword: (auth, email, pass) => auth.signInWithEmailAndPassword(email, pass),
+  signOut: (auth) => auth.signOut(),
+  onAuthStateChanged: (auth, cb) => auth.onAuthStateChanged(cb),
+  collection: (db, col) => db.collection(col),
+  doc: (db, col, id) => db.collection(col).doc(id),
+  getDoc: (ref) => ref.get(),
+  getDocs: (ref) => ref.get(),
+  setDoc: (ref, data) => ref.set(data),
+  updateDoc: (ref, data) => ref.update(data),
+  deleteDoc: (ref) => ref.delete(),
+  onSnapshot: (ref, cb) => ref.onSnapshot(cb),
+  ref: (storage, path) => storage.ref(path),
+  uploadString: (ref, data, format) => ref.putString(data, format),
+  getDownloadURL: (ref) => ref.getDownloadURL(),
+  deleteObject: (ref) => ref.delete()
 };
 
-// Auth state change
-onAuthStateChanged(window.fbAuth, user => {
+firebase.auth().onAuthStateChanged(user => {
   window._fbUid = user ? user.uid : null;
 });
 </script>
@@ -3156,7 +3167,7 @@ async function doLogin(){
     const cred=await fbFns.signInWithEmailAndPassword(fbAuth,u,p);
     const uid=cred.user.uid;
     const snap=await fbFns.getDoc(fbFns.doc(fbDB,'users',uid));
-    if(!snap.exists()){throw new Error('No user profile');}
+    if(!snap.exists){throw new Error('No user profile');}
     const user={id:uid,...snap.data()};
     if(user.status!=='Active'){throw new Error('Inactive user');}
     err.style.display='none';
@@ -3372,11 +3383,10 @@ async function loadAllData(){
 
 async function seedAdmin(){
   // Create admin user in Firebase Auth and Firestore
-  const {createUserWithEmailAndPassword}=await import("https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js");
   try{
     const adminEmail='admin@fieldlog.app';
     const adminPass='admin123';
-    const cred=await createUserWithEmailAndPassword(fbAuth,adminEmail,adminPass);
+    const cred=await fbAuth.createUserWithEmailAndPassword(adminEmail,adminPass);
     const adminData={username:adminEmail,name:'Administrador',email:adminEmail,role:'admin',
       status:'Active',projects:[],perms:['view_reports','create_reports','approve_reports',
       'manage_projects','manage_users','manage_materials','manage_checklists','customer_signoff'],
@@ -3595,8 +3605,7 @@ async function saveUser(){
     if(pass.length<6){toast('PASSWORD MIN 6 CHARS','var(--rd)');return;}
     let fbUid='usr'+Date.now();
     try{
-      const {createUserWithEmailAndPassword}=await import("https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js");
-      const fbCred=await createUserWithEmailAndPassword(fbAuth,data.email||fbUid+'@fieldlog.app',pass);
+      const fbCred=await fbAuth.createUserWithEmailAndPassword(data.email||fbUid+'@fieldlog.app',pass);
       fbUid=fbCred.user.uid;
     }catch(authErr){console.warn('Auth create error:',authErr);}
     const nu={id:fbUid,...data,createdAt:new Date().toISOString()};DB.users.push(nu);fbSave('users',fbUid,nu).catch(console.error);
