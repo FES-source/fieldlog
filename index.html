@@ -1,4 +1,4 @@
-<!-- FieldLog v1.2.6 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.2.7 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3179,8 +3179,10 @@ async function doLogin(){
     if(newProjBtn)newProjBtn.style.display=(['admin','manager'].includes(user.role)||(user.perms||[]).includes('manage_projects'))?'inline-flex':'none';
     goPage('dashboard');
   }
+  if(!currentUser.lang)currentUser.lang='es';
   updateNavBadge();
   applyLang();
+  renderDash();
   }catch(e){
     console.error('Login error:',e);
     err.style.display='block';
