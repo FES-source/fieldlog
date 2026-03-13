@@ -1,4 +1,4 @@
-<!-- FieldLog v1.2.8 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.2.9 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3239,6 +3239,8 @@ function applyLang(){
   if(workSvl)workSvl.textContent=es?'Cuadrilla':'Workforce';
   const workSvs=document.querySelector('.svs[data-i18n="members"]');
   if(workSvs)workSvs.textContent=es?'Miembros':'Members';
+  // Re-render dash if visible to apply language
+  if(document.getElementById('page-dashboard')?.style.display!=='none')renderDash();
   _setTxt('ph-tf-title',es?'Cuadrilla':'Taskforce');
   _setTxt('btn-add-worker-txt',es?'＋ Nuevo Miembro':'＋ New Member');
 
