@@ -1,4 +1,4 @@
-<!-- FieldLog v1.0.0 | Build: 2026-03-13 | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.1.0 | Build: 2026-03-13 | Firebase Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +6,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FieldLog</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@600;700;900&display=swap" rel="stylesheet">
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+import { getStorage, ref, uploadString, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAfbJ_RPrRNYjnd3VpxoxKC9NM6GBgbEFk",
+  authDomain: "fieldlog-b8606.firebaseapp.com",
+  projectId: "fieldlog-b8606",
+  storageBucket: "fieldlog-b8606.firebasestorage.app",
+  messagingSenderId: "348066593345",
+  appId: "1:348066593345:web:f0cb61b92e38d135e964c0"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+window.fbAuth = getAuth(fbApp);
+window.fbDB = getFirestore(fbApp);
+window.fbStorage = getStorage(fbApp);
+window.fbFns = {
+  signInWithEmailAndPassword, signOut, onAuthStateChanged,
+  collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, onSnapshot,
+  ref, uploadString, getDownloadURL, deleteObject
+};
+
+// Auth state change
+onAuthStateChanged(window.fbAuth, user => {
+  window._fbUid = user ? user.uid : null;
+});
+<\/script>
 <style>
 :root{
   --bg:#0f0f0f;--sf:#181818;--s2:#1f1f1f;--s3:#272727;--bd:#303030;
@@ -374,9 +405,9 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="llogo">Field<span>Log</span></div>
     <div class="lsub" data-i18n="app_subtitle">Sistema de Informes de Campo</div>
     <div class="lerr" id="lerr">Invalid username or password.</div>
-    <div style="margin-bottom:10px;"><label data-i18n="user_username">Usuario</label><input type="text" id="lin-u" placeholder="Usuario" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div style="margin-bottom:10px;"><label data-i18n="user_username">Usuario</label><input type="text" id="lin-u" placeholder="email@empresa.com" autocomplete="email" type="email" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <div style="margin-bottom:18px;"><label data-i18n="user_password">Contraseña</label><input type="password" id="lin-p" placeholder="Contraseña" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <button class="btn bp" style="width:100%;justify-content:center;padding:11px;" onclick="doLogin()">Sign In ›</button>
+    <button class="btn bp" style="width:100%;justify-content:center;padding:11px;" onclick="doLogin()" id="login-btn">Iniciar Sesión ›</button>
     <div style="margin-top:18px;background:var(--s2);border:1px solid var(--bd);padding:10px 12px;font-family:var(--mo);font-size:9px;color:var(--mu);letter-spacing:1px;">
       DEFAULT ADMIN<br><span style="color:var(--am);">admin / admin123</span>
     </div>
@@ -1108,73 +1139,11 @@ function t(key){const lang=(currentUser?.lang)||'es';return (I18N[lang]||I18N.es
 // DATABASE
 // ═══════════════════════════════════════════════
 const DB={
-  customers:[
-    {id:'cust1',name:'Walmart Chile',email:'contacto@walmart.cl',phone:'+56 2 2345 6789',notes:'Cadena de supermercados. Marca: Líder.',logo:null,projects:['p1','p2'],createdAt:'2025-01-10T08:00:00.000Z'},
-    {id:'cust2',name:'Mass',email:'contacto@mass.cl',phone:'+56 2 2987 6543',notes:'Cadena de supermercados formato vecindario.',logo:null,projects:['p3'],createdAt:'2025-01-15T08:00:00.000Z'}
-  ],
-  projects:[
-    {id:'p1',name:'Lider Temuco',code:'LDR-TMC-120',client:'Walmart Chile',location:'Temuco, La Araucanía',desc:'Mantención e instalaciones eléctricas y de redes. Tienda Líder Temuco.',start:'2026-01-15',end:'2026-12-31',status:'Activo',members:['w1','w3'],logo1:null,logo2:null,requireCustomerApproval:true,customerId:'cust1'},
-    {id:'p2',name:'Lider Rancagua',code:'LDR-RCG-215',client:'Walmart Chile',location:'Rancagua, O\'Higgins',desc:'Modernización de instalaciones y sistemas de seguridad. Tienda Líder Rancagua.',start:'2026-02-01',end:'2026-10-31',status:'Activo',members:['w2','w3'],logo1:null,logo2:null,requireCustomerApproval:true,customerId:'cust1'},
-    {id:'p3',name:'Mass Rancagua',code:'MSS-RCG-301',client:'Mass',location:'Rancagua, O\'Higgins',desc:'Instalación de nuevas cajas y sistema eléctrico. Local Mass Rancagua Centro.',start:'2026-03-01',end:'2026-09-30',status:'Activo',members:['w3'],logo1:null,logo2:null,requireCustomerApproval:false,customerId:'cust2'}
-  ],
-  workers:[
-    {id:'w1',name:'Juan Pérez',role:'Técnico',phone:'+56 9 1111 2222',email:'juan@fieldlog.cl',empId:'EMP-001',status:'Activo'},
-    {id:'w2',name:'Pedro González',role:'Técnico',phone:'+56 9 2222 3333',email:'pedro@fieldlog.cl',empId:'EMP-002',status:'Activo'},
-    {id:'w3',name:'Jorge Muñoz',role:'Técnico',phone:'+56 9 3333 4444',email:'jorge@fieldlog.cl',empId:'EMP-003',status:'Activo'},
-    {id:'w4',name:'Felipe Torres',role:'Supervisor',phone:'+56 9 4444 5555',email:'felipe@fieldlog.cl',empId:'EMP-004',status:'Activo'}
-  ],
-  materials:[
-    {id:'m1',name:'Cable eléctrico 2.5mm',cat:'Eléctrico',unit:'m',qty:500,notes:'Certificado SEC'},
-    {id:'m2',name:'Interruptor automático 20A',cat:'Eléctrico',unit:'un',qty:24,notes:'Schneider Electric'},
-    {id:'m3',name:'Tubería conduit 1"',cat:'Eléctrico',unit:'m',qty:120,notes:'PVC rígido'},
-    {id:'m4',name:'Cinta aislante',cat:'Eléctrico',unit:'un',qty:30,notes:'3M'},
-    {id:'m5',name:'Taco Fischer 10mm',cat:'Fijaciones',unit:'un',qty:200,notes:''},
-    {id:'m6',name:'Tornillo hex. 1/4"',cat:'Fijaciones',unit:'un',qty:400,notes:'Acero inoxidable'},
-    {id:'m7',name:'Casco seguridad',cat:'Seguridad',unit:'un',qty:10,notes:'Certificado'},
-    {id:'m8',name:'Guantes dieléctricos',cat:'Seguridad',unit:'par',qty:8,notes:'Categoría 00'}
-  ],
-  users:[
-    {id:'u0',username:'admin',password:'admin123',name:'Administrador',email:'admin@fieldlog.cl',role:'admin',status:'Active',projects:[],perms:['view_reports','create_reports','edit_reports','delete_reports','manage_projects','manage_taskforce','manage_materials','manage_checklists','approve_reports','export_pdf'],workerId:null,lang:'es',createdAt:'2025-01-01T00:00:00.000Z'},
-    {id:'u1',username:'juan',password:'654321',name:'Juan Pérez',email:'juan@fieldlog.cl',role:'technician',status:'Active',projects:['p1'],perms:['view_reports','create_reports','edit_reports','export_pdf'],workerId:'w1',customerId:null,lang:'es',createdAt:'2026-01-16T08:00:00.000Z'},
-    {id:'u2',username:'pedro',password:'654321',name:'Pedro González',email:'pedro@fieldlog.cl',role:'technician',status:'Active',projects:['p2'],perms:['view_reports','create_reports','edit_reports','export_pdf'],workerId:'w2',customerId:null,lang:'es',createdAt:'2026-02-02T08:00:00.000Z'},
-    {id:'u3',username:'jorge',password:'654321',name:'Jorge Muñoz',email:'jorge@fieldlog.cl',role:'technician',status:'Active',projects:['p1','p2','p3'],perms:['view_reports','create_reports','edit_reports','export_pdf'],workerId:'w3',customerId:null,lang:'es',createdAt:'2026-01-16T08:00:00.000Z'},
-    {id:'u4',username:'felipe',password:'654321',name:'Felipe Torres',email:'felipe@fieldlog.cl',role:'manager',status:'Active',projects:['p1','p2','p3'],perms:['view_reports','create_reports','edit_reports','delete_reports','manage_projects','manage_taskforce','manage_materials','manage_checklists','approve_reports','export_pdf'],workerId:'w4',customerId:null,lang:'es',createdAt:'2026-01-10T08:00:00.000Z'},
-    {id:'u5',username:'clientewalmart1',password:'654321',name:'Cliente Walmart Temuco',email:'cliente1@walmart.cl',role:'customer',status:'Active',projects:['p1'],perms:['customer_signoff'],workerId:null,customerId:'cust1',lang:'es',createdAt:'2026-01-20T08:00:00.000Z'},
-    {id:'u6',username:'clientewalmart2',password:'654321',name:'Cliente Walmart Regional',email:'cliente2@walmart.cl',role:'customer',status:'Active',projects:['p1','p2'],perms:['customer_signoff'],workerId:null,customerId:'cust1',lang:'es',createdAt:'2026-01-20T08:00:00.000Z'},
-    {id:'u7',username:'clientemass',password:'654321',name:'Cliente Mass Rancagua',email:'cliente@mass.cl',role:'customer',status:'Active',projects:['p3'],perms:['customer_signoff'],workerId:null,customerId:'cust2',lang:'es',createdAt:'2026-03-02T08:00:00.000Z'}
-  ],
-  checklists:[
-    {id:'cl1',name:'Revisión Pre-Turno',items:[
-      {id:'a1',text:'EPP disponible y en buen estado',category:'Seguridad',type:'yesno'},
-      {id:'a2',text:'Área de trabajo libre de peligros',category:'Seguridad',type:'yesno'},
-      {id:'a3',text:'Salidas de emergencia identificadas',category:'Seguridad',type:'yesno'},
-      {id:'a4',text:'Herramientas inspeccionadas y operativas',category:'Equipos',type:'yesno'},
-      {id:'a5',text:'Permisos y documentación verificados',category:'Admin',type:'yesno'},
-    ]},
-    {id:'cl2',name:'Inspección de Equipos',items:[
-      {id:'b1',text:'Niveles de fluidos OK (aceite, refrigerante)',category:'Mecánico',type:'sna'},
-      {id:'b2',text:'Estado de neumáticos/orugas',category:'Mecánico',type:'sna'},
-      {id:'b3',text:'Luces y señales funcionales',category:'Eléctrico',type:'sna'},
-      {id:'b4',text:'Frenos probados y responsivos',category:'Mecánico',type:'sna'},
-      {id:'b5',text:'Extintor presente y cargado',category:'Seguridad',type:'sna'},
-    ]},
-    {id:'cl3',name:'Cierre de Turno',items:[
-      {id:'c1',text:'Todas las herramientas inventariadas y guardadas',category:'General',type:'yesno'},
-      {id:'c2',text:'Área de trabajo limpia y asegurada',category:'General',type:'yesno'},
-      {id:'c3',text:'Maquinaria apagada y bloqueada',category:'Equipos',type:'yesno'},
-      {id:'c4',text:'Trabajo incompleto señalizado',category:'Seguridad',type:'yesno'},
-      {id:'c5',text:'Supervisor notificado de incidencias',category:'Admin',type:'yesno'},
-    ]},
-    {id:'cl4',name:'Instalación Eléctrica',items:[
-      {id:'d1',text:'Tensión de alimentación verificada',category:'Eléctrico',type:'sna'},
-      {id:'d2',text:'Continuidad de circuitos comprobada',category:'Eléctrico',type:'sna'},
-      {id:'d3',text:'Canalización fijada correctamente',category:'Eléctrico',type:'sna'},
-      {id:'d4',text:'Conexiones a tierra realizadas',category:'Seguridad',type:'yesno'},
-      {id:'d5',text:'Prueba de aislamiento realizada',category:'Eléctrico',type:'yesno'},
-      {id:'d6',text:'Etiquetado y marcación completados',category:'Admin',type:'yesno'},
-      {id:'d7',text:'Observaciones adicionales',category:'General',type:'text'},
-    ]}
-  ],
+  customers:[],
+  projects:[],
+  workers:[],
+  materials:[],
+  checklists:[],
   reports:[]
 };
 
@@ -1450,8 +1419,8 @@ function saveP(){
   const customerId=document.getElementById('p-customer-sel')?.value||null;
   const projId=editPJ||('p'+Date.now());
   const d={name,code:gv('p-code'),client:gv('p-cli'),location:gv('p-loc'),desc:gv('p-desc'),start:gv('p-start'),end:gv('p-end'),status:gv('p-stat'),members:[...pmems],logo1,logo2,requireCustomerApproval,customerId};
-  if(editPJ){Object.assign(DB.projects.find(p=>p.id===editPJ),d);toast('✓ PROYECTO ACTUALIZADO');}
-  else{DB.projects.push({id:projId,...d});toast('✓ PROYECTO CREADO');}
+  if(editPJ){const ep2=DB.projects.find(p=>p.id===editPJ);Object.assign(ep2,d);fbSave('projects',editPJ,ep2).catch(console.error);toast('✓ PROYECTO ACTUALIZADO');}
+  else{const np={id:projId,...d};DB.projects.push(np);fbSave('projects',projId,np).catch(console.error);toast('✓ PROYECTO CREADO');}
   // Auto-assign project to customer's project list
   if(customerId){
     const cust=DB.customers.find(x=>x.id===customerId);
@@ -1699,8 +1668,8 @@ function openWM(id=null){
 function saveW(){
   const name=gv('w-name').trim();if(!name){toast('NOMBRE REQUERIDO','var(--rd)');return;}
   const d={name,role:gv('w-role'),phone:gv('w-phone'),email:gv('w-email'),empId:gv('w-id'),status:gv('w-stat')};
-  if(editWK){Object.assign(DB.workers.find(w=>w.id===editWK),d);toast('✓ ACTUALIZADO');}
-  else{DB.workers.push({id:'w'+Date.now(),...d});toast('✓ MEMBER ADDED');}
+  if(editWK){const ew2=DB.workers.find(w=>w.id===editWK);Object.assign(ew2,d);fbSave('workers',editWK,ew2).catch(console.error);toast('✓ ACTUALIZADO');}
+  else{const nw={id:'w'+Date.now(),...d};DB.workers.push(nw);fbSave('workers',nw.id,nw).catch(console.error);toast('✓ MEMBER ADDED');}
   closeMO('mo-worker');renderWorkers();renderDash();
 }
 function renderWorkers(){
@@ -1719,7 +1688,7 @@ function renderWorkers(){
     <td style="white-space:nowrap;"><button class="ib ed" onclick="openWM('${w.id}')">✏</button><button class="ib" onclick="delW('${w.id}')">🗑</button></td>
   </tr>`).join('');
 }
-function delW(id){if(!confirm('Remove?'))return;DB.workers=DB.workers.filter(w=>w.id!==id);DB.projects.forEach(p=>{p.members=(p.members||[]).filter(m=>m!==id);});renderWorkers();renderDash();toast('REMOVED','var(--rd)');}
+function delW(id){if(!confirm('Remove?'))return;DB.workers=DB.workers.filter(w=>w.id!==id);DB.projects.forEach(p=>{p.members=(p.members||[]).filter(m=>m!==id);});fbDelete('workers',id).catch(console.error);renderWorkers();renderDash();toast('REMOVED','var(--rd)');}
 
 // ═══════════════════════════════════════════════
 // MATERIALS
@@ -1735,8 +1704,8 @@ function openMM(id=null){
 function saveM(){
   const name=gv('m-name').trim();if(!name){toast('NOMBRE REQUERIDO','var(--rd)');return;}
   const d={name,cat:gv('m-cat'),unit:gv('m-unit'),qty:gv('m-qty'),notes:gv('m-notes')};
-  if(editMT){Object.assign(DB.materials.find(m=>m.id===editMT),d);toast('✓ ACTUALIZADO');}
-  else{DB.materials.push({id:'m'+Date.now(),...d});toast('✓ ADDED');}
+  if(editMT){const em2=DB.materials.find(m=>m.id===editMT);Object.assign(em2,d);fbSave('materials',editMT,em2).catch(console.error);toast('✓ ACTUALIZADO');}
+  else{const nm={id:'m'+Date.now(),...d};DB.materials.push(nm);fbSave('materials',nm.id,nm).catch(console.error);toast('✓ ADDED');}
   closeMO('mo-mat');renderMats();renderDash();
 }
 function renderMats(){
@@ -1755,7 +1724,7 @@ function renderMats(){
     <td style="white-space:nowrap;"><button class="ib ed" onclick="openMM('${m.id}')">✏</button><button class="ib" onclick="delM('${m.id}')">🗑</button></td>
   </tr>`).join('');
 }
-function delM(id){if(!confirm('Delete?'))return;DB.materials=DB.materials.filter(m=>m.id!==id);renderMats();renderDash();toast('ELIMINADO','var(--rd)');}
+function delM(id){if(!confirm('Delete?'))return;DB.materials=DB.materials.filter(m=>m.id!==id);fbDelete('materials',id).catch(console.error);renderMats();renderDash();toast('ELIMINADO','var(--rd)');}
 
 // ═══════════════════════════════════════════════
 // CHECKLISTS PAGE
@@ -1805,8 +1774,8 @@ function saveCLT(){
   const rows=document.querySelectorAll('#clb-items .bi');const items=[];
   rows.forEach((r,i)=>{const t=r.querySelector('input').value.trim(),sels=r.querySelectorAll('select'),cat=sels[0]?.value||'General',tp=sels[1]?.value||'sna';if(t)items.push({id:'ci'+Date.now()+i,text:t,category:cat,type:tp});});
   if(!items.length){toast('AGREGA AL MENOS UN ÍTEM','var(--rd)');return;}
-  if(editCL){Object.assign(DB.checklists.find(c=>c.id===editCL),{name,items,snaLabels});toast('✓ ACTUALIZADO');}
-  else{DB.checklists.push({id:'cl'+Date.now(),name,items,snaLabels});toast('✓ PLANTILLA GUARDADA');}
+  if(editCL){const ecl2=DB.checklists.find(c=>c.id===editCL);Object.assign(ecl2,{name,items,snaLabels});fbSave('checklists',editCL,ecl2).catch(console.error);toast('✓ ACTUALIZADO');}
+  else{const ncl={id:'cl'+Date.now(),name,items,snaLabels};DB.checklists.push(ncl);fbSave('checklists',ncl.id,ncl).catch(console.error);toast('✓ PLANTILLA GUARDADA');}
   closeMO('mo-clb');renderCLTs();
 }
 function renderCLTs(){
@@ -1823,7 +1792,7 @@ function renderCLTs(){
     </div>
   </div>`).join('');
 }
-function delCLT(id){if(!confirm('¿Eliminar esta plantilla?'))return;DB.checklists=DB.checklists.filter(c=>c.id!==id);if(activeCL?.templateId===id){activeCL=null;renderCLR();}renderCLTs();toast('ELIMINADO','var(--rd)');}
+function delCLT(id){if(!confirm('¿Eliminar esta plantilla?'))return;DB.checklists=DB.checklists.filter(c=>c.id!==id);fbDelete('checklists',id).catch(console.error);if(activeCL?.templateId===id){activeCL=null;renderCLR();}renderCLTs();toast('ELIMINADO','var(--rd)');}
 
 // ═══════════════════════════════════════════════
 // REPORT FORM
@@ -2476,11 +2445,13 @@ function saveReport(){
       const existing=DB.reports[idx];
       Object.assign(existing,data);
       logActivity(existing,'saved');
+      fbSave('reports',existing.id,existing).catch(console.error);
     }
   } else {
     data.activityLog=[];
     logActivity(data,'created');
     DB.reports.push(data);curRptId=data.id;editingRpt=true;
+    fbSave('reports',data.id,data).catch(console.error);
   }
   renderDash();updateNavBadge();toast(currentUser?.lang==='en'?'✓ SAVED':'✓ GUARDADO');
 }
@@ -2563,11 +2534,12 @@ function doSubmitSigned(){
   const isNew=!(editingRpt&&curRptId);
   if(!isNew){
     const idx=DB.reports.findIndex(r=>r.id===curRptId);
-    if(idx>-1){const ex=DB.reports[idx];Object.assign(ex,data);logActivity(ex,'submitted',currentUser?.lang==='en'?'Signed and sent for review':'Firmado y enviado a revisión');}
+    if(idx>-1){const ex=DB.reports[idx];Object.assign(ex,data);logActivity(ex,'submitted',currentUser?.lang==='en'?'Signed and sent for review':'Firmado y enviado a revisión');fbSave('reports',ex.id,ex).catch(console.error);}
   } else {
     data.activityLog=[];data.createdAt=new Date().toISOString();
     logActivity(data,'created',currentUser?.lang==='en'?'Report created':'Informe creado');logActivity(data,'submitted',currentUser?.lang==='en'?'Signed and sent for review':'Firmado y enviado a revisión');
     DB.reports.push(data);curRptId=data.id;editingRpt=true;
+    fbSave('reports',data.id,data).catch(console.error);
   }
   closeMO('mo-submit-sig');setBBStatus(nextStatus);renderDash();updateNavBadge();
   toast('\u2713 FIRMADO Y ENVIADO A REVISIÓN','var(--am)');
@@ -2600,7 +2572,7 @@ function doApproveSigned(){
   ex.approveSignature=sigData;ex.approvedBy=sigName;ex.approvedByRole=sigRole;ex.approvedAt=new Date().toISOString();
   ex.status=needsCust?'Pending Customer':'Approved';
   const _appLang=currentUser?.lang||'es';logActivity(ex,'approved',(_appLang==='en'?'Signed by ':'Firmado por ')+sigName+(_appLang==='en'?(needsCust?' — awaiting customer sign-off':''):(needsCust?' — esperando firma del cliente':'')));
-  closeMO('mo-approve-sig');setBBStatus(ex.status);renderDash();updateNavBadge();
+  fbSave('reports',ex.id,ex).catch(console.error);closeMO('mo-approve-sig');setBBStatus(ex.status);renderDash();updateNavBadge();
   toast(needsCust?'\u2713 APROBADO — ESPERANDO FIRMA DEL CLIENTE':'\u2713 INFORME APROBADO','var(--gn)');
 }
 
@@ -2629,6 +2601,7 @@ function doCustApprSigned(){
   const ex=DB.reports[idx];
   ex.customerSignature=sigData;ex.customerName=sigName;ex.customerRole=sigRole;
   ex.customerApprovedAt=new Date().toISOString();ex.status='Approved';
+  fbSave('reports',ex.id,ex).catch(console.error);
   logActivity(ex,'approved',(currentUser?.lang==='en'?'Customer sign-off by ':'Firma del cliente por ')+sigName);
   closeMO('mo-custappr-sig');
   closeMO('mo-view');
@@ -2660,6 +2633,7 @@ function doCustReject(){
   ex.custRejectedAt=new Date().toISOString();
   ex.custRejectionReason=reason;
   logActivity(ex,'rejected','Cliente solicitó corrección: '+reason);
+  fbSave('reports',ex.id,ex).catch(console.error);
   closeMO('mo-cust-reject');
   renderDash();renderAllReports();updateNavBadge();
   toast('↩ CORRECCIÓN SOLICITADA — ENVIADO A REVISIÓN','var(--am)');
@@ -2689,7 +2663,7 @@ function doReject(){
   ex.rejectedAt=new Date().toISOString();
   ex.rejectionReason=reason;
   logActivity(ex,'rejected',(currentUser?.lang==='en'?'Rejected by ':'Rechazado por ')+(currentUser?.name||'Manager')+': '+reason);
-  closeMO('mo-reject');
+  fbSave('reports',ex.id,ex).catch(console.error);closeMO('mo-reject');
   if(curRptId===rptId)setBBStatus('Rejected');
   renderDash();renderAllReports();updateNavBadge();
   toast(currentUser?.lang==='en'?'REPORT REJECTED — SENT BACK TO TECHNICIAN':'INFORME RECHAZADO — DEVUELTO AL TÉCNICO','var(--rd)');
@@ -2748,6 +2722,7 @@ function upOCC(){const n=document.querySelectorAll('#r-occ .occ-entry').length;c
 function delR(id){
   if(!confirm('¿Eliminar este informe?'))return;
   DB.reports=DB.reports.filter(r=>r.id!==id);
+  fbDelete('reports',id).catch(console.error);
   renderDash();renderAllReports();updateNavBadge();
   if(curProjId)renderPDReports();
   toast('ELIMINADO','var(--rd)');
@@ -3050,6 +3025,14 @@ window.onload=()=>{
 }
 
 // ═══════════════════════════════════════════════
+// APP INIT — show login screen immediately  
+// ═══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  // Theme is applied first
+  applyTheme(localStorage.getItem('fl-theme')||'dark');
+});
+
+// ═══════════════════════════════════════════════
 // REPORT VIEW MODAL
 // ═══════════════════════════════════════════════
 function viewReport(id){
@@ -3163,14 +3146,22 @@ function gv(id){const el=document.getElementById(id);return el?el.value:'';}
 // ═══════════════════════════════════════════════
 // AUTH SYSTEM
 // ═══════════════════════════════════════════════
-function doLogin(){
+async function doLogin(){
   const u=document.getElementById('lin-u').value.trim();
   const p=document.getElementById('lin-p').value;
-  const user=DB.users.find(x=>x.username===u&&x.password===p&&x.status==='Active');
   const err=document.getElementById('lerr');
-  if(!user){err.style.display='block';return;}
-  err.style.display='none';
-  currentUser=user;
+  const btn=document.querySelector('#login-screen .btn.bp');
+  if(btn){btn.textContent='...';btn.disabled=true;}
+  try{
+    const cred=await fbFns.signInWithEmailAndPassword(fbAuth,u,p);
+    const uid=cred.user.uid;
+    const snap=await fbFns.getDoc(fbFns.doc(fbDB,'users',uid));
+    if(!snap.exists()){throw new Error('No user profile');}
+    const user={id:uid,...snap.data()};
+    if(user.status!=='Active'){throw new Error('Inactive user');}
+    err.style.display='none';
+    currentUser=user;
+    await loadAllData();
   document.getElementById('login-screen').style.display='none';
   document.getElementById('uav-init').textContent=user.name.charAt(0).toUpperCase();
   document.getElementById('um-nm').textContent=user.name;
@@ -3201,6 +3192,13 @@ function doLogin(){
   }
   updateNavBadge();
   applyLang();
+  }catch(e){
+    console.error('Login error:',e);
+    err.style.display='block';
+    err.textContent=e.code==='auth/invalid-credential'?'Usuario o contraseña incorrectos':'Error al iniciar sesión';
+  }finally{
+    if(btn){btn.textContent='Sign In ›';btn.disabled=false;}
+  }
 }
 function applyLang(){
   const lang=currentUser?.lang||'es';
@@ -3344,6 +3342,61 @@ function _setPlh(id,v){const el=document.getElementById(id);if(el&&v)el.placehol
 const THEMES=['dark','blue','light','slate'];
 const THEME_ICONS={dark:'🌑',blue:'🌊',light:'☀️',slate:'🔮'};
 const THEME_NAMES={dark:'Industrial',blue:'Ocean',light:'Claro',slate:'Slate'};
+// ═══════════════════════════════════════════════
+// FIREBASE DATA LAYER
+// ═══════════════════════════════════════════════
+async function loadAllData(){
+  const {getDocs,collection,onSnapshot,doc}=fbFns;
+  // Load all collections in parallel
+  const [usersSnap,projectsSnap,workersSnap,materialsSnap,checklistsSnap,reportsSnap,customersSnap]=await Promise.all([
+    getDocs(collection(fbDB,'users')),
+    getDocs(collection(fbDB,'projects')),
+    getDocs(collection(fbDB,'workers')),
+    getDocs(collection(fbDB,'materials')),
+    getDocs(collection(fbDB,'checklists')),
+    getDocs(collection(fbDB,'reports')),
+    getDocs(collection(fbDB,'customers')),
+  ]);
+  DB.users=usersSnap.docs.map(d=>({id:d.id,...d.data()}));
+  DB.projects=projectsSnap.docs.map(d=>({id:d.id,...d.data()}));
+  DB.workers=workersSnap.docs.map(d=>({id:d.id,...d.data()}));
+  DB.materials=materialsSnap.docs.map(d=>({id:d.id,...d.data()}));
+  DB.checklists=checklistsSnap.docs.map(d=>({id:d.id,...d.data()}));
+  DB.reports=reportsSnap.docs.map(d=>({id:d.id,...d.data()}));
+  DB.customers=customersSnap.docs.map(d=>({id:d.id,...d.data()}));
+  // If first time (no users in DB), seed default admin
+  if(DB.users.length===0){
+    await seedAdmin();
+  }
+}
+
+async function seedAdmin(){
+  // Create admin user in Firebase Auth and Firestore
+  const {createUserWithEmailAndPassword}=await import("https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js");
+  try{
+    const adminEmail='admin@fieldlog.app';
+    const adminPass='admin123';
+    const cred=await createUserWithEmailAndPassword(fbAuth,adminEmail,adminPass);
+    const adminData={username:adminEmail,name:'Administrador',email:adminEmail,role:'admin',
+      status:'Active',projects:[],perms:['view_reports','create_reports','approve_reports',
+      'manage_projects','manage_users','manage_materials','manage_checklists','customer_signoff'],
+      lang:'es',createdAt:new Date().toISOString()};
+    await fbFns.setDoc(fbFns.doc(fbDB,'users',cred.user.uid),adminData);
+    DB.users.push({id:cred.user.uid,...adminData});
+    toast('Sistema iniciado. Usuario: admin@fieldlog.app / Contraseña: admin123','var(--gn)',6000);
+  }catch(e){console.error('Seed error:',e);}
+}
+
+async function fbSave(collName, id, data){
+  await fbFns.setDoc(fbFns.doc(fbDB,collName,id),data);
+}
+async function fbUpdate(collName, id, data){
+  await fbFns.updateDoc(fbFns.doc(fbDB,collName,id),data);
+}
+async function fbDelete(collName, id){
+  await fbFns.deleteDoc(fbFns.doc(fbDB,collName,id));
+}
+
 let currentTheme=localStorage.getItem('fl-theme')||'dark';
 function applyTheme(t){
   currentTheme=t;
@@ -3359,7 +3412,7 @@ function cycleTheme(){
   toast(THEME_NAMES[THEMES[idx]].toUpperCase(),'var(--am)');
 }
 applyTheme(currentTheme);
-function doLogout(){
+async function doLogout(){try{await fbFns.signOut(fbAuth);}catch(e){console.warn(e);}
   currentUser=null;
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('lin-u').value='';
@@ -3503,7 +3556,7 @@ function refreshUPerms(){
     }).join('');
   }
 }
-function saveUser(){
+async function saveUser(){
   const uname=document.getElementById('u-uname').value.trim();
   const fname=document.getElementById('u-fname').value.trim();
   const pass=document.getElementById('u-pass').value;
@@ -3540,7 +3593,13 @@ function saveUser(){
     toast('✓ USUARIO ACTUALIZADO');
   } else {
     if(pass.length<6){toast('PASSWORD MIN 6 CHARS','var(--rd)');return;}
-    DB.users.push({id:'usr'+Date.now(),...data,password:pass,createdAt:new Date().toISOString()});
+    let fbUid='usr'+Date.now();
+    try{
+      const {createUserWithEmailAndPassword}=await import("https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js");
+      const fbCred=await createUserWithEmailAndPassword(fbAuth,data.email||fbUid+'@fieldlog.app',pass);
+      fbUid=fbCred.user.uid;
+    }catch(authErr){console.warn('Auth create error:',authErr);}
+    const nu={id:fbUid,...data,createdAt:new Date().toISOString()};DB.users.push(nu);fbSave('users',fbUid,nu).catch(console.error);
     toast('✓ USER CREATED');
   }
   closeMO('mo-user');renderUsers();
@@ -3573,6 +3632,7 @@ function delUser(id){
   if(id===currentUser?.id){toast(currentUser?.lang==='en'?'CANNOT DELETE YOURSELF':'NO PUEDES ELIMINARTE A TI MISMO','var(--rd)');return;}
   if(!confirm('Delete this user?'))return;
   DB.users=DB.users.filter(u=>u.id!==id);
+  fbDelete('users',id).catch(console.error);
   renderUsers();toast('ELIMINADO','var(--rd)');
 }
 function openChPW(id){
@@ -3680,10 +3740,11 @@ function saveCust(){
     DB.users.filter(u=>u.customerId===editCUST).forEach(u=>{
       u.projects=(u.projects||[]).filter(pid=>projects.includes(pid));
     });
-    toast(isEs?'✓ CLIENTE ACTUALIZADO':'✓ CUSTOMER UPDATED','var(--gn)');
+    const ec2=DB.customers.find(c=>c.id===editCustId);if(ec2)fbSave('customers',editCustId,ec2).catch(console.error);toast(isEs?'✓ CLIENTE ACTUALIZADO':'✓ CUSTOMER UPDATED','var(--gn)');
   } else {
     data.id='cust'+Date.now();data.createdAt=new Date().toISOString();
     DB.customers.push(data);
+    fbSave('customers',data.id,data).catch(console.error);
     toast(isEs?'✓ CLIENTE CREADO':'✓ CUSTOMER CREATED','var(--gn)');
   }
   closeMO('mo-cust');
@@ -3785,7 +3846,8 @@ function delCust(id){
   const msg=lang==='es'?'¿Eliminar este cliente? Los usuarios asociados perderán su empresa.':'Delete this customer? Associated users will lose their company link.';
   if(!confirm(msg))return;
   DB.customers=DB.customers.filter(c=>c.id!==id);
-  DB.users.filter(u=>u.customerId===id).forEach(u=>{u.customerId=null;u.projects=[];});
+  DB.users.filter(u=>u.customerId===id).forEach(u=>{u.customerId=null;u.projects=[];fbSave('users',u.id,u).catch(console.error);});
+  fbDelete('customers',id).catch(console.error);
   renderCustomers();renderUsers();
   toast(lang==='es'?'ELIMINADO':'DELETED','var(--rd)');
 }
