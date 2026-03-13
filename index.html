@@ -1,9 +1,15 @@
-<!-- FieldLog v1.1.2 | Build: 2026-03-13 | Firebase Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.2.0 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f5a623">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FieldLog">
+<link rel="manifest" href="manifest.json">
 <title>FieldLog</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@600;700;900&display=swap" rel="stylesheet">
 <!-- Firebase SDK (compat) -->
@@ -3028,6 +3034,16 @@ window.onload=()=>{
   window.print();
 };
 <\/script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/fieldlog/sw.js')
+      .then(r => console.log('SW registered'))
+      .catch(e => console.log('SW error:', e));
+  });
+}
+</script>
 </body></html>`;
 
   const win=window.open('','_blank','width=920,height=1100');
