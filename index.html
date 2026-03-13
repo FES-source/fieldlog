@@ -1,4 +1,4 @@
-<!-- FieldLog v1.2.5 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.2.6 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3145,7 +3145,7 @@ async function doLogin(){
     const cred=await fbFns.signInWithEmailAndPassword(fbAuth,u,p);
     const uid=cred.user.uid;
     const snap=await fbFns.getDoc(fbFns.doc(fbDB,'users',uid));
-    if(!snap.exists()){throw new Error('No user profile');}
+    if(!snap.exists){throw new Error('No user profile');}
     const user={id:uid,...snap.data()};
     if(user.status!=='Active'){throw new Error('Inactive user');}
     err.style.display='none';
