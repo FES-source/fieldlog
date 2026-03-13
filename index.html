@@ -30,26 +30,23 @@ firebase.initializeApp(firebaseConfig);
 window.fbAuth = firebase.auth();
 window.fbDB = firebase.firestore();
 window.fbStorage = firebase.storage();
-
-// Wrap functions to match our API
 window.fbFns = {
-  signInWithEmailAndPassword: (auth, email, pass) => auth.signInWithEmailAndPassword(email, pass),
+  signInWithEmailAndPassword: (auth,email,pass) => auth.signInWithEmailAndPassword(email,pass),
   signOut: (auth) => auth.signOut(),
-  onAuthStateChanged: (auth, cb) => auth.onAuthStateChanged(cb),
-  collection: (db, col) => db.collection(col),
-  doc: (db, col, id) => db.collection(col).doc(id),
+  onAuthStateChanged: (auth,cb) => auth.onAuthStateChanged(cb),
+  collection: (db,col) => db.collection(col),
+  doc: (db,col,id) => db.collection(col).doc(id),
   getDoc: (ref) => ref.get(),
   getDocs: (ref) => ref.get(),
-  setDoc: (ref, data) => ref.set(data),
-  updateDoc: (ref, data) => ref.update(data),
+  setDoc: (ref,data) => ref.set(data),
+  updateDoc: (ref,data) => ref.update(data),
   deleteDoc: (ref) => ref.delete(),
-  onSnapshot: (ref, cb) => ref.onSnapshot(cb),
-  ref: (storage, path) => storage.ref(path),
-  uploadString: (ref, data, format) => ref.putString(data, format),
+  onSnapshot: (ref,cb) => ref.onSnapshot(cb),
+  ref: (storage,path) => storage.ref(path),
+  uploadString: (ref,data,fmt) => ref.putString(data,fmt),
   getDownloadURL: (ref) => ref.getDownloadURL(),
   deleteObject: (ref) => ref.delete()
 };
-
 firebase.auth().onAuthStateChanged(user => {
   window._fbUid = user ? user.uid : null;
 });
@@ -3034,13 +3031,11 @@ window.onload=()=>{
   window.print();
 };
 <\/script>
-
 <script>
 if('serviceWorker' in navigator){
-  window.addEventListener('load', () => {
+  window.addEventListener('load',()=>{
     navigator.serviceWorker.register('/fieldlog/sw.js')
-      .then(r => console.log('SW registered'))
-      .catch(e => console.log('SW error:', e));
+      .then(r=>console.log('SW ok')).catch(e=>console.log('SW err',e));
   });
 }
 </script>
@@ -3298,7 +3293,7 @@ function applyLang(){
   _setTxt('btn-cust-cancel',es?'Cancelar':'Cancel');
   _setTxt('btn-cust-save',es?'Guardar Cliente':'Save Customer');
   _setPlh('cm-name',es?'Nombre de la empresa o contacto':'Company or contact name');
-  _setPlh('cm-email',es?'<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="99faf6f7edf8faedf6d9fcf4e9ebfceaf8b7faf6f4">[email&#160;protected]</a>':'<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ed8e8283998c8e99ad8e82809d8c8394c38e8280">[email&#160;protected]</a>');
+  _setPlh('cm-email',es?'contacto@empresa.com':'contact@company.com');
   _setPlh('cm-phone',es?'+56 9 ...':'+1 555 ...');
   _setPlh('cm-notes',es?'Observaciones...':'Notes...');
   _setTxt('cm-logo-lbl',es?'+ SUBIR':'+ UPLOAD');
@@ -3308,7 +3303,7 @@ function applyLang(){
   _setPlh('u-uname',es?'e.g. jsmith':'e.g. jsmith');
   _setPlh('u-fname',es?'Nombre Apellido':'First Last');
   _setPlh('u-pass',es?'Mín. 6 caracteres':'Min 6 chars');
-  _setPlh('u-email',es?'<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d8adabadb9aab1b798bdb5a8aabdabb9f6bbb7b5">[email&#160;protected]</a>':'<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e590968097a5868a8895848b9ccb868a88">[email&#160;protected]</a>');
+  _setPlh('u-email',es?'usuario@empresa.com':'user@company.com');
 
   // Worker role options in worker modal
   const wrole=document.getElementById('w-role');
@@ -3399,17 +3394,18 @@ async function loadAllData(){
 
 async function seedAdmin(){
   // Create admin user in Firebase Auth and Firestore
+  const {createUserWithEmailAndPassword}=await import("https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js");
   try{
-    const adminEmail='<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="afcecbc2c6c1efc9c6cac3cbc3c0c881cedfdf">[email&#160;protected]</a>';
+    const adminEmail='admin@fieldlog.app';
     const adminPass='admin123';
-    const cred=await fbAuth.createUserWithEmailAndPassword(adminEmail,adminPass);
+    const cred=await createUserWithEmailAndPassword(fbAuth,adminEmail,adminPass);
     const adminData={username:adminEmail,name:'Administrador',email:adminEmail,role:'admin',
       status:'Active',projects:[],perms:['view_reports','create_reports','approve_reports',
       'manage_projects','manage_users','manage_materials','manage_checklists','customer_signoff'],
       lang:'es',createdAt:new Date().toISOString()};
     await fbFns.setDoc(fbFns.doc(fbDB,'users',cred.user.uid),adminData);
     DB.users.push({id:cred.user.uid,...adminData});
-    toast('Sistema iniciado. Usuario: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5f3e3b3236311f39363a333b333038713e2f2f">[email&#160;protected]</a> / Contraseña: admin123','var(--gn)',6000);
+    toast('Sistema iniciado. Usuario: admin@fieldlog.app / Contraseña: admin123','var(--gn)',6000);
   }catch(e){console.error('Seed error:',e);}
 }
 
@@ -3438,7 +3434,7 @@ function cycleTheme(){
   toast(THEME_NAMES[THEMES[idx]].toUpperCase(),'var(--am)');
 }
 applyTheme(currentTheme);
-async function doLogout(){try{await fbFns.signOut(fbAuth);}catch(e){console.warn(e);}
+async async function doLogout(){try{await fbFns.signOut(fbAuth);}catch(e){console.warn(e);}try{await fbFns.signOut(fbAuth);}catch(e){console.warn(e);}
   currentUser=null;
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('lin-u').value='';
@@ -3582,7 +3578,7 @@ function refreshUPerms(){
     }).join('');
   }
 }
-async function saveUser(){
+async async function saveUser(){
   const uname=document.getElementById('u-uname').value.trim();
   const fname=document.getElementById('u-fname').value.trim();
   const pass=document.getElementById('u-pass').value;
@@ -3995,4 +3991,20 @@ document.getElementById('lin-u').addEventListener('keydown',e=>{if(e.key==='Ente
       <button class="btn sm bg" id="mo-view-approve" style="display:none;">✓ Aprobar</button>
       <button class="btn sm" id="mo-view-cust-reject" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">↩ Solicitar corrección</button>
       <button class="btn sm" id="mo-view-reject" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">❌ Rechazar</button>
-      
+      <button class="btn sm bs" id="mo-view-custappr" style="display:none;">🤝 Firma Cliente</button>
+      <button class="btn sm bs" id="mo-view-edit">✏ Editar</button>
+      <button class="btn sm bs" id="mo-view-pdf">📄 PDF</button>
+      <button class="mcl" onclick="closeMO('mo-view')">✕</button>
+    </div>
+  </div>
+  <div class="mb" id="mo-view-body" style="max-height:70vh;overflow-y:auto;"></div>
+</div></div>
+
+<!-- ACTIVITY LOG MODAL -->
+<div class="mo" id="mo-log"><div class="modal" style="max-width:540px;">
+  <div class="mh"><div class="mtt">📋 Registro de Actividad</div><button class="mcl" onclick="closeMO('mo-log')">✕</button></div>
+  <div class="mb" id="mo-log-body"></div>
+</div></div>
+
+</body>
+</html>
