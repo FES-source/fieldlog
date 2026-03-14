@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.8 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.9 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3272,7 +3272,8 @@ function updateRID(){
 const ROLES=['Electrician','Plumber','Carpenter','Welder','Equipment Operator','Laborer','Engineer','Inspector','Foreman','Site Manager','Supervisor','Technician','Other'];
 const ROLES_ES={'Electrician':'Electricista','Plumber':'Gasfiter','Carpenter':'Carpintero','Welder':'Soldador','Equipment Operator':'Operador de Equipos','Laborer':'Jornalero','Engineer':'Ingeniero','Inspector':'Inspector','Foreman':'Capataz','Site Manager':'Jefe de Obra','Supervisor':'Supervisor','Technician':'Técnico','Other':'Otro'};
 const ROLES_EN={'Electrician':'Electrician','Plumber':'Plumber','Carpenter':'Carpenter','Welder':'Welder','Equipment Operator':'Equipment Operator','Laborer':'Laborer','Engineer':'Engineer','Inspector':'Inspector','Foreman':'Foreman','Site Manager':'Site Manager','Supervisor':'Supervisor','Technician':'Technician','Other':'Other'};
-// Traduce rol de trabajador al idioma actual
+const ROLES_PT={'Electrician':'Eletricista','Plumber':'Encanador','Carpenter':'Carpinteiro','Welder':'Soldador','Equipment Operator':'Operador de Equipamentos','Laborer':'Trabalhador','Engineer':'Engenheiro','Inspector':'Inspetor','Foreman':'Encarregado','Site Manager':'Gerente de Obra','Supervisor':'Supervisor','Technician':'Técnico','Other':'Outro'};
+const ROLES_IT={'Electrician':'Elettricista','Plumber':'Idraulico','Carpenter':'Falegname','Welder':'Saldatore','Equipment Operator':'Operatore Attrezzature','Laborer':'Manovale','Engineer':'Ingegnere','Inspector':'Ispettore','Foreman':'Caposquadra','Site Manager':'Direttore Cantiere','Supervisor':'Supervisore','Technician':'Tecnico','Other':'Altro'};
 const ROLES_ALL={es:ROLES_ES,en:ROLES_EN,pt:ROLES_PT,it:ROLES_IT};
 function tRole(s){const lang=currentUser?.lang||'es';return(ROLES_ALL[lang]||ROLES_ES)[s]||s||'—';}
 // Translate a weather key (stored as data-en value) to current user's language
@@ -3290,14 +3291,11 @@ function tWeatherArr(arr,lang){
 }
 function tRoleOpt(sel){const lang=currentUser?.lang||'es';const map=ROLES_ALL[lang]||ROLES_ES;return ROLES.map(v=>`<option value="${v}"${v===sel?' selected':''}>${map[v]||v}</option>`).join('');}
 const ESTAT=['In use','Idle','Off-site','Under repair'];
-const ROLES_PT={'Electrician':'Eletricista','Plumber':'Encanador','Carpenter':'Carpinteiro','Welder':'Soldador','Equipment Operator':'Operador de Equipamentos','Laborer':'Trabalhador','Engineer':'Engenheiro','Inspector':'Inspetor','Foreman':'Encarregado','Site Manager':'Gerente de Obra','Supervisor':'Supervisor','Technician':'Técnico','Other':'Outro'};
-const ROLES_IT={'Electrician':'Elettricista','Plumber':'Idraulico','Carpenter':'Falegname','Welder':'Saldatore','Equipment Operator':'Operatore Attrezzature','Laborer':'Manovale','Engineer':'Ingegnere','Inspector':'Ispettore','Foreman':'Caposquadra','Site Manager':'Direttore Cantiere','Supervisor':'Supervisore','Technician':'Tecnico','Other':'Altro'};
-
 const ESTAT_ES={'In use':'En uso','Idle':'Disponible','Off-site':'Fuera de sitio','Under repair':'En reparación'};
+const ESTAT_EN={'In use':'In use','Idle':'Idle','Off-site':'Off-site','Under repair':'Under repair'};
 const ESTAT_PT={'In use':'Em uso','Idle':'Disponível','Off-site':'Fora do local','Under repair':'Em manutenção'};
 const ESTAT_IT={'In use':'In uso','Idle':'Disponibile','Off-site':'Fuori cantiere','Under repair':'In riparazione'};
 const ESTAT_ALL={es:ESTAT_ES,en:ESTAT_EN,pt:ESTAT_PT,it:ESTAT_IT};
-const ESTAT_EN={'In use':'In use','Idle':'Idle','Off-site':'Off-site','Under repair':'Under repair'};
 // Traduce estado de equipo al idioma actual
 function tEstat(s){const lang=currentUser?.lang||'es';return(ESTAT_ALL[lang]||ESTAT_ES)[s]||s||'—';}
 function tEstatOpt(s){const lang=currentUser?.lang||'es';const map=ESTAT_ALL[lang]||ESTAT_ES;return ESTAT.map(v=>`<option value="${v}"${v===s?' selected':''}>${map[v]||v}</option>`).join('');}
