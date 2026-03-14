@@ -1,4 +1,4 @@
-<!-- FieldLog v1.2.9 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.3.0 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1422,12 +1422,13 @@ function saveP(){
   // Auto-assign project to customer's project list
   if(customerId){
     const cust=DB.customers.find(x=>x.id===customerId);
-    if(cust){if(!cust.projects)cust.projects=[];if(!cust.projects.includes(projId))cust.projects.push(projId);}
+    if(cust){if(!cust.projects)cust.projects=[];if(!cust.projects.includes(projId))cust.projects.push(projId);fbSave('customers',cust.id,cust).catch(console.error);}
   }
   // Remove from old customer if changed
   DB.customers.forEach(cust=>{
     if(cust.id!==customerId&&(cust.projects||[]).includes(projId)){
       cust.projects=cust.projects.filter(pid=>pid!==projId);
+      fbSave('customers',cust.id,cust).catch(console.error);
     }
   });
   closeMO('mo-proj');renderProjs();renderDash();
