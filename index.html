@@ -1,4 +1,4 @@
-<!-- FieldLog v1.3.6 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.3.8 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -472,7 +472,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="ni" id="nav-users" data-p="users" onclick="goPage('users')"><span class="ni-ic">👥</span>Users</div>
   <div class="ni" id="nav-customers" data-p="customers" onclick="goPage('customers')"><span class="ni-ic">🤝</span>Customers</div>
   <div class="nsep"></div>
-  <div class="ni" data-p="report" onclick="startNewReport(null)"><span class="ni-ic">✏️</span>Nuevo Informe</div>
+  <div class="ni" data-p="report" onclick="startNewReport(null)"><span class="ni-ic">✏️</span><span id="nav-lbl-new-report">Nuevo Informe</span></div>
 </nav>
 
 <main class="mn" id="mn">
@@ -481,7 +481,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 <div class="pg on" id="page-dashboard"><div class="wrap">
   <div class="ph">
     <div class="pht"><small data-i18n="overview_label">// OVERVIEW</small><span data-i18n="dashboard">Dashboard</span></div>
-    <div class="pha"><button class="btn bp" onclick="startNewReport(null)">＋ Nuevo Informe</button></div>
+    <div class="pha"><button class="btn bp" onclick="startNewReport(null)" id="btn-new-report-dash">＋ <span id="lbl-new-report-dash">Nuevo Informe</span></button></div>
   </div>
   <div class="sg">
     <div class="sv"><div class="svl">Projects</div><div class="svv" id="s-proj">0</div><div class="svs" data-i18n="active">Activos</div></div>
@@ -507,7 +507,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="pha">
       <input type="text" id="ar-search" placeholder="Buscar supervisor, fecha..." oninput="renderAllReports()" style="font-family:var(--mo);font-size:10px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);width:160px;letter-spacing:1px;">
       <select id="ar-filter-proj" onchange="renderAllReports()" style="font-family:var(--mo);font-size:10px;letter-spacing:1px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);max-width:180px;">
-        <option value="">Todos los proyectos</option>
+        <option value="" id="opt-all-projects">Todos los proyectos</option>
       </select>
       <select id="ar-filter-status" onchange="renderAllReports()" style="font-family:var(--mo);font-size:10px;letter-spacing:1px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);">
         <option value="">Todos los estados</option>
@@ -518,7 +518,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
         <option value="Pending Customer">Firma cliente</option>
         <option value="Rejected">Rechazado</option>
       </select>
-      <button class="btn bp" onclick="startNewReport(null)">＋ Nuevo Informe</button>
+      <button class="btn bp" onclick="startNewReport(null)" id="btn-new-report-dash">＋ <span id="lbl-new-report-dash">Nuevo Informe</span></button>
     </div>
   </div>
   <div style="font-family:var(--mo);font-size:10px;color:var(--mu);margin-bottom:10px;letter-spacing:1px;display:flex;gap:14px;flex-wrap:wrap;">
@@ -544,7 +544,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
       <option value="Cancelled">Cancelado</option>
     </select>
     <select id="proj-filter-cust" onchange="renderProjs()" style="font-size:12px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);cursor:pointer;">
-      <option value="">Todos los clientes</option>
+      <option value="" id="opt-all-customers">Todos los clientes</option>
     </select>
     <button class="btn sm bs" onclick="clearProjFilters()" style="font-size:10px;padding:5px 10px;white-space:nowrap;" id="proj-filter-clear" title="Limpiar filtros">✕ Limpiar</button>
   </div>
@@ -673,14 +673,14 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="sec op" id="sec-labor">
     <div class="sh" onclick="togS('sec-labor')"><div class="sl"><span class="si">👷</span><span class="st2" id="sec-labor-label">Mano de Obra</span><span class="bx" id="bl-l" style="margin-left:6px;">0 workers</span></div><div class="sc"><label class="tog" onclick="event.stopPropagation()"><input type="checkbox" checked onchange="togSE('sec-labor',this)"><span class="tt"></span></label><span class="schev">▼</span></div></div>
     <div class="sb"><div id="r-labor" style="margin-top:10px;"></div>
-      <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;"><button class="adb" style="flex:1;" onclick="addLR()">＋ Agregar Trabajador</button><button class="btn sm bs" onclick="impW()">📋 Importar Cuadrilla</button></div>
+      <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;"><button class="adb" style="flex:1;" onclick="addLR()">＋ <span id="lbl-add-worker">Agregar Trabajador</span></button><button class="btn sm bs" onclick="impW()">📋 <span id="lbl-import-crew">Importar Cuadrilla</span></button></div>
     </div>
   </div>
 
   <!-- EQUIPMENT -->
   <div class="sec op" id="sec-equip">
     <div class="sh" onclick="togS('sec-equip')"><div class="sl"><span class="si">🔧</span><span class="st2" id="sec-equip-label">Equipos</span><span class="bx" id="bl-e" style="margin-left:6px;">0 items</span></div><div class="sc"><label class="tog" onclick="event.stopPropagation()"><input type="checkbox" checked onchange="togSE('sec-equip',this)"><span class="tt"></span></label><span class="schev">▼</span></div></div>
-    <div class="sb"><div id="r-equip" style="margin-top:10px;"></div><button class="adb" onclick="addER()">＋ Agregar Equipo</button></div>
+    <div class="sb"><div id="r-equip" style="margin-top:10px;"></div><button class="adb" onclick="addER()">＋ <span id="lbl-add-equip">Agregar Equipo</span></button></div>
   </div>
 
   <!-- TASKS -->
@@ -688,10 +688,10 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="sh" onclick="togS('sec-tasks')"><div class="sl"><span class="si">📋</span><span class="st2" id="sec-tasks-label">Tareas y Actividades</span><span class="bx" id="bl-t" style="margin-left:6px;">0 tasks</span></div><div class="sc"><label class="tog" onclick="event.stopPropagation()"><input type="checkbox" checked onchange="togSE('sec-tasks',this)"><span class="tt"></span></label><span class="schev">▼</span></div></div>
     <div class="sb">
       <div id="r-tasks" style="margin-top:10px;"></div>
-      <button class="adb" onclick="addTR()">＋ Agregar Tarea</button>
+      <button class="adb" onclick="addTR()">＋ <span id="lbl-add-task">Agregar Tarea</span></button>
       <!-- Task Photo Gallery — shown below task list -->
       <div id="task-photo-gallery" style="display:none;margin-top:14px;border-top:1px solid var(--bd);padding-top:12px;">
-        <div style="font-family:var(--mo);font-size:9px;letter-spacing:3px;color:var(--am);margin-bottom:10px;">📷 FOTOS DE TAREAS</div>
+        <div style="font-family:var(--mo);font-size:9px;letter-spacing:3px;color:var(--am);margin-bottom:10px;"><span id="lbl-task-photos">📷 FOTOS DE TAREAS</span></div>
         <div id="task-photo-gallery-inner"></div>
       </div>
     </div>
@@ -701,7 +701,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="sec op" id="sec-mats">
     <div class="sh" onclick="togS('sec-mats')"><div class="sl"><span class="si">📦</span><span class="st2" id="sec-mats-label">Materiales Utilizados</span><span class="bx" id="bl-m" style="margin-left:6px;">0 items</span></div><div class="sc"><label class="tog" onclick="event.stopPropagation()"><input type="checkbox" checked onchange="togSE('sec-mats',this)"><span class="tt"></span></label><span class="schev">▼</span></div></div>
     <div class="sb"><div id="r-mats" style="margin-top:10px;"></div>
-      <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;"><button class="adb" style="flex:1;" onclick="addMR()">＋ Agregar Material</button><button class="btn sm bs" onclick="impM()">📦 Importar Catálogo</button></div>
+      <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;"><button class="adb" style="flex:1;" onclick="addMR()">＋ <span id="lbl-add-mat-rpt">Agregar Material</span></button><button class="btn sm bs" onclick="impM()">📦 <span id="lbl-import-cat">Importar Catálogo</span></button></div>
     </div>
   </div>
 
@@ -710,7 +710,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="sh" onclick="togS('sec-incidents')"><div class="sl"><span class="si">⚠️</span><span class="st2" id="sec-incidents-label">Incidentes y Ocurrencias</span><span class="bx" id="bl-occ" style="margin-left:6px;">0 entries</span></div><div class="sc"><label class="tog" onclick="event.stopPropagation()"><input type="checkbox" onchange="togSE('sec-incidents',this)"><span class="tt"></span></label><span class="schev">▼</span></div></div>
     <div class="sb">
       <div id="r-occ" style="margin-top:8px;"></div>
-      <button class="adb" onclick="addOCC()">＋ Agregar Ocurrencia</button>
+      <button class="adb" onclick="addOCC()">＋ <span id="lbl-add-occ">Agregar Ocurrencia</span></button>
     </div>
   </div>
 
@@ -718,9 +718,9 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="sec op" id="sec-checklist">
     <div class="sh" onclick="togS('sec-checklist')"><div class="sl"><span class="si">☑️</span><span class="st2" id="sec-checklist-label">Checklist de Verificación</span><span class="bx" id="bl-cl" style="margin-left:6px;">0 / 0</span></div><div class="sc"><label class="tog" onclick="event.stopPropagation()"><input type="checkbox" checked onchange="togSE('sec-checklist',this)"><span class="tt"></span></label><span class="schev">▼</span></div></div>
     <div class="sb">
-      <div id="r-cl-render"><div class="emp" id="r-cl-empty">NO CHECKLIST LOADED</div></div>
+      <div id="r-cl-render"><div class="emp" id="r-cl-empty"><span id="lbl-no-cl">NO CHECKLIST LOADED</span></div></div>
       <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
-        <button class="btn sm bs" style="border-color:var(--am);color:var(--am);" onclick="openCLP()">📂 Cargar Plantilla</button>
+        <button class="btn sm bs" style="border-color:var(--am);color:var(--am);" onclick="openCLP()">📂 <span id="lbl-load-cl">Cargar Plantilla</span></button>
       </div>
     </div>
   </div>
@@ -729,7 +729,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="sec" id="sec-photos">
     <div class="sh" onclick="togS('sec-photos')"><div class="sl"><span class="si">📷</span><span class="st2" id="sec-photos-label">Registro Fotográfico</span><span class="bx" id="bl-ph" style="margin-left:6px;">0 photos</span></div><div class="sc"><label class="tog" onclick="event.stopPropagation()"><input type="checkbox" onchange="togSE('sec-photos',this)"><span class="tt"></span></label><span class="schev">▼</span></div></div>
     <div class="sb">
-      <div class="pzone"><input type="file" accept="image/*" multiple onchange="addPhotos(event)"><div style="font-size:24px;">📸</div><div style="font-family:var(--mo);font-size:9px;color:var(--mu);letter-spacing:2px;margin-top:5px;">TOCA O ARRASTRA FOTOS AQUÍ</div></div>
+      <div class="pzone"><input type="file" accept="image/*" multiple onchange="addPhotos(event)"><div style="font-size:24px;">📸</div><div style="font-family:var(--mo);font-size:9px;color:var(--mu);letter-spacing:2px;margin-top:5px;"><span id="lbl-photo-drop">TOCA O ARRASTRA FOTOS AQUÍ</span></div></div>
       <div id="r-photos" style="margin-top:8px;display:flex;flex-direction:column;gap:7px;"></div>
     </div>
   </div>
@@ -791,7 +791,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <button class="btn bp" id="bb-submit-btn" onclick="submitReport()">Enviar →</button>
     <button class="btn bg" id="bb-approve-btn" onclick="approveReport()" style="display:none;">✓ Aprobar</button>
     <button class="btn sm" id="bb-reject-btn" onclick="openReject()" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">❌ Rechazar</button>
-    <button class="btn sm" id="bb-custappr-btn" onclick="openCustAppr(curRptId)" style="display:none;background:var(--bl);border-color:var(--bl);color:#fff;">🤝 Firma Cliente</button>
+    <button class="btn sm" id="bb-custappr-btn" onclick="openCustAppr(curRptId)" style="display:none;background:var(--bl);border-color:var(--bl);color:#fff;" id="btn-sign-lbl">🤝 <span id="lbl-sign-btn">Firma Cliente</span></button>
   </div>
 </div>
 <div class="toast" id="tst"></div>
@@ -841,7 +841,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="dv"></div>
     <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:7px;" data-i18n="assigned_team">MIEMBROS ASIGNADOS AL EQUIPO</div>
     <div id="p-mdisp" style="margin-bottom:8px;min-height:24px;"></div>
-    <div style="display:flex;gap:7px;"><select id="p-msel" style="flex:1;font-size:12px;"><option value="">— Agregar de Cuadrilla —</option></select><button class="btn sm bs" onclick="addPM()">+ Agregar</button></div>
+    <div style="display:flex;gap:7px;"><select id="p-msel" style="flex:1;font-size:12px;"><option value="">— Agregar de Cuadrilla —</option></select><button class="btn sm bs" onclick="addPM()"><span id="lbl-add-member-btn">+ Agregar</span></button></div>
   </div>
   <div class="mf"><button class="btn bs" onclick="closeMO('mo-proj')" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveP()" data-i18n="save">Guardar</button></div>
 </div></div>
@@ -870,7 +870,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 
 <!-- CL PICKER -->
 <div class="mo" id="mo-clpick"><div class="modal">
-  <div class="mh"><div class="mtt" id="clpick-title">📂 Cargar Plantilla de Checklist</div><button class="mcl" onclick="closeMO('mo-clpick')">✕</button></div>
+  <div class="mh"><div class="mtt" id="clpick-title">📂 <span id="lbl-load-cl">Cargar Plantilla</span> de Checklist</div><button class="mcl" onclick="closeMO('mo-clpick')">✕</button></div>
   <div class="mb" id="clp-list"></div>
   <div class="mf"><button class="btn bs" onclick="closeMO('mo-clpick')">Cerrar</button></div>
 </div></div>
@@ -890,9 +890,9 @@ tr:hover td{background:rgba(255,255,255,.018);}
       </div>
     </div>
     <label>Ítems</label><div id="clb-items" style="margin-top:7px;"></div>
-    <button class="adb" onclick="addCLBI()">＋ Agregar Ítem</button>
+    <button class="adb" onclick="addCLBI()"><span id="lbl-add-cl-item">＋ Agregar Ítem</span></button>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-clb')">Cancelar</button><button class="btn bp" onclick="saveCLT()">Guardar Plantilla</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-clb')">Cancelar</button><button class="btn bp" onclick="saveCLT()"><span id="lbl-save-cl">Guardar Plantilla</span></button></div>
 </div></div>
 
 
@@ -908,7 +908,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
         <option value="manager">Supervisor</option>
         <option value="technician" selected>Técnico</option>
         <option value="viewer">Visualizador</option>
-        <option value="customer">Cliente</option>
+        <option value="customer" id="opt-role-customer">Cliente</option>
       </select></div>
       <div><label data-i18n="user_status">Estado</label><select id="u-stat"><option value="Active">Activo</option><option value="Inactive">Inactivo</option></select></div>
       <div><label data-i18n="user_language">Idioma / Language</label><select id="u-lang"><option value="es" selected>Español</option><option value="en">English</option></select></div>
@@ -920,7 +920,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="fg f1" style="margin-top:10px;display:none;" id="u-customer-row">
       <div>
         <label>Cliente Asociado *</label>
-        <select id="u-customer-sel" onchange="refreshUCustProjs()" style="width:100%;font-size:12px;"><option value="">— Seleccionar empresa cliente —</option></select>
+        <select id="u-customer-sel" onchange="refreshUCustProjs()" style="width:100%;font-size:12px;"><option value="" id="opt-sel-cust">— Seleccionar empresa cliente —</option></select>
         <div style="font-size:10px;color:var(--mu2);margin-top:4px;">Selecciona la empresa para ver qué proyectos se pueden asignar a este usuario.</div>
       </div>
     </div>
@@ -1034,7 +1034,7 @@ const I18N={
     name:'Nombre',role:'Rol',hours:'Horas',start:'Inicio',end:'Término',
     task_description:'Descripción de tarea',activity:'Actividades',
     material:'Material',unit:'Unidad',qty:'Cant.',
-    occurrence_type:'Tipo',time:'Hora',description:'Descripción',corrective_action:'Acción correctiva',
+    occurrence_type:(currentUser?.lang==='en'?'Type':'Tipo'),time:'Hora',description:(currentUser?.lang==='en'?'Description':'Descripción'),corrective_action:'Acción correctiva',
     notes_label:'Notas y Comentarios',general_notes:'Notas generales',tomorrows_plan:'Plan para mañana',
     page:'Página',of:'de',generated:'Generado',
     // Rejection
@@ -1076,8 +1076,8 @@ const I18N={
     // Status labels
     all_statuses:'Todos los estados',
     // Misc
-    save:'Guardar',cancel:'Cancelar',delete:'Eliminar',edit:'Editar',new:'Nuevo',
-    upload:'+ SUBIR',remove:'Eliminar',yes:'Sí',no:'No',
+    save:'Guardar',cancel:'Cancelar',delete:(currentUser?.lang==='en'?'Remove':'Eliminar'),edit:'Editar',new:'Nuevo',
+    upload:'+ SUBIR',remove:(currentUser?.lang==='en'?'Remove':'Eliminar'),yes:'Sí',no:'No',
     required:'REQUERIDO',no_results:'SIN RESULTADOS',
     search:'Buscar...',active:'Activo',inactive:'Inactivo',
     back:'← Volver',members:'Miembros',no_projects_yet:'SIN PROYECTOS AÚN',
@@ -1204,8 +1204,8 @@ function goPage(p){
   if(p==='projects'){populateProjCustFilter();}
   if(window.innerWidth<=680){document.getElementById('sn').classList.remove('mob');navOpen=false;}
   updateNavBadge();
-}
   applyLang();
+}
 
 function showPage(id){
   document.querySelectorAll('.pg').forEach(el=>el.classList.remove('on'));
@@ -1300,7 +1300,7 @@ function renderAllReports(){
   if(projSel){
     const accessibleProjs=DB.projects.filter(p=>canAccessProject(p.id));
     const curPF=projSel.value;
-    projSel.innerHTML='<option value="">Todos los proyectos</option>'+accessibleProjs.map(p=>`<option value="${p.id}"${p.id===curPF?' selected':''}>${p.name}</option>`).join('');
+    projSel.innerHTML='<option value="" id="opt-all-projects">Todos los proyectos</option>'+accessibleProjs.map(p=>`<option value="${p.id}"${p.id===curPF?' selected':''}>${p.name}</option>`).join('');
   }
   let rpts=[...DB.reports].reverse();
   // Customer sees only reports from their assigned projects (Pending or Approved)
@@ -2001,7 +2001,7 @@ function tRptStatus(s){const lang=currentUser?.lang||'es';return(lang==='en'?RST
 function tStatOpt(s){const lang=currentUser?.lang||'es';return TSTAT.map(v=>`<option value="${v}"${v===s?' selected':''}>${(lang==='en'?TSTAT_EN:TSTAT_ES)[v]||v}</option>`).join('');}
 function addLR(name='',role='Electrician',start='07:00',end='16:00',hrs=''){
   const d=document.createElement('div');d.className='ri';d.style.gridTemplateColumns='2fr 1.2fr 58px 58px 50px 26px';
-  d.innerHTML=`<input type="text" placeholder="${currentUser?.lang==='en'?'Name / Crew':'Nombre / Cuadrilla'}" value="${E(name)}">
+  d.innerHTML=`<input type="text" placeholder="${currentUser?.lang==='en'?'Name / Crew':(currentUser?.lang==='en'?'Name / Crew':'Nombre / Cuadrilla')}" value="${E(name)}">
     <select>${tRoleOpt(role)}</select>
     <input type="time" value="${E(start)}" style="text-align:center;" title="Start time">
     <input type="time" value="${E(end)}" style="text-align:center;" title="End time">
@@ -2023,13 +2023,13 @@ function addTR(desc='',status='Pending',comment='',photos=[],captions=[]){
   const hasPh=photos.length>0;
   d.innerHTML=`
     <div class="ri" style="grid-template-columns:1fr 105px 26px 26px;align-items:center;">
-      <input type="text" placeholder="Descripción de la tarea..." value="${E(desc)}" oninput="renderTaskPhotoGallery()">
+      <input type="text" class="td" placeholder="${currentUser?.lang==='en'?'Task description...':'Descripción de la tarea...'}" value="${E(desc)}" oninput="renderTaskPhotoGallery()">
       <select>${tStatOpt(status)}</select>
-      <button class="ib task-cam-btn" title="Agregar fotos" style="${hasPh?'border-color:var(--am);color:var(--am);':''}">📷</button>
+      <button class="ib task-cam-btn" title="${currentUser?.lang==='en'?'Add photos':'Agregar fotos'}" style="${hasPh?'border-color:var(--am);color:var(--am);':''}">📷</button>
       <button class="ib" onclick="this.closest('.task-entry').remove();upB('r-tasks','bl-t','task');renderTaskPhotoGallery()">✕</button>
     </div>
     <input type="file" accept="image/*" multiple style="display:none;" class="task-file-input" onchange="addTaskPhotos('${uid}',event)">
-    <input type="text" class="task-comment" placeholder="Comentario o nota..." value="${E(comment)}" style="width:100%;background:transparent;border:none;border-top:1px dashed var(--bd);color:var(--mu2);padding:4px 8px;font-size:11px;outline:none;display:${comment?'block':'none'};" onfocus="this.style.display='block'">`;
+    <input type="text" class="task-comment" placeholder="${currentUser?.lang==='en'?'Comment or note...':'Comentario o nota...'}" value="${E(comment)}" style="width:100%;background:transparent;border:none;border-top:1px dashed var(--bd);color:var(--mu2);padding:4px 8px;font-size:11px;outline:none;display:${comment?'block':'none'};" onfocus="this.style.display='block'">`;
   d.querySelector('.task-cam-btn').addEventListener('click', ()=>{
     d.querySelector('.task-file-input').click();
   });
@@ -2124,13 +2124,13 @@ function openTaskPhotoLB(uid,idx){
 }
 function addMR(name='',unit='pcs',qty=''){
   const d=document.createElement('div');d.className='ri';d.style.gridTemplateColumns='2fr 65px 60px 26px';
-  d.innerHTML=`<input type="text" placeholder="Material / item" value="${E(name)}">
+  d.innerHTML=`<input type="text" placeholder="${currentUser?.lang==='en'?'Material / item':'Material / ítem'}" value="${E(name)}">
     <input type="text" placeholder="${currentUser?.lang==='en'?'Unit':'Unidad'}" style="text-align:center;" value="${E(unit)}">
     <input type="number" placeholder="${currentUser?.lang==='en'?'Qty':'Cant.'}" min="0" style="text-align:center;" value="${E(qty)}">
     <button class="ib" onclick="this.closest('.ri').remove();upB('r-mats','bl-m','item')">✕</button>`;
   document.getElementById('r-mats').appendChild(d);upB('r-mats','bl-m','item');
 }
-function upB(rid,bid,u){const n=document.getElementById(rid).querySelectorAll('.ri').length;document.getElementById(bid).textContent=n+' '+u+(n!==1?'s':'');}
+function upB(rid,bid,u){const n=document.getElementById(rid).querySelectorAll('.ri').length;const es3=currentUser?.lang!=='en';const units={item:es3?'ítem':'item',task:es3?'tarea':'task',photo:es3?'foto':'photo',entry:es3?'entrada':'entry'};const u2=units[u]||u;document.getElementById(bid).textContent=n+' '+u2+(n!==1&&!es3?'s':n!==1&&es3?'s':'');}
 function impW(){if(!DB.workers.length){toast(currentUser?.lang==='en'?'NO WORKERS IN TASKFORCE':'SIN TRABAJADORES EN CUADRILLA','var(--am)');return;}const act=DB.workers.filter(w=>w.status==='Active');act.forEach(w=>addLR(w.name,w.role,'07:00','16:00',''));toast('✓ IMPORTED '+act.length+' WORKERS');}
 function impM(){if(!DB.materials.length){toast(currentUser?.lang==='en'?'NO MATERIALS IN CATALOG':'SIN MATERIALES EN CATÁLOGO','var(--am)');return;}DB.materials.forEach(m=>addMR(m.name,m.unit,m.qty||''));toast('✓ '+(currentUser?.lang==='en'?'IMPORTED':'IMPORTADOS')+' '+DB.materials.length+' '+(currentUser?.lang==='en'?'MATERIALS':'MATERIALES'));}
 
@@ -2691,18 +2691,18 @@ function addOCC(type='',time='',desc='',action='',photos=[],captions=[]){
   d._photos=[...photos];d._captions=[...captions];
   d.style.cssText='background:rgba(224,82,82,.05);border:1px solid rgba(224,82,82,.25);border-left:3px solid var(--rd);padding:10px;margin-bottom:8px;';
   d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-    <span style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--rd);">⚠ ${es?'OCURRENCIA':'OCCURRENCE'}</span>
+    <span style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--rd);">⚠ ${es?(currentUser?.lang==='en'?'OCCURRENCE':'OCURRENCIA'):'OCCURRENCE'}</span>
     <div style="display:flex;gap:6px;">
       <button class="ib occ-cam-btn" title="${es?'Agregar fotos':'Add photos'}" style="${photos.length?'border-color:var(--am);color:var(--am);':''}">📷</button>
-      <button class="ib" onclick="this.closest('.occ-entry').remove();upOCC()">✕ ${es?'Eliminar':'Remove'}</button>
+      <button class="ib" onclick="this.closest('.occ-entry').remove();upOCC()">✕ ${es?(currentUser?.lang==='en'?'Remove':'Eliminar'):'Remove'}</button>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 80px;gap:8px;margin-bottom:8px;">
-    <div><label>${es?'Tipo':'Type'}</label><select class="occ-type" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;">${getOccTypes().map(t=>`<option${t===type?' selected':''}>${t}</option>`).join('')}</select></div>
+    <div><label>${es?(currentUser?.lang==='en'?'Type':'Tipo'):'Type'}</label><select class="occ-type" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;">${getOccTypes().map(t=>`<option${t===type?' selected':''}>${t}</option>`).join('')}</select></div>
     <div><label>${es?'Hora':'Time'}</label><input type="time" class="occ-time" value="${E(time)}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;"></div>
   </div>
-  <div style="margin-bottom:8px;"><label>${es?'Descripción':'Description'}</label><textarea class="occ-desc" rows="2" placeholder="${es?'Describe la ocurrencia...':'Describe the occurrence...'}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;resize:vertical;">${E(desc)}</textarea></div>
-  <div style="margin-bottom:8px;"><label>${es?'Acción correctiva tomada':'Corrective Action Taken'}</label><textarea class="occ-act" rows="2" placeholder="${es?'Acciones tomadas o planificadas...':'Actions taken or planned...'}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;resize:vertical;">${E(action)}</textarea></div>
+  <div style="margin-bottom:8px;"><label>${es?(currentUser?.lang==='en'?'Description':'Descripción'):'Description'}</label><textarea class="occ-desc" rows="2" placeholder="${es?(currentUser?.lang==='en'?'Describe the occurrence...':'Describe la ocurrencia...'):'Describe the occurrence...'}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;resize:vertical;">${E(desc)}</textarea></div>
+  <div style="margin-bottom:8px;"><label>${es?(currentUser?.lang==='en'?'Corrective action taken':'Acción correctiva tomada'):'Corrective Action Taken'}</label><textarea class="occ-act" rows="2" placeholder="${es?'Acciones tomadas o planificadas...':'Actions taken or planned...'}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;resize:vertical;">${E(action)}</textarea></div>
   <input type="file" accept="image/*" multiple style="display:none;" class="occ-file-input">
   <div class="occ-photo-grid" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;"></div>`;
   // Wire up photo button
@@ -3213,6 +3213,8 @@ function applyLang(){
   const navMap={dashboard:'dashboard',projects:'projects',taskforce:'taskforce',
     materials:'materials',checklists:'checklists','all-reports':'all_reports',
     users:'users',customers:'customers'};
+  // New Report nav item
+  _setTxt('nav-lbl-new-report', es?'Nuevo Informe':'New Report');
   document.querySelectorAll('.ni[data-p]').forEach(el=>{
     const key=navMap[el.getAttribute('data-p')];if(!key)return;
     const ic=el.querySelector('.ni-ic'),nb=el.querySelector('.nb');
@@ -3352,6 +3354,26 @@ function applyLang(){
   // Notes labels
   _setTxt('lbl-r-notes-gen',es?'Notas Generales':'General Notes');
   _setTxt('lbl-r-tom',es?'Plan para Mañana':"Tomorrow's Plan");
+
+  // ── Report form buttons ──────────────────────────────
+  _setTxt('lbl-add-worker', es?'Agregar Trabajador':'Add Worker');
+  _setTxt('lbl-import-crew', es?'Importar Cuadrilla':'Import Crew');
+  // Update counter labels if they exist
+  const blL=document.getElementById('bl-l');
+  if(blL){const n=blL.textContent.match(/\d+/)?.[0]||'0';blL.textContent=n+' '+(es?'trabajador':'worker')+(parseInt(n)!==1?'s':'');}
+  _setTxt('lbl-add-equip', es?'Agregar Equipo':'Add Equipment');
+  _setTxt('lbl-add-task', es?'Agregar Tarea':'Add Task');
+  _setTxt('lbl-task-photos', es?'📷 FOTOS DE TAREAS':'📷 TASK PHOTOS');
+  _setTxt('lbl-add-mat-rpt', es?'Agregar Material':'Add Material');
+  _setPlh('eq-desc-plh',es?'Descripción del equipo...':'Equipment description...');
+  _setTxt('lbl-import-cat', es?'Importar Catálogo':'Import Catalog');
+  _setTxt('lbl-add-occ', es?'Agregar Ocurrencia':'Add Occurrence');
+  _setTxt('lbl-no-cl', es?'NO HAY CHECKLIST CARGADO':'NO CHECKLIST LOADED');
+  _setTxt('lbl-load-cl', es?'Cargar Plantilla':'Load Template');
+
+  // ── Dynamic counters in section headers ─────────────────
+  // Labor/equip/task counters use addLR/addEQ/addTK which run after
+  // We patch the placeholder text via IDs when available
   _setPlh('r-super',es?'Nombre del supervisor':'Supervisor name');
   _setTxt('lbl-site-hdr',es?'📍 SITIO DE TRABAJO':'📍 WORK SITE');
   _setTxt('lbl-r-site-name',es?'Nombre del Sitio':'Site Name');
@@ -3373,6 +3395,28 @@ function applyLang(){
   _setPlh('r-notes',es?'Observaciones generales del día...':'General notes for the day...');
   _setPlh('r-tom',es?'Descripción de actividades programadas...':'Planned work description...');
 
+  // ── Section label translations (backup - already set via _setTxt below) ──
+  // These are set via _setTxt calls in the section toggles section
+  // ── Static placeholders ──────────────────────────────────────────────
+  _setPlh('r-notes', es?'Observaciones, instrucciones o comentarios...':'General observations and notes...');
+  _setPlh('r-tom', es?'Descripción de actividades programadas para mañana...':'Planned activities for tomorrow...');
+  // ── Photo drop zone ──────────────────────────────────────────────────
+  _setTxt('lbl-photo-drop', es?'TOCA O ARRASTRA FOTOS AQUÍ':'TAP OR DRAG PHOTOS HERE');
+
+  // ── Buttons & dropdowns without data-i18n ────────────────────────────
+  _setTxt('lbl-new-report-dash', es?'Nuevo Informe':'New Report');
+  _setTxt('lbl-sign-btn', es?'Firma Cliente':'Customer Sign-Off');
+  _setTxt('lbl-add-member-btn', es?'+ Agregar':'+ Add');
+  _setTxt('lbl-add-cl-item', es?'＋ Agregar Ítem':'＋ Add Item');
+  _setTxt('lbl-save-cl', es?'Guardar Plantilla':'Save Template');
+  const _optAP=document.getElementById('opt-all-projects');
+  if(_optAP)_optAP.textContent=es?'Todos los proyectos':'All projects';
+  const _optAC=document.getElementById('opt-all-customers');
+  if(_optAC)_optAC.textContent=es?'Todos los clientes':'All customers';
+  const _optSC=document.getElementById('opt-sel-cust');
+  if(_optSC)_optSC.textContent=es?'— Seleccionar empresa cliente —':'— Select customer company —';
+  const _optCR=document.getElementById('opt-role-customer');
+  if(_optCR)_optCR.textContent=es?'Cliente':'Customer';
   // ── Bottom bar buttons ─────────────────────────
   const bbSubmit=document.getElementById('bb-submit-btn');
   if(bbSubmit)bbSubmit.textContent=es?'Enviar →':'Submit →';
@@ -3862,7 +3906,7 @@ function renderCustomers(){
         </div>
         <div style="display:flex;gap:5px;flex-shrink:0;">
           <button class="ib ed" onclick="openCustM('${c.id}')" title="${es?'Editar':'Edit'}">✏</button>
-          <button class="ib" onclick="delCust('${c.id}')" title="${es?'Eliminar':'Delete'}">🗑</button>
+          <button class="ib" onclick="delCust('${c.id}')" title="${es?(currentUser?.lang==='en'?'Remove':'Eliminar'):'Delete'}">🗑</button>
         </div>
       </div>
       ${projs.length>0?`<div style="margin-top:8px;">
@@ -4002,7 +4046,7 @@ document.getElementById('lin-u').addEventListener('keydown',e=>{if(e.key==='Ente
       <button class="btn sm bg" id="mo-view-approve" style="display:none;">✓ Aprobar</button>
       <button class="btn sm" id="mo-view-cust-reject" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">↩ Solicitar corrección</button>
       <button class="btn sm" id="mo-view-reject" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">❌ Rechazar</button>
-      <button class="btn sm bs" id="mo-view-custappr" style="display:none;">🤝 Firma Cliente</button>
+      <button class="btn sm bs" id="mo-view-custappr" style="display:none;" id="btn-sign-lbl">🤝 <span id="lbl-sign-btn">Firma Cliente</span></button>
       <button class="btn sm bs" id="mo-view-edit">✏ Editar</button>
       <button class="btn sm bs" id="mo-view-pdf">📄 PDF</button>
       <button class="mcl" onclick="closeMO('mo-view')">✕</button>
