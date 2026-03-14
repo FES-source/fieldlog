@@ -1,4 +1,4 @@
-<!-- FieldLog v1.5.0 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
+<!-- FieldLog v1.5.1 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +10,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FieldLog">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <title>FieldLog</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@600;700;900&display=swap" rel="stylesheet">
 <!-- Firebase SDK (compat) -->
@@ -484,7 +487,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 <div class="pg on" id="page-dashboard"><div class="wrap">
   <div class="ph">
     <div class="pht"><small data-i18n="overview_label">// OVERVIEW</small><span data-i18n="dashboard">Dashboard</span></div>
-    <div class="pha"><button class="btn bp" onclick="startNewReport(null)">＋ <span id="lbl-new-report-ar">Nuevo Informe</span></button></div>
+    <div class="pha"><button class="btn bp" onclick="startNewReport(null)">＋ <span id="lbl-new-report-dash">Nuevo Informe</span></button></div>
   </div>
   <div class="sg">
     <div class="sv"><div class="svl">Projects</div><div class="svv" id="s-proj">0</div><div class="svs" data-i18n="active">Activos</div></div>
@@ -910,7 +913,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 <div class="mo" id="mo-clpick"><div class="modal">
   <div class="mh"><div class="mtt" id="clpick-title">📂 <span id="lbl-load-cl">Cargar Plantilla</span> de Checklist</div><button class="mcl" onclick="closeMO('mo-clpick')">✕</button></div>
   <div class="mb" id="clp-list"></div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-clpick')">Cerrar</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-clpick')" id="clpick-close">Cerrar</button></div>
 </div></div>
 
 <!-- QUICK BUILD -->
@@ -1399,7 +1402,7 @@ function rptRow(r,withProj=false){
     <div class="rr-info">
       <div class="rr-date">${E(r.date)}</div>
       ${withProj&&projName?`<div class="rr-proj">${E(projName)}</div>`:''}
-      <div class="rr-summary">${r.laborCount||0} trabajadores · ${r.taskCount||0} tareas${clItems.length?` · ☑ ${clDone}/${clItems.length}`:''}</div>
+      <div class="rr-summary">${r.laborCount||0} ${currentUser?.lang==='en'?'workers':'trabajadores'} · ${r.taskCount||0} ${currentUser?.lang==='en'?'tasks':'tareas'}${clItems.length?` · ☑ ${clDone}/${clItems.length}`:''}</div>
     </div>
     ${photos.length?`<div class="rr-photo-count">📷 ${photos.length}</div>`:''}
     <div class="rr-photo-count"><span class="st-${(r.status||'draft').toLowerCase().replace(/ /g,'-')}">${tRptStatus(r.status||'Draft')}</span></div>
@@ -1656,13 +1659,13 @@ function renderPDOverview(){
     `<div style="background:rgba(224,82,82,.12);border:1px solid var(--rd);border-left:4px solid var(--rd);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
       <span style="font-size:20px;">⚠️</span>
       <div><div style="font-family:var(--mo);font-size:10px;color:var(--rd);letter-spacing:2px;font-weight:700;">PROYECTO ATRASADO</div>
-      <div style="font-size:11px;color:var(--mu2);margin-top:2px;">La fecha de término fue el ${p.end} — ${Math.abs(daysLeft)} días atrás. El estado sigue como "${p.status}".</div></div>
+      <div style="font-size:11px;color:var(--mu2);margin-top:2px;">${currentUser?.lang==='en'?`The deadline was ${p.end} — ${Math.abs(daysLeft)} days ago. Status is still "${p.status}".`:`La fecha de término fue el ${p.end} — ${Math.abs(daysLeft)} días atrás. El estado sigue como "${p.status}".`}</div></div>
     </div>`:
     (daysLeft!==null&&daysLeft<=14&&p.status!=='Completed'&&p.status!=='Cancelled')?
     `<div style="background:rgba(245,166,35,.08);border:1px solid var(--am);border-left:4px solid var(--am);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
       <span style="font-size:20px;">⚡</span>
       <div><div style="font-family:var(--mo);font-size:10px;color:var(--am);letter-spacing:2px;font-weight:700;">PRÓXIMO A VENCER</div>
-      <div style="font-size:11px;color:var(--mu2);margin-top:2px;">Quedan ${daysLeft} día${daysLeft!==1?'s':''} para el término (${p.end}).</div></div>
+      <div style="font-size:11px;color:var(--mu2);margin-top:2px;">${currentUser?.lang==='en'?`${daysLeft} day${daysLeft!==1?'s':''} remaining until deadline (${p.end}).`:`Quedan ${daysLeft} día${daysLeft!==1?'s':''} para el término (${p.end}).`}</div></div>
     </div>`:'';
   const progHtml=pct2!==null?`<div style="margin-top:10px;">
     <div style="display:flex;justify-content:space-between;font-family:var(--mo);font-size:9px;color:var(--mu);letter-spacing:1px;margin-bottom:4px;">
@@ -1696,7 +1699,7 @@ function renderPDOverview(){
       </div>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">📋 Últimos Informes</div><button class="btn sm bs" onclick="switchPDTab('reports')">Ver todos</button></div>
+      <div class="ch"><div class="ct">📋 ${currentUser?.lang==='en'?'Latest Reports':'Últimos Informes'}</div><button class="btn sm bs" onclick="switchPDTab('reports')">${currentUser?.lang==='en'?'View all':'Ver todos'}</button></div>
       <div class="cb" style="padding-top:8px;">
         ${rpts.length?[...rpts].slice(-5).reverse().map(r=>rptRow(r,false)).join(''):`<div class="emp"><div class="eic">📋</div>${currentUser?.lang==='en'?'NO REPORTS YET':'SIN INFORMES AÚN'}</div>`}
       </div>
@@ -2368,8 +2371,8 @@ function renderCLR(){
         </div>`;
       } else if(tp==='yesno'){
         ansHtml=`<div class="sna">
-          <button class="sna-btn si ${item.singleSel==='si'?'on':''}" onclick="setCLISingle('${item.id}','si')">Sí</button>
-          <button class="sna-btn no ${item.singleSel==='no'?'on':''}" onclick="setCLISingle('${item.id}','no')">No</button>
+          <button class="sna-btn si ${item.singleSel==='si'?'on':''}" onclick="setCLISingle('${item.id}','si')">${currentUser?.lang==='en'?'Yes':'Sí'}</button>
+          <button class="sna-btn no ${item.singleSel==='no'?'on':''}" onclick="setCLISingle('${item.id}','no')">${currentUser?.lang==='en'?'No':'No'}</button>
         </div>`;
       } else if(tp==='single'){
         const opts=item.opts||(activeCL.snaLabels||['Si','No','N/A']);
@@ -2391,7 +2394,7 @@ function renderCLR(){
           <div style="flex:1;">
             <div class="cli-txt">${E(item.text)}</div>
             <div style="margin-top:5px;">${ansHtml}</div>
-            ${unanswered?`<div style="font-family:var(--mo);font-size:8px;color:var(--rd);letter-spacing:1px;margin-top:3px;">⚠ REQUERIDO</div>`:''}
+            ${unanswered?`<div style="font-family:var(--mo);font-size:8px;color:var(--rd);letter-spacing:1px;margin-top:3px;">⚠ ${currentUser?.lang==='en'?'REQUIRED':'REQUERIDO'}</div>`:''}
           </div>
           <span class="cli-cat">${E(item.category)}</span>
           <button style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:11px;padding:0 4px;" onclick="event.stopPropagation();togCLI('${item.id}')" title="Fotos / Nota">📷</button>
@@ -2890,7 +2893,7 @@ function genPDF(id,dataOverride){
   const clPhotoEvidenceHTML=clPhotoItems.map(item=>{
     const pairs=[];
     for(let pi=0;pi<item.photos.length;pi+=2)pairs.push(item.photos.slice(pi,pi+2));
-    const snaTxt=item.sna==='si'?'Si':item.sna==='no'?'No':item.sna==='na'?'N/A':'-';
+    const snaTxt=item.sna==='si'?(currentUser?.lang==='en'?'Yes':'Si'):item.sna==='no'?'No':item.sna==='na'?'N/A':'-';
     const check=item.checked?'✓ ':'□ ';
     const pairHTML=pairs.map(pair=>{
       const imgs=pair.map(p=>'<div style="border:1px solid #ddd;overflow:hidden;"><img src="'+p+'" style="width:100%;height:190px;object-fit:cover;display:block;"></div>').join('');
@@ -3178,7 +3181,7 @@ function viewReport(id){
     const pct=clit.length?Math.round(done/clit.length*100):0;
     html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">☑ Checklist: ${E(r.checklist.name)} (${done}/${clit.length})</div>`;
     html+=`<div style="background:var(--s2);height:4px;margin-bottom:6px;"><div style="width:${pct}%;height:100%;background:var(--gn);"></div></div>`;
-    Object.entries(grps).forEach(([cat,items])=>{html+=`<div style="font-family:var(--mo);font-size:8px;letter-spacing:2px;color:var(--mu);padding:4px 0;border-bottom:1px solid var(--bd);text-transform:uppercase;">${cat}</div>`;items.forEach(it=>{const sna=it.sna==='si'?'<span style="color:var(--gn);">Si</span>':it.sna==='no'?'<span style="color:var(--rd);">No</span>':it.sna==='na'?'<span style="color:var(--mu);">N/A</span>':'';const photos=(it.photos||[]).map(p=>`<img src="${p}" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--bd);margin-right:3px;">`).join('');html+=`<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:11px;align-items:flex-start;"><span style="color:${it.checked?'var(--gn)':'var(--mu)'};">${it.checked?'✓':'□'}</span><div style="flex:1;">${E(it.text)}${photos?`<div style="margin-top:4px;">${photos}</div>`:''}</div>${sna}</div>`;});});
+    Object.entries(grps).forEach(([cat,items])=>{html+=`<div style="font-family:var(--mo);font-size:8px;letter-spacing:2px;color:var(--mu);padding:4px 0;border-bottom:1px solid var(--bd);text-transform:uppercase;">${cat}</div>`;items.forEach(it=>{const sna=it.sna==='si'?`<span style="color:var(--gn);">${currentUser?.lang==='en'?'Yes':'Si'}</span>`:it.sna==='no'?'<span style="color:var(--rd);">No</span>':it.sna==='na'?'<span style="color:var(--mu);">N/A</span>':"";const photos=(it.photos||[]).map(p=>`<img src="${p}" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--bd);margin-right:3px;">`).join('');html+=`<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:11px;align-items:flex-start;"><span style="color:${it.checked?'var(--gn)':'var(--mu)'};">${it.checked?'✓':'□'}</span><div style="flex:1;">${E(it.text)}${photos?`<div style="margin-top:4px;">${photos}</div>`:''}</div>${sna}</div>`;});});
   }
   const pdata=r.photoData||(r.photos||[]).map((src,i)=>({src,caption:(r.photoCaptions||[])[i]||''}));
   if(pdata.length){
@@ -3582,6 +3585,7 @@ function applyLang(){
   // Update checklist item placeholders
   document.querySelectorAll('.cl-item-plh').forEach(el=>el.placeholder=es?'Descripción del ítem...':'Item description...');
   _setTxt('lbl-save-cl', es?'Guardar Plantilla':'Save Template');
+  _setTxt('clpick-close', es?'Cerrar':'Close');
   _setTxt('lbl-no-templates', es?'SIN PLANTILLAS AÚN':'NO TEMPLATES YET');
   _setTxt('lbl-no-materials', es?'SIN MATERIALES AÚN':'NO MATERIALS YET');
   _setTxt('lbl-ar-empty', es?'SIN INFORMES AÚN':'NO REPORTS YET');
