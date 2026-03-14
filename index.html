@@ -1,4 +1,4 @@
-<!-- FieldLog v1.5.4 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
+<!-- FieldLog v1.5.7 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1041,6 +1041,20 @@ const PERM_LABELS={
   export_pdf:'Export PDF',
   customer_signoff:'Customer Sign-Off',
 };
+const PERM_LABELS_ES={
+  view_reports:'Ver Informes',
+  create_reports:'Crear Informes',
+  edit_reports:'Editar Informes',
+  delete_reports:'Eliminar Informes',
+  manage_projects:'Gestionar Proyectos',
+  manage_taskforce:'Gestionar Cuadrilla',
+  manage_materials:'Gestionar Materiales',
+  manage_checklists:'Gestionar Checklists',
+  approve_reports:'Aprobar Informes',
+  export_pdf:'Exportar PDF',
+  customer_signoff:'Firma del Cliente',
+};
+function getPermLabel(pk){return (currentUser?.lang==='en'?PERM_LABELS:PERM_LABELS_ES)[pk]||pk;}
 // Perms available per role (customer only gets customer_signoff)
 const ROLE_PERMS={
   admin:()=>Object.keys(PERM_LABELS),
@@ -2055,7 +2069,8 @@ function resetRF(){
   document.querySelectorAll('.wp').forEach((wp,i)=>wp.classList.toggle('on',i===0));
   // Rows
   ['r-labor','r-equip','r-tasks','r-mats','r-occ'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='';});
-  ['bl-l','bl-e','bl-t','bl-m'].forEach((b,i)=>document.getElementById(b).textContent='0 '+['workers','items','tasks','items'][i]);
+  const _es3=currentUser?.lang!=='en';
+  [['bl-l',_es3?'trabajador':'worker'],['bl-e',_es3?'ítem':'item'],['bl-t',_es3?'tarea':'task'],['bl-m',_es3?'ítem':'item']].forEach(([b,u])=>document.getElementById(b).textContent='0 '+u+'s');
   document.getElementById('bl-occ').textContent=currentUser?.lang==='en'?'0 entries':'0 entradas';
   reportPhotos=[];renderPhotos();
   // Section enables
@@ -2171,7 +2186,7 @@ function renderTaskPhotoGallery(){
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
         <span style="font-family:var(--mo);font-size:9px;letter-spacing:1px;color:var(--mu);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">▸ ${E(desc)}</span>
         <label style="font-family:var(--mo);font-size:9px;letter-spacing:1px;color:var(--am);cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border:1px solid var(--am);background:var(--abg);white-space:nowrap;">
-          📷 Agregar fotos
+          ${currentUser?.lang==='en'?'📷 Add photos':'📷 Agregar fotos'}
           <input type="file" accept="image/*" multiple style="display:none;" onchange="addTaskPhotos('${uid}',event)">
         </label>
       </div>
@@ -2284,7 +2299,7 @@ function openLBRaw(i){
   lbCaptions=reportPhotos.map(p=>p.caption||'');
   lbIdx=i;renderLB();openMO('mo-lb');
 }
-function upPH(){document.getElementById('bl-ph').textContent=reportPhotos.length+' foto'+(reportPhotos.length!==1?'s':'');}
+function upPH(){const n=reportPhotos.length;const es3=currentUser?.lang!=='en';document.getElementById('bl-ph').textContent=n+' '+(es3?'foto':'photo')+(n!==1?'s':'');}
 
 // SIGNATURE — FIXED
 function initSig(){
@@ -2524,7 +2539,7 @@ function collectRpt(){
 // ACTIVITY LOG HELPERS
 // ═══════════════════════════════════════════════
 // Registra una acción en el log de actividad del informe
-function logActivity(rpt, action, extraNote=''){
+function logActivity(rpt, action, extraNote='', noteData={}){
   if(!rpt.activityLog)rpt.activityLog=[];
   rpt.activityLog.push({
     action,
@@ -2532,8 +2547,28 @@ function logActivity(rpt, action, extraNote=''){
     userId:currentUser?.id||'',
     role:currentUser?.role||'',
     ts:new Date().toISOString(),
-    note:extraNote
+    noteKey:extraNote, // kept for backwards compat with old entries
+    noteData,         // structured data for translation
+    note:extraNote    // legacy field - will be overridden by noteKey on render
   });
+}
+
+// Translate a structured activity note into the viewer's language
+function translateNote(entry, lang){
+  const es=lang!=='en';
+  const nd=entry.noteData||{};
+  const k=entry.noteKey||entry.note||'';
+  // Structured note keys
+  if(k==='report.created')        return es?'Informe creado':'Report created';
+  if(k==='report.saved')          return es?'Guardado':'Saved';
+  if(k==='report.submitted')      return es?'Firmado y enviado a revisión':'Signed and sent for review';
+  if(k==='report.edited')         return es?'Informe editado':'Report edited';
+  if(k==='report.approved')       return (es?'Firmado por ':'Signed by ')+(nd.by||'')+(nd.pendingCust?(es?' — esperando firma del cliente':' — awaiting customer sign-off'):'');
+  if(k==='report.cust_approved')  return (es?'Firma del cliente por ':'Customer sign-off by ')+(nd.by||'');
+  if(k==='report.rejected')       return (es?'Rechazado por ':'Rejected by ')+(nd.by||'')+': '+(nd.reason||'');
+  if(k==='report.cust_rejected')  return (es?'Cliente solicitó corrección: ':'Customer requested correction: ')+(nd.reason||'');
+  // Legacy: plain text note stored directly - return as-is (old entries)
+  return k;
 }
 function openActivityLog(){
   const rpt=editingRpt&&curRptId?DB.reports.find(r=>r.id===curRptId):null;
@@ -2554,7 +2589,7 @@ function openActivityLog(){
           <span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${new Date(e.ts).toLocaleString()}</span>
         </div>
         <div style="font-size:12px;margin-top:3px;">${E(e.user)} <span style="font-family:var(--mo);font-size:9px;color:var(--mu);">(${e.role})</span></div>
-        ${e.note?`<div style="font-size:11px;color:var(--mu2);margin-top:2px;font-style:italic;">${E(e.note)}</div>`:''}
+        ${e.noteKey||e.note?`<div style="font-size:11px;color:var(--mu2);margin-top:2px;font-style:italic;">${E(translateNote(e, uLang))}</div>`:''}
       </div>
     </div>`).join('')
     :`<div class="emp"><div class="eic">📋</div>${emptyMsg}</div>`;
@@ -2571,12 +2606,12 @@ function saveReport(){
     if(idx>-1){
       const existing=DB.reports[idx];
       Object.assign(existing,data);
-      logActivity(existing,'saved');
+      logActivity(existing,'saved','report.saved');
       fbSave('reports',existing.id,existing).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});
     }
   } else {
     data.activityLog=[];
-    logActivity(data,'created');
+    logActivity(data,'created','report.created');
     DB.reports.push(data);curRptId=data.id;editingRpt=true;
     fbSave('reports',data.id,data).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});
   }
@@ -2661,10 +2696,10 @@ function doSubmitSigned(){
   const isNew=!(editingRpt&&curRptId);
   if(!isNew){
     const idx=DB.reports.findIndex(r=>r.id===curRptId);
-    if(idx>-1){const ex=DB.reports[idx];Object.assign(ex,data);logActivity(ex,'submitted',currentUser?.lang==='en'?'Signed and sent for review':'Firmado y enviado a revisión');fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});}
+    if(idx>-1){const ex=DB.reports[idx];Object.assign(ex,data);logActivity(ex,'submitted','report.submitted');fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});}
   } else {
     data.activityLog=[];data.createdAt=new Date().toISOString();
-    logActivity(data,'created',currentUser?.lang==='en'?'Report created':'Informe creado');logActivity(data,'submitted',currentUser?.lang==='en'?'Signed and sent for review':'Firmado y enviado a revisión');
+    logActivity(data,'created','report.created');logActivity(data,'submitted','report.submitted');
     DB.reports.push(data);curRptId=data.id;editingRpt=true;
     fbSave('reports',data.id,data).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});
   }
@@ -2698,7 +2733,7 @@ function doApproveSigned(){
   const needsCust=proj?.requireCustomerApproval;
   ex.approveSignature=sigData;ex.approvedBy=sigName;ex.approvedByRole=sigRole;ex.approvedAt=new Date().toISOString();
   ex.status=needsCust?'Pending Customer':'Approved';
-  const _appLang=currentUser?.lang||'es';logActivity(ex,'approved',(_appLang==='en'?'Signed by ':'Firmado por ')+sigName+(_appLang==='en'?(needsCust?' — awaiting customer sign-off':''):(needsCust?' — esperando firma del cliente':'')));
+  logActivity(ex,'approved','report.approved',{by:sigName,pendingCust:!!needsCust});
   fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});closeMO('mo-approve-sig');setBBStatus(ex.status);renderDash();updateNavBadge();
   toast(needsCust?(currentUser?.lang==='en'?'✓ APPROVED — AWAITING CUSTOMER SIGN-OFF':'✓ APROBADO — ESPERANDO FIRMA DEL CLIENTE'):(currentUser?.lang==='en'?'✓ REPORT APPROVED':'✓ INFORME APROBADO'),'var(--gn)');
 }
@@ -2729,7 +2764,7 @@ function doCustApprSigned(){
   ex.customerSignature=sigData;ex.customerName=sigName;ex.customerRole=sigRole;
   ex.customerApprovedAt=new Date().toISOString();ex.status='Approved';
   fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});
-  logActivity(ex,'approved',(currentUser?.lang==='en'?'Customer sign-off by ':'Firma del cliente por ')+sigName);
+  logActivity(ex,'approved','report.cust_approved',{by:sigName});
   closeMO('mo-custappr-sig');
   closeMO('mo-view');
   if(curRptId===rptId)setBBStatus('Approved');
@@ -2759,7 +2794,7 @@ function doCustReject(){
   ex.custRejectedBy=currentUser?.name||(currentUser?.lang==='en'?'Customer':'Cliente');
   ex.custRejectedAt=new Date().toISOString();
   ex.custRejectionReason=reason;
-  logActivity(ex,'rejected',(currentUser?.lang==='en'?'Customer requested correction: ':'Cliente solicitó corrección: ')+reason);
+  logActivity(ex,'rejected','report.cust_rejected',{reason});
   fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});
   closeMO('mo-cust-reject');
   renderDash();renderAllReports();updateNavBadge();
@@ -2787,7 +2822,7 @@ function doReject(){
   ex.rejectedByRole=currentUser?.role||'';
   ex.rejectedAt=new Date().toISOString();
   ex.rejectionReason=reason;
-  logActivity(ex,'rejected',(currentUser?.lang==='en'?'Rejected by ':'Rechazado por ')+(currentUser?.name||'Manager')+': '+reason);
+  logActivity(ex,'rejected','report.rejected',{by:currentUser?.name||'Manager',reason});
   closeMO('mo-reject');
   if(curRptId===rptId)setBBStatus('Rejected');
   renderDash();renderAllReports();updateNavBadge();
@@ -2883,7 +2918,7 @@ function genPDF(id,dataOverride){
     const itemRows=items.map(item=>{
       const sl=snaLabels;
       const sna=item.sna==='si'?`<span style="color:#2e7d52;font-weight:700;">${sl[0]}</span>`:item.sna==='no'?`<span style="color:#c43c3c;font-weight:700;">${sl[1]}</span>`:item.sna==='na'?`<span style="color:#888;">${sl[2]}</span>`:'<span style="color:#aaa;">—</span>';
-      const note=item.note?'<div style="font-size:9px;color:#888;margin-top:2px;font-style:italic;">Note: '+item.note+'</div>':'';
+      const note=item.note?'<div style="font-size:9px;color:#888;margin-top:2px;font-style:italic;">'+(pdfLang==='en'?'Note: ':'Nota: ')+item.note+'</div>':'';
       const check=item.checked?'<span style="color:#2e7d52;font-weight:700;">✓</span>':'<span style="color:#aaa;">□</span>';
       return '<tr><td style="padding:5px 8px;border:1px solid #e0e0e0;font-size:10px;line-height:1.5;">'+check+' '+item.text+note+'</td><td style="padding:5px 8px;border:1px solid #e0e0e0;text-align:center;font-size:10px;white-space:nowrap;vertical-align:middle;">'+sna+'</td></tr>';
     }).join('');
@@ -3073,7 +3108,7 @@ ${r.tasks.map(t=>`<tr><td>${t.desc||'—'}${t.comment?`<div style="font-size:9px
     return '<div style="margin-bottom:14px;page-break-inside:avoid;"><div style="font-size:9px;letter-spacing:1px;color:#5a5040;background:#f5f2ed;padding:5px 8px;margin-bottom:8px;border-left:3px solid #f5a623;font-weight:600;">'+(t.desc||'—')+'<span style="float:right;'+statusCls+'">'+tStatLabel+'</span></div>'+pairHTML+'</div>';
   }).join('');
   const photoSection=tasksWithPhotos.length?`
-<div class="sec-title" style="margin-top:16px;">Evidencia fotográfica — Tareas (${tasksWithPhotos.length})</div>
+<div class="sec-title" style="margin-top:16px;">${pdfLang==='en'?'Photo Evidence — Tasks':'Evidencia fotográfica — Tareas'} (${tasksWithPhotos.length})</div>
 ${taskPhotoEvidence}`:'';
   return taskTable+photoSection;
 })()}
@@ -3214,7 +3249,7 @@ function viewReport(id){
     html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:14px 0 6px;">📋 ${vwLogTitle}</div><div style="background:var(--s2);border:1px solid var(--bd);">`;
     log.forEach(e=>{html+=`<div style="display:flex;gap:10px;padding:7px 10px;border-bottom:1px solid var(--bd);align-items:flex-start;font-size:11px;">
       <span style="font-family:var(--mo);font-size:9px;color:${actionColors[e.action]||'var(--mu)'};letter-spacing:1px;text-transform:uppercase;width:68px;flex-shrink:0;">${vwActLabels[e.action]||e.action}</span>
-      <div style="flex:1;"><span style="font-weight:600;">${E(e.user)}</span><span style="font-family:var(--mo);font-size:9px;color:var(--mu);margin-left:6px;">(${e.role})</span>${e.note?`<span style="color:var(--mu2);margin-left:6px;font-size:10px;">— ${E(e.note)}</span>`:''}</div>
+      <div style="flex:1;"><span style="font-weight:600;">${E(e.user)}</span><span style="font-family:var(--mo);font-size:9px;color:var(--mu);margin-left:6px;">(${e.role})</span>${(e.noteKey||e.note)?`<span style="color:var(--mu2);margin-left:6px;font-size:10px;">— ${E(translateNote(e, currentUser?.lang||'es'))}</span>`:''}</div>
       <span style="font-family:var(--mo);font-size:9px;color:var(--mu);flex-shrink:0;">${new Date(e.ts).toLocaleString()}</span>
     </div>`;});
     html+='</div>';
@@ -3958,7 +3993,7 @@ function refreshUPerms(){
     permg.innerHTML=shownPerms.map(pk=>{
       const checked=userPerms.includes(pk)?'checked':'';
       const locked=role==='customer'?'disabled':'';
-      return`<label class="pi" ${role==='customer'?'style="opacity:0.7;"':''}><input type="checkbox" value="${pk}" ${checked} ${locked}> ${PERM_LABELS[pk]||pk}</label>`;
+      return`<label class="pi" ${role==='customer'?'style="opacity:0.7;"':''}><input type="checkbox" value="${pk}" ${checked} ${locked}> ${getPermLabel(pk)}</label>`;
     }).join('');
   }
 }
