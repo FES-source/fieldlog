@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.13 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.14 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -446,7 +446,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="lb-caption-display" id="lb-cap-show"></div>
     <div class="lb-cap-row" style="margin-top:6px;">
       <input type="text" id="lb-cap-in" placeholder="Add photo description or comment…">
-      <button class="lb-save-btn" onclick="saveLBCap()">💾 Save</button>
+      <button class="lb-save-btn" onclick="saveLBCap()" id="lb-save-btn">💾 Save</button>
     </div>
   </div>
   <div class="lb-nav">
@@ -843,7 +843,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   </div>
   <div style="display:flex;gap:7px;">
     <button class="btn sm bs" onclick="genPDF(null)">📄 PDF</button>
-    <button class="btn sm bs" onclick="saveReport()" style="border-color:var(--am);color:var(--am);">💾 Save</button>
+    <button class="btn sm bs" onclick="saveReport()" style="border-color:var(--am);color:var(--am);" id="bb-save-btn-lbl">💾 <span id="lbl-bb-save">Save</span></button>
     <button class="btn bp" id="bb-submit-btn" onclick="submitReport()">Enviar →</button>
     <button class="btn bg" id="bb-approve-btn" onclick="approveReport()" style="display:none;">✓ <span id="lbl-bb-approve">Aprobar</span></button>
     <button class="btn sm" id="bb-reject-btn" onclick="openReject()" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">❌ <span id="lbl-bb-reject">Rechazar</span></button>
@@ -4974,6 +4974,8 @@ function applyLang(){
   const bbSubmit=document.getElementById('bb-submit-btn');
   if(bbSubmit)bbSubmit.textContent=t('submit');
   const bbSave=document.querySelector('#bb .btn.bs[onclick*="saveReport"]');
+  if(bbSave){const sp=bbSave.querySelector('#lbl-bb-save');if(sp)sp.textContent=t('save');}
+  _setTxt('lb-save-btn','💾 '+t('save'));
   // Section toggles
   // Report form header texts
   _setTxt('rml',t('new_report_header'));
