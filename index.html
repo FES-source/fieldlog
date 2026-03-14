@@ -1,4 +1,4 @@
-<!-- FieldLog v1.4.1 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.4.2 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -511,18 +511,18 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="ph">
     <div class="pht"><small id="ph-ar-small">// HISTORIAL</small><span id="ph-ar-title">Informes</span></div>
     <div class="pha">
-      <input type="text" id="ar-search" placeholder="Buscar supervisor, fecha..." id="ar-search" oninput="renderAllReports()" style="font-family:var(--mo);font-size:10px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);width:160px;letter-spacing:1px;">
+      <input type="text" id="ar-search" placeholder="Buscar supervisor, fecha..." oninput="renderAllReports()" style="font-family:var(--mo);font-size:10px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);width:160px;letter-spacing:1px;">
       <select id="ar-filter-proj" onchange="renderAllReports()" style="font-family:var(--mo);font-size:10px;letter-spacing:1px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);max-width:180px;">
         <option value="" id="opt-all-projects">Todos los proyectos</option>
       </select>
       <select id="ar-filter-status" onchange="renderAllReports()" style="font-family:var(--mo);font-size:10px;letter-spacing:1px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);">
         <option value="" id="opt-all-statuses">Todos los estados</option>
-        <option value="Draft">Borrador</option>
-        <option value="Filling">Llenando</option>
-        <option value="Review">En revisión</option>
-        <option value="Approved">Aprobado</option>
-        <option value="Pending Customer">Firma cliente</option>
-        <option value="Rejected">Rechazado</option>
+        <option value="Draft" id="ar-opt-draft">Borrador</option>
+        <option value="Filling" id="ar-opt-filling">Llenando</option>
+        <option value="Review" id="ar-opt-review">En revisión</option>
+        <option value="Approved" id="ar-opt-approved">Aprobado</option>
+        <option value="Pending Customer" id="ar-opt-pending">Firma cliente</option>
+        <option value="Rejected" id="ar-opt-rejected">Rechazado</option>
       </select>
       <button class="btn bp" onclick="startNewReport(null)">＋ <span id="lbl-new-report-ar">Nuevo Informe</span></button>
     </div>
@@ -547,10 +547,10 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="sbx" style="flex:1;min-width:180px;margin:0;"><input type="text" id="proj-search" placeholder="🔍  Buscar proyectos…" oninput="renderProjs()"><span class="sbx-ic">⌕</span></div>
     <select id="proj-filter-status" onchange="renderProjs()" style="font-size:12px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);cursor:pointer;">
       <option value="" id="opt-all-statuses">Todos los estados</option>
-      <option value="Active">Activo</option>
-      <option value="On Hold">En pausa</option>
-      <option value="Completed">Completado</option>
-      <option value="Cancelled">Cancelado</option>
+      <option value="Active" id="proj-opt-active" id="pm-opt-active">Activo</option>
+      <option value="On Hold" id="proj-opt-hold" id="pm-opt-hold">En pausa</option>
+      <option value="Completed" id="proj-opt-completed">Completado</option>
+      <option value="Cancelled" id="proj-opt-cancelled">Cancelado</option>
     </select>
     <select id="proj-filter-cust" onchange="renderProjs()" style="font-size:12px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);cursor:pointer;">
       <option value="" id="opt-all-customers">Todos los clientes</option>
@@ -574,9 +574,9 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="sg" id="pd-stats" style="grid-template-columns:repeat(auto-fit,minmax(100px,1fr));"></div>
   <!-- Nav tabs -->
   <div style="display:flex;border-bottom:1px solid var(--bd);margin-bottom:14px;">
-    <div class="pd-tab on" data-tab="overview" onclick="switchPDTab('overview')" style="font-family:var(--mo);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px 15px;cursor:pointer;border:1px solid transparent;border-bottom:none;color:var(--mu);transition:all .15s;margin-bottom:-1px;">Resumen</div>
-    <div class="pd-tab" data-tab="reports" onclick="switchPDTab('reports')" style="font-family:var(--mo);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px 15px;cursor:pointer;border:1px solid transparent;border-bottom:none;color:var(--mu);transition:all .15s;margin-bottom:-1px;">Informes</div>
-    <div class="pd-tab" data-tab="photos" onclick="switchPDTab('photos')" style="font-family:var(--mo);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px 15px;cursor:pointer;border:1px solid transparent;border-bottom:none;color:var(--mu);transition:all .15s;margin-bottom:-1px;">Fotos</div>
+    <div class="pd-tab on" data-tab="overview" onclick="switchPDTab('overview')" style="font-family:var(--mo);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px 15px;cursor:pointer;border:1px solid transparent;border-bottom:none;color:var(--mu);transition:all .15s;margin-bottom:-1px;" data-i18n="overview"><span>Resumen</span></div>
+    <div class="pd-tab" data-tab="reports" onclick="switchPDTab('reports')" style="font-family:var(--mo);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px 15px;cursor:pointer;border:1px solid transparent;border-bottom:none;color:var(--mu);transition:all .15s;margin-bottom:-1px;" data-i18n="reports"><span>Informes</span></div>
+    <div class="pd-tab" data-tab="photos" onclick="switchPDTab('photos')" style="font-family:var(--mo);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px 15px;cursor:pointer;border:1px solid transparent;border-bottom:none;color:var(--mu);transition:all .15s;margin-bottom:-1px;" data-i18n="photos"><span>Fotos</span></div>
   </div>
   <div id="pd-panel-overview"></div>
   <div id="pd-panel-reports" style="display:none;"></div>
@@ -1062,7 +1062,7 @@ const I18N={
     submitted_by:'FIRMA TÉCNICO',approved_by:'FIRMA SUPERVISOR',customer_signoff:'FIRMA CLIENTE',
     // PDF sections
     daily_report:'INFORME DIARIO DE CAMPO',report_number:'N° Informe',date:'Fecha',status:'Estado',supervisor:'Supervisor',
-    client:'Cliente',location:'Ubicación',shift:'Turno',temperature:'Temperatura',wind:'Viento',work_impact:'Impacto en obra',
+    client:(currentUser?.lang==='en'?'Customer':'Cliente'),location:'Ubicación',shift:'Turno',temperature:'Temperatura',wind:'Viento',work_impact:'Impacto en obra',
     name:'Nombre',role:'Rol',hours:'Horas',start:'Inicio',end:'Término',
     task_description:'Descripción de tarea',activity:'Actividades',
     material:'Material',unit:'Unidad',qty:'Cant.',
@@ -1090,7 +1090,7 @@ const I18N={
     project_desc:'Descripción / Alcance',project_logos:'LOGOS DEL PROYECTO',
     logo_contractor:'Logo 1 (Empresa / Contratista)',logo_owner:'Logo 2 (Cliente / Propietario)',
     customer_approval_step:'PASO DE APROBACIÓN DEL CLIENTE',customer_approval_desc:'Requiere firma del cliente después de la aprobación del supervisor',
-    assigned_team:'MIEMBROS ASIGNADOS AL EQUIPO',add_from_taskforce:'— Agregar de Cuadrilla —',
+    assigned_team:'MIEMBROS ASIGNADOS AL EQUIPO',add_from_taskforce:(currentUser?.lang==='en'?'— Add from Taskforce —':'— Agregar de Cuadrilla —'),
     project_customer:'Cliente del Proyecto',
     // User modal
     user_username:'Usuario',user_fullname:'Nombre Completo',user_password:'Contraseña',user_email:'Correo',
@@ -1104,7 +1104,7 @@ const I18N={
     checklist_section:'Checklist de Verificación',photos_section:'Registro Fotográfico',notes_section:'Notas y Comentarios',
     general_notes_label:'Notas Generales',tomorrows_plan_label:'Plan para mañana',
     select_project:'— Seleccionar Proyecto —',add_occurrence:'+ Agregar Ocurrencia',
-    select_checklist:'+ Seleccionar Checklist',
+    select_checklist:(currentUser?.lang==='en'?'+ Select Checklist':'+ Seleccionar Checklist'),
     // Status labels
     all_statuses:'Todos los estados',
     // Misc
@@ -1116,6 +1116,7 @@ const I18N={
     no_reports_yet_rpt:'SIN INFORMES AÚN',overview_label:'// RESUMEN',workforce:'Cuadrilla',
     site_name:'Nombre del Sitio',site_address:'Dirección del Sitio',approved_by:'Aprobado por',occurrences:'Ocurrencias',labor:'Mano de Obra',tasks:'Tareas y Actividades',equipment:'Equipos',
     created:'Creado',saved:'Guardado',submitted:'Enviado',rejected:'Rechazado',edited:'Editado',work_site:'SITIO DE TRABAJO',
+    overview:'Resumen',photos:'Fotos',all_projects:'Todos los proyectos',no_photos:'SIN FOTOS',no_results:'SIN RESULTADOS',
   },
   en:{
     dashboard:'Dashboard',projects:'Projects',all_reports:'All Reports',taskforce:'Taskforce',materials:'Materials',checklists:'Checklists',users:'Users',customers:'Customers',new_report:'NEW REPORT',
@@ -1165,6 +1166,7 @@ const I18N={
     general_notes_label:'General Notes',tomorrows_plan_label:"Tomorrow's Plan",
     select_project:'— Select Project —',add_occurrence:'+ Add Occurrence',
     select_checklist:'+ Select Checklist',
+    select_checklist_es:(currentUser?.lang==='en'?'+ Select Checklist':'+ Seleccionar Checklist'),
     // Status labels
     all_statuses:'All statuses',
     // Misc
@@ -1176,6 +1178,7 @@ const I18N={
     no_reports_yet_rpt:'NO REPORTS YET',overview_label:'// OVERVIEW',workforce:'Workforce',
     site_name:'Site Name',site_address:'Site Address',approved_by:'Approved by',occurrences:'Occurrences',labor:'Labor',tasks:'Tasks & Activities',equipment:'Equipment',
     created:'Created',saved:'Saved',submitted:'Submitted',rejected:'Rejected',edited:'Edited',work_site:'WORK SITE',
+    overview:'Overview',photos:'Photos',all_projects:'All projects',no_photos:'NO PHOTOS',no_results:'NO RESULTS',
   }
 };
 function t(key){const lang=(typeof currentUser!=='undefined'&&currentUser?.lang)||'es';return (I18N[lang]||I18N.es)[key]||I18N.en[key]||key;}
@@ -1285,7 +1288,7 @@ function togSiteRow(cb){
   }
   const es2=currentUser?.lang!=='en';
   const lbl=document.getElementById('lbl-site-toggle-txt');
-  if(lbl)lbl.textContent=cb.checked?(es2?'— OCULTAR SITIO ESPECÍFICO':'— HIDE SPECIFIC SITE'):(es2?'+ AGREGAR SITIO ESPECÍFICO':'+ ADD SPECIFIC SITE');
+  if(lbl)lbl.textContent=cb.checked?(es2?'— OCULTAR SITIO ESPECÍFICO':'— HIDE SPECIFIC SITE'):(es2?(currentUser?.lang==='en'?'+ ADD SPECIFIC SITE':'+ AGREGAR SITIO ESPECÍFICO'):'+ ADD SPECIFIC SITE');
 }
 function togSE(id,cb){
   const el=document.getElementById(id);
@@ -1347,7 +1350,7 @@ function renderAllReports(){
   if(projSel){
     const accessibleProjs=DB.projects.filter(p=>canAccessProject(p.id));
     const curPF=projSel.value;
-    projSel.innerHTML='<option value="" id="opt-all-projects">Todos los proyectos</option>'+accessibleProjs.map(p=>`<option value="${p.id}"${p.id===curPF?' selected':''}>${p.name}</option>`).join('');
+    projSel.innerHTML=`<option value="" id="opt-all-projects">${t('all_projects')}</option>`+accessibleProjs.map(p=>`<option value="${p.id}"${p.id===curPF?' selected':''}>${p.name}</option>`).join('');
   }
   let rpts=[...DB.reports].reverse();
   // Customer sees only reports from their assigned projects (Pending or Approved)
@@ -1365,9 +1368,9 @@ function renderAllReports(){
     const myRptsCust=[...DB.reports].filter(r=>canAccessProject(r.projId));
     const myCnt={'Pending Customer':myRptsCust.filter(r=>r.status==='Pending Customer').length,'Approved':myRptsCust.filter(r=>r.status==='Approved').length};
     const lang2=currentUser?.lang||'es';const es2=lang2==='es';
-    countsEl.innerHTML=`<span style="color:#6495ed;">⏳ ${es2?'Pendiente tu firma':'Pending your signature'}: ${myCnt['Pending Customer']}</span> · <span style="color:var(--gn);">✓ ${es2?'Aprobados':'Approved'}: ${myCnt['Approved']}</span>`;
+    countsEl.innerHTML=`<span style="color:#6495ed;">⏳ ${es2?'Pendiente tu firma':'Pending your signature'}: ${myCnt['Pending Customer']}</span> · <span style="color:var(--gn);">✓ ${es2?(currentUser?.lang==='en'?'Approved':'Aprobados'):'Approved'}: ${myCnt['Approved']}</span>`;
   } else {
-    const _es2=currentUser?.lang!=='en';countsEl.textContent=`${_es2?'Llenando':'Filling'}: ${cnt.Filling}  ·  ${_es2?'En revisión':'In review'}: ${cnt.Review}  ·  ${_es2?'Aprobados':'Approved'}: ${cnt.Approved}  ·  ${_es2?'Borradores':'Drafts'}: ${cnt.Draft}`;
+    const _es2=currentUser?.lang!=='en';countsEl.textContent=`${_es2?'Llenando':'Filling'}: ${cnt.Filling} · ${_es2?'En revisión':'In Review'}: ${cnt.Review} · ${_es2?'Aprobados':'Approved'}: ${cnt.Approved} · ${_es2?'Borradores':'Drafts'}: ${cnt.Draft}`;
   }
   const c=document.getElementById('ar-list'),e=document.getElementById('ar-empty');
   if(!rpts.length){c.innerHTML='';e.style.display='block';return;}
@@ -1426,14 +1429,14 @@ function clearLogo(n){setLogoPreview(n,null);}
 function fillPCSel(selId,selectedId){
   const sel=document.getElementById(selId);if(!sel)return;
   const lang=currentUser?.lang||'es';
-  sel.innerHTML=`<option value="">${lang==='es'?'— Sin cliente asignado —':'— No customer assigned —'}</option>`;
+  sel.innerHTML=`<option value="">${lang==='es'?(currentUser?.lang==='en'?'— No customer assigned —':'— Sin cliente asignado —'):'— No customer assigned —'}</option>`;
   DB.customers.forEach(c=>sel.innerHTML+=`<option value="${c.id}"${c.id===selectedId?' selected':''}>${E(c.name)}</option>`);
 }
 function openPM(id=null){
   if(!hasPerm('manage_projects')){toast(t('no_permission')||'NO PERMISSION','var(--rd)');return;}
   editPJ=id;pmems=[];
   const lang=currentUser?.lang||'es';
-  document.getElementById('pm-title').textContent=id?(lang==='es'?'✏ Editar Proyecto':'✏ Edit Project'):(lang==='es'?'🏗 Nuevo Proyecto':'🏗 New Project');
+  document.getElementById('pm-title').textContent=id?(lang==='es'?(currentUser?.lang==='en'?'✏ Edit Project':'✏ Editar Proyecto'):'✏ Edit Project'):(lang==='es'?(currentUser?.lang==='en'?'🏗 New Project':'🏗 Nuevo Proyecto'):'🏗 New Project');
   ['p-name','p-code','p-cli','p-loc','p-desc'].forEach(f=>document.getElementById(f).value='');
   document.getElementById('p-start').value='';document.getElementById('p-end').value='';
   document.getElementById('p-stat').value='Active';
@@ -1457,7 +1460,7 @@ function openPM(id=null){
 function fillPMS(){
   const s=document.getElementById('p-msel');
   const lang=currentUser?.lang||'es';
-  s.innerHTML=`<option value="">${lang==='es'?'— Agregar de Cuadrilla —':'— Add from Taskforce —'}</option>`;
+  s.innerHTML=`<option value="">${lang==='es'?(currentUser?.lang==='en'?'— Add from Taskforce —':'— Agregar de Cuadrilla —'):'— Add from Taskforce —'}</option>`;
   DB.workers.forEach(w=>{if(!pmems.includes(w.id))s.innerHTML+=`<option value="${w.id}">${E(w.name)} — ${E(w.role)}</option>`;});
 }
 function addPM(){const v=document.getElementById('p-msel').value;if(!v)return;pmems.push(v);fillPMS();renderPMD();}
@@ -1505,7 +1508,7 @@ function populateProjCustFilter(){
   const sel=document.getElementById('proj-filter-cust');if(!sel)return;
   const cur=sel.value;
   const lang=currentUser?.lang||'es';
-  sel.innerHTML=`<option value="">${lang==='es'?'Todos los clientes':'All customers'}</option>`;
+  sel.innerHTML=`<option value="">${lang==='es'?(currentUser?.lang==='en'?'All customers':'Todos los clientes'):'All customers'}</option>`;
   DB.customers.forEach(c=>sel.innerHTML+=`<option value="${c.id}"${c.id===cur?' selected':''}>${E(c.name)}</option>`);
   if(cur)sel.value=cur;
 }
@@ -1595,11 +1598,11 @@ function viewProj(projId){
   const pct=totalDays>0?Math.min(100,Math.round(elapsedDays/totalDays*100)):null;
   const pending=rpts.filter(r=>r.status==='Review'||r.status==='Pending Customer').length;
   document.getElementById('pd-stats').innerHTML=`
-    <div class="sv"><div class="svl">Informes</div><div class="svv">${rpts.length}</div><div class="svs">Total</div></div>
-    <div class="sv"><div class="svl">Aprobados</div><div class="svv" style="color:var(--gn)">${rpts.filter(r=>r.status==='Approved').length}</div><div class="svs">Informes</div></div>
+    <div class="sv"><div class="svl">${t('reports')}</div><div class="svv">${rpts.length}</div><div class="svs">${t('total')}</div></div>
+    <div class="sv"><div class="svl">${t('approved')}</div><div class="svv" style="color:var(--gn)">${rpts.filter(r=>r.status==='Approved').length}</div><div class="svs">${t('reports')}</div></div>
     <div class="sv"><div class="svl">Pendientes</div><div class="svv" style="color:${pending?'var(--am)':'var(--mu)'}">${pending}</div><div class="svs">En revisión</div></div>
     <div class="sv"><div class="svl">Trabajadores</div><div class="svv">${(p.members||[]).length}</div><div class="svs">Asignados</div></div>
-    <div class="sv"><div class="svl">Fotos</div><div class="svv">${allPhotos.length}</div><div class="svs">Total</div></div>
+    <div class="sv"><div class="svl">${t('photos')}</div><div class="svv">${allPhotos.length}</div><div class="svs">${t('total')}</div></div>
     ${isOverdue?`<div class="sv" style="border-color:var(--rd);"><div class="svl" style="color:var(--rd);">⚠ ATRASADO</div><div class="svv" style="color:var(--rd);font-size:16px;">${Math.abs(daysToEnd)}</div><div class="svs" style="color:var(--rd);">días atrás</div></div>`
     :daysToEnd!==null&&daysToEnd<=14&&p.status!=='Completed'?`<div class="sv" style="border-color:var(--am);"><div class="svl" style="color:var(--am);">⚡ Por vencer</div><div class="svv" style="color:var(--am);">${daysToEnd}</div><div class="svs" style="color:var(--am);">días restantes</div></div>`:
     daysToEnd!==null?`<div class="sv"><div class="svl">Plazo</div><div class="svv">${daysToEnd>0?daysToEnd:0}</div><div class="svs">días rest.</div></div>`:''}
@@ -1664,7 +1667,7 @@ function renderPDOverview(){
       <div class="card" style="margin:0;">
         <div class="ch"><div class="ct">📋 Información del Proyecto</div></div>
         <div class="cb" style="padding-top:11px;">
-          ${infoRow('Cliente',p.client)}
+          ${infoRow((currentUser?.lang==='en'?'Customer':'Cliente'),p.client)}
           ${cust2?infoRow('Empresa',cust2.name):''}
           ${infoRow('Ubicación',p.location)}${infoRow('Inicio',p.start)}${infoRow('Término',p.end||'—')}${infoRow('Estado',p.status)}
           ${progHtml}
@@ -1699,9 +1702,9 @@ function renderPDReports(){
   c.innerHTML=`
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
       <div style="font-family:var(--mo);font-size:10px;color:var(--mu);letter-spacing:1px;">
-        ${rpts.length} informe${rpts.length!==1?'s':''} · 
-        Aprobados: ${rpts.filter(r=>r.status==='Approved').length} · 
-        En revisión: ${rpts.filter(r=>r.status==='Review').length}
+        ${rpts.length} ${t('report')||'informe'}${rpts.length!==1?'s':''} · 
+        ${t('approved')||'Aprobados'}: ${rpts.filter(r=>r.status==='Approved').length} · 
+        ${t('review_short')||'En revisión'}: ${rpts.filter(r=>r.status==='Review').length}
       </div>
     </div>
     ${[...rpts].reverse().map(r=>rptRow(r,false)).join('')}
@@ -1712,7 +1715,7 @@ function renderPDPhotos(){
   const rpts=DB.reports.filter(r=>r.projId===curProjId);
   const allPhotos=rpts.flatMap(r=>(r.photos||[]).map(p=>({src:p,date:r.date,rid:r.id})));
   const c=document.getElementById('pd-panel-photos');
-  if(!allPhotos.length){c.innerHTML='<div class="emp"><div class="eic">📷</div>SIN FOTOS AÚN</div>';return;}
+  if(!allPhotos.length){c.innerHTML=`<div class="emp"><div class="eic">📷</div>${t('no_photos')}</div>`;return;}
   c.innerHTML=`<div class="pgrid">${allPhotos.map(p=>`<div class="pthumb"><img src="${p.src}"><div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);font-family:var(--mo);font-size:8px;color:var(--mu);padding:2px 4px;">${p.date||''}</div></div>`).join('')}</div>`;
 }
 
@@ -1746,7 +1749,7 @@ function renderWorkers(){
   let wks=DB.workers;
   if(q)wks=wks.filter(w=>[w.name,w.role,w.status,w.empId,w.phone,w.email].some(f=>(f||'').toLowerCase().includes(q)));
   document.getElementById('wk-bx').textContent=DB.workers.length+' members';
-  if(!wks.length){tb.innerHTML='';em.style.display=DB.workers.length?'none':'block';if(!DB.workers.length)em.style.display='block';else{em.textContent='Sin resultados';em.style.display='block';}return;}
+  if(!wks.length){tb.innerHTML='';em.style.display=DB.workers.length?'none':'block';if(!DB.workers.length)em.style.display='block';else{em.textContent=(currentUser?.lang==='en'?'No results':'Sin resultados');em.style.display='block';}return;}
   em.style.display='none';
   tb.innerHTML=wks.map(w=>`<tr>
     <td><strong>${E(w.name)}</strong>${w.empId?` <span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${E(w.empId)}</span>`:''}</td>
@@ -1787,8 +1790,8 @@ function renderMats(){
   const q=(document.getElementById('mc-search')?.value||'').toLowerCase().trim();
   let mats=DB.materials;
   if(q)mats=mats.filter(m=>[m.name,m.cat,m.unit,m.notes].some(f=>(f||'').toLowerCase().includes(q)));
-  const _matLng=currentUser?.lang==='en';document.getElementById('mc-bx').textContent=DB.materials.length+' items';document.getElementById('mat-cat-hdr').textContent=_matLng?'📦 Materials Catalog':'📦 Catálogo de Materiales';
-  if(!mats.length){tb.innerHTML='';em.style.display='block';em.innerHTML=DB.materials.length?'<div class="eic">🔍</div>SIN RESULTADOS':'<div class="eic">📦</div>SIN MATERIALES AÚN';return;}
+  const _matLng=currentUser?.lang==='en';document.getElementById('mc-bx').textContent=DB.materials.length+' items';document.getElementById('mat-cat-hdr').textContent=_matLng?'📦 Materials Catalog':(currentUser?.lang==='en'?'📦 Materials Catalog':'📦 Catálogo de Materiales');
+  if(!mats.length){tb.innerHTML='';em.style.display='block';em.innerHTML=DB.materials.length?'<div class="eic">🔍</div>SIN RESULTADOS':`<div class="eic">📦</div>${currentUser?.lang==='en'?'NO MATERIALS YET':'SIN MATERIALES AÚN'}`;return;}
   em.style.display='none';
   tb.innerHTML=mats.map(m=>`<tr>
     <td><strong>${E(m.name)}</strong>${m.notes?`<br><span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${E(m.notes)}</span>`:''}</td>
@@ -2138,7 +2141,7 @@ function renderTaskPhotoGallery(){
   gallery.style.display='block';
   inner.innerHTML=allEntries.map(entry=>{
     const uid=entry.dataset.uid;
-    const desc=entry.querySelector('input[type=text]')?.value||'Tarea sin nombre';
+    const desc=entry.querySelector('input[type=text]')?.value||(currentUser?.lang==='en'?'Unnamed task':'Tarea sin nombre');
     const photos=entry._photos||[];
     const caps=entry._captions||[];
     return`<div style="margin-bottom:16px;">
@@ -2729,7 +2732,7 @@ function doCustReject(){
   if(idx<0){toast('INFORME NO ENCONTRADO','var(--rd)');return;}
   const ex=DB.reports[idx];
   ex.status='Review';
-  ex.custRejectedBy=currentUser?.name||'Cliente';
+  ex.custRejectedBy=currentUser?.name||(currentUser?.lang==='en'?'Customer':'Cliente');
   ex.custRejectedAt=new Date().toISOString();
   ex.custRejectionReason=reason;
   logActivity(ex,'rejected','Cliente solicitó corrección: '+reason);
@@ -3264,7 +3267,7 @@ async function doLogin(){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('uav-init').textContent=user.name.charAt(0).toUpperCase();
   document.getElementById('um-nm').textContent=user.name;
-  document.getElementById('um-rl').textContent=({admin:'Administrador',manager:'Supervisor',technician:'Técnico',viewer:'Solo lectura',customer:'Cliente'}[user.role]||user.role);
+  document.getElementById('um-rl').textContent=({admin:'Administrador',manager:'Supervisor',technician:'Técnico',viewer:'Solo lectura',customer:(currentUser?.lang==='en'?'Customer':'Cliente')}[user.role]||user.role);
   // Show/hide admin-only UI
   document.getElementById('nav-users').style.display=user.role==='admin'?'flex':'none';
   document.getElementById('um-it-users').style.display=user.role==='admin'?'block':'none';
@@ -3348,7 +3351,7 @@ function applyLang(){
   if(document.getElementById('page-dashboard')?.style.display!=='none')renderDash();
 
   // ── Section headers ──────────────────────────────
-  _setTxt('mat-cat-hdr', es?'📦 Catálogo de Materiales':'📦 Materials Catalog');
+  _setTxt('mat-cat-hdr', es?(currentUser?.lang==='en'?'📦 Materials Catalog':'📦 Catálogo de Materiales'):'📦 Materials Catalog');
   _setTxt('users-hdr', es?'👥 Usuarios del Sistema':'👥 System Users');
   _setTxt('mm-title', es?'📦 Agregar Material':'📦 Add Material');
   _setTxt('wm-title', es?'👷 Agregar Miembro':'👷 Add Member');
@@ -3376,6 +3379,36 @@ function applyLang(){
   // ── All Reports page ───────────────────────────
   _setTxt('ph-ar-small',es?'// HISTORIAL':'// HISTORY');
   _setTxt('ph-ar-title',es?'Informes':'All Reports');
+  // All reports status filter options
+  const _arOpts={
+    'opt-all-statuses':es?'Todos los estados':'All statuses',
+    'ar-opt-draft':es?'Borrador':'Draft',
+    'ar-opt-filling':es?'Llenando':'Filling',
+    'ar-opt-review':es?'En revisión':'In Review',
+    'ar-opt-approved':es?'Aprobado':'Approved',
+    'ar-opt-pending':es?'Firma cliente':'Customer Sign-Off',
+    'ar-opt-rejected':es?'Rechazado':'Rejected'
+  };
+  Object.entries(_arOpts).forEach(([id,txt])=>{const el=document.getElementById(id);if(el)el.textContent=txt;});
+  // Project status filter options
+  const _projOpts={
+    'proj-opt-all-status':es?'Todos los estados':'All statuses',
+    'proj-opt-active':es?'Activo':'Active',
+    'proj-opt-hold':es?'En pausa':'On Hold',
+    'proj-opt-completed':es?'Completado':'Completed',
+    'proj-opt-cancelled':es?'Cancelado':'Cancelled'
+  };
+  Object.entries(_projOpts).forEach(([id,txt])=>{const el=document.getElementById(id);if(el)el.textContent=txt;});
+  // Project modal status options
+  const _pmOpts={
+    'pm-opt-active':es?'Activo':'Active',
+    'pm-opt-hold':es?'En pausa':'On Hold',
+    'pm-opt-completed':es?'Completado':'Completed',
+    'pm-opt-cancelled':es?'Cancelado':'Cancelled'
+  };
+  Object.entries(_pmOpts).forEach(([id,txt])=>{const el=document.getElementById(id);if(el)el.textContent=txt;});
+  _setPlh('ar-search-plh',es?'Buscar supervisor, fecha...':'Search supervisor, date...');
+  _setTxt('ph-ar-title',es?'Informes':'All Reports');
 
   // ── Users page ─────────────────────────────────
   _setTxt('ph-users-small',es?'// ADMINISTRACIÓN':'// ADMINISTRATION');
@@ -3389,7 +3422,7 @@ function applyLang(){
   _setTxt('btn-add-cust-txt',es?'＋ Nuevo Cliente':'＋ New Customer');
 
   // ── Project modal labels ───────────────────────
-  _setTxt('pm-title',es?'🏗 Nuevo Proyecto':'🏗 New Project');
+  _setTxt('pm-title',es?(currentUser?.lang==='en'?'🏗 New Project':'🏗 Nuevo Proyecto'):'🏗 New Project');
 
   // ── Customer modal labels ──────────────────────
   _setTxt('lbl-cm-name',es?'Empresa / Nombre *':'Company / Name *');
@@ -3424,7 +3457,7 @@ function applyLang(){
   // Role options in user modal
   const urole=document.getElementById('u-role');
   if(urole){
-    const roleLabels=es?{admin:'Administrador',manager:'Supervisor',technician:'Técnico',viewer:'Visualizador',customer:'Cliente'}
+    const roleLabels=es?{admin:'Administrador',manager:'Supervisor',technician:'Técnico',viewer:'Visualizador',customer:(currentUser?.lang==='en'?'Customer':'Cliente')}
                       :{admin:'Administrator',manager:'Manager',technician:'Technician',viewer:'Viewer',customer:'Customer'};
     [...urole.options].forEach(o=>{if(roleLabels[o.value])o.textContent=roleLabels[o.value];});
   }
@@ -3479,7 +3512,7 @@ function applyLang(){
   _setPlh('r-site-name',es?'ej. Tienda Gabriela Mistral':'e.g. Store North Branch');
   _setPlh('r-site-addr',es?'ej. Av. Gabriela Mistral 890, Temuco':'e.g. 123 Main St, City');
   const togSiteChk=document.getElementById('tog-site');
-  _setTxt('lbl-site-toggle-txt',togSiteChk?.checked?(es?'— OCULTAR SITIO ESPECÍFICO':'— HIDE SPECIFIC SITE'):(es?'+ AGREGAR SITIO ESPECÍFICO':'+ ADD SPECIFIC SITE'));
+  _setTxt('lbl-site-toggle-txt',togSiteChk?.checked?(es?'— OCULTAR SITIO ESPECÍFICO':'— HIDE SPECIFIC SITE'):(es?(currentUser?.lang==='en'?'+ ADD SPECIFIC SITE':'+ AGREGAR SITIO ESPECÍFICO'):'+ ADD SPECIFIC SITE'));
   // Project selector in report form
   const projSel=document.getElementById('r-proj');
   if(projSel&&projSel.options[0])projSel.options[0].text=t('select_project')||'— Select Project —';
@@ -3530,11 +3563,11 @@ function applyLang(){
   const _optAP=document.getElementById('opt-all-projects');
   if(_optAP)_optAP.textContent=es?'Todos los proyectos':'All projects';
   const _optAC=document.getElementById('opt-all-customers');
-  if(_optAC)_optAC.textContent=es?'Todos los clientes':'All customers';
+  if(_optAC)_optAC.textContent=es?(currentUser?.lang==='en'?'All customers':'Todos los clientes'):'All customers';
   const _optSC=document.getElementById('opt-sel-cust');
   if(_optSC)_optSC.textContent=es?'— Seleccionar empresa cliente —':'— Select customer company —';
   const _optCR=document.getElementById('opt-role-customer');
-  if(_optCR)_optCR.textContent=es?'Cliente':'Customer';
+  if(_optCR)_optCR.textContent=es?(currentUser?.lang==='en'?'Customer':'Cliente'):'Customer';
   // ── Bottom bar buttons ─────────────────────────
   const bbSubmit=document.getElementById('bb-submit-btn');
   if(bbSubmit)bbSubmit.textContent=es?'Enviar →':'Submit →';
@@ -3749,7 +3782,7 @@ function refreshUPerms(){
     if(!user?.customerId)ps.style.display='none';
   } else {
     ps.style.display='block';
-    const noProj=lang==='es'?'Aún no hay proyectos':'No projects yet';
+    const noProj=lang==='es'?(currentUser?.lang==='en'?'No projects yet':'Aún no hay proyectos'):'No projects yet';
     pg.innerHTML=DB.projects.length?DB.projects.map(p=>{
       const checked=user&&(user.projects||[]).includes(p.id)?'checked':'';
       return`<label class="pi"><input type="checkbox" value="${p.id}" ${checked}> ${E(p.name)}</label>`;
@@ -3907,7 +3940,7 @@ function openCustM(id=null){
   clearCustLogo();
   // Project grid — all projects selectable for this customer
   const pg=document.getElementById('cm-proj-grid');
-  const noProjs=isEs?'Aún no hay proyectos creados':'No projects yet';
+  const noProjs=isEs?(currentUser?.lang==='en'?'No projects created yet':'Aún no hay proyectos creados'):'No projects yet';
   if(id){
     const c=DB.customers.find(x=>x.id===id);
     if(c){
