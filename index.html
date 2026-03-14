@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.6 | Build: 2026-03-14 | Firebase + PWA Edition | 4 Languages + Session Persist -->
+<!-- FieldLog v1.6.7 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Full i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -660,7 +660,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
      ══════════════════════════════════════════════════ -->
 <div class="pg" id="page-report"><div class="wrap">
   <div class="ph">
-    <div class="pht"><small id="rml">// NEW REPORT</small><span id="rml2">Field Report</span></div>
+    <div class="pht"><small id="rml">// NEW REPORT</small><span id="rml2">FIELD REPORT</span></div>
     <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
       <div class="rid2" id="rrid">RPT-XXX</div>
       <div class="rid2" id="r-status-disp" style="color:var(--am);">DRAFT</div>
@@ -705,8 +705,17 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="sec op" id="sec-weather">
     <div class="sh" onclick="togS('sec-weather')"><div class="sl"><span class="si">🌤</span><span class="st2" id="sec-weather-label">Clima</span></div><div class="sc"><label class="tog" onclick="event.stopPropagation()"><input type="checkbox" id="tog-w" checked onchange="togSE('sec-weather',this)"><span class="tt"></span></label><span class="schev">▼</span></div></div>
     <div class="sb">
-      <div class="wps" id="weather-pills"><div class="wp on" data-en="☀️ Clear" data-es="☀️ Despejado" data-es="☀️ Despejado" onclick="this.classList.toggle('on')">☀️ Despejado</div><div class="wp" data-en="⛅ Partly Cloudy" data-es="⛅ Parcial nublado" onclick="this.classList.toggle('on')">⛅ Parcial nublado</div><div class="wp" data-en="☁️ Overcast" data-es="☁️ Cubierto" onclick="this.classList.toggle('on')">☁️ Cubierto</div><div class="wp" data-en="🌧 Rain" data-es="🌧 Lluvia" onclick="this.classList.toggle('on')">🌧 Lluvia</div><div class="wp" data-en="⛈ Storm" data-es="⛈ Tormenta" onclick="this.classList.toggle('on')">⛈ Tormenta</div><div class="wp" data-en="❄️ Snow" data-es="❄️ Nieve" onclick="this.classList.toggle('on')">❄️ Nieve</div><div class="wp" data-en="🌬 High Winds" data-es="🌬 Viento fuerte" onclick="this.classList.toggle('on')">🌬 Viento fuerte</div><div class="wp" data-en="🌫 Fog" data-es="🌫 Niebla" onclick="this.classList.toggle('on')">🌫 Niebla</div></div>
-      <div class="fg f3" style="margin-top:10px;"><div><label id="lbl-r-temp">Temperatura</label><input type="text" id="r-temp" placeholder="ej. 22°C"></div><div><label id="lbl-r-wind">Viento</label><input type="text" id="r-wind" placeholder="ej. 12 km/h"></div><div><label id="lbl-r-imp">Impacto en obra</label><select id="r-imp"><option data-es="Sin impacto" data-en="No impact">Sin impacto</option><option data-es="Demora leve" data-en="Minor delay">Demora leve</option><option data-es="Demora significativa" data-en="Significant delay">Demora significativa</option><option data-es="Trabajo detenido" data-en="Work stopped">Trabajo detenido</option></select></div></div>
+      <div class="wps" id="weather-pills">
+        <div class="wp on" data-en="☀️ Clear" data-es="☀️ Despejado" data-pt="☀️ Limpo" data-it="☀️ Sereno" onclick="this.classList.toggle('on')">☀️ Despejado</div>
+        <div class="wp" data-en="⛅ Partly Cloudy" data-es="⛅ Parcial nublado" data-pt="⛅ Parcialmente nublado" data-it="⛅ Parz. nuvoloso" onclick="this.classList.toggle('on')">⛅ Parcial nublado</div>
+        <div class="wp" data-en="☁️ Overcast" data-es="☁️ Cubierto" data-pt="☁️ Encoberto" data-it="☁️ Coperto" onclick="this.classList.toggle('on')">☁️ Cubierto</div>
+        <div class="wp" data-en="🌧 Rain" data-es="🌧 Lluvia" data-pt="🌧 Chuva" data-it="🌧 Pioggia" onclick="this.classList.toggle('on')">🌧 Lluvia</div>
+        <div class="wp" data-en="⛈ Storm" data-es="⛈ Tormenta" data-pt="⛈ Tempestade" data-it="⛈ Temporale" onclick="this.classList.toggle('on')">⛈ Tormenta</div>
+        <div class="wp" data-en="❄️ Snow" data-es="❄️ Nieve" data-pt="❄️ Neve" data-it="❄️ Neve" onclick="this.classList.toggle('on')">❄️ Nieve</div>
+        <div class="wp" data-en="🌬 High Winds" data-es="🌬 Viento fuerte" data-pt="🌬 Ventos fortes" data-it="🌬 Vento forte" onclick="this.classList.toggle('on')">🌬 Viento fuerte</div>
+        <div class="wp" data-en="🌫 Fog" data-es="🌫 Niebla" data-pt="🌫 Neblina" data-it="🌫 Nebbia" onclick="this.classList.toggle('on')">🌫 Niebla</div>
+      </div>
+      <div class="fg f3" style="margin-top:10px;"><div><label id="lbl-r-temp">Temperatura</label><input type="text" id="r-temp" placeholder="ej. 22°C"></div><div><label id="lbl-r-wind">Viento</label><input type="text" id="r-wind" placeholder="ej. 12 km/h"></div><div><label id="lbl-r-imp">Impacto en obra</label><select id="r-imp"><option data-es="Sin impacto" data-en="No impact" data-pt="Sem impacto" data-it="Nessun impatto">Sin impacto</option><option data-es="Demora leve" data-en="Minor delay" data-pt="Atraso leve" data-it="Ritardo lieve">Demora leve</option><option data-es="Demora significativa" data-en="Significant delay" data-pt="Atraso significativo" data-it="Ritardo significativo">Demora significativa</option><option data-es="Trabajo detenido" data-en="Work stopped" data-pt="Trabalho parado" data-it="Lavoro sospeso">Trabajo detenido</option></select></div></div>
     </div>
   </div>
 
@@ -1330,6 +1339,91 @@ const I18N={
     lbl_add_equip:'Agregar Equipo',lbl_add_task:'Agregar Tarea',
     lbl_add_occ:'Agregar Ocurrencia',lbl_add_mat:'Agregar Material',lbl_import_cat:'Importar Catálogo',
     no_checklist:'SIN CHECKLIST CARGADO',no_materials_yet:'SIN MATERIALES AÚN',no_templates_yet:'SIN PLANTILLAS AÚN',
+    report_id_lbl:'ID Informe',
+    sec_weather:'Clima',sec_labor:'Mano de Obra',sec_equip:'Equipos',
+    sec_tasks:'Tareas y Actividades',sec_mats:'Materiales Utilizados',
+    sec_incidents:'Incidentes y Ocurrencias',sec_checklist:'Checklist de Verificación',
+    sec_photos:'Registro Fotográfico',sec_notes:'Notas y Comentarios',
+    sec_toggle_hint:'ACTIVAR/DESACTIVAR SECCIONES – LAS SECCIONES DESACTIVADAS NO APARECEN EN EL PDF',
+    back_btn:'← Volver',new_report_header:'// NUEVO INFORME',report_field_title:'INFORME DE CAMPO',
+    del_report_lbl:'Informe:',del_date_lbl:'Fecha:',
+    del_pw_lbl:'Para confirmar, escribe la palabra ELIMINAR en el campo:',
+    cl_ph_name:'ej. Inspección de Equipos',
+    occurrence_lbl:'OCURRENCIA',add_photos_occ:'Agregar fotos',
+    remove_lbl:'Eliminar',caption_ph:'Caption...',
+    describe_occ_ph:'Describe la ocurrencia...',corrective_ph:'Acciones tomadas o planificadas...',
+    photo_evidence_tasks:'Evidencia fotográfica — Tareas',
+    no_impact:'Sin impacto',minor_delay:'Demora leve',
+    significant_delay:'Demora significativa',work_stopped:'Trabajo detenido',
+    customers_label:'🤝 Clientes',new_customer_btn:'＋ Nuevo Cliente',
+    new_project_btn2:'🏗 Nuevo Proyecto',
+    company_name_lbl:'Empresa / Nombre *',email_lbl:'Correo',phone_lbl:'Teléfono',
+    notes_lbl:'Notas',customer_logo_lbl:'LOGO DEL CLIENTE',
+    customer_projects_lbl:'PROYECTOS ASIGNADOS AL CLIENTE',
+    log_report_created2:'Informe creado',
+    log_saved:'Guardado',
+    log_submitted:'Firmado y enviado a revisión',
+    log_edited:'Informe editado',
+    log_signed_by:'Firmado por ',
+    log_awaiting_cust:' — esperando firma del cliente',
+    log_cust_signoff:'Firma del cliente por ',
+    log_rejected_by:'Rechazado por ',
+    log_cust_correction:'Cliente solicitó corrección: ',
+    sec_occurrence:'OCURRENCIA',
+    add_photos_occ2:'Agregar fotos',
+    remove_btn:'Eliminar',
+    occ_type_lbl:'Tipo',
+    occ_time_lbl:'Hora',
+    occ_desc_lbl:'Descripción',
+    occ_desc_ph:'Describe la ocurrencia...',
+    occ_action_lbl:'Acción correctiva tomada',
+    occ_action_ph:'Acciones tomadas o planificadas...',
+    caption_ph2:'Caption...',
+    nav_customers:'🤝 Clientes',
+    btn_new_customer:'＋ Nuevo Cliente',
+    btn_new_project2:'🏗 Nuevo Proyecto',
+    cust_name_lbl:'Empresa / Nombre *',
+    cust_email_lbl:'Correo',
+    cust_phone_lbl:'Teléfono',
+    cust_notes_lbl:'Notas',
+    cust_logo_lbl:'LOGO DEL CLIENTE',
+    cust_projects_lbl:'PROYECTOS ASIGNADOS AL CLIENTE',
+    cust_save_btn:'Guardar Cliente',
+    upload_btn:'+ SUBIR',
+    w_fullname_lbl:'Nombre Completo *',
+    w_fullname_ph:'Nombre Apellido',
+    w_role_lbl:'Cargo / Oficio *',
+    w_phone_ph:'+56 9 0000 0000',
+    w_email_ph:'correo@empresa.com',
+    w_emp_id:'ID Empleado',
+    w_status:'Estado',
+    w_on_leave:'Con permiso',
+    mat_name_lbl:'Nombre del Ítem *',
+    mat_name_ph:'ej. Cable THHN #10',
+    mat_cat_lbl:'Categoría',
+    mat_unit_lbl:'Unidad',
+    mat_qty_lbl:'Cantidad',
+    mat_spec_ph:'Especificación, marca o info...',
+    r_notes_ph:'Observaciones, instrucciones o comentarios...',
+    r_tom_ph:'Descripción de actividades programadas para mañana...',
+    photo_caption_ph:'Agregar descripción o comentario a la foto…',
+    filter_all_statuses:'Todos los estados',
+    filter_all_projects:'Todos los proyectos',
+    filter_all_customers:'Todos los clientes',
+    select_cust_company:'— Seleccionar empresa cliente —',
+    close_btn:'Cerrar',
+    job_info_lbl:'Información del Trabajo',
+    required_badge:'REQUERIDO',
+    del_icon_btn:'🗑 Eliminar',
+    rej_reason_lbl:'Motivo del rechazo *',
+    rej_reason_ph:'Describe qué se necesita corregir...',
+    approve_btn2:'Aprobar',
+    activity_log_btn:'📋 Registro de Actividad',
+    no_customers_yet:'AÚN NO HAY CLIENTES',
+    no_projects_text:'Sin proyectos',
+    projects_lbl:'PROYECTOS',
+    user_access_projects:'ACCESO A PROYECTOS',
+    report_subheader:'Informe de Campo',
     manage_users:'👥 Gestionar Usuarios',
 role_customer:'Cliente',
   },
@@ -1563,6 +1657,91 @@ role_customer:'Cliente',
     lbl_add_equip:'Add Equipment',lbl_add_task:'Add Task',
     lbl_add_occ:'Add Occurrence',lbl_add_mat:'Add Material',lbl_import_cat:'Import Catalog',
     no_checklist:'NO CHECKLIST LOADED',no_materials_yet:'NO MATERIALS YET',no_templates_yet:'NO TEMPLATES YET',
+    report_id_lbl:'Report ID',
+    sec_weather:'Weather',sec_labor:'Labor',sec_equip:'Equipment',
+    sec_tasks:'Tasks & Activities',sec_mats:'Materials Used',
+    sec_incidents:'Incidents & Occurrences',sec_checklist:'Verification Checklist',
+    sec_photos:'Photo Log',sec_notes:'Notes & Comments',
+    sec_toggle_hint:'ENABLE/DISABLE SECTIONS – DISABLED SECTIONS DO NOT APPEAR IN THE PDF',
+    back_btn:'← Back',new_report_header:'// NEW REPORT',report_field_title:'FIELD REPORT',
+    del_report_lbl:'Report:',del_date_lbl:'Date:',
+    del_pw_lbl:'To confirm, type the word DELETE in the field:',
+    cl_ph_name:'e.g. Equipment Inspection',
+    occurrence_lbl:'OCCURRENCE',add_photos_occ:'Add photos',
+    remove_lbl:'Remove',caption_ph:'Caption...',
+    describe_occ_ph:'Describe the occurrence...',corrective_ph:'Actions taken or planned...',
+    photo_evidence_tasks:'Photo Evidence — Tasks',
+    no_impact:'No impact',minor_delay:'Minor delay',
+    significant_delay:'Significant delay',work_stopped:'Work stopped',
+    customers_label:'🤝 Customers',new_customer_btn:'＋ New Customer',
+    new_project_btn2:'🏗 New Project',
+    company_name_lbl:'Company / Name *',email_lbl:'Email',phone_lbl:'Phone',
+    notes_lbl:'Notes',customer_logo_lbl:'CUSTOMER LOGO',
+    customer_projects_lbl:'PROJECTS ASSIGNED TO CUSTOMER',
+    log_report_created2:'Report created',
+    log_saved:'Saved',
+    log_submitted:'Signed and sent for review',
+    log_edited:'Report edited',
+    log_signed_by:'Signed by ',
+    log_awaiting_cust:' — awaiting customer sign-off',
+    log_cust_signoff:'Customer sign-off by ',
+    log_rejected_by:'Rejected by ',
+    log_cust_correction:'Customer requested correction: ',
+    sec_occurrence:'OCCURRENCE',
+    add_photos_occ2:'Add photos',
+    remove_btn:'Remove',
+    occ_type_lbl:'Type',
+    occ_time_lbl:'Time',
+    occ_desc_lbl:'Description',
+    occ_desc_ph:'Describe the occurrence...',
+    occ_action_lbl:'Corrective Action Taken',
+    occ_action_ph:'Actions taken or planned...',
+    caption_ph2:'Caption...',
+    nav_customers:'🤝 Customers',
+    btn_new_customer:'＋ New Customer',
+    btn_new_project2:'🏗 New Project',
+    cust_name_lbl:'Company / Name *',
+    cust_email_lbl:'Email',
+    cust_phone_lbl:'Phone',
+    cust_notes_lbl:'Notes',
+    cust_logo_lbl:'CUSTOMER LOGO',
+    cust_projects_lbl:'PROJECTS ASSIGNED TO CUSTOMER',
+    cust_save_btn:'Save Customer',
+    upload_btn:'+ UPLOAD',
+    w_fullname_lbl:'Full Name *',
+    w_fullname_ph:'First Last',
+    w_role_lbl:'Role / Trade *',
+    w_phone_ph:'+1 555 000 0000',
+    w_email_ph:'email@company.com',
+    w_emp_id:'Employee ID',
+    w_status:'Status',
+    w_on_leave:'On Leave',
+    mat_name_lbl:'Item Name *',
+    mat_name_ph:'e.g. THHN Wire #10',
+    mat_cat_lbl:'Category',
+    mat_unit_lbl:'Unit',
+    mat_qty_lbl:'Quantity',
+    mat_spec_ph:'Spec, brand or notes...',
+    r_notes_ph:'General observations and notes...',
+    r_tom_ph:'Planned activities for tomorrow...',
+    photo_caption_ph:'Add photo description or comment…',
+    filter_all_statuses:'All statuses',
+    filter_all_projects:'All projects',
+    filter_all_customers:'All customers',
+    select_cust_company:'— Select customer company —',
+    close_btn:'Close',
+    job_info_lbl:'Job Information',
+    required_badge:'REQUIRED',
+    del_icon_btn:'🗑 Delete',
+    rej_reason_lbl:'Reason for rejection *',
+    rej_reason_ph:'Describe what needs to be corrected...',
+    approve_btn2:'Approve',
+    activity_log_btn:'📋 Activity Log',
+    no_customers_yet:'NO CUSTOMERS YET',
+    no_projects_text:'No projects',
+    projects_lbl:'PROJECTS',
+    user_access_projects:'PROJECT ACCESS',
+    report_subheader:'Field Report',
     manage_users:'👥 Manage Users',
 role_customer:'Customer',
   },
@@ -1733,6 +1912,112 @@ role_customer:'Customer',
     lbl_add_equip:'Adicionar Equipamento',lbl_add_task:'Adicionar Tarefa',
     lbl_add_occ:'Adicionar Ocorrência',lbl_add_mat:'Adicionar Material',lbl_import_cat:'Importar Catálogo',
     no_checklist:'NENHUM CHECKLIST CARREGADO',no_materials_yet:'SEM MATERIAIS AINDA',no_templates_yet:'SEM MODELOS AINDA',
+    report_id_lbl:'ID Relatório',
+    sec_weather:'Clima',sec_labor:'Mão de Obra',sec_equip:'Equipamentos',
+    sec_tasks:'Tarefas e Atividades',sec_mats:'Materiais Utilizados',
+    sec_incidents:'Incidentes e Ocorrências',sec_checklist:'Checklist de Verificação',
+    sec_photos:'Registro Fotográfico',sec_notes:'Notas e Comentários',
+    sec_toggle_hint:'ATIVAR/DESATIVAR SEÇÕES – SEÇÕES DESATIVADAS NÃO APARECEM NO PDF',
+    back_btn:'← Voltar',new_report_header:'// NOVO RELATÓRIO',report_field_title:'RELATÓRIO DE CAMPO',
+    del_report_lbl:'Relatório:',del_date_lbl:'Data:',
+    del_pw_lbl:'Para confirmar, escreva a palavra EXCLUIR no campo:',
+    cl_ph_name:'ex. Inspeção de Equipamentos',
+    daily_report:'RELATÓRIO DIÁRIO DE CAMPO',report_number:'Relatório #',date:'Data',
+    rejected_by:'Rejeitado por',rejection_reason:'Motivo da rejeição',
+    report_info:'Informações do Relatório',report_id_lbl:'ID Relatório',
+    weather:'Clima',labor:'Mão de obra',equipment:'Equipamentos',
+    tasks:'Tarefas e Atividades',task_description:'Descrição da tarefa',activity:'Atividades',
+    materials_used:'Materiais Utilizados',incidents:'Incidentes',
+    material:'Material',unit:'Unidade',qty:'Qtd.',
+    corrective_action:'Ação corretiva',checklist:'Checklist',
+    item:'Item',answer:'Resposta',photo_evidence:'Checklist — Evidência fotográfica',
+    notes_label:'Notas e Comentários',general_notes:'Notas gerais',tomorrows_plan:'Plano para amanhã',
+    photos:'Fotos',signatures:'Assinaturas',
+    submitted_by:'ASSINADO POR',approved_by:'APROVADO POR',customer_signoff:'ASSINATURA DO CLIENTE',
+    generated:'Gerado',page:'Página',of:'de',
+    status:'Status',projects:'Projetos',client:'Cliente',supervisor:'Supervisor',
+    location:'Localização',shift:'Turno',start:'Início',end:'Término',
+    temperature:'Temperatura',wind:'Vento',work_impact:'Impacto no trabalho',
+    name:'Nome',role:'Função',hours:'Horas',
+    work_site:'LOCAL DE TRABALHO',site_name:'Nome do Local',site_address:'Endereço do Local',
+    no_results:'SEM RESULTADOS',no_projects_yet:'SEM PROJETOS AINDA',
+    occurrence_type:'Tipo',time:'Hora',description:'Descrição',
+    add_occurrence:'+ Adicionar Ocorrência',
+    customers_label:'🤝 Clientes',new_customer_btn:'＋ Novo Cliente',
+    new_project_btn2:'🏗 Novo Projeto',
+    company_name_lbl:'Empresa / Nome *',email_lbl:'E-mail',phone_lbl:'Telefone',
+    notes_lbl:'Notas',customer_logo_lbl:'LOGO DO CLIENTE',
+    customer_projects_lbl:'PROJETOS ATRIBUÍDOS AO CLIENTE',
+    occurrence_lbl:'OCORRÊNCIA',add_photos_occ:'Adicionar fotos',
+    remove_lbl:'Remover',caption_ph:'Legenda...',
+    describe_occ_ph:'Descreva a ocorrência...',corrective_ph:'Ações tomadas ou planejadas...',
+    photo_evidence_tasks:'Evidência fotográfica — Tarefas',
+    no_impact:'Sem impacto',minor_delay:'Atraso leve',
+    significant_delay:'Atraso significativo',work_stopped:'Trabalho parado',
+    log_report_created2:'Relatório criado',
+    log_saved:'Salvo',
+    log_submitted:'Assinado e enviado para revisão',
+    log_edited:'Relatório editado',
+    log_signed_by:'Assinado por ',
+    log_awaiting_cust:' — aguardando assinatura do cliente',
+    log_cust_signoff:'Assinatura do cliente por ',
+    log_rejected_by:'Rejeitado por ',
+    log_cust_correction:'Cliente solicitou correção: ',
+    sec_occurrence:'OCORRÊNCIA',
+    add_photos_occ2:'Adicionar fotos',
+    remove_btn:'Remover',
+    occ_type_lbl:'Tipo',
+    occ_time_lbl:'Hora',
+    occ_desc_lbl:'Descrição',
+    occ_desc_ph:'Descreva a ocorrência...',
+    occ_action_lbl:'Ação corretiva tomada',
+    occ_action_ph:'Ações tomadas ou planejadas...',
+    caption_ph2:'Legenda...',
+    nav_customers:'🤝 Clientes',
+    btn_new_customer:'＋ Novo Cliente',
+    btn_new_project2:'🏗 Novo Projeto',
+    cust_name_lbl:'Empresa / Nome *',
+    cust_email_lbl:'E-mail',
+    cust_phone_lbl:'Telefone',
+    cust_notes_lbl:'Notas',
+    cust_logo_lbl:'LOGO DO CLIENTE',
+    cust_projects_lbl:'PROJETOS ATRIBUÍDOS AO CLIENTE',
+    cust_save_btn:'Salvar Cliente',
+    upload_btn:'+ ENVIAR',
+    w_fullname_lbl:'Nome Completo *',
+    w_fullname_ph:'Nome Sobrenome',
+    w_role_lbl:'Cargo / Ofício *',
+    w_phone_ph:'+55 11 9000-0000',
+    w_email_ph:'email@empresa.com',
+    w_emp_id:'ID Funcionário',
+    w_status:'Status',
+    w_on_leave:'Com licença',
+    mat_name_lbl:'Nome do Item *',
+    mat_name_ph:'ex. Cabo THHN #10',
+    mat_cat_lbl:'Categoria',
+    mat_unit_lbl:'Unidade',
+    mat_qty_lbl:'Quantidade',
+    mat_spec_ph:'Especificação, marca ou info...',
+    r_notes_ph:'Observações, instruções ou comentários...',
+    r_tom_ph:'Descrição das atividades programadas para amanhã...',
+    photo_caption_ph:'Adicionar descrição ou comentário à foto…',
+    filter_all_statuses:'Todos os status',
+    filter_all_projects:'Todos os projetos',
+    filter_all_customers:'Todos os clientes',
+    select_cust_company:'— Selecionar empresa cliente —',
+    close_btn:'Fechar',
+    job_info_lbl:'Informações do Trabalho',
+    required_badge:'OBRIGATÓRIO',
+    del_icon_btn:'🗑 Excluir',
+    rej_reason_lbl:'Motivo da rejeição *',
+    rej_reason_ph:'Descreva o que precisa ser corrigido...',
+    approve_btn2:'Aprovar',
+    activity_log_btn:'📋 Registro de Atividade',
+    no_customers_yet:'SEM CLIENTES AINDA',
+    no_projects_text:'Sem projetos',
+    projects_lbl:'PROJETOS',
+    user_access_projects:'ACESSO AO PROJETO',
+    report_subheader:'Relatório de Campo',
     manage_users:'👥 Gerenciar Usuários',
 role_customer:'Cliente',
   },
@@ -1784,7 +2069,7 @@ role_customer:'Cliente',
     confirm_delete_word:'ELIMINA',type_to_confirm:'Per confermare, scrivi la parola ELIMINA:',
     all_statuses_label:'Tutti gli stati',no_permission:'NESSUN PERMESSO',no_permission_approve:'NESSUN PERMESSO PER APPROVARE',
     administrators_only:'SOLO AMMINISTRATORI',report_not_found:'RAPPORTO NON TROVATO',
-    report_closed_signed:"RAPPORTO CHIUSO — FIRMATO DAL CLIENTE. SOLO ADMIN PUÒ ELIMINARE.",
+    report_closed_signed:'RAPPORTO CHIUSO — FIRMATO DAL CLIENTE. SOLO ADMIN PUÒ ELIMINARE.',
     report_approved_supervisors:'RAPPORTO APPROVATO — SOLO I SUPERVISORI POSSONO RIFIUTARE',
     report_must_be_review:'IL RAPPORTO DEVE ESSERE IN REVISIONE',report_not_ready:'RAPPORTO NON PRONTO PER LA REVISIONE',
     report_rejected_returned:'RAPPORTO RIFIUTATO — RESTITUITO AL TECNICO',
@@ -1818,9 +2103,9 @@ role_customer:'Cliente',
     photo_description_ph:'Descrizione della foto...',free_text_answer_ph:'Risposta libera...',
     note_for_item_ph:'Nota per questo elemento...',task_description_ph:'Descrizione attività...',
     comment_note_ph:'Commento o nota...',name_crew_ph:'Nome / Squadra',unnamed_task:'Attività senza nome',
-    no_photos_add:"Nessuna foto — usa il pulsante per aggiungere",no_results_label:'Nessun risultato',
+    no_photos_add:'Nessuna foto — usa il pulsante per aggiungere',no_results_label:'Nessun risultato',
     loaded_label:'CARICATO: ',editing_label:'MODIFICA: ',rejected_by_label:'Rifiutato da: ',
-    correction_by_label:'Correzione richiesta da: ',project_assigned_to:"✓ Il progetto sarà assegnato automaticamente a ",
+    correction_by_label:'Correzione richiesta da: ',project_assigned_to:'✓ Il progetto sarà assegnato automaticamente a ',
     uploading_label:'CARICAMENTO...',no_email_on_file:"Nessuna email registrata — contatta l'admin",
     confirm_delete_project:'Eliminare il progetto?',confirm_delete_template:'Eliminare questo modello?',
     confirm_delete_user:'Eliminare questo utente?',confirm_delete_short:'Eliminare?',confirm_delete_report:'Eliminare questo rapporto?',
@@ -1833,7 +2118,7 @@ role_customer:'Cliente',
     equipment_desc_ph:'Descrizione attrezzatura',task_desc_ph:'Descrizione attività...',add_photos_title:'Aggiungi foto',
     comment_note_ph2:'Commento o nota...',material_item_ph:'Materiale / articolo',unit_ph:'Unità',qty_ph:'Qtà',
     yes_label:'Sì',required_label:'OBBLIGATORIO',free_text_ph:'Risposta libera...',note_item_ph:'Nota per questo elemento...',
-    no_photos_button:"Nessuna foto — usa il pulsante per aggiungere",
+    no_photos_button:'Nessuna foto — usa il pulsante per aggiungere',
     all_items_must_answer:'TUTTI GLI ELEMENTI DELLA CHECKLIST DEVONO ESSERE RISPOSTI',remaining_label:'rimanenti',
     photo_desc_ph:'Descrizione della foto...',customer_label:'Cliente',near_miss_label:'Quasi incidente',
     entry_single:'voce',entry_plural:'voci',min_6_chars_short:'MIN. 6 CARATTERI',
@@ -1903,6 +2188,112 @@ role_customer:'Cliente',
     lbl_add_equip:'Aggiungi Attrezzatura',lbl_add_task:'Aggiungi Attività',
     lbl_add_occ:'Aggiungi Occorrenza',lbl_add_mat:'Aggiungi Materiale',lbl_import_cat:'Importa Catalogo',
     no_checklist:'NESSUNA CHECKLIST CARICATA',no_materials_yet:'NESSUN MATERIALE ANCORA',no_templates_yet:'NESSUN MODELLO ANCORA',
+    report_id_lbl:'ID Rapporto',
+    sec_weather:'Meteo',sec_labor:'Manodopera',sec_equip:'Attrezzatura',
+    sec_tasks:'Attività',sec_mats:'Materiali Utilizzati',
+    sec_incidents:'Incidenti e Occorrenze',sec_checklist:'Checklist di Verifica',
+    sec_photos:'Registro Fotografico',sec_notes:'Note e Commenti',
+    sec_toggle_hint:'ABILITA/DISABILITA SEZIONI – LE SEZIONI DISABILITATE NON APPAIONO NEL PDF',
+    back_btn:'← Indietro',new_report_header:'// NUOVO RAPPORTO',report_field_title:'RAPPORTO DI CAMPO',
+    del_report_lbl:'Rapporto:',del_date_lbl:'Data:',
+    del_pw_lbl:'Per confermare, scrivi la parola ELIMINA nel campo:',
+    cl_ph_name:'es. Ispezione Attrezzature',
+    daily_report:'RAPPORTO GIORNALIERO DI CAMPO',report_number:'Rapporto #',date:'Data',
+    rejected_by:'Rifiutato da',rejection_reason:'Motivo del rifiuto',
+    report_info:'Informazioni del Rapporto',report_id_lbl:'ID Rapporto',
+    weather:'Meteo',labor:'Manodopera',equipment:'Attrezzatura',
+    tasks:'Attività',task_description:'Descrizione attività',activity:'Attività',
+    materials_used:'Materiali Utilizzati',incidents:'Incidenti',
+    material:'Materiale',unit:'Unità',qty:'Qtà',
+    corrective_action:'Azione correttiva',checklist:'Checklist',
+    item:'Elemento',answer:'Risposta',photo_evidence:'Checklist — Evidenza fotografica',
+    notes_label:'Note e Commenti',general_notes:'Note generali',tomorrows_plan:'Piano per domani',
+    photos:'Foto',signatures:'Firme',
+    submitted_by:'FIRMATO DA',approved_by:'APPROVATO DA',customer_signoff:'FIRMA DEL CLIENTE',
+    generated:'Generato',page:'Pagina',of:'di',
+    status:'Stato',projects:'Progetti',client:'Cliente',supervisor:'Supervisore',
+    location:'Posizione',shift:'Turno',start:'Inizio',end:'Fine',
+    temperature:'Temperatura',wind:'Vento',work_impact:'Impatto sul lavoro',
+    name:'Nome',role:'Ruolo',hours:'Ore',
+    work_site:'SITO DI LAVORO',site_name:'Nome del Sito',site_address:'Indirizzo del Sito',
+    no_results:'NESSUN RISULTATO',no_projects_yet:'NESSUN PROGETTO ANCORA',
+    occurrence_type:'Tipo',time:'Ora',description:'Descrizione',
+    add_occurrence:'+ Aggiungi Occorrenza',
+    customers_label:'🤝 Clienti',new_customer_btn:'＋ Nuovo Cliente',
+    new_project_btn2:'🏗 Nuovo Progetto',
+    company_name_lbl:'Azienda / Nome *',email_lbl:'Email',phone_lbl:'Telefono',
+    notes_lbl:'Note',customer_logo_lbl:'LOGO CLIENTE',
+    customer_projects_lbl:'PROGETTI ASSEGNATI AL CLIENTE',
+    occurrence_lbl:'OCCORRENZA',add_photos_occ:'Aggiungi foto',
+    remove_lbl:'Rimuovi',caption_ph:'Didascalia...',
+    describe_occ_ph:"Descrivi l'occorrenza...",corrective_ph:"Azioni intraprese o pianificate...",
+    photo_evidence_tasks:'Evidenza fotografica — Attività',
+    no_impact:'Nessun impatto',minor_delay:'Ritardo lieve',
+    significant_delay:'Ritardo significativo',work_stopped:'Lavoro sospeso',
+    log_report_created2:'Rapporto creato',
+    log_saved:'Salvato',
+    log_submitted:'Firmato e inviato alla revisione',
+    log_edited:'Rapporto modificato',
+    log_signed_by:'Firmato da ',
+    log_awaiting_cust:' — in attesa firma cliente',
+    log_cust_signoff:'Firma del cliente da ',
+    log_rejected_by:'Rifiutato da ',
+    log_cust_correction:'Cliente ha richiesto correzione: ',
+    sec_occurrence:'OCCORRENZA',
+    add_photos_occ2:'Aggiungi foto',
+    remove_btn:'Rimuovi',
+    occ_type_lbl:'Tipo',
+    occ_time_lbl:'Ora',
+    occ_desc_lbl:'Descrizione',
+    occ_desc_ph:"Descrivi l'occorrenza...",
+    occ_action_lbl:'Azione correttiva intrapresa',
+    occ_action_ph:'Azioni intraprese o pianificate...',
+    caption_ph2:'Didascalia...',
+    nav_customers:'🤝 Clienti',
+    btn_new_customer:'＋ Nuovo Cliente',
+    btn_new_project2:'🏗 Nuovo Progetto',
+    cust_name_lbl:'Azienda / Nome *',
+    cust_email_lbl:'Email',
+    cust_phone_lbl:'Telefono',
+    cust_notes_lbl:'Note',
+    cust_logo_lbl:'LOGO CLIENTE',
+    cust_projects_lbl:'PROGETTI ASSEGNATI AL CLIENTE',
+    cust_save_btn:'Salva Cliente',
+    upload_btn:'+ CARICA',
+    w_fullname_lbl:'Nome Completo *',
+    w_fullname_ph:'Nome Cognome',
+    w_role_lbl:'Ruolo / Mansione *',
+    w_phone_ph:'+39 000 0000000',
+    w_email_ph:'email@azienda.com',
+    w_emp_id:'ID Dipendente',
+    w_status:'Stato',
+    w_on_leave:'In permesso',
+    mat_name_lbl:'Nome Articolo *',
+    mat_name_ph:'es. Cavo THHN #10',
+    mat_cat_lbl:'Categoria',
+    mat_unit_lbl:'Unità',
+    mat_qty_lbl:'Quantità',
+    mat_spec_ph:'Specifiche, marca o note...',
+    r_notes_ph:'Osservazioni, istruzioni o commenti...',
+    r_tom_ph:'Descrizione delle attività pianificate per domani...',
+    photo_caption_ph:'Aggiungi descrizione o commento alla foto…',
+    filter_all_statuses:'Tutti gli stati',
+    filter_all_projects:'Tutti i progetti',
+    filter_all_customers:'Tutti i clienti',
+    select_cust_company:'— Seleziona azienda cliente —',
+    close_btn:'Chiudi',
+    job_info_lbl:'Informazioni Lavoro',
+    required_badge:'OBBLIGATORIO',
+    del_icon_btn:'🗑 Elimina',
+    rej_reason_lbl:'Motivo del rifiuto *',
+    rej_reason_ph:'Descrivi cosa deve essere corretto...',
+    approve_btn2:'Approva',
+    activity_log_btn:'📋 Registro Attività',
+    no_customers_yet:'NESSUN CLIENTE ANCORA',
+    no_projects_text:'Nessun progetto',
+    projects_lbl:'PROGETTI',
+    user_access_projects:'ACCESSO AL PROGETTO',
+    report_subheader:'Rapporto di Campo',
     manage_users:'👥 Gestisci Utenti',
 role_customer:'Cliente',
   },
@@ -2252,7 +2643,7 @@ function renderProjs(){
     projs=projs.filter(p=>canAccessProject(p.id));
   const lang=currentUser?.lang||'es';
   const es=lang==='es';
-  if(!projs.length){c.innerHTML=`<div class="emp"><div class="eic">🏗</div>${q||fStat||fCust?(es?'SIN RESULTADOS':'NO RESULTS'):(es?'SIN PROYECTOS AÚN':'NO PROJECTS YET')}</div>`;return;}
+  if(!projs.length){c.innerHTML=`<div class="emp"><div class="eic">🏗</div>${q||fStat||fCust?(t('no_results')):(t('no_projects_yet'))}</div>`;return;}
   const canMgr=hasPerm('manage_projects');
   c.innerHTML=projs.map(p=>{
     const mn=(p.members||[]).map(id=>DB.workers.find(w=>w.id===id)?.name).filter(Boolean);
@@ -2627,7 +3018,7 @@ function startNewReport(projId=null){
   curRptId=null;editingRpt=false;activeCL=null;curReportStatus='Draft';
   resetRF();applyLang();
   if(projId){document.getElementById('r-proj').value=projId;onPC();curProjId=projId;}
-  document.getElementById('rml').textContent=currentUser?.lang==='en'?'// NEW REPORT':'// NUEVO INFORME';
+  document.getElementById('rml').textContent=t('new_report_header');
   document.getElementById('rback').style.display=projId?'inline-flex':'none';
   document.getElementById('rback').onclick=projId?()=>viewProj(projId):()=>goPage('projects');
   setBBStatus('Draft');
@@ -2813,10 +3204,9 @@ function tRole(s){const lang=currentUser?.lang||'es';return(lang==='en'?ROLES_EN
 function tWeather(key){
   if(!key) return '';
   const lang=currentUser?.lang||'es';
-  if(lang==='en') return key; // key IS the EN label
-  // Find the pill with matching data-en and return data-es
+  if(lang==='en') return key;
   const pill=[...document.querySelectorAll('#weather-pills .wp')].find(p=>p.getAttribute('data-en')===key);
-  return pill?pill.getAttribute('data-es')||key:key;
+  return pill?(pill.getAttribute('data-'+lang)||pill.getAttribute('data-es')||key):key;
 }
 // Translate an array of weather keys
 function tWeatherArr(arr,lang){
@@ -3311,14 +3701,14 @@ function translateNote(entry, lang){
   const nd=entry.noteData||{};
   const k=entry.noteKey||entry.note||'';
   // Structured note keys (new format — v1.5.5+)
-  if(k==='report.created')        return es?'Informe creado':'Report created';
-  if(k==='report.saved')          return es?'Guardado':'Saved';
-  if(k==='report.submitted')      return es?'Firmado y enviado a revisión':'Signed and sent for review';
-  if(k==='report.edited')         return es?'Informe editado':'Report edited';
-  if(k==='report.approved')       return (es?'Firmado por ':'Signed by ')+(nd.by||'')+(nd.pendingCust?(es?' — esperando firma del cliente':' — awaiting customer sign-off'):'');
-  if(k==='report.cust_approved')  return (es?'Firma del cliente por ':'Customer sign-off by ')+(nd.by||'');
-  if(k==='report.rejected')       return (es?'Rechazado por ':'Rejected by ')+(nd.by||'')+': '+(nd.reason||'');
-  if(k==='report.cust_rejected')  return (es?'Cliente solicitó corrección: ':'Customer requested correction: ')+(nd.reason||'');
+  if(k==='report.created')        return t('log_report_created2');
+  if(k==='report.saved')          return t('log_saved');
+  if(k==='report.submitted')      return t('log_submitted');
+  if(k==='report.edited')         return t('log_edited');
+  if(k==='report.approved')       return (t('log_signed_by'))+(nd.by||'')+(nd.pendingCust?(t('log_awaiting_cust')):'');
+  if(k==='report.cust_approved')  return (t('log_cust_signoff'))+(nd.by||'');
+  if(k==='report.rejected')       return (t('log_rejected_by'))+(nd.by||'')+': '+(nd.reason||'');
+  if(k==='report.cust_rejected')  return (t('log_cust_correction'))+(nd.reason||'');
   // Legacy: plain text stored directly (pre-v1.5.5) — translate known Spanish phrases
   if(!es) {
     const legacyMap={
@@ -3615,18 +4005,18 @@ function addOCC(type='',time='',desc='',action='',photos=[],captions=[]){
   d._photos=[...photos];d._captions=[...captions];
   d.style.cssText='background:rgba(224,82,82,.05);border:1px solid rgba(224,82,82,.25);border-left:3px solid var(--rd);padding:10px;margin-bottom:8px;';
   d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-    <span style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--rd);">⚠ ${es?'OCURRENCIA':'OCCURRENCE'}</span>
+    <span style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--rd);">⚠ ${t('sec_occurrence')}</span>
     <div style="display:flex;gap:6px;">
-      <button class="ib occ-cam-btn" title="${es?'Agregar fotos':'Add photos'}" style="${photos.length?'border-color:var(--am);color:var(--am);':''}">📷</button>
-      <button class="ib" onclick="this.closest('.occ-entry').remove();upOCC()">✕ ${es?'Eliminar':'Remove'}</button>
+      <button class="ib occ-cam-btn" title="${t('add_photos_occ2')}" style="${photos.length?'border-color:var(--am);color:var(--am);':''}">📷</button>
+      <button class="ib" onclick="this.closest('.occ-entry').remove();upOCC()">✕ ${t('delete')}</button>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 80px;gap:8px;margin-bottom:8px;">
-    <div><label>${es?'Tipo':'Type'}</label><select class="occ-type" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;">${getOccTypes().map(t=>`<option${t===type?' selected':''}>${t}</option>`).join('')}</select></div>
-    <div><label>${es?'Hora':'Time'}</label><input type="time" class="occ-time" value="${E(time)}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;"></div>
+    <div><label>${t('occ_type_lbl')}</label><select class="occ-type" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;">${getOccTypes().map(t=>`<option${t===type?' selected':''}>${t}</option>`).join('')}</select></div>
+    <div><label>${t('occ_time_lbl')}</label><input type="time" class="occ-time" value="${E(time)}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;"></div>
   </div>
-  <div style="margin-bottom:8px;"><label>${es?'Descripción':'Description'}</label><textarea class="occ-desc" rows="2" placeholder="${es?'Describe la ocurrencia...':'Describe the occurrence...'}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;resize:vertical;">${E(desc)}</textarea></div>
-  <div style="margin-bottom:8px;"><label>${es?'Acción correctiva tomada':'Corrective Action Taken'}</label><textarea class="occ-act" rows="2" placeholder="${es?'Acciones tomadas o planificadas...':'Actions taken or planned...'}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;resize:vertical;">${E(action)}</textarea></div>
+  <div style="margin-bottom:8px;"><label>${t('occ_desc_lbl')}</label><textarea class="occ-desc" rows="2" placeholder="${t('occ_desc_ph')}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;resize:vertical;">${E(desc)}</textarea></div>
+  <div style="margin-bottom:8px;"><label>${t('occ_action_lbl')}</label><textarea class="occ-act" rows="2" placeholder="${t('occ_action_ph')}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;resize:vertical;">${E(action)}</textarea></div>
   <input type="file" accept="image/*" multiple style="display:none;" class="occ-file-input">
   <div class="occ-photo-grid" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;"></div>`;
   // Wire up photo button
@@ -3649,7 +4039,7 @@ function renderOCCPhotos(entry){
     <div style="position:relative;width:90px;flex-shrink:0;">
       <img src="${src}" style="width:90px;height:70px;object-fit:cover;border:1px solid var(--bd);display:block;">
       <button onclick="this.closest('div').remove();this.closest('.occ-entry')._photos.splice(${i},1);this.closest('.occ-entry')._captions.splice(${i},1);renderOCCPhotos(this.closest('.occ-entry'))" style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,.6);border:none;color:#fff;font-size:9px;cursor:pointer;padding:1px 4px;">✕</button>
-      <input type="text" placeholder="${es?'Caption...':'Caption...'}" value="${(entry._captions[i]||'')}" oninput="this.closest('.occ-entry')._captions[${i}]=this.value" style="width:100%;background:var(--s2);border:1px solid var(--bd);border-top:none;color:var(--tx);padding:2px 4px;font-size:9px;outline:none;">
+      <input type="text" placeholder="${t('caption_ph2')}" value="${(entry._captions[i]||'')}" oninput="this.closest('.occ-entry')._captions[${i}]=this.value" style="width:100%;background:var(--s2);border:1px solid var(--bd);border-top:none;color:var(--tx);padding:2px 4px;font-size:9px;outline:none;">
     </div>`).join('');
 }
 function upOCC(){const n=document.querySelectorAll('#r-occ .occ-entry').length;const el=document.getElementById('bl-occ');if(el)el.textContent=n+' '+(n===1?t('entry_single'):t('entry_plural'));}
@@ -3875,7 +4265,7 @@ ${r.status==='Rejected'&&r.rejectionReason?`<div style="background:#fff0f0;borde
 ${!r.disabledSections?.includes('sec-job')?`
 <div class="sec-title">${pt('report_info')}</div>
 <table>
-  <tr><th>${pdfLang==='en'?'Report ID':'ID Informe'}</th><th>${pt('report_number')}</th><th>${pt('date')}</th><th>${pt('status')}</th></tr>
+  <tr><th>${pt('report_id_lbl')}</th><th>${pt('report_number')}</th><th>${pt('date')}</th><th>${pt('status')}</th></tr>
   <tr><td><strong>${r.id}</strong></td><td>#${r.num||'—'}</td><td>${r.date||'—'}</td><td style="color:${statusColor};font-weight:700;">${pdfLang==='es'?(RSTATUS_ES[r.status]||r.status||'Borrador'):(RSTATUS_EN[r.status]||r.status||'Draft')}</td></tr>
 </table>
 <div class="sec-title">${pt('report_info')}</div>
@@ -3891,11 +4281,11 @@ ${(r.siteEnabled||(r.siteName||r.siteAddr))?`<div style="border-left:3px solid #
 
 ${!r.disabledSections?.includes('sec-weather')&&(r.weather?.length||r.temp)?`
 <div class="sec-title">${pt('weather')}</div>
-<div class="wps">${(r.weather||[]).map(w=>`<div class="wpx">${pdfLang==='en'?w:(tWeather(w)||w)}</div>`).join('')}</div>
+<div class="wps">${(r.weather||[]).map(w=>`<div class="wpx">${(()=>{const pill=[...document.querySelectorAll('#weather-pills .wp')].find(p=>p.getAttribute('data-en')===w);return pill?(pill.getAttribute('data-'+pdfLang)||pill.getAttribute('data-es')||w):w;})()}</div>`).join('')}</div>
 <div class="g3">
   <div class="fl"><div class="fl-l">${pt('temperature')}</div><div class="fl-v">${r.temp||'—'}</div></div>
   <div class="fl"><div class="fl-l">${pt('wind')}</div><div class="fl-v">${r.wind||'—'}</div></div>
-  <div class="fl"><div class="fl-l">${pt('work_impact')}</div><div class="fl-v">${r.weatherImpact||'—'}</div></div>
+  <div class="fl"><div class="fl-l">${pt('work_impact')}</div><div class="fl-v">${(()=>{const imp=r.weatherImpact||'';const impMap={'No impact':{es:'Sin impacto',pt:'Sem impacto',it:'Nessun impatto'},'Minor delay':{es:'Demora leve',pt:'Atraso leve',it:'Ritardo lieve'},'Significant delay':{es:'Demora significativa',pt:'Atraso significativo',it:'Ritardo significativo'},'Work stopped':{es:'Trabajo detenido',pt:'Trabalho parado',it:'Lavoro sospeso'}};return pdfLang==='en'?imp:(impMap[imp]?.[pdfLang]||impMap[imp]?.es||imp)||'—';})()}</div></div>
 </div>`:''}
 
 ${!r.disabledSections?.includes('sec-labor')&&r.labor?.length?`
@@ -3933,7 +4323,7 @@ ${r.tasks.map(t=>`<tr><td>${t.desc||'—'}${t.comment?`<div style="font-size:9px
     return '<div style="margin-bottom:14px;page-break-inside:avoid;"><div style="font-size:9px;letter-spacing:1px;color:#5a5040;background:#f5f2ed;padding:5px 8px;margin-bottom:8px;border-left:3px solid #f5a623;font-weight:600;">'+(t.desc||'—')+'<span style="float:right;'+statusCls+'">'+tStatLabel+'</span></div>'+pairHTML+'</div>';
   }).join('');
   const photoSection=tasksWithPhotos.length?`
-<div class="sec-title" style="margin-top:16px;">${pdfLang==='en'?'Photo Evidence — Tasks':'Evidencia fotográfica — Tareas'} (${tasksWithPhotos.length})</div>
+<div class="sec-title" style="margin-top:16px;">${pt('photo_evidence_tasks')} (${tasksWithPhotos.length})</div>
 ${taskPhotoEvidence}`:'';
   return taskTable+photoSection;
 })()}
@@ -4308,11 +4698,11 @@ function applyLang(){
   // ── Customers page ─────────────────────────────
   _setTxt('ph-cust-small',t('client_mgmt'));
   _setTxt('ph-cust-title',t('customers'));
-  _setTxt('ph-cust-h',es?'🤝 Clientes':'🤝 Customers');
-  _setTxt('btn-add-cust-txt',es?'＋ Nuevo Cliente':'＋ New Customer');
+  _setTxt('ph-cust-h',t('nav_customers'));
+  _setTxt('btn-add-cust-txt',t('btn_new_customer'));
 
   // ── Project modal labels ───────────────────────
-  _setTxt('pm-title',es?'🏗 Nuevo Proyecto':'🏗 New Project');
+  _setTxt('pm-title',t('btn_new_project2'));
   _setPlh('p-cli',t('ph_company_person'));
   _setPlh('p-loc',t('ph_site_address'));
   _setPlh('p-desc',t('ph_project_scope'));
@@ -4324,23 +4714,23 @@ function applyLang(){
   }
 
   // ── Customer modal labels ──────────────────────
-  _setTxt('lbl-cm-name',es?'Empresa / Nombre *':'Company / Name *');
-  _setTxt('lbl-cm-email',es?'Correo':'Email');
-  _setTxt('lbl-cm-phone',es?'Teléfono':'Phone');
-  _setTxt('lbl-cm-notes',es?'Notas':'Notes');
-  _setTxt('lbl-cust-logo-sec',es?'LOGO DEL CLIENTE':'CUSTOMER LOGO');
+  _setTxt('lbl-cm-name',t('cust_name_lbl'));
+  _setTxt('lbl-cm-email',t('cust_email_lbl'));
+  _setTxt('lbl-cm-phone',t('cust_phone_lbl'));
+  _setTxt('lbl-cm-notes',t('cust_notes_lbl'));
+  _setTxt('lbl-cust-logo-sec',t('cust_logo_lbl'));
   _setTxt('lbl-cust-logo-hint',es?'Este logo aparecerá en los informes asociados a este cliente.':'This logo will appear on reports associated with this customer.');
-  _setTxt('lbl-cm-proj-sec',es?'PROYECTOS ASIGNADOS AL CLIENTE':'PROJECTS ASSIGNED TO CUSTOMER');
-  _setTxt('btn-cust-cancel',es?'Cancelar':'Cancel');
-  _setTxt('btn-cust-save',es?'Guardar Cliente':'Save Customer');
+  _setTxt('lbl-cm-proj-sec',t('cust_projects_lbl'));
+  _setTxt('btn-cust-cancel',t('cancel'));
+  _setTxt('btn-cust-save',t('cust_save_btn'));
   _setPlh('cm-name',t('ph_company_contact'));
   _setPlh('cm-email',t('ph_contact_email'));
   _setPlh('cm-phone',t('ph_contact_phone'));
   _setPlh('cm-notes',t('ph_notes_obs'));
-  _setTxt('cm-logo-lbl',es?'+ SUBIR':'+ UPLOAD');
+  _setTxt('cm-logo-lbl',t('upload_btn'));
 
   // ── User modal labels ──────────────────────────
-  _setTxt('um2-title',es?'👥 Nuevo Usuario':'👥 New User');
+  _setTxt('um2-title',t('new_user_label'));
   _setPlh('u-uname',t('ph_uname'));
   _setPlh('u-fname',t('ph_fullname'));
   _setPlh('u-pass',t('ph_pass_min'));
@@ -4435,49 +4825,49 @@ function applyLang(){
   _setPlh('proj-search',t('ph_search_project'));
   _setPlh('ar-search',t('ph_search_report'));
   _setPlh('cust-search',t('ph_search_customer'));
-  _setPlh('r-notes', es?'Observaciones, instrucciones o comentarios...':'General observations and notes...');
-  _setPlh('r-tom', es?'Descripción de actividades programadas para mañana...':'Planned activities for tomorrow...');
-  _setPlh('lb-cap-in', es?'Agregar descripción o comentario a la foto…':'Add photo description or comment…');
+  _setPlh('r-notes', t('r_notes_ph'));
+  _setPlh('r-tom', t('r_tom_ph'));
+  _setPlh('lb-cap-in', t('photo_caption_ph'));
   // ── Photo drop zone ──────────────────────────────────────────────────
   _setTxt('lbl-photo-drop', t('r_photo_drop'));
 
   // ── All Reports page ──────────────────────────────────────────────────
   const _optAS=document.getElementById('opt-all-statuses');
-  if(_optAS)_optAS.textContent=es?'Todos los estados':'All statuses';
-  _setTxt('lbl-new-report-ar', es?'Nuevo Informe':'New Report');
+  if(_optAS)_optAS.textContent=t('filter_all_statuses');
+  _setTxt('lbl-new-report-ar', t('new_report'));
 
   // ── Checklist modal ───────────────────────────────────────────────────
   _setTxt('lbl-cl-modal-title', t('cl_modal_new'));
   _setTxt('lbl-cl-name-title', t('cl_name_label'));
-  _setPlh('clb-name', es?'ej. Inspección de Equipos':'e.g. Equipment Inspection');
+  _setPlh('clb-name', t('cl_ph_name'));
   _setTxt('lbl-cl-answer-opts', t('lbl_cl_answer'));
   _setTxt('lbl-cl-opt1', t('lbl_cl_opt1'));
   _setTxt('lbl-cl-opt2', t('lbl_cl_opt2'));
   _setTxt('lbl-cl-opt3', t('lbl_cl_opt3'));
   _setTxt('lbl-cl-items', t('cl_items_label'));
   // Update checklist item placeholders
-  document.querySelectorAll('.cl-item-plh').forEach(el=>el.placeholder=es?'Descripción del ítem...':'Item description...');
+  document.querySelectorAll('.cl-item-plh').forEach(el=>el.placeholder=t('item_description_ph'));
   _setTxt('lbl-save-cl', t('cl_save_btn'));
-  _setTxt('clpick-close', es?'Cerrar':'Close');
-  _setTxt('lbl-no-templates', es?'SIN PLANTILLAS AÚN':'NO TEMPLATES YET');
+  _setTxt('clpick-close', t('close_btn'));
+  _setTxt('lbl-no-templates', t('no_templates_yet'));
   _setTxt('lbl-no-materials', t('no_materials_yet'));
   _setTxt('lbl-ar-empty', t('no_reports_yet2'));
 
   // ── Buttons & dropdowns without data-i18n ────────────────────────────
-  _setTxt('lbl-new-report-dash', es?'Nuevo Informe':'New Report');
+  _setTxt('lbl-new-report-dash', t('new_report'));
   _setTxt('lbl-sign-btn', t('sign_off'));
   _setTxt('lbl-sign-btn-bb', t('sign_off'));
   _setTxt('lbl-add-member-btn', '+ '+t('add_member_label').split(' ').pop());
   _setTxt('lbl-add-cl-item', t('cl_add_item'));
   _setTxt('lbl-save-cl', t('cl_save_btn'));
   const _optAP=document.getElementById('opt-all-projects');
-  if(_optAP)_optAP.textContent=es?'Todos los proyectos':'All projects';
+  if(_optAP)_optAP.textContent=t('filter_all_projects');
   const _optAC=document.getElementById('opt-all-customers');
-  if(_optAC)_optAC.textContent=es?'Todos los clientes':'All customers';
+  if(_optAC)_optAC.textContent=t('filter_all_customers');
   const _optSC=document.getElementById('opt-sel-cust');
-  if(_optSC)_optSC.textContent=es?'— Seleccionar empresa cliente —':'— Select customer company —';
+  if(_optSC)_optSC.textContent=t('select_cust_company');
   const _optCR=document.getElementById('opt-role-customer');
-  if(_optCR)_optCR.textContent=es?'Cliente':'Customer';
+  if(_optCR)_optCR.textContent=t('role_customer');
   // ── Bottom bar report buttons ──────────────────────────────────────
   _setTxt('lbl-bb-approve', t('approve'));
   _setTxt('lbl-bb-reject', t('reject'));
@@ -4490,48 +4880,49 @@ function applyLang(){
   _setTxt('lbl-sign-btn', t('sign_off'));
   _setTxt('lbl-sign-btn-bb', t('sign_off'));
   const bbSubmit=document.getElementById('bb-submit-btn');
-  if(bbSubmit)bbSubmit.textContent=es?'Enviar →':'Submit →';
+  if(bbSubmit)bbSubmit.textContent=t('submit');
   const bbSave=document.querySelector('#bb .btn.bs[onclick*="saveReport"]');
   // Section toggles
   // Report form header texts
-  _setTxt('rml',es?'// NUEVO INFORME':'// NEW REPORT');
-  _setTxt('rml2',es?'Informe de Campo':'Field Report');
-  _setTxt('cbar-toggle',es?'⚙ ACTIVAR/DESACTIVAR SECCIONES — LAS SECCIONES DESACTIVADAS NO APARECEN EN EL PDF':'⚙ TOGGLE SECTIONS ON/OFF — DISABLED SECTIONS ARE EXCLUDED FROM PDF');
-  _setTxt('sec-job-label',es?'Información del Trabajo':'Job Information');
-  _setTxt('sec-job-required',es?'REQUERIDO':'REQUIRED');
+  _setTxt('rml',t('new_report_header'));
+  _setTxt('rml2',t('report_field_title'));
+  _setTxt('rml2',t('report_subheader'));
+  _setTxt('cbar-toggle','⚙ '+t('sec_toggle_hint'));
+  _setTxt('sec-job-label',t('job_info_lbl'));
+  _setTxt('sec-job-required',t('required_badge'));
   // Project selector placeholder
   const rProjEl=document.getElementById('r-proj');
-  if(rProjEl&&rProjEl.options.length>0)rProjEl.options[0].text=es?'— Seleccionar Proyecto —':'— Select Project —';
+  if(rProjEl&&rProjEl.options.length>0)rProjEl.options[0].text=t('select_project');
   // Back button
-  document.querySelectorAll('[data-i18n="back"]').forEach(el=>el.textContent=es?'← Volver':'← Back');
-  _setTxt('sec-weather-label',es?'Clima':'Weather');
+  document.querySelectorAll('[data-i18n="back"]').forEach(el=>el.textContent=t('back_btn'));
+  _setTxt('sec-weather-label',t('sec_weather'));
   // Weather pills translation
   document.querySelectorAll('#weather-pills .wp').forEach(pill=>{
-    const txt=pill.getAttribute(es?'data-es':'data-en');
+    const txt=pill.getAttribute('data-'+lang)||pill.getAttribute('data-es');
     if(txt)pill.textContent=txt;
   });
-  _setTxt('sec-labor-label',es?'Mano de Obra':'Labor');
-  _setTxt('sec-equip-label',es?'Equipos':'Equipment');
-  _setTxt('sec-tasks-label',es?'Tareas y Actividades':'Tasks & Activities');
-  _setTxt('sec-mats-label',es?'Materiales Utilizados':'Materials Used');
-  _setTxt('sec-incidents-label',es?'Incidentes y Ocurrencias':'Incidents & Occurrences');
-  _setTxt('sec-checklist-label',es?'Checklist de Verificación':'Verification Checklist');
-  _setTxt('sec-photos-label',es?'Registro Fotográfico':'Photo Log');
-  _setTxt('sec-notes-label',es?'Notas y Comentarios':'Notes & Comments');
+  _setTxt('sec-labor-label',t('sec_labor'));
+  _setTxt('sec-equip-label',t('sec_equip'));
+  _setTxt('sec-tasks-label',t('sec_tasks'));
+  _setTxt('sec-mats-label',t('sec_mats'));
+  _setTxt('sec-incidents-label',t('sec_incidents'));
+  _setTxt('sec-checklist-label',t('sec_checklist'));
+  _setTxt('sec-photos-label',t('sec_photos'));
+  _setTxt('sec-notes-label',t('sec_notes'));
 
   _setTxt('lbl-u-cust-assoc', t('u_cust_assoc'));
   _setTxt('lbl-u-cust-hint', t('u_cust_hint'));
   // ── Delete report modal ───────────────────────────────────────────────
-  _setTxt('del-rpt-title', es?'🗑 Eliminar Informe':'🗑 Delete Report');
-  _setTxt('del-rpt-warn', es?'ACCIÓN IRREVERSIBLE':'IRREVERSIBLE ACTION');
-  _setTxt('del-rpt-desc', es?'Este informe y todas sus fotos serán eliminados permanentemente.':'This report and all its photos will be permanently deleted.');
-  _setTxt('del-rpt-lbl-id', es?'Informe:':'Report:');
-  _setTxt('del-rpt-lbl-date', es?'Fecha:':'Date:');
-  _setTxt('del-rpt-lbl-pw', es?'Para confirmar, escribe la palabra ELIMINAR en el campo:':'To confirm, type the word DELETE in the field:');
+  _setTxt('del-rpt-title', t('report_deleted').replace('🗑 ','🗑 ').replace('ELIMINADO','Eliminar').replace('DELETED','Delete')||t('del_report_lbl').replace(':',''));
+  _setTxt('del-rpt-warn', t('irreversible_action'));
+  _setTxt('del-rpt-desc', t('report_photos_deleted'));
+  _setTxt('del-rpt-lbl-id', t('del_report_lbl'));
+  _setTxt('del-rpt-lbl-date', t('del_date_lbl'));
+  _setTxt('del-rpt-lbl-pw', t('del_pw_lbl'));
   const _delPwEl=document.getElementById('del-rpt-pw');
-  if(_delPwEl)_delPwEl.placeholder=es?'ELIMINAR':'DELETE';
-  _setTxt('del-rpt-cancel', es?'Cancelar':'Cancel');
-  _setTxt('del-rpt-confirm-btn', es?'🗑 Eliminar':'🗑 Delete');
+  if(_delPwEl)_delPwEl.placeholder=t('confirm_delete_word');
+  _setTxt('del-rpt-cancel', t('cancel'));
+  _setTxt('del-rpt-confirm-btn', t('del_icon_btn'));
   // ── Change password modal ─────────────────────────────────────────────
   _setTxt('chpw-title', t('chpw_title'));
   _setTxt('chpw-lbl-new', t('chpw_new'));
@@ -4583,42 +4974,42 @@ function applyLang(){
   // Reject modal
   _setTxt('rej-title', t('rej_title'));
   _setTxt('reject-desc', es?'El informe será devuelto al técnico para correcciones. Por favor explica el motivo.':'The report will be returned to the technician for corrections. Please explain the reason.');
-  _setTxt('reject-reason-lbl', es?'Motivo del rechazo *':'Reason for rejection *');
-  _setPlh('reject-comment', es?'Describe qué se necesita corregir...':'Describe what needs to be corrected...');
+  _setTxt('reject-reason-lbl', t('rej_reason_lbl'));
+  _setPlh('reject-comment', t('rej_reason_ph'));
   _setTxt('rej-cancel', t('cancel'));
   _setTxt('rej-submit', t('rej_submit'));
   // mo-view action buttons
-  _setTxt('mo-view-approve-lbl', es?'Aprobar':'Approve');
+  _setTxt('mo-view-approve-lbl', t('approve_btn2'));
   _setTxt('mo-view-crej-lbl', t('view_crej'));
   _setTxt('mo-view-rej-lbl', t('view_rej'));
   // Activity log modal
-  _setTxt('mo-log-title', es?'📋 Registro de Actividad':'📋 Activity Log');
+  _setTxt('mo-log-title', t('activity_log_btn'));
 
   // ── Worker modal ──────────────────────────────────────────────────────
-  _setTxt('w-lbl-name', es?'Nombre Completo *':'Full Name *');
-  _setPlh('w-name', es?'Nombre Apellido':'First Last');
-  _setTxt('w-lbl-role', es?'Cargo / Oficio *':'Role / Trade *');
-  _setTxt('w-lbl-phone', es?'Teléfono':'Phone');
-  _setPlh('w-phone', es?'+56 9 0000 0000':'+1 555 000 0000');
-  _setPlh('w-email', es?'correo@empresa.com':'email@company.com');
-  _setTxt('w-lbl-empid', es?'ID Empleado':'Employee ID');
-  _setTxt('w-lbl-stat', es?'Estado':'Status');
+  _setTxt('w-lbl-name', t('w_fullname_lbl'));
+  _setPlh('w-name', t('w_fullname_ph'));
+  _setTxt('w-lbl-role', t('w_role_lbl'));
+  _setTxt('w-lbl-phone', t('cust_phone_lbl'));
+  _setPlh('w-phone', t('w_phone_ph'));
+  _setPlh('w-email', t('w_email_ph'));
+  _setTxt('w-lbl-empid', t('w_emp_id'));
+  _setTxt('w-lbl-stat', t('status_label'));
   const wStat=document.getElementById('w-stat');
   if(wStat)[...wStat.options].forEach(o=>{
     if(o.value==='Active')o.textContent=t('opt_active');
-    else if(o.value==='On Leave')o.textContent=es?'Con permiso':'On Leave';
-    else if(o.value==='Inactive')o.textContent=es?'Inactivo':'Inactive';
+    else if(o.value==='On Leave')o.textContent=t('w_on_leave');
+    else if(o.value==='Inactive')o.textContent=t('inactive');
   });
 
   // ── Material modal ────────────────────────────────────────────────────
-  _setTxt('m-lbl-name', es?'Nombre del Ítem *':'Item Name *');
-  _setPlh('m-name', es?'ej. Cable THHN #10':'e.g. THHN Wire #10');
-  _setTxt('m-lbl-cat', es?'Categoría':'Category');
-  _setTxt('m-lbl-unit', es?'Unidad':'Unit');
-  _setTxt('m-lbl-qty', es?'Cantidad':'Quantity');
-  _setTxt('m-lbl-notes', es?'Notas':'Notes');
-  _setPlh('m-notes', es?'Especificación, marca o info...':'Spec, brand or notes...');
-  _setTxt('mm-save-lbl', es?'Guardar':'Save');
+  _setTxt('m-lbl-name', t('mat_name_lbl'));
+  _setPlh('m-name', t('mat_name_ph'));
+  _setTxt('m-lbl-cat', t('mat_cat_lbl'));
+  _setTxt('m-lbl-unit', t('mat_unit_lbl'));
+  _setTxt('m-lbl-qty', t('mat_qty_lbl'));
+  _setTxt('m-lbl-notes', t('cust_notes_lbl'));
+  _setPlh('m-notes', t('mat_spec_ph'));
+  _setTxt('mm-save-lbl', t('save'));
   const mCatMap=es?
     {'m-cat-elec':'Eléctrico','m-cat-plmb':'Gasfitería','m-cat-strc':'Estructural','m-cat-mech':'Mecánico','m-cat-fix':'Fijaciones','m-cat-safe':'Seguridad','m-cat-conc':'Hormigón','m-cat-fin':'Terminaciones','m-cat-oth':'Otro'}:
     {'m-cat-elec':'Electrical','m-cat-plmb':'Plumbing','m-cat-strc':'Structural','m-cat-mech':'Mechanical','m-cat-fix':'Fasteners','m-cat-safe':'Safety','m-cat-conc':'Concrete','m-cat-fin':'Finishes','m-cat-oth':'Other'};
@@ -5114,7 +5505,7 @@ function refreshUCustProjs(){
   } else {
     ps.style.display='none';
     pg.innerHTML='';
-    if(lbl)lbl.textContent=es?'ACCESO A PROYECTOS':'PROJECT ACCESS';
+    if(lbl)lbl.textContent=t('user_access_projects');
     if(hint)hint.textContent='';
   }
 }
@@ -5131,7 +5522,7 @@ function renderCustomers(){
   if(cnt)cnt.textContent=custs.length+' '+(es?'cliente'+(custs.length!==1?'s':''):'customer'+(custs.length!==1?'s':''));
   if(!custs.length){
     if(list)list.innerHTML='';
-    if(em){em.style.display='block';const et=document.getElementById('cust-emp-txt');if(et)et.textContent=q?(es?'SIN RESULTADOS':'NO RESULTS'):(es?'AÚN NO HAY CLIENTES':'NO CUSTOMERS YET');}
+    if(em){em.style.display='block';const et=document.getElementById('cust-emp-txt');if(et)et.textContent=q?(t('no_results')):(t('no_customers_yet'));}
     return;
   }
   if(em)em.style.display='none';
@@ -5142,7 +5533,7 @@ function renderCustomers(){
     const projHtml=projs.length?projs.map(p=>{
       const overdue=p.end&&new Date(p.end+'T23:59:00')<new Date()&&p.status!=='Completed'&&p.status!=='Cancelled';
       return`<span class="bx" style="cursor:pointer;${overdue?'border-color:var(--rd);color:var(--rd);':''}" onclick="viewProj('${p.id}')" title="${E(p.name+(overdue?' — ATRASADO':''))}">${E(p.name)}${p.status?` <span style="opacity:.6;font-size:8px;">${p.status}</span>`:''}</span>`;
-    }).join(''):`<span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${es?(es?'Sin proyectos':'No projects'):'No projects'}</span>`;
+    }).join(''):`<span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${es?(t('no_projects_text')):'No projects'}</span>`;
     return`<div class="pc" style="margin-bottom:10px;">
       <div class="pc-top">
         <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
@@ -5158,12 +5549,12 @@ function renderCustomers(){
           </div>
         </div>
         <div style="display:flex;gap:5px;flex-shrink:0;">
-          <button class="ib ed" onclick="openCustM('${c.id}')" title="${es?'Editar':'Edit'}">✏</button>
-          <button class="ib" onclick="delCust('${c.id}')" title="${es?'Eliminar':'Delete'}">🗑</button>
+          <button class="ib ed" onclick="openCustM('${c.id}')" title="${t('edit')}">✏</button>
+          <button class="ib" onclick="delCust('${c.id}')" title="${t('delete')}">🗑</button>
         </div>
       </div>
       ${projs.length>0?`<div style="margin-top:8px;">
-        <div style="font-family:var(--mo);font-size:8px;color:var(--mu);letter-spacing:2px;margin-bottom:5px;">${es?'PROYECTOS':'PROJECTS'}</div>
+        <div style="font-family:var(--mo);font-size:8px;color:var(--mu);letter-spacing:2px;margin-bottom:5px;">${t('projects_lbl')}</div>
         <div style="display:flex;flex-wrap:wrap;gap:5px;">${projHtml}</div>
       </div>`:''}
       ${c.notes?`<div style="font-size:11px;color:var(--mu2);margin-top:6px;font-style:italic;">${E(c.notes)}</div>`:''}
