@@ -1,4 +1,4 @@
-<!-- FieldLog v1.3.8 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.3.9 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1034,7 +1034,7 @@ const I18N={
     name:'Nombre',role:'Rol',hours:'Horas',start:'Inicio',end:'Término',
     task_description:'Descripción de tarea',activity:'Actividades',
     material:'Material',unit:'Unidad',qty:'Cant.',
-    occurrence_type:(currentUser?.lang==='en'?'Type':'Tipo'),time:'Hora',description:(currentUser?.lang==='en'?'Description':'Descripción'),corrective_action:'Acción correctiva',
+    occurrence_type:'Tipo',time:'Hora',description:'Descripción',corrective_action:'Acción correctiva',
     notes_label:'Notas y Comentarios',general_notes:'Notas generales',tomorrows_plan:'Plan para mañana',
     page:'Página',of:'de',generated:'Generado',
     // Rejection
@@ -1076,8 +1076,8 @@ const I18N={
     // Status labels
     all_statuses:'Todos los estados',
     // Misc
-    save:'Guardar',cancel:'Cancelar',delete:(currentUser?.lang==='en'?'Remove':'Eliminar'),edit:'Editar',new:'Nuevo',
-    upload:'+ SUBIR',remove:(currentUser?.lang==='en'?'Remove':'Eliminar'),yes:'Sí',no:'No',
+    save:'Guardar',cancel:'Cancelar',delete:'Eliminar',edit:'Editar',new:'Nuevo',
+    upload:'+ SUBIR',remove:'Eliminar',yes:'Sí',no:'No',
     required:'REQUERIDO',no_results:'SIN RESULTADOS',
     search:'Buscar...',active:'Activo',inactive:'Inactivo',
     back:'← Volver',members:'Miembros',no_projects_yet:'SIN PROYECTOS AÚN',
@@ -1146,7 +1146,7 @@ const I18N={
     created:'Created',saved:'Saved',submitted:'Submitted',rejected:'Rejected',edited:'Edited',work_site:'WORK SITE',
   }
 };
-function t(key){const lang=(currentUser?.lang)||'es';return (I18N[lang]||I18N.es)[key]||I18N.en[key]||key;}
+function t(key){const lang=(typeof currentUser!=='undefined'&&currentUser?.lang)||'es';return (I18N[lang]||I18N.es)[key]||I18N.en[key]||key;}
 
 // ═══════════════════════════════════════════════
 // DATABASE
@@ -3206,6 +3206,8 @@ async function doLogin(){
   }
 }
 function applyLang(){
+  // Guard: ensure required variables are initialized
+  if(typeof ROLES_ES==='undefined'||typeof currentUser==='undefined')return;
   const lang=currentUser?.lang||'es';
   const es=lang==='es';
 
