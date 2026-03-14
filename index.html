@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.2 | Build: 2026-03-14 | Firebase + PWA Edition | 4 Languages: ES EN PT IT -->
+<!-- FieldLog v1.6.4 | Build: 2026-03-14 | Firebase + PWA Edition | 4 Languages + Session Persist -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,7 +43,23 @@ window.fbFns={
   getDownloadURL:(ref)=>ref.getDownloadURL(),
   deleteObject:(ref)=>ref.delete()
 };
-firebase.auth().onAuthStateChanged(user=>{window._fbUid=user?user.uid:null;});
+firebase.auth().onAuthStateChanged(async user=>{
+  window._fbUid=user?user.uid:null;
+  // Auto-restore session on F5 / browser back (if not already logged in)
+  if(user&&!currentUser){
+    try{
+      const snap=await fbFns.getDoc(fbFns.doc(fbDB,'users',user.uid));
+      if(snap.exists()){
+        const userData={id:user.uid,...snap.data()};
+        if(userData.status==='Active'){
+          currentUser=userData;
+          await loadAllData();
+          await setupUserSession(userData);
+        }
+      }
+    }catch(e){console.warn('Session restore failed:',e);}
+  }
+});
 </script>
 <style>
 :root{
@@ -454,7 +470,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
       <span id="uav-init">?</span>
       <div class="umenu" id="umenu" onclick="event.stopPropagation()">
         <div class="um-hd"><div class="um-nm" id="um-nm">—</div><div class="um-rl" id="um-rl">—</div></div>
-        <div class="um-it" id="um-it-users" onclick="goPage('users')">👥 Gestionar Usuarios</div>
+        <div class="um-it" id="um-it-users" onclick="goPage('users')"><span id="lbl-manage-users">👥 Gestionar Usuarios</div>
         <div class="um-sep"></div>
         <div class="um-it" onclick="doLogout()">↩ Cerrar sesión</div>
       </div>
@@ -1255,6 +1271,33 @@ const I18N={
     pending_label:'Pendientes',in_review_label:'En revisión',
     workers_stat:'Trabajadores',assigned_label:'Asignados',
     latest_reports_label:'Últimos Informes',view_all_label:'Ver todos',
+    recent_projects:'🏗 Proyectos Recientes',latest_reports:'📋 Últimos Informes',
+    proj_mgmt:'// GESTIÓN DE PROYECTOS',workforce_mgmt:'// GESTIÓN DE PERSONAL',
+    inventory:'// INVENTARIO',templates:'// PLANTILLAS',history:'// HISTORIAL',
+    administration:'// ADMINISTRACIÓN',client_mgmt:'// GESTIÓN DE CLIENTES',
+    search_projects:'Buscar proyectos...',search_supervisor:'Buscar supervisor, fecha...',
+    clear_label:'Limpiar',new_project_btn:'＋ Nuevo Proyecto',new_member_btn:'＋ Nuevo Miembro',
+    new_material_btn:'＋ Nuevo Material',new_template_btn:'＋ Nueva Plantilla',new_user_btn:'＋ Nuevo Usuario',
+    materials_catalog_hdr:'📦 Catálogo de Materiales',system_users_hdr:'👥 Usuarios del Sistema',
+    team_members_hdr:'👷 Miembros del Equipo',
+    opt_all_statuses:'Todos los estados',opt_draft:'Borrador',opt_filling:'Llenando',
+    opt_review:'En revisión',opt_approved:'Aprobado',opt_pending:'Firma cliente',opt_rejected:'Rechazado',
+    opt_active:'Activo',opt_hold:'En pausa',opt_completed:'Completado',opt_cancelled:'Cancelado',
+    rpt_count_suffix:'rpts',
+    ph_company_person:'Empresa o persona',ph_site_address:'Dirección del sitio',
+    ph_project_scope:'Alcance o notas del proyecto...',ph_company_contact:'Nombre de la empresa o contacto',
+    ph_contact_email:'contacto@empresa.com',ph_contact_phone:'+56 9 ...',ph_notes_obs:'Observaciones...',
+    ph_username_ex:'ej. jsmith',ph_fullname:'Nombre Apellido',ph_pass_min:'Mín. 6 caracteres',
+    ph_user_email:'usuario@empresa.com',ph_equip_desc:'Descripción del equipo...',
+    ph_supervisor:'Nombre del supervisor',
+    ph_uname:'ej. jsmith',ph_site_name_ex:'ej. Tienda Norte',ph_site_addr_ex:'ej. Av. Principal 123, Ciudad',
+    ph_client_owner:'Empresa o propietario',ph_temp_ex:'ej. 18°C',ph_wind_ex:'ej. Vientos del sur',
+    ph_general_notes:'Observaciones generales del día...',ph_planned_work:'Descripción de actividades programadas...',
+    ph_search_worker:'🔍  Buscar por nombre, cargo, estado…',ph_search_material:'🔍  Buscar por nombre, categoría, unidad…',
+    ph_search_customer:'🔍  Buscar clientes...',ph_search_project:'🔍  Buscar proyectos…',
+    ph_search_report:'Buscar supervisor, fecha...',
+    role_admin:'Administrador',role_manager:'Supervisor',role_technician:'Técnico',
+    role_viewer:'Visualizador',role_customer:'Cliente',
   },
   en:{
     dashboard:'Dashboard',projects:'Projects',all_reports:'All Reports',taskforce:'Taskforce',materials:'Materials',checklists:'Checklists',users:'Users',customers:'Customers',new_report:'NEW REPORT',
@@ -1427,6 +1470,33 @@ const I18N={
     pending_label:'Pending',in_review_label:'In Review',
     workers_stat:'Workers',assigned_label:'Assigned',
     latest_reports_label:'Latest Reports',view_all_label:'View All',
+    recent_projects:'🏗 Recent Projects',latest_reports:'📋 Latest Reports',
+    proj_mgmt:'// PROJECT MANAGEMENT',workforce_mgmt:'// WORKFORCE MANAGEMENT',
+    inventory:'// INVENTORY',templates:'// TEMPLATES',history:'// HISTORY',
+    administration:'// ADMINISTRATION',client_mgmt:'// CLIENT MANAGEMENT',
+    search_projects:'Search projects...',search_supervisor:'Search supervisor, date...',
+    clear_label:'Clear',new_project_btn:'＋ New Project',new_member_btn:'＋ New Member',
+    new_material_btn:'＋ New Material',new_template_btn:'＋ New Template',new_user_btn:'＋ New User',
+    materials_catalog_hdr:'📦 Materials Catalog',system_users_hdr:'👥 System Users',
+    team_members_hdr:'👷 Team Members',
+    opt_all_statuses:'All statuses',opt_draft:'Draft',opt_filling:'Filling',
+    opt_review:'In Review',opt_approved:'Approved',opt_pending:'Customer Sign-Off',opt_rejected:'Rejected',
+    opt_active:'Active',opt_hold:'On Hold',opt_completed:'Completed',opt_cancelled:'Cancelled',
+    rpt_count_suffix:'rpts',
+    ph_company_person:'Company or person',ph_site_address:'Site address',
+    ph_project_scope:'Project scope or notes...',ph_company_contact:'Company or contact name',
+    ph_contact_email:'contact@company.com',ph_contact_phone:'+1 555 ...',ph_notes_obs:'Notes...',
+    ph_username_ex:'e.g. jsmith',ph_fullname:'First Last',ph_pass_min:'Min 6 chars',
+    ph_user_email:'user@company.com',ph_equip_desc:'Equipment description...',
+    ph_supervisor:'Supervisor name',
+    ph_uname:'e.g. jsmith',ph_site_name_ex:'e.g. North Branch',ph_site_addr_ex:'e.g. 123 Main St, City',
+    ph_client_owner:'Company or owner',ph_temp_ex:'e.g. 72°F',ph_wind_ex:'e.g. Gusts from SW',
+    ph_general_notes:'General notes for the day...',ph_planned_work:'Planned work description...',
+    ph_search_worker:'🔍  Search by name, role, status...',ph_search_material:'🔍  Search by name, category, unit...',
+    ph_search_customer:'🔍  Search customers...',ph_search_project:'🔍  Search projects...',
+    ph_search_report:'Search supervisor, date...',
+    role_admin:'Administrator',role_manager:'Manager',role_technician:'Technician',
+    role_viewer:'Viewer',role_customer:'Customer',
   },
   pt:{
     dashboard:'Painel',projects:'Projetos',all_reports:'Relatórios',taskforce:'Equipe',materials:'Materiais',checklists:'Checklists',users:'Usuários',customers:'Clientes',new_report:'NOVO RELATÓRIO',
@@ -1536,6 +1606,33 @@ const I18N={
     due_soon:'Vencendo em breve',days_left:'dias restantes',deadline_label:'Prazo',days_rest:'dias rest.',
     pending_label:'Pendente',in_review_label:'Em Revisão',workers_stat:'Trabalhadores',assigned_label:'Atribuídos',
     latest_reports_label:'Últimos Relatórios',view_all_label:'Ver Todos',
+    recent_projects:'🏗 Projetos Recentes',latest_reports:'📋 Últimos Relatórios',
+    proj_mgmt:'// GESTÃO DE PROJETOS',workforce_mgmt:'// GESTÃO DE PESSOAL',
+    inventory:'// INVENTÁRIO',templates:'// MODELOS',history:'// HISTÓRICO',
+    administration:'// ADMINISTRAÇÃO',client_mgmt:'// GESTÃO DE CLIENTES',
+    search_projects:'Buscar projetos...',search_supervisor:'Buscar supervisor, data...',
+    clear_label:'Limpar',new_project_btn:'＋ Novo Projeto',new_member_btn:'＋ Novo Membro',
+    new_material_btn:'＋ Novo Material',new_template_btn:'＋ Novo Modelo',new_user_btn:'＋ Novo Usuário',
+    materials_catalog_hdr:'📦 Catálogo de Materiais',system_users_hdr:'👥 Usuários do Sistema',
+    team_members_hdr:'👷 Membros da Equipe',
+    opt_all_statuses:'Todos os status',opt_draft:'Rascunho',opt_filling:'Em preenchimento',
+    opt_review:'Em revisão',opt_approved:'Aprovado',opt_pending:'Assinatura do cliente',opt_rejected:'Rejeitado',
+    opt_active:'Ativo',opt_hold:'Em pausa',opt_completed:'Concluído',opt_cancelled:'Cancelado',
+    rpt_count_suffix:'rels',
+    ph_company_person:'Empresa ou pessoa',ph_site_address:'Endereço do local',
+    ph_project_scope:'Escopo ou notas do projeto...',ph_company_contact:'Nome da empresa ou contato',
+    ph_contact_email:'contato@empresa.com',ph_contact_phone:'+55 11 ...',ph_notes_obs:'Observações...',
+    ph_username_ex:'ex. jsmith',ph_fullname:'Nome Sobrenome',ph_pass_min:'Mín. 6 caracteres',
+    ph_user_email:'usuario@empresa.com',ph_equip_desc:'Descrição do equipamento...',
+    ph_supervisor:'Nome do supervisor',
+    ph_uname:'ex. jsmith',ph_site_name_ex:'ex. Loja Norte',ph_site_addr_ex:'ex. Av. Principal 123, Cidade',
+    ph_client_owner:'Empresa ou proprietário',ph_temp_ex:'ex. 20°C',ph_wind_ex:'ex. Ventos do sul',
+    ph_general_notes:'Observações gerais do dia...',ph_planned_work:'Descrição das atividades planejadas...',
+    ph_search_worker:'🔍  Buscar por nome, função, status…',ph_search_material:'🔍  Buscar por nome, categoria, unidade…',
+    ph_search_customer:'🔍  Buscar clientes...',ph_search_project:'🔍  Buscar projetos...',
+    ph_search_report:'Buscar supervisor, data...',
+    role_admin:'Administrador',role_manager:'Supervisor',role_technician:'Técnico',
+    role_viewer:'Visualizador',role_customer:'Cliente',
   },
   it:{
     dashboard:'Pannello',projects:'Progetti',all_reports:'Rapporti',taskforce:'Squadra',materials:'Materiali',checklists:'Checklist',users:'Utenti',customers:'Clienti',new_report:'NUOVO RAPPORTO',
@@ -1645,6 +1742,33 @@ const I18N={
     due_soon:'In scadenza',days_left:'giorni rimanenti',deadline_label:'Scadenza',days_rest:'gg rim.',
     pending_label:'In attesa',in_review_label:'In Revisione',workers_stat:'Lavoratori',assigned_label:'Assegnati',
     latest_reports_label:'Ultimi Rapporti',view_all_label:'Vedi Tutti',
+    recent_projects:'🏗 Progetti Recenti',latest_reports:'📋 Ultimi Rapporti',
+    proj_mgmt:'// GESTIONE PROGETTI',workforce_mgmt:'// GESTIONE PERSONALE',
+    inventory:'// INVENTARIO',templates:'// MODELLI',history:'// CRONOLOGIA',
+    administration:'// AMMINISTRAZIONE',client_mgmt:'// GESTIONE CLIENTI',
+    search_projects:'Cerca progetti...',search_supervisor:'Cerca supervisore, data...',
+    clear_label:'Cancella',new_project_btn:'＋ Nuovo Progetto',new_member_btn:'＋ Nuovo Membro',
+    new_material_btn:'＋ Nuovo Materiale',new_template_btn:'＋ Nuovo Modello',new_user_btn:'＋ Nuovo Utente',
+    materials_catalog_hdr:'📦 Catalogo Materiali',system_users_hdr:'👥 Utenti del Sistema',
+    team_members_hdr:'👷 Membri del Team',
+    opt_all_statuses:'Tutti gli stati',opt_draft:'Bozza',opt_filling:'In compilazione',
+    opt_review:'In revisione',opt_approved:'Approvato',opt_pending:'Firma del cliente',opt_rejected:'Rifiutato',
+    opt_active:'Attivo',opt_hold:'In pausa',opt_completed:'Completato',opt_cancelled:'Annullato',
+    rpt_count_suffix:'rapp.',
+    ph_company_person:'Azienda o persona',ph_site_address:'Indirizzo del sito',
+    ph_project_scope:'Ambito o note del progetto...',ph_company_contact:'Nome azienda o contatto',
+    ph_contact_email:'contatto@azienda.com',ph_contact_phone:'+39 ...',ph_notes_obs:'Osservazioni...',
+    ph_username_ex:'es. jsmith',ph_fullname:'Nome Cognome',ph_pass_min:'Min. 6 caratteri',
+    ph_user_email:'utente@azienda.com',ph_equip_desc:'Descrizione attrezzatura...',
+    ph_supervisor:'Nome supervisore',
+    ph_uname:'es. jsmith',ph_site_name_ex:'es. Negozio Nord',ph_site_addr_ex:'es. Via Principale 123, Città',
+    ph_client_owner:'Azienda o proprietario',ph_temp_ex:'es. 20°C',ph_wind_ex:'es. Vento da sud',
+    ph_general_notes:'Note generali del giorno...',ph_planned_work:'Descrizione lavori pianificati...',
+    ph_search_worker:'🔍  Cerca per nome, ruolo, stato...',ph_search_material:'🔍  Cerca per nome, categoria, unità...',
+    ph_search_customer:'🔍  Cerca clienti...',ph_search_project:'🔍  Cerca progetti...',
+    ph_search_report:'Cerca supervisore, data...',
+    role_admin:'Amministratore',role_manager:'Supervisore',role_technician:'Tecnico',
+    role_viewer:'Visualizzatore',role_customer:'Cliente',
   },
 };
 function t(key){const lang=(typeof currentUser!=='undefined'&&currentUser?.lang)||'es';return (I18N[lang]||I18N.es)[key]||I18N.en[key]||key;}
@@ -2281,7 +2405,7 @@ const CATS=['General','Safety','Electrical','Mechanical','Equipment','Admin','En
 function openCLB(id=null){
   const _en=currentUser?.lang==='en';
   editCL=id;
-  document.getElementById('clb-title').textContent=id?(_en?'✏ Edit Template':'✏ Editar Plantilla'):(_en?'☑ New Template':'☑ Nueva Plantilla');
+  document.getElementById('lbl-cl-modal-title').textContent=id?t('cl_modal_edit'):t('cl_modal_new');
   document.getElementById('clb-name').value='';
   document.getElementById('clb-items').innerHTML='';
   document.getElementById('clb-sna1').value=_en?'Yes':'Sí';
@@ -3887,39 +4011,7 @@ async function doLogin(){
     err.style.display='none';
     currentUser=user;
     await loadAllData();
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('uav-init').textContent=user.name.charAt(0).toUpperCase();
-  document.getElementById('um-nm').textContent=user.name;
-  const _isEn=currentUser?.lang==='en';
-  document.getElementById('um-rl').textContent=(_isEn?{admin:'Administrator',manager:'Manager',technician:'Technician',viewer:'Read Only',customer:'Customer'}:{admin:'Administrador',manager:'Supervisor',technician:'Técnico',viewer:'Solo lectura',customer:'Cliente'})[user.role]||user.role;
-  // Show/hide admin-only UI
-  document.getElementById('nav-users').style.display=user.role==='admin'?'flex':'none';
-  document.getElementById('um-it-users').style.display=user.role==='admin'?'block':'none';
-  const navCust=document.getElementById('nav-customers');
-  if(navCust)navCust.style.display=user.role==='admin'?'flex':'none';
-  // Customer role: restrict nav
-  if(user.role==='customer'){
-    document.querySelectorAll('.ni').forEach(el=>{
-      const p=el.getAttribute('data-p');
-      // Customer can see All Reports and Projects
-      if(p&&p!=='all-reports'&&p!=='projects')el.style.display='none';
-    });
-    const newProjBtn=document.getElementById('btn-new-proj');if(newProjBtn)newProjBtn.style.display='none';
-    // Hide all "New Report" buttons
-    ['pd-new-rpt-btn','dash-new-rpt-btn'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
-    // Hide new report button in All Reports header and project detail
-    document.querySelectorAll('.btn.bp[onclick*="startNewReport"]').forEach(el=>el.style.display='none');
-    goPage('all-reports');
-  } else {
-    document.querySelectorAll('.ni').forEach(el=>el.style.display='');
-    const newProjBtn=document.getElementById('btn-new-proj');
-    if(newProjBtn)newProjBtn.style.display=(['admin','manager'].includes(user.role)||(user.perms||[]).includes('manage_projects'))?'inline-flex':'none';
-    goPage('dashboard');
-  }
-  if(!currentUser.lang)currentUser.lang='es';
-  updateNavBadge();
-  applyLang();
-  renderDash();
+    await setupUserSession(user);
   }catch(e){
     console.error('Login error:',e);
     const _ien=navigator.language?.toLowerCase().startsWith('en');
@@ -3930,6 +4022,39 @@ async function doLogin(){
     if(btn){btn.textContent=_ienf?'Sign In ›':'Ingresar ›';btn.disabled=false;}
   }
 }
+// ── setupUserSession — called after login OR session restore ───────────
+async function setupUserSession(user){
+  if(!currentUser.lang)currentUser.lang='es';
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('uav-init').textContent=user.name.charAt(0).toUpperCase();
+  document.getElementById('um-nm').textContent=user.name;
+  document.getElementById('um-rl').textContent=t('role_'+user.role)||user.role;
+  // Show/hide admin-only UI
+  document.getElementById('nav-users').style.display=user.role==='admin'?'flex':'none';
+  document.getElementById('um-it-users').style.display=user.role==='admin'?'block':'none';
+  const navCust=document.getElementById('nav-customers');
+  if(navCust)navCust.style.display=user.role==='admin'?'flex':'none';
+  // Customer role: restrict nav
+  if(user.role==='customer'){
+    document.querySelectorAll('.ni').forEach(el=>{
+      const p=el.getAttribute('data-p');
+      if(p&&p!=='all-reports'&&p!=='projects')el.style.display='none';
+    });
+    const newProjBtn=document.getElementById('btn-new-proj');if(newProjBtn)newProjBtn.style.display='none';
+    ['pd-new-rpt-btn','dash-new-rpt-btn'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+    document.querySelectorAll('.btn.bp[onclick*="startNewReport"]').forEach(el=>el.style.display='none');
+    goPage('all-reports');
+  } else {
+    document.querySelectorAll('.ni').forEach(el=>el.style.display='');
+    const newProjBtn=document.getElementById('btn-new-proj');
+    if(newProjBtn)newProjBtn.style.display=(['admin','manager'].includes(user.role)||(user.perms||[]).includes('manage_projects'))?'inline-flex':'none';
+    goPage('dashboard');
+  }
+  updateNavBadge();
+  applyLang();
+  renderDash();
+}
+
 function applyLang(){
   // Guard: ensure required variables are initialized before running
   try{if(currentUser===undefined||currentUser===null)return;}catch(e){return;}
@@ -3942,7 +4067,7 @@ function applyLang(){
     materials:'materials',checklists:'checklists','all-reports':'all_reports',
     users:'users',customers:'customers'};
   // New Report nav item
-  _setTxt('nav-lbl-new-report', es?'Nuevo Informe':'New Report');
+  _setTxt('nav-lbl-new-report', t('new_report'));
   document.querySelectorAll('.ni[data-p]').forEach(el=>{
     const key=navMap[el.getAttribute('data-p')];if(!key)return;
     const ic=el.querySelector('.ni-ic'),nb=el.querySelector('.nb');
@@ -3957,109 +4082,109 @@ function applyLang(){
   });
 
   // ── Projects page ──────────────────────────────
-  _setTxt('ph-proj-small',es?'// GESTIÓN DE PROYECTOS':'// PROJECT MANAGEMENT');
-  _setTxt('ph-proj-title',es?'Proyectos':'Projects');
-  _setPlh('proj-search',es?'Buscar proyectos...':'Search projects...');
-  _setTxt('lbl-proj-clear', es?'Limpiar':'Clear');
-  _setTxt('btn-add-proj-txt',es?'＋ Nuevo Proyecto':'＋ New Project');
+  _setTxt('ph-proj-small',t('proj_mgmt'));
+  _setTxt('ph-proj-title',t('projects'));
+  _setPlh('proj-search',t('search_projects'));
+  _setTxt('lbl-proj-clear', t('clear_label'));
+  _setTxt('btn-add-proj-txt',t('new_project_btn'));
 
   // ── Taskforce page ─────────────────────────────
-  _setTxt('ph-tf-small',es?'// GESTIÓN DE PERSONAL':'// WORKFORCE MANAGEMENT');
+  _setTxt('ph-tf-small',t('workforce_mgmt'));
   // data-i18n elements handled by t() above
   // Dashboard section headers
-  _setTxt('dash-svl-proj', es?'Proyectos':'Projects');
+  _setTxt('dash-svl-proj', t('projects'));
   const recentLbl=document.getElementById('dash-recent-lbl');
-  if(recentLbl)recentLbl.textContent='🏗 '+(es?'Proyectos Recientes':'Recent Projects');
+  if(recentLbl)recentLbl.textContent=t('recent_projects');
   const rptsLbl=document.getElementById('dash-rpts-lbl');
-  if(rptsLbl)rptsLbl.textContent='📋 '+(es?'Últimos Informes':'Latest Reports');
+  if(rptsLbl)rptsLbl.textContent=t('latest_reports');
   const workSvl=document.querySelector('.svl[data-i18n="workforce"]');
-  if(workSvl)workSvl.textContent=es?'Cuadrilla':'Workforce';
+  if(workSvl)workSvl.textContent=t('taskforce');
   const workSvs=document.querySelector('.svs[data-i18n="members"]');
-  if(workSvs)workSvs.textContent=es?'Miembros':'Members';
+  if(workSvs)workSvs.textContent=t('members');
   // Re-render dash if visible to apply language
   if(document.getElementById('page-dashboard')?.style.display!=='none')renderDash();
 
   // ── Section headers ──────────────────────────────
-  _setTxt('mat-cat-hdr', es?'📦 Catálogo de Materiales':'📦 Materials Catalog');
-  _setTxt('users-hdr', es?'👥 Usuarios del Sistema':'👥 System Users');
-  _setTxt('lbl-team-members', es?'👷 Miembros del Equipo':'👷 Team Members');
-  _setTxt('mm-title', es?'📦 Agregar Material':'📦 Add Material');
-  _setTxt('wm-title', es?'👷 Agregar Miembro':'👷 Add Member');
-  _setTxt('mm-save-btn', es?'Guardar':'Save');
-  _setTxt('wm-save-btn', es?'Guardar':'Save');
+  _setTxt('mat-cat-hdr', t('materials_catalog_hdr'));
+  _setTxt('users-hdr', t('system_users_hdr'));
+  _setTxt('lbl-team-members', t('team_members_hdr'));
+  _setTxt('mm-title', '📦 '+t('add_material_label'));
+  _setTxt('wm-title', '👷 '+t('add_member_label'));
+  _setTxt('mm-save-btn', t('save'));
+  _setTxt('wm-save-btn', t('save'));
 
   // ── Stats badges ─────────────────────────────────
   const mcBx=document.getElementById('mc-bx');
-  if(mcBx){const n=mcBx.textContent.match(/\d+/)?.[0]||'0';mcBx.textContent=n+(es?' items':' items');}
+  if(mcBx){const n=mcBx.textContent.match(/\d+/)?.[0]||'0';mcBx.textContent=n+' '+t('items_label');}
   const ubCnt=document.getElementById('ub-cnt');
-  if(ubCnt){const n=ubCnt.textContent.match(/\d+/)?.[0]||'0';ubCnt.textContent=n+(es?' usuarios':' users');}
-  _setTxt('ph-tf-title',es?'Cuadrilla':'Taskforce');
-  _setTxt('btn-add-worker-txt',es?'＋ Nuevo Miembro':'＋ New Member');
+  if(ubCnt){const n=ubCnt.textContent.match(/\d+/)?.[0]||'0';ubCnt.textContent=n+' '+t('users');}
+  _setTxt('ph-tf-title',t('taskforce'));
+  _setTxt('btn-add-worker-txt',t('new_member_btn'));
 
   // ── Materials page ─────────────────────────────
-  _setTxt('ph-mat-small',es?'// INVENTARIO':'// INVENTORY');
-  _setTxt('ph-mat-title',es?'Materiales':'Materials');
-  _setTxt('btn-add-mat-txt',es?'＋ Nuevo Material':'＋ New Material');
+  _setTxt('ph-mat-small',t('inventory'));
+  _setTxt('ph-mat-title',t('materials'));
+  _setTxt('btn-add-mat-txt',t('new_material_btn'));
 
   // ── Checklists page ────────────────────────────
-  _setTxt('ph-cl-small',es?'// PLANTILLAS':'// TEMPLATES');
-  _setTxt('ph-cl-title',es?'Checklists':'Checklists');
-  _setTxt('btn-add-cl-txt',es?'＋ Nueva Plantilla':'＋ New Template');
+  _setTxt('ph-cl-small',t('templates'));
+  _setTxt('ph-cl-title',t('checklists'));
+  _setTxt('btn-add-cl-txt',t('new_template_btn'));
 
   // ── All Reports page ───────────────────────────
-  _setTxt('ph-ar-small',es?'// HISTORIAL':'// HISTORY');
-  _setTxt('ph-ar-title',es?'Informes':'All Reports');
+  _setTxt('ph-ar-small',t('history'));
+  _setTxt('ph-ar-title',t('all_reports'));
   // All reports status filter options
   const _arOpts={
-    'opt-all-statuses':es?'Todos los estados':'All statuses',
-    'ar-opt-draft':es?'Borrador':'Draft',
-    'ar-opt-filling':es?'Llenando':'Filling',
-    'ar-opt-review':es?'En revisión':'In Review',
-    'ar-opt-approved':es?'Aprobado':'Approved',
-    'ar-opt-pending':es?'Firma cliente':'Customer Sign-Off',
-    'ar-opt-rejected':es?'Rechazado':'Rejected'
+    'opt-all-statuses':t('opt_all_statuses'),
+    'ar-opt-draft':t('opt_draft'),
+    'ar-opt-filling':t('opt_filling'),
+    'ar-opt-review':t('opt_review'),
+    'ar-opt-approved':t('opt_approved'),
+    'ar-opt-pending':t('opt_pending'),
+    'ar-opt-rejected':t('opt_rejected')
   };
   Object.entries(_arOpts).forEach(([id,txt])=>{const el=document.getElementById(id);if(el)el.textContent=txt;});
   // Project status filter options
   const _projOpts={
-    'proj-opt-all-status':es?'Todos los estados':'All statuses',
-    'proj-opt-active':es?'Activo':'Active',
-    'proj-opt-hold':es?'En pausa':'On Hold',
-    'proj-opt-completed':es?'Completado':'Completed',
-    'proj-opt-cancelled':es?'Cancelado':'Cancelled'
+    'proj-opt-all-status':t('opt_all_statuses'),
+    'proj-opt-active':t('opt_active'),
+    'proj-opt-hold':t('opt_hold'),
+    'proj-opt-completed':t('opt_completed'),
+    'proj-opt-cancelled':t('opt_cancelled')
   };
   Object.entries(_projOpts).forEach(([id,txt])=>{const el=document.getElementById(id);if(el)el.textContent=txt;});
   // Project modal status options
   const _pmOpts={
-    'pm-opt-active':es?'Activo':'Active',
-    'pm-opt-hold':es?'En pausa':'On Hold',
-    'pm-opt-completed':es?'Completado':'Completed',
-    'pm-opt-cancelled':es?'Cancelado':'Cancelled'
+    'pm-opt-active':t('opt_active'),
+    'pm-opt-hold':t('opt_hold'),
+    'pm-opt-completed':t('opt_completed'),
+    'pm-opt-cancelled':t('opt_cancelled')
   };
   Object.entries(_pmOpts).forEach(([id,txt])=>{const el=document.getElementById(id);if(el)el.textContent=txt;});
-  _setPlh('ar-search-plh',es?'Buscar supervisor, fecha...':'Search supervisor, date...');
-  _setTxt('ph-ar-title',es?'Informes':'All Reports');
+  _setPlh('ar-search-plh',t('search_supervisor'));
+  _setTxt('ph-ar-title',t('all_reports'));
 
   // ── Users page ─────────────────────────────────
-  _setTxt('ph-users-small',es?'// ADMINISTRACIÓN':'// ADMINISTRATION');
-  _setTxt('ph-users-title',es?'Usuarios':'Users');
-  _setTxt('btn-add-user-txt',es?'＋ Nuevo Usuario':'＋ New User');
+  _setTxt('ph-users-small',t('administration'));
+  _setTxt('ph-users-title',t('users'));
+  _setTxt('btn-add-user-txt',t('new_user_btn'));
 
   // ── Customers page ─────────────────────────────
-  _setTxt('ph-cust-small',es?'// GESTIÓN DE CLIENTES':'// CLIENT MANAGEMENT');
-  _setTxt('ph-cust-title',es?'Clientes':'Customers');
+  _setTxt('ph-cust-small',t('client_mgmt'));
+  _setTxt('ph-cust-title',t('customers'));
   _setTxt('ph-cust-h',es?'🤝 Clientes':'🤝 Customers');
   _setTxt('btn-add-cust-txt',es?'＋ Nuevo Cliente':'＋ New Customer');
 
   // ── Project modal labels ───────────────────────
   _setTxt('pm-title',es?'🏗 Nuevo Proyecto':'🏗 New Project');
-  _setPlh('p-cli',es?'Empresa o persona':'Company or person');
-  _setPlh('p-loc',es?'Dirección del sitio':'Site address');
-  _setPlh('p-desc',es?'Alcance o notas del proyecto...':'Project scope or notes...');
+  _setPlh('p-cli',t('ph_company_person'));
+  _setPlh('p-loc',t('ph_site_address'));
+  _setPlh('p-desc',t('ph_project_scope'));
   // p-stat options
   const _pStat=document.getElementById('p-stat');
   if(_pStat){
-    const _pStatMap=es?{Active:'Activo','On Hold':'En pausa',Completed:'Completado',Cancelled:'Cancelado'}:{Active:'Active','On Hold':'On Hold',Completed:'Completed',Cancelled:'Cancelled'};
+    const _pStatMap={Active:t('opt_active'),'On Hold':t('opt_hold'),Completed:t('opt_completed'),Cancelled:t('opt_cancelled')};
     [..._pStat.options].forEach(o=>{if(_pStatMap[o.value])o.textContent=_pStatMap[o.value];});
   }
 
@@ -4073,18 +4198,18 @@ function applyLang(){
   _setTxt('lbl-cm-proj-sec',es?'PROYECTOS ASIGNADOS AL CLIENTE':'PROJECTS ASSIGNED TO CUSTOMER');
   _setTxt('btn-cust-cancel',es?'Cancelar':'Cancel');
   _setTxt('btn-cust-save',es?'Guardar Cliente':'Save Customer');
-  _setPlh('cm-name',es?'Nombre de la empresa o contacto':'Company or contact name');
-  _setPlh('cm-email',es?'contacto@empresa.com':'contact@company.com');
-  _setPlh('cm-phone',es?'+56 9 ...':'+1 555 ...');
-  _setPlh('cm-notes',es?'Observaciones...':'Notes...');
+  _setPlh('cm-name',t('ph_company_contact'));
+  _setPlh('cm-email',t('ph_contact_email'));
+  _setPlh('cm-phone',t('ph_contact_phone'));
+  _setPlh('cm-notes',t('ph_notes_obs'));
   _setTxt('cm-logo-lbl',es?'+ SUBIR':'+ UPLOAD');
 
   // ── User modal labels ──────────────────────────
   _setTxt('um2-title',es?'👥 Nuevo Usuario':'👥 New User');
-  _setPlh('u-uname',es?'e.g. jsmith':'e.g. jsmith');
-  _setPlh('u-fname',es?'Nombre Apellido':'First Last');
-  _setPlh('u-pass',es?'Mín. 6 caracteres':'Min 6 chars');
-  _setPlh('u-email',es?'usuario@empresa.com':'user@company.com');
+  _setPlh('u-uname',t('ph_uname'));
+  _setPlh('u-fname',t('ph_fullname'));
+  _setPlh('u-pass',t('ph_pass_min'));
+  _setPlh('u-email',t('ph_user_email'));
 
   // Worker role options in worker modal
   const wrole=document.getElementById('w-role');
@@ -4096,91 +4221,90 @@ function applyLang(){
   // Role options in user modal
   const urole=document.getElementById('u-role');
   if(urole){
-    const roleLabels=es?{admin:'Administrador',manager:'Supervisor',technician:'Técnico',viewer:'Visualizador',customer:'Cliente'}
-                      :{admin:'Administrator',manager:'Manager',technician:'Technician',viewer:'Viewer',customer:'Customer'};
+    const roleLabels={admin:t('role_admin'),manager:t('role_manager'),technician:t('role_technician'),viewer:t('role_viewer'),customer:t('role_customer')};
     [...urole.options].forEach(o=>{if(roleLabels[o.value])o.textContent=roleLabels[o.value];});
   }
   // Status options
   ['u-stat','cm-stat'].forEach(sid=>{
     const sel=document.getElementById(sid);
     if(sel)[...sel.options].forEach(o=>{
-      if(o.value==='Active'||o.textContent==='Active'||o.textContent==='Activo')o.textContent=es?'Activo':'Active';
-      if(o.value==='Inactive'||o.textContent==='Inactive'||o.textContent==='Inactivo')o.textContent=es?'Inactivo':'Inactive';
+      if(o.value==='Active'||o.textContent==='Active'||o.textContent==='Activo')o.textContent=t('opt_active');
+      if(o.value==='Inactive'||o.textContent==='Inactive'||o.textContent==='Inactivo')o.textContent=t('inactive');
     });
   });
 
   // ── Report form ────────────────────────────────
   // ── Report form field labels ─────────────────────
-  _setTxt('lbl-r-proj',es?'Proyecto':'Project');
-  _setTxt('lbl-r-date',es?'Fecha del Informe':'Report Date');
-  _setTxt('lbl-r-start',es?'Inicio Turno':'Shift Start');
-  _setTxt('lbl-r-end',es?'Fin Turno':'Shift End');
-  _setTxt('lbl-r-super',es?'Supervisor':'Supervisor');
-  _setTxt('lbl-r-client',es?'Cliente / Propietario':'Client / Owner');
-  _setTxt('lbl-r-loc',es?'Ubicación / Dirección':'Location / Address');
-  _setTxt('lbl-r-temp',es?'Temperatura':'Temperature');
-  _setTxt('lbl-r-wind',es?'Viento':'Wind');
-  _setTxt('lbl-r-imp',es?'Impacto en obra':'Work Impact');
+  _setTxt('lbl-r-proj',t('r_proj'));
+  _setTxt('lbl-r-date',t('r_date'));
+  _setTxt('lbl-r-start',t('r_start'));
+  _setTxt('lbl-r-end',t('r_end'));
+  _setTxt('lbl-r-super',t('r_super'));
+  _setTxt('lbl-r-client',t('r_client'));
+  _setTxt('lbl-r-loc',t('r_loc'));
+  _setTxt('lbl-r-temp',t('r_temp'));
+  _setTxt('lbl-r-wind',t('r_wind'));
+  _setTxt('lbl-r-imp',t('r_imp'));
   // Notes labels
-  _setTxt('lbl-r-notes-gen',es?'Notas Generales':'General Notes');
-  _setTxt('lbl-r-tom',es?'Plan para Mañana':"Tomorrow's Plan");
+  _setTxt('lbl-r-notes-gen',t('r_notes_gen'));
+  _setTxt('lbl-r-tom',t('r_tom'));
 
   // ── Report form buttons ──────────────────────────────
-  _setTxt('lbl-add-worker', es?'Agregar Trabajador':'Add Worker');
-  _setTxt('lbl-import-crew', es?'Importar Cuadrilla':'Import Crew');
+  _setTxt('lbl-add-worker', t('lbl_add_worker'));
+  _setTxt('lbl-import-crew', t('lbl_import_crew'));
   // Update counter labels if they exist
   const blL=document.getElementById('bl-l');
-  if(blL){const n=blL.textContent.match(/\d+/)?.[0]||'0';blL.textContent=n+' '+(es?'trabajador':'worker')+(parseInt(n)!==1?'s':'');}
-  _setTxt('lbl-add-equip', es?'Agregar Equipo':'Add Equipment');
-  _setTxt('lbl-add-task', es?'Agregar Tarea':'Add Task');
-  _setTxt('lbl-task-photos', es?'📷 FOTOS DE TAREAS':'📷 TASK PHOTOS');
-  _setTxt('lbl-add-mat-rpt', es?'Agregar Material':'Add Material');
-  _setPlh('eq-desc-plh',es?'Descripción del equipo...':'Equipment description...');
-  _setTxt('lbl-import-cat', es?'Importar Catálogo':'Import Catalog');
-  _setTxt('lbl-add-occ', es?'Agregar Ocurrencia':'Add Occurrence');
-  _setTxt('lbl-no-cl', es?'NO HAY CHECKLIST CARGADO':'NO CHECKLIST LOADED');
-  _setTxt('lbl-load-cl', es?'Cargar Plantilla':'Load Template');
-  _setTxt('lbl-load-cl-title', es?'Cargar Plantilla':'Load Template');
+  if(blL){const n=blL.textContent.match(/\d+/)?.[0]||'0';blL.textContent=n+' '+t('workers_label');}
+  _setTxt('lbl-add-equip', t('lbl_add_equip'));
+  _setTxt('lbl-add-task', t('lbl_add_task'));
+  _setTxt('lbl-task-photos', t('r_task_photos'));
+  _setTxt('lbl-add-mat-rpt', t('lbl_add_mat'));
+  _setPlh('eq-desc-plh',t('ph_equip_desc'));
+  _setTxt('lbl-import-cat', t('lbl_import_cat'));
+  _setTxt('lbl-add-occ', t('lbl_add_occ'));
+  _setTxt('lbl-no-cl', t('no_checklist_loaded'));
+  _setTxt('lbl-load-cl', t('cl_load_btn'));
+  _setTxt('lbl-load-cl-title', t('cl_load_btn'));
 
   // ── Dynamic counters in section headers ─────────────────
   // Labor/equip/task counters use addLR/addEQ/addTK which run after
   // We patch the placeholder text via IDs when available
-  _setPlh('r-super',es?'Nombre del supervisor':'Supervisor name');
-  _setTxt('lbl-site-hdr',es?'📍 SITIO DE TRABAJO':'📍 WORK SITE');
-  _setTxt('lbl-r-site-name',es?'Nombre del Sitio':'Site Name');
-  _setTxt('lbl-r-site-addr',es?'Dirección del Sitio':'Site Address');
-  _setPlh('r-site-name',es?'ej. Tienda Gabriela Mistral':'e.g. Store North Branch');
-  _setPlh('r-site-addr',es?'ej. Av. Gabriela Mistral 890, Temuco':'e.g. 123 Main St, City');
+  _setPlh('r-super',t('ph_supervisor'));
+  _setTxt('lbl-site-hdr',t('r_site_hdr'));
+  _setTxt('lbl-r-site-name',t('r_site_name'));
+  _setTxt('lbl-r-site-addr',t('r_site_addr'));
+  _setPlh('r-site-name',t('ph_site_name_ex'));
+  _setPlh('r-site-addr',t('ph_site_addr_ex'));
   const togSiteChk=document.getElementById('tog-site');
-  _setTxt('lbl-site-toggle-txt',togSiteChk?.checked?(es?'— OCULTAR SITIO ESPECÍFICO':'— HIDE SPECIFIC SITE'):(es?'+ AGREGAR SITIO ESPECÍFICO':'+ ADD SPECIFIC SITE'));
+  _setTxt('lbl-site-toggle-txt',togSiteChk?.checked?('— '+t('r_site_toggle').replace(/^[+] /,'')):t('r_site_toggle'));
   // Project selector in report form
   const projSel=document.getElementById('r-proj');
   if(projSel&&projSel.options[0])projSel.options[0].text=t('select_project')||'— Select Project —';
-  _setPlh('r-client',es?'Empresa o propietario':'Company or owner');
-  _setPlh('r-loc',es?'Dirección del sitio':'Site address');
-  _setPlh('r-temp',es?'ej. 18°C':'e.g. 72°F');
-  _setPlh('r-wind',es?'ej. Vientos fuertes del sur':'e.g. Gusts from SW');
+  _setPlh('r-client',t('ph_client_owner'));
+  _setPlh('r-loc',t('ph_site_address'));
+  _setPlh('r-temp',t('ph_temp_ex'));
+  _setPlh('r-wind',t('ph_wind_ex'));
   // Weather impact select options
   const impSel=document.getElementById('r-imp');
-  if(impSel){[...impSel.options].forEach(o=>{const t2=o.getAttribute(es?'data-es':'data-en');if(t2)o.textContent=t2;});}
-  _setPlh('r-notes',es?'Observaciones generales del día...':'General notes for the day...');
-  _setPlh('r-tom',es?'Descripción de actividades programadas...':'Planned work description...');
+  if(impSel){const _lang=currentUser?.lang||'es';[...impSel.options].forEach(o=>{const t2=o.getAttribute('data-'+_lang)||o.getAttribute('data-es');if(t2)o.textContent=t2;});}
+  _setPlh('r-notes',t('ph_general_notes'));
+  _setPlh('r-tom',t('ph_planned_work'));
 
   // ── Section label translations (backup - already set via _setTxt below) ──
   // These are set via _setTxt calls in the section toggles section
   // ── Static placeholders ──────────────────────────────────────────────
   // ── Page search placeholders ─────────────────────────────────────────
-  _setPlh('wk-search', es?'🔍  Buscar por nombre, cargo, estado…':'🔍  Search by name, role, status...');
-  _setPlh('mc-search', es?'🔍  Buscar por nombre, categoría, unidad…':'🔍  Search by name, category, unit...');
-  _setPlh('cust-search', es?'🔍  Buscar clientes...':'🔍  Search customers...');
-  _setPlh('proj-search', es?'🔍  Buscar proyectos…':'🔍  Search projects...');
-  _setPlh('ar-search', es?'Buscar supervisor, fecha...':'Search supervisor, date...');
-  _setPlh('cust-search', es?'🔍  Buscar clientes...':'🔍  Search customers...');
+  _setPlh('wk-search',t('ph_search_worker'));
+  _setPlh('mc-search',t('ph_search_material'));
+  _setPlh('cust-search',t('ph_search_customer'));
+  _setPlh('proj-search',t('ph_search_project'));
+  _setPlh('ar-search',t('ph_search_report'));
+  _setPlh('cust-search',t('ph_search_customer'));
   _setPlh('r-notes', es?'Observaciones, instrucciones o comentarios...':'General observations and notes...');
   _setPlh('r-tom', es?'Descripción de actividades programadas para mañana...':'Planned activities for tomorrow...');
   _setPlh('lb-cap-in', es?'Agregar descripción o comentario a la foto…':'Add photo description or comment…');
   // ── Photo drop zone ──────────────────────────────────────────────────
-  _setTxt('lbl-photo-drop', es?'TOCA O ARRASTRA FOTOS AQUÍ':'TAP OR DRAG PHOTOS HERE');
+  _setTxt('lbl-photo-drop', t('r_photo_drop'));
 
   // ── All Reports page ──────────────────────────────────────────────────
   const _optAS=document.getElementById('opt-all-statuses');
@@ -4188,29 +4312,29 @@ function applyLang(){
   _setTxt('lbl-new-report-ar', es?'Nuevo Informe':'New Report');
 
   // ── Checklist modal ───────────────────────────────────────────────────
-  _setTxt('lbl-cl-modal-title', es?'☑ Nueva Plantilla':'☑ New Template');
-  _setTxt('lbl-cl-name-title', es?'Nombre de Plantilla *':'Template Name *');
+  _setTxt('lbl-cl-modal-title', t('cl_modal_new'));
+  _setTxt('lbl-cl-name-title', t('cl_name_label'));
   _setPlh('clb-name', es?'ej. Inspección de Equipos':'e.g. Equipment Inspection');
-  _setTxt('lbl-cl-answer-opts', es?'OPCIONES DE RESPUESTA (etiquetas Sí / No / N/A)':'ANSWER OPTIONS (Yes / No / N/A labels)');
-  _setTxt('lbl-cl-opt1', es?'Opción 1 (Sí)':'Option 1 (Yes)');
-  _setTxt('lbl-cl-opt2', es?'Opción 2 (No)':'Option 2 (No)');
-  _setTxt('lbl-cl-opt3', es?'Opción 3 (N/A)':'Option 3 (N/A)');
-  _setTxt('lbl-cl-items', es?'Ítems':'Items');
+  _setTxt('lbl-cl-answer-opts', t('lbl_cl_answer'));
+  _setTxt('lbl-cl-opt1', t('lbl_cl_opt1'));
+  _setTxt('lbl-cl-opt2', t('lbl_cl_opt2'));
+  _setTxt('lbl-cl-opt3', t('lbl_cl_opt3'));
+  _setTxt('lbl-cl-items', t('cl_items_label'));
   // Update checklist item placeholders
   document.querySelectorAll('.cl-item-plh').forEach(el=>el.placeholder=es?'Descripción del ítem...':'Item description...');
-  _setTxt('lbl-save-cl', es?'Guardar Plantilla':'Save Template');
+  _setTxt('lbl-save-cl', t('cl_save_btn'));
   _setTxt('clpick-close', es?'Cerrar':'Close');
   _setTxt('lbl-no-templates', es?'SIN PLANTILLAS AÚN':'NO TEMPLATES YET');
-  _setTxt('lbl-no-materials', es?'SIN MATERIALES AÚN':'NO MATERIALS YET');
-  _setTxt('lbl-ar-empty', es?'SIN INFORMES AÚN':'NO REPORTS YET');
+  _setTxt('lbl-no-materials', t('no_materials_yet'));
+  _setTxt('lbl-ar-empty', t('no_reports_yet2'));
 
   // ── Buttons & dropdowns without data-i18n ────────────────────────────
   _setTxt('lbl-new-report-dash', es?'Nuevo Informe':'New Report');
-  _setTxt('lbl-sign-btn', es?'Firma Cliente':'Customer Sign-Off');
-  _setTxt('lbl-sign-btn-bb', es?'Firma Cliente':'Customer Sign-Off');
-  _setTxt('lbl-add-member-btn', es?'+ Agregar':'+ Add');
-  _setTxt('lbl-add-cl-item', es?'＋ Agregar Ítem':'＋ Add Item');
-  _setTxt('lbl-save-cl', es?'Guardar Plantilla':'Save Template');
+  _setTxt('lbl-sign-btn', t('sign_off'));
+  _setTxt('lbl-sign-btn-bb', t('sign_off'));
+  _setTxt('lbl-add-member-btn', '+ '+t('add_member_label').split(' ').pop());
+  _setTxt('lbl-add-cl-item', t('cl_add_item'));
+  _setTxt('lbl-save-cl', t('cl_save_btn'));
   const _optAP=document.getElementById('opt-all-projects');
   if(_optAP)_optAP.textContent=es?'Todos los proyectos':'All projects';
   const _optAC=document.getElementById('opt-all-customers');
@@ -4220,16 +4344,16 @@ function applyLang(){
   const _optCR=document.getElementById('opt-role-customer');
   if(_optCR)_optCR.textContent=es?'Cliente':'Customer';
   // ── Bottom bar report buttons ──────────────────────────────────────
-  _setTxt('lbl-bb-approve', es?'Aprobar':'Approve');
-  _setTxt('lbl-bb-reject', es?'Rechazar':'Reject');
+  _setTxt('lbl-bb-approve', t('approve'));
+  _setTxt('lbl-bb-reject', t('reject'));
   // ── Project detail header ────────────────────────────────────────────
-  _setTxt('pd-back-btn', es?'← Proyectos':'← Projects');
-  _setTxt('lbl-pd-edit', es?'Editar':'Edit');
-  _setTxt('lbl-pd-new-rpt', es?'Nuevo Informe':'New Report');
+  _setTxt('pd-back-btn', '← '+t('projects'));
+  _setTxt('lbl-pd-edit', t('edit'));
+  _setTxt('lbl-pd-new-rpt', t('new_report'));
   // ── Report view modal ────────────────────────────────────────────────
-  _setTxt('lbl-mo-view-edit', es?'Editar':'Edit');
-  _setTxt('lbl-sign-btn', es?'Firma Cliente':'Customer Sign-Off');
-  _setTxt('lbl-sign-btn-bb', es?'Firma Cliente':'Customer Sign-Off');
+  _setTxt('lbl-mo-view-edit', t('edit'));
+  _setTxt('lbl-sign-btn', t('sign_off'));
+  _setTxt('lbl-sign-btn-bb', t('sign_off'));
   const bbSubmit=document.getElementById('bb-submit-btn');
   if(bbSubmit)bbSubmit.textContent=es?'Enviar →':'Submit →';
   const bbSave=document.querySelector('#bb .btn.bs[onclick*="saveReport"]');
@@ -4260,8 +4384,8 @@ function applyLang(){
   _setTxt('sec-photos-label',es?'Registro Fotográfico':'Photo Log');
   _setTxt('sec-notes-label',es?'Notas y Comentarios':'Notes & Comments');
 
-  _setTxt('lbl-u-cust-assoc', es?'Cliente Asociado *':'Associated Customer *');
-  _setTxt('lbl-u-cust-hint', es?'Selecciona la empresa para ver qué proyectos se pueden asignar a este usuario.':'Select the company to see which projects can be assigned to this user.');
+  _setTxt('lbl-u-cust-assoc', t('u_cust_assoc'));
+  _setTxt('lbl-u-cust-hint', t('u_cust_hint'));
   // ── Delete report modal ───────────────────────────────────────────────
   _setTxt('del-rpt-title', es?'🗑 Eliminar Informe':'🗑 Delete Report');
   _setTxt('del-rpt-warn', es?'ACCIÓN IRREVERSIBLE':'IRREVERSIBLE ACTION');
@@ -4274,64 +4398,64 @@ function applyLang(){
   _setTxt('del-rpt-cancel', es?'Cancelar':'Cancel');
   _setTxt('del-rpt-confirm-btn', es?'🗑 Eliminar':'🗑 Delete');
   // ── Change password modal ─────────────────────────────────────────────
-  _setTxt('chpw-title', es?'🔒 Cambiar Contraseña':'🔒 Change Password');
-  _setTxt('chpw-lbl-new', es?'Nueva Contraseña *':'New Password *');
-  _setPlh('chpw-new', es?'Mín. 6 caracteres':'Min. 6 characters');
-  _setTxt('chpw-lbl-cfm', es?'Confirmar *':'Confirm *');
-  _setPlh('chpw-cfm', es?'Repetir contraseña':'Repeat password');
-  _setTxt('chpw-submit', es?'Cambiar':'Change');
+  _setTxt('chpw-title', t('chpw_title'));
+  _setTxt('chpw-lbl-new', t('chpw_new'));
+  _setPlh('chpw-new', t('chpw_new_ph'));
+  _setTxt('chpw-lbl-cfm', t('chpw_cfm'));
+  _setPlh('chpw-cfm', t('chpw_cfm_ph'));
+  _setTxt('chpw-submit', t('chpw_submit'));
 
   // ── Signature modals ─────────────────────────────────────────────────
-  _setTxt('ssig-title', es?'✍️ Firmar y Enviar a Revisión':'✍️ Sign & Submit for Review');
-  _setTxt('ssig-desc', es?'Al firmar, confirmas que este informe está completo y es correcto. Será enviado al supervisor para revisión.':'By signing, you confirm this report is complete and accurate. It will be sent to the supervisor for review.');
-  _setTxt('ssig-lbl-name', es?'Firmado por':'Signed by');
-  _setTxt('ssig-lbl-role', es?'Cargo / Título':'Title / Role');
-  _setTxt('ssig-lbl-draw', es?'Dibujar Firma':'Draw Signature');
-  _setTxt('ssig-clear', es?'Limpiar':'Clear');
-  _setTxt('ssig-cancel', es?'Cancelar':'Cancel');
-  _setTxt('ssig-submit', es?'Enviar →':'Submit →');
-  _setPlh('ssig-name', es?'Nombre completo':'Full name');
-  _setPlh('ssig-role', es?'ej. Técnico Líder':'e.g. Lead Technician');
+  _setTxt('ssig-title', t('ssig_title'));
+  _setTxt('ssig-desc', t('ssig_desc'));
+  _setTxt('ssig-lbl-name', t('ssig_signed_by'));
+  _setTxt('ssig-lbl-role', t('ssig_role'));
+  _setTxt('ssig-lbl-draw', t('ssig_draw'));
+  _setTxt('ssig-clear', t('ssig_clear'));
+  _setTxt('ssig-cancel', t('cancel'));
+  _setTxt('ssig-submit', t('submit'));
+  _setPlh('ssig-name', t('ph_fullname'));
+  _setPlh('ssig-role', t('ph_supervisor'));
   // Approve signature modal
-  _setTxt('asig-title', es?'✍️ Firmar y Aprobar Informe':'✍️ Sign & Approve Report');
-  _setTxt('asig-desc', es?'Al firmar, apruebas este informe. Quedará marcado como Aprobado.':'By signing, you approve this report. It will be marked as Approved.');
-  _setTxt('asig-lbl-name', es?'Aprobado por':'Approved by');
-  _setTxt('asig-lbl-role', es?'Cargo / Título':'Title / Role');
-  _setTxt('asig-lbl-draw', es?'Dibujar Firma':'Draw Signature');
-  _setTxt('asig-clear', es?'Limpiar':'Clear');
-  _setTxt('asig-cancel', es?'Cancelar':'Cancel');
-  _setTxt('asig-submit', es?'✓ Aprobar':'✓ Approve');
-  _setPlh('asig-name', es?'Nombre completo':'Full name');
-  _setPlh('asig-role', es?'ej. Jefe de Obra':'e.g. Project Manager');
+  _setTxt('asig-title', t('asig_title'));
+  _setTxt('asig-desc', t('asig_desc'));
+  _setTxt('asig-lbl-name', t('asig_approved_by'));
+  _setTxt('asig-lbl-role', t('asig_role'));
+  _setTxt('asig-lbl-draw', t('asig_draw'));
+  _setTxt('asig-clear', t('asig_clear'));
+  _setTxt('asig-cancel', t('cancel'));
+  _setTxt('asig-submit', t('asig_submit'));
+  _setPlh('asig-name', t('ph_fullname'));
+  _setPlh('asig-role', t('ph_supervisor'));
   // Customer signature modal
-  _setTxt('csig-title', es?'✍️ Firma del Cliente':'✍️ Customer Sign-Off');
-  _setTxt('csig-desc', es?'Firma final del cliente. Esto marcará el informe como completamente cerrado.':'Final customer signature. This will mark the report as fully closed.');
-  _setTxt('csig-lbl-name', es?'Nombre del Cliente':'Customer Name');
-  _setTxt('csig-lbl-role', es?'Cargo / Empresa':'Title / Company');
-  _setTxt('csig-lbl-draw', es?'Dibujar Firma':'Draw Signature');
-  _setTxt('csig-clear', es?'Limpiar':'Clear');
-  _setTxt('csig-cancel', es?'Cancelar':'Cancel');
-  _setTxt('csig-submit', es?'✓ Firma del Cliente':'✓ Customer Sign-Off');
-  _setPlh('csig-name', es?'Nombre completo':'Full name');
-  _setPlh('csig-role', es?'ej. Propietario del Proyecto':'e.g. Project Owner');
+  _setTxt('csig-title', t('csig_title'));
+  _setTxt('csig-desc', t('csig_desc_lbl'));
+  _setTxt('csig-lbl-name', t('customer_label'));
+  _setTxt('csig-lbl-role', t('r_client'));
+  _setTxt('csig-lbl-draw', t('ssig_draw'));
+  _setTxt('csig-clear', t('ssig_clear'));
+  _setTxt('csig-cancel', t('cancel'));
+  _setTxt('csig-submit', t('sign_off'));
+  _setPlh('csig-name', t('ph_fullname'));
+  _setPlh('csig-role', t('ph_supervisor'));
   // Customer reject modal
-  _setTxt('crej-title', es?'↩ Solicitar Corrección':'↩ Request Correction');
+  _setTxt('crej-title', t('crej_title'));
   _setTxt('crej-desc', es?'Indica qué correcciones necesita este informe antes de aprobarlo. El supervisor recibirá tu comentario y deberá volver a enviar para tu revisión.':'Indicate what corrections this report needs before you can approve it. The supervisor will receive your comment and must resubmit for your review.');
-  _setTxt('crej-lbl', es?'Motivo / Correcciones solicitadas':'Reason / Corrections requested');
-  _setPlh('cust-reject-comment', es?'Describe las correcciones necesarias...':'Describe the corrections needed...');
-  _setTxt('crej-cancel', es?'Cancelar':'Cancel');
-  _setTxt('crej-submit', es?'↩ Solicitar Corrección':'↩ Request Correction');
+  _setTxt('crej-lbl', t('crej_reason_lbl'));
+  _setPlh('cust-reject-comment', t('ph_notes_obs'));
+  _setTxt('crej-cancel', t('cancel'));
+  _setTxt('crej-submit', t('crej_title'));
   // Reject modal
-  _setTxt('rej-title', es?'❌ Rechazar Informe':'❌ Reject Report');
+  _setTxt('rej-title', t('rej_title'));
   _setTxt('reject-desc', es?'El informe será devuelto al técnico para correcciones. Por favor explica el motivo.':'The report will be returned to the technician for corrections. Please explain the reason.');
   _setTxt('reject-reason-lbl', es?'Motivo del rechazo *':'Reason for rejection *');
   _setPlh('reject-comment', es?'Describe qué se necesita corregir...':'Describe what needs to be corrected...');
-  _setTxt('rej-cancel', es?'Cancelar':'Cancel');
-  _setTxt('rej-submit', es?'❌ Rechazar y Devolver':'❌ Reject & Return');
+  _setTxt('rej-cancel', t('cancel'));
+  _setTxt('rej-submit', t('rej_submit'));
   // mo-view action buttons
   _setTxt('mo-view-approve-lbl', es?'Aprobar':'Approve');
-  _setTxt('mo-view-crej-lbl', es?'Solicitar corrección':'Request correction');
-  _setTxt('mo-view-rej-lbl', es?'Rechazar':'Reject');
+  _setTxt('mo-view-crej-lbl', t('view_crej'));
+  _setTxt('mo-view-rej-lbl', t('view_rej'));
   // Activity log modal
   _setTxt('mo-log-title', es?'📋 Registro de Actividad':'📋 Activity Log');
 
@@ -4346,7 +4470,7 @@ function applyLang(){
   _setTxt('w-lbl-stat', es?'Estado':'Status');
   const wStat=document.getElementById('w-stat');
   if(wStat)[...wStat.options].forEach(o=>{
-    if(o.value==='Active')o.textContent=es?'Activo':'Active';
+    if(o.value==='Active')o.textContent=t('opt_active');
     else if(o.value==='On Leave')o.textContent=es?'Con permiso':'On Leave';
     else if(o.value==='Inactive')o.textContent=es?'Inactivo':'Inactive';
   });
