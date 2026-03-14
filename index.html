@@ -1,4 +1,4 @@
-<!-- FieldLog v1.5.10 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
+<!-- FieldLog v1.5.11 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1925,7 +1925,7 @@ function delCLT(id){if(!confirm(currentUser?.lang==='en'?'Delete this template?'
 // ═══════════════════════════════════════════════
 // Inicia un informe nuevo - resetea el formulario y aplica el idioma
 function startNewReport(projId=null){
-  if(isCustomerRole()){toast('CLIENTES NO PUEDEN CREAR INFORMES','var(--rd)');return;}
+  if(isCustomerRole()){toast(currentUser?.lang==='en'?'CUSTOMERS CANNOT CREATE REPORTS':'CLIENTES NO PUEDEN CREAR INFORMES','var(--rd)');return;}
   curRptId=null;editingRpt=false;activeCL=null;curReportStatus='Draft';
   resetRF();applyLang();
   if(projId){document.getElementById('r-proj').value=projId;onPC();curProjId=projId;}
@@ -3834,22 +3834,41 @@ const THEME_NAMES={dark:'Industrial',blue:'Ocean',light:'Claro',slate:'Slate'};
 // ═══════════════════════════════════════════════
 // Carga todas las colecciones de Firestore en paralelo al hacer login
 async function loadAllData(){
-  const [us,ps,ws,ms,cs,rs,cus]=await Promise.all([
-    fbFns.getDocs(fbFns.collection(fbDB,'users')),
-    fbFns.getDocs(fbFns.collection(fbDB,'projects')),
-    fbFns.getDocs(fbFns.collection(fbDB,'workers')),
-    fbFns.getDocs(fbFns.collection(fbDB,'materials')),
-    fbFns.getDocs(fbFns.collection(fbDB,'checklists')),
-    fbFns.getDocs(fbFns.collection(fbDB,'reports')),
-    fbFns.getDocs(fbFns.collection(fbDB,'customers')),
-  ]);
-  DB.users=us.docs.map(d=>({id:d.id,...d.data()}));
-  DB.projects=ps.docs.map(d=>({id:d.id,...d.data()}));
-  DB.workers=ws.docs.map(d=>({id:d.id,...d.data()}));
-  DB.materials=ms.docs.map(d=>({id:d.id,...d.data()}));
-  DB.checklists=cs.docs.map(d=>({id:d.id,...d.data()}));
-  DB.reports=rs.docs.map(d=>({id:d.id,...d.data()}));
-  DB.customers=cus.docs.map(d=>({id:d.id,...d.data()}));
+  const role=currentUser?.role||'guest';
+  const isCustomer=role==='customer';
+  // All roles need users, projects, reports
+  // Customers only need projects and reports (filtered by their assigned projects)
+  // Workers/materials/checklists/customers are admin/manager/technician only
+  if(isCustomer){
+    const [ps,rs]=await Promise.all([
+      fbFns.getDocs(fbFns.collection(fbDB,'projects')),
+      fbFns.getDocs(fbFns.collection(fbDB,'reports')),
+    ]);
+    DB.users=[];
+    DB.projects=ps.docs.map(d=>({id:d.id,...d.data()}));
+    DB.workers=[];
+    DB.materials=[];
+    DB.checklists=[];
+    DB.reports=rs.docs.map(d=>({id:d.id,...d.data()}));
+    DB.customers=[];
+  } else {
+    const [us,ps,ws,ms,cs,rs,cus]=await Promise.all([
+      fbFns.getDocs(fbFns.collection(fbDB,'users')),
+      fbFns.getDocs(fbFns.collection(fbDB,'projects')),
+      fbFns.getDocs(fbFns.collection(fbDB,'workers')),
+      fbFns.getDocs(fbFns.collection(fbDB,'materials')),
+      fbFns.getDocs(fbFns.collection(fbDB,'checklists')),
+      fbFns.getDocs(fbFns.collection(fbDB,'reports')),
+      fbFns.getDocs(fbFns.collection(fbDB,'customers')),
+    ]);
+    DB.users=us.docs.map(d=>({id:d.id,...d.data()}));
+    DB.projects=ps.docs.map(d=>({id:d.id,...d.data()}));
+    DB.workers=ws.docs.map(d=>({id:d.id,...d.data()}));
+    DB.materials=ms.docs.map(d=>({id:d.id,...d.data()}));
+    DB.checklists=cs.docs.map(d=>({id:d.id,...d.data()}));
+    DB.reports=rs.docs.map(d=>({id:d.id,...d.data()}));
+    DB.customers=cus.docs.map(d=>({id:d.id,...d.data()}));
+  }
 }
 // Guarda o actualiza un documento en Firestore
 async function fbSave(col,id,data){
