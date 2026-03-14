@@ -1,4 +1,4 @@
-<!-- FieldLog v1.5.13 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
+<!-- FieldLog v1.5.15 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -942,7 +942,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="mh"><div class="mtt" id="um2-title">👥 Nuevo Usuario</div><button class="mcl" onclick="closeMO('mo-user')">✕</button></div>
   <div class="mb">
     <div class="fg f2"><div><label data-i18n="user_username">Usuario *</label><input type="text" id="u-uname" placeholder="e.g. jsmith" autocomplete="off"></div><div><label data-i18n="user_fullname">Nombre Completo *</label><input type="text" id="u-fname" placeholder="Nombre Apellido"></div></div>
-    <div class="fg f2" style="margin-top:10px;"><div><label data-i18n="user_password">Contraseña *</label><input type="password" id="u-pass" placeholder="Mín. 6 caracteres" autocomplete="new-password"></div><div><label data-i18n="user_email">Correo</label><input type="email" id="u-email" placeholder="usuario@empresa.com"></div></div>
+    <div class="fg f2" style="margin-top:10px;"><div><label data-i18n="user_password">Contraseña *</label><input type="password" id="u-pass" placeholder="Mín. 6 caracteres" autocomplete="new-password"></div><div><label data-i18n="user_email">Correo *</label><input type="email" id="u-email" placeholder="usuario@empresa.com" required></div></div>
     <div class="fg f3" style="margin-top:10px;">
       <div><label data-i18n="user_role">Rol</label><select id="u-role" onchange="refreshUPerms()">
         <option value="admin">Administrador</option>
@@ -1121,7 +1121,7 @@ const I18N={
     assigned_team:'MIEMBROS ASIGNADOS AL EQUIPO',add_from_taskforce:'— Agregar de Cuadrilla —',
     project_customer:'Cliente del Proyecto',
     // User modal
-    user_username:'Usuario',user_fullname:'Nombre Completo',user_password:'Contraseña',user_email:'Correo',
+    user_username:'Usuario',user_fullname:'Nombre Completo',user_password:'Contraseña',user_email:'Correo *',
     user_role:'Rol',user_status:'Estado',user_language:'Idioma / Language',user_worker:'Trabajador vinculado',
     user_projects:'ACCESO A PROYECTOS',user_permissions:'PERMISOS',
     // Report form labels
@@ -1182,7 +1182,7 @@ const I18N={
     assigned_team:'ASSIGNED TEAM MEMBERS',add_from_taskforce:'— Add from Taskforce —',
     project_customer:'Project Customer',
     // User modal
-    user_username:'Username',user_fullname:'Full Name',user_password:'Password',user_email:'Email',
+    user_username:'Username',user_fullname:'Full Name',user_password:'Password',user_email:'Email *',
     user_role:'Role',user_status:'Status',user_language:'Language / Idioma',user_worker:'Linked Worker',
     user_projects:'PROJECT ACCESS',user_permissions:'PERMISSIONS',
     // Report form labels
@@ -2957,13 +2957,64 @@ function renderOCCPhotos(entry){
 }
 function upOCC(){const n=document.querySelectorAll('#r-occ .occ-entry').length;const el=document.getElementById('bl-occ');if(el)el.textContent=currentUser?.lang==='en'?n+' entr'+(n===1?'y':'ies'):n+(n===1?' entrada':' entradas');}
 
+// ── Delete Report — requires password confirmation ──────────────────
+let _delRPendingId=null;
 function delR(id){
-  if(!confirm(currentUser?.lang==='en'?'Delete this report?':'¿Eliminar este informe?'))return;
-  DB.reports=DB.reports.filter(r=>r.id!==id);
-  fbDelete('reports',id).catch(console.error);
-  renderDash();renderAllReports();updateNavBadge();
-  if(curProjId)renderPDReports();
-  toast(currentUser?.lang==='en'?'DELETED':'ELIMINADO','var(--rd)');
+  const r=DB.reports.find(x=>x.id===id);
+  if(!r)return;
+  _delRPendingId=id;
+  const _en=currentUser?.lang==='en';
+  // Populate confirmation modal
+  document.getElementById('del-rpt-id-lbl').textContent=r.id;
+  document.getElementById('del-rpt-date-lbl').textContent=r.date||'—';
+  document.getElementById('del-rpt-pw').value='';
+  document.getElementById('del-rpt-err').style.display='none';
+  applyLang();
+  openMO('mo-del-rpt');
+  setTimeout(()=>document.getElementById('del-rpt-pw').focus(),200);
+}
+async function confirmDelR(){
+  const _en=currentUser?.lang==='en';
+  const pw=document.getElementById('del-rpt-pw').value;
+  const errEl=document.getElementById('del-rpt-err');
+  if(!pw){errEl.textContent=_en?'Enter your password':'Ingresa tu contraseña';errEl.style.display='block';return;}
+  const btn=document.getElementById('del-rpt-confirm-btn');
+  btn.disabled=true;btn.textContent=_en?'Verifying...':'Verificando...';
+  try{
+    // Re-authenticate with Firebase using stored email
+    const userEmail=currentUser.email;
+    if(!userEmail){errEl.textContent=_en?'No email on file — contact admin':'Sin email registrado — contacta al admin';errEl.style.display='block';btn.disabled=false;btn.textContent=_en?'🗑 Delete':'🗑 Eliminar';return;}
+    await fbFns.signInWithEmailAndPassword(fbAuth,userEmail,pw);
+    // Auth OK — proceed with deletion
+    const id=_delRPendingId;
+    const r=DB.reports.find(x=>x.id===id);
+    // Delete photos from Storage
+    if(r){
+      const allPhotos=[
+        ...(r.photos||[]),
+        ...(r.tasks||[]).flatMap(t=>t.photos||[]),
+        ...(r.occurrences||[]).flatMap(o=>o.photos||[]),
+        ...(r.checklist?.items||[]).flatMap(i=>i.photos||[]),
+      ].filter(p=>p&&p.startsWith('https://firebasestorage'));
+      await Promise.allSettled(allPhotos.map(async url=>{
+        try{
+          const ref=fbStorage.refFromURL(url);
+          await fbFns.deleteObject(ref);
+        }catch(e){console.warn('Storage delete failed:',url,e);}
+      }));
+    }
+    DB.reports=DB.reports.filter(x=>x.id!==id);
+    fbDelete('reports',id).catch(console.error);
+    closeMO('mo-del-rpt');
+    renderDash();renderAllReports();updateNavBadge();
+    if(curProjId)renderPDReports();
+    toast(_en?'🗑 REPORT DELETED':'🗑 INFORME ELIMINADO','var(--rd)');
+  }catch(e){
+    errEl.textContent=_en?'Incorrect password':'Contraseña incorrecta';
+    errEl.style.display='block';
+    btn.disabled=false;
+    btn.textContent=_en?'🗑 Delete':'🗑 Eliminar';
+  }
 }
 
 // PDF
@@ -3773,6 +3824,15 @@ function applyLang(){
 
   _setTxt('lbl-u-cust-assoc', es?'Cliente Asociado *':'Associated Customer *');
   _setTxt('lbl-u-cust-hint', es?'Selecciona la empresa para ver qué proyectos se pueden asignar a este usuario.':'Select the company to see which projects can be assigned to this user.');
+  // ── Delete report modal ───────────────────────────────────────────────
+  _setTxt('del-rpt-title', es?'🗑 Eliminar Informe':'🗑 Delete Report');
+  _setTxt('del-rpt-warn', es?'ACCIÓN IRREVERSIBLE':'IRREVERSIBLE ACTION');
+  _setTxt('del-rpt-desc', es?'Este informe y todas sus fotos serán eliminados permanentemente.':'This report and all its photos will be permanently deleted.');
+  _setTxt('del-rpt-lbl-id', es?'Informe:':'Report:');
+  _setTxt('del-rpt-lbl-date', es?'Fecha:':'Date:');
+  _setTxt('del-rpt-lbl-pw', es?'Confirma tu contraseña para continuar *':'Confirm your password to continue *');
+  _setTxt('del-rpt-cancel', es?'Cancelar':'Cancel');
+  _setTxt('del-rpt-confirm-btn', es?'🗑 Eliminar':'🗑 Delete');
   // ── Change password modal ─────────────────────────────────────────────
   _setTxt('chpw-title', es?'🔒 Cambiar Contraseña':'🔒 Change Password');
   _setTxt('chpw-lbl-new', es?'Nueva Contraseña *':'New Password *');
@@ -4107,10 +4167,19 @@ async function saveUser(){
   const uname=document.getElementById('u-uname').value.trim();
   const fname=document.getElementById('u-fname').value.trim();
   const pass=document.getElementById('u-pass').value;
-  if(!uname||!fname){toast(currentUser?.lang==='en'?'USERNAME + NAME REQUIRED':'USUARIO Y NOMBRE OBLIGATORIOS','var(--rd)');return;}
+  const email=document.getElementById('u-email').value.trim();
+  const _en=currentUser?.lang==='en';
+  if(!uname||!fname){toast(_en?'USERNAME + NAME REQUIRED':'USUARIO Y NOMBRE OBLIGATORIOS','var(--rd)');return;}
+  // Email is required
+  if(!email){toast(_en?'EMAIL IS REQUIRED':'CORREO ES OBLIGATORIO','var(--rd)');document.getElementById('u-email').focus();return;}
+  // Basic email format validation
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast(_en?'INVALID EMAIL FORMAT':'FORMATO DE CORREO INVÁLIDO','var(--rd)');document.getElementById('u-email').focus();return;}
   // Check duplicate username
   const dup=DB.users.find(u=>u.username===uname&&u.id!==editUSR);
-  if(dup){toast(currentUser?.lang==='en'?'USERNAME ALREADY EXISTS':'EL USUARIO YA EXISTE','var(--rd)');return;}
+  if(dup){toast(_en?'USERNAME ALREADY EXISTS':'EL USUARIO YA EXISTE','var(--rd)');return;}
+  // Check duplicate email
+  const dupEmail=DB.users.find(u=>u.email===email&&u.id!==editUSR);
+  if(dupEmail){toast(_en?'EMAIL ALREADY IN USE':'CORREO YA ESTÁ EN USO','var(--rd)');return;}
   const role=document.getElementById('u-role').value;
   // Collect projects
   const projChecks=[...document.querySelectorAll('#u-proj-grid input:checked')].map(c=>c.value);
@@ -4126,7 +4195,7 @@ async function saveUser(){
   const customerId=(role==='customer'&&custSelEl)?custSelEl.value||null:null;
   const data={
     username:uname,name:fname,
-    email:document.getElementById('u-email').value.trim(),
+    email,
     role,status:document.getElementById('u-stat').value,
     workerId:(workerEl&&role!=='customer')?workerEl.value||null:null,
     customerId,
@@ -4136,13 +4205,25 @@ async function saveUser(){
     const u=DB.users.find(x=>x.id===editUSR);
     Object.assign(u,data);
     if(pass.length>=6)u.password=pass;
-    else if(pass.length>0&&pass.length<6){toast((currentUser?.lang==='en'?'PASSWORD MIN 6 CHARS':'CONTRASEÑA: MÍN. 6 CARACTERES'),'var(--rd)');return;}
-    toast(currentUser?.lang==='en'?'✓ USER UPDATED':'✓ USUARIO ACTUALIZADO');
+    else if(pass.length>0&&pass.length<6){toast((_en?'PASSWORD MIN 6 CHARS':'CONTRASEÑA: MÍN. 6 CARACTERES'),'var(--rd)');return;}
+    fbSave('users',u.id,u).catch(console.error);
+    toast(_en?'✓ USER UPDATED':'✓ USUARIO ACTUALIZADO');
   } else {
-    if(pass.length<6){toast((currentUser?.lang==='en'?'PASSWORD MIN 6 CHARS':'CONTRASEÑA: MÍN. 6 CARACTERES'),'var(--rd)');return;}
-    let fbUid='usr'+Date.now();try{const fbCred=await fbAuth.createUserWithEmailAndPassword(data.email||fbUid+'@fieldlog.app',pass);fbUid=fbCred.user.uid;}catch(authErr){console.warn('Auth create error:',authErr);}
-    const nu={id:fbUid,...data,createdAt:new Date().toISOString()};DB.users.push(nu);fbSave('users',fbUid,nu).catch(console.error);
-    toast('✓ USER CREATED');
+    if(pass.length<6){toast((_en?'PASSWORD MIN 6 CHARS':'CONTRASEÑA: MÍN. 6 CARACTERES'),'var(--rd)');return;}
+    let fbUid='usr'+Date.now();
+    try{
+      const fbCred=await fbAuth.createUserWithEmailAndPassword(email,pass);
+      fbUid=fbCred.user.uid;
+    }catch(authErr){
+      console.warn('Auth create error:',authErr);
+      if(authErr.code==='auth/email-already-in-use'){toast(_en?'EMAIL ALREADY IN USE IN FIREBASE':'CORREO YA REGISTRADO EN FIREBASE','var(--rd)');return;}
+      if(authErr.code==='auth/invalid-email'){toast(_en?'INVALID EMAIL FORMAT':'FORMATO DE CORREO INVÁLIDO','var(--rd)');return;}
+      if(authErr.code==='auth/weak-password'){toast(_en?'PASSWORD TOO WEAK':'CONTRASEÑA MUY DÉBIL','var(--rd)');return;}
+    }
+    const nu={id:fbUid,...data,createdAt:new Date().toISOString()};
+    DB.users.push(nu);
+    fbSave('users',fbUid,nu).catch(console.error);
+    toast(_en?'✓ USER CREATED':'✓ USUARIO CREADO');
   }
   closeMO('mo-user');renderUsers();
 }
@@ -4541,6 +4622,31 @@ document.getElementById('lin-u').addEventListener('keydown',e=>{if(e.key==='Ente
     </div>
   </div>
   <div class="mb" id="mo-view-body" style="max-height:70vh;overflow-y:auto;"></div>
+</div></div>
+
+<!-- DELETE REPORT MODAL -->
+<div class="mo" id="mo-del-rpt"><div class="modal" style="max-width:440px;">
+  <div class="mh"><div class="mtt" id="del-rpt-title">🗑 Eliminar Informe</div><button class="mcl" onclick="closeMO('mo-del-rpt')">✕</button></div>
+  <div class="mb">
+    <div style="background:rgba(224,82,82,.08);border:1px solid var(--rd);border-left:3px solid var(--rd);padding:10px 12px;margin-bottom:14px;">
+      <div style="font-family:var(--mo);font-size:9px;color:var(--rd);letter-spacing:2px;margin-bottom:4px;">⚠ <span id="del-rpt-warn">ACCIÓN IRREVERSIBLE</span></div>
+      <div style="font-size:11px;color:var(--mu2);" id="del-rpt-desc">Este informe y todas sus fotos serán eliminados permanentemente.</div>
+    </div>
+    <div style="font-family:var(--mo);font-size:10px;color:var(--mu);margin-bottom:10px;">
+      <span id="del-rpt-lbl-id">Informe:</span> <strong style="color:var(--tx);" id="del-rpt-id-lbl">—</strong>
+      &nbsp;·&nbsp;
+      <span id="del-rpt-lbl-date">Fecha:</span> <strong style="color:var(--tx);" id="del-rpt-date-lbl">—</strong>
+    </div>
+    <label id="del-rpt-lbl-pw" style="font-size:11px;">Confirma tu contraseña para continuar *</label>
+    <input type="password" id="del-rpt-pw" placeholder="••••••••"
+      style="width:100%;margin-top:6px;background:var(--s2);border:1px solid var(--bd);border-left:2px solid var(--rd);color:var(--tx);padding:8px;font-size:13px;outline:none;"
+      onkeydown="if(event.key==='Enter')confirmDelR()">
+    <div id="del-rpt-err" style="display:none;color:var(--rd);font-family:var(--mo);font-size:10px;margin-top:6px;letter-spacing:1px;"></div>
+  </div>
+  <div class="mf">
+    <button class="btn bs" onclick="closeMO('mo-del-rpt')" id="del-rpt-cancel">Cancelar</button>
+    <button class="btn" id="del-rpt-confirm-btn" onclick="confirmDelR()" style="background:var(--rd);border-color:var(--rd);color:#fff;">🗑 Eliminar</button>
+  </div>
 </div></div>
 
 <!-- ACTIVITY LOG MODAL -->
