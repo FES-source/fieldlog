@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.5 | Build: 2026-03-14 | Firebase + PWA Edition | 4 Languages + Session Persist -->
+<!-- FieldLog v1.6.6 | Build: 2026-03-14 | Firebase + PWA Edition | 4 Languages + Session Persist -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,7 +49,7 @@ firebase.auth().onAuthStateChanged(async user=>{
   if(user&&!currentUser){
     try{
       const snap=await fbFns.getDoc(fbFns.doc(fbDB,'users',user.uid));
-      if(snap.exists()){
+      if(snap.exists){
         const userData={id:user.uid,...snap.data()};
         if(userData.status==='Active'){
           currentUser=userData;
