@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.14 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.17 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3211,8 +3211,14 @@ function setBBStatus(s){
   if(approveBtn)approveBtn.style.display=(canApprove&&!isCust&&s==='Review')?'inline-flex':'none';
   // Reject: same as approve conditions
   if(rejectBtn)rejectBtn.style.display=(canApprove&&!isCust&&s==='Review')?'inline-flex':'none';
-  // Customer sign-off
-  if(custBtn)custBtn.style.display=(canApprove&&!isCust&&s==='Pending Customer')?'inline-flex':'none';
+  // Customer sign-off: show when Pending Customer (any with customer_signoff perm), OR manager when Approved+needsCustSign
+  const projForCust=DB.projects?.find(p=>p.id===DB.reports?.find(r=>r.id===curRptId)?.projId);
+  const needsCustSign=projForCust?.requireCustomerApproval;
+  const canCustSign=hasPerm('customer_signoff');
+  if(custBtn)custBtn.style.display=(
+    (canCustSign&&s==='Pending Customer') ||
+    (canApprove&&!isCust&&s==='Approved'&&needsCustSign)
+  )?'inline-flex':'none';
 }
 function setReportStatus(s){setBBStatus(s);}
 
@@ -3992,7 +3998,7 @@ function openCustAppr(rptId){
   // Allow both managers (approve_reports) and customers (customer_signoff)
   if(!hasPerm('approve_reports')&&!hasPerm('customer_signoff')){toast(t('no_permission'),'var(--rd)');return;}
   const r=DB.reports.find(x=>x.id===rptId);
-  if(!r||r.status!=='Pending Customer'){toast(t('not_ready_customer_signoff'),'var(--am)');return;}
+  if(!r||!(r.status==='Pending Customer'||r.status==='Approved')){toast(t('not_ready_customer_signoff'),'var(--am)');return;}
   clearSigModal('csigc');
   openMO('mo-custappr-sig');
   setTimeout(()=>initSigModal('csigc','csigwrap'),150);
@@ -4586,14 +4592,18 @@ function viewReport(id){
     } else rejectBtn2.style.display='none';
   }
   if(custBtn){
-    if(canApprove&&r.status==='Pending Customer'){
+    const projForV=DB.projects?.find(p=>p.id===r.projId);
+    const needsCustV=projForV?.requireCustomerApproval;
+    if(canApprove&&(r.status==='Pending Customer'||(r.status==='Approved'&&needsCustV))){
       custBtn.style.display='inline-flex';
       custBtn.onclick=()=>{closeMO('mo-view');openCustAppr(r.id);};
     } else custBtn.style.display='none';
   }
-  // Customer sign-off: show in view for customer role on Pending Customer reports
+  // Customer sign-off: show in view for customer role on Pending Customer or Approved (if project needs it)
   const custRejectBtn=document.getElementById('mo-view-cust-reject');
-  if(isCustomerRole()&&r.status==='Pending Customer'){
+  const projForCustRole=DB.projects?.find(p=>p.id===r.projId);
+  const custCanSign=isCustomerRole()&&(r.status==='Pending Customer'||(r.status==='Approved'&&projForCustRole?.requireCustomerApproval));
+  if(custCanSign){
     const custSelfBtn=document.getElementById('mo-view-custappr');
     if(custSelfBtn){custSelfBtn.style.display='inline-flex';custSelfBtn.onclick=()=>{closeMO('mo-view');openCustAppr(r.id);};}
     if(custRejectBtn){custRejectBtn.style.display='inline-flex';custRejectBtn.onclick=()=>{closeMO('mo-view');openCustReject(r.id);};}
@@ -4947,8 +4957,8 @@ function applyLang(){
 
   // ── Buttons & dropdowns without data-i18n ────────────────────────────
   _setTxt('lbl-new-report-dash', t('new_report'));
-  _setTxt('lbl-sign-btn', t('sign_off'));
-  _setTxt('lbl-sign-btn-bb', t('sign_off'));
+  _setTxt('lbl-sign-btn', t('sign_off').replace(/^[🤝 ]+/,''));
+  _setTxt('lbl-sign-btn-bb', t('sign_off').replace(/^[🤝 ]+/,''));
   _setTxt('lbl-add-member-btn', '+ '+t('add_member_label').split(' ').pop());
   _setTxt('lbl-add-cl-item', t('cl_add_item'));
   _setTxt('lbl-save-cl', t('cl_save_btn'));
@@ -4961,16 +4971,14 @@ function applyLang(){
   const _optCR=document.getElementById('opt-role-customer');
   if(_optCR)_optCR.textContent=t('role_customer');
   // ── Bottom bar report buttons ──────────────────────────────────────
-  _setTxt('lbl-bb-approve', t('approve'));
-  _setTxt('lbl-bb-reject', t('reject'));
+  _setTxt('lbl-bb-approve', t('approve').replace(/^[✓ ]+/,''));
+  _setTxt('lbl-bb-reject', t('reject').replace(/^[❌ ]+/,''));
   // ── Project detail header ────────────────────────────────────────────
   _setTxt('pd-back-btn', '← '+t('projects'));
   _setTxt('lbl-pd-edit', t('edit'));
   _setTxt('lbl-pd-new-rpt', t('new_report'));
   // ── Report view modal ────────────────────────────────────────────────
   _setTxt('lbl-mo-view-edit', t('edit'));
-  _setTxt('lbl-sign-btn', t('sign_off'));
-  _setTxt('lbl-sign-btn-bb', t('sign_off'));
   const bbSubmit=document.getElementById('bb-submit-btn');
   if(bbSubmit)bbSubmit.textContent=t('submit');
   const bbSave=document.querySelector('#bb .btn.bs[onclick*="saveReport"]');
@@ -5053,7 +5061,7 @@ function applyLang(){
   _setTxt('asig-lbl-draw', t('asig_draw'));
   _setTxt('asig-clear', t('asig_clear'));
   _setTxt('asig-cancel', t('cancel'));
-  _setTxt('asig-submit', t('asig_submit'));
+  _setTxt('asig-submit', t('asig_submit').replace(/^[✓ ]+/,''));
   _setPlh('asig-name', t('ph_fullname'));
   _setPlh('asig-role', t('ph_supervisor'));
   // Customer signature modal
@@ -5064,7 +5072,7 @@ function applyLang(){
   _setTxt('csig-lbl-draw', t('ssig_draw'));
   _setTxt('csig-clear', t('ssig_clear'));
   _setTxt('csig-cancel', t('cancel'));
-  _setTxt('csig-submit', t('sign_off'));
+  _setTxt('csig-submit', t('sign_off').replace(/^[✓🤝 ]+/,''));
   _setPlh('csig-name', t('ph_fullname'));
   _setPlh('csig-role', t('ph_supervisor'));
   // Customer reject modal
@@ -5073,14 +5081,14 @@ function applyLang(){
   _setTxt('crej-lbl', t('crej_reason_lbl'));
   _setPlh('cust-reject-comment', t('ph_notes_obs'));
   _setTxt('crej-cancel', t('cancel'));
-  _setTxt('crej-submit', t('crej_title'));
+  _setTxt('crej-submit', t('crej_title').replace(/^[↩ ]+/,''));
   // Reject modal
   _setTxt('rej-title', t('rej_title'));
   _setTxt('reject-desc', t('rej_desc_full'));
   _setTxt('reject-reason-lbl', t('rej_reason_lbl'));
   _setPlh('reject-comment', t('rej_reason_ph'));
   _setTxt('rej-cancel', t('cancel'));
-  _setTxt('rej-submit', t('rej_submit'));
+  _setTxt('rej-submit', t('rej_submit').replace(/^[❌ ]+/,''));
   // mo-view action buttons
   _setTxt('mo-view-approve-lbl', t('approve_btn2'));
   _setTxt('mo-view-crej-lbl', t('view_crej'));
