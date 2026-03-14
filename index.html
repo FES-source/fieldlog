@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.11 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.12 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2358,8 +2358,9 @@ let lbPhotos=[],lbCaptions=[],lbIdx=0,lbContext=null;
 function tick(){
   const n=new Date();
   const d=document.getElementById('cd');const t=document.getElementById('ct');
-  if(d)d.textContent=n.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
-  if(t)t.textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const uLocale=LOCALE_MAP[currentUser?.lang||'es']||'es-CL';
+  if(d)d.textContent=n.toLocaleDateString(uLocale,{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+  if(t)t.textContent=n.toLocaleTimeString(uLocale,{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 }
 // ═══════════════════════════════════════════════
 // NAV
@@ -3311,6 +3312,7 @@ const RSTATUS_ES={Draft:'Borrador',Filling:'En proceso',Review:'En revisión',Ap
 const RSTATUS_EN={Draft:'Draft',Filling:'Filling',Review:'In Review',Approved:'Approved','Pending Customer':'Customer Sign-Off',Rejected:'Rejected'};
 const RSTATUS_PT={Draft:'Rascunho',Filling:'Em preenchimento',Review:'Em revisão',Approved:'Aprovado','Pending Customer':'Assinatura do cliente',Rejected:'Rejeitado'};
 const RSTATUS_IT={Draft:'Bozza',Filling:'In compilazione',Review:'In revisione',Approved:'Approvato','Pending Customer':'Firma del cliente',Rejected:'Rifiutato'};
+const LOCALE_MAP={es:'es-CL',en:'en-US',pt:'pt-BR',it:'it-IT'};
 const RSTATUS_ALL={es:RSTATUS_ES,en:RSTATUS_EN,pt:RSTATUS_PT,it:RSTATUS_IT};
 function tRptStatus(s){const lang=currentUser?.lang||'es';return(RSTATUS_ALL[lang]||RSTATUS_ES)[s]||s||'—';}
 function tStatOpt(s){const lang=currentUser?.lang||'es';const map=TSTAT_ALL[lang]||TSTAT_ES;return TSTAT.map(v=>`<option value="${v}"${v===s?' selected':''}>${map[v]||v}</option>`).join('');}
@@ -4329,7 +4331,7 @@ tr:nth-child(even) td{background:#fafafa;}
     <div><div class="logo">Field<span>Log</span></div><div class="cov-sub">${pt('daily_report')}</div></div>
   </div>
   <div style="display:flex;align-items:flex-end;gap:14px;">
-    <div class="cov-r"><div class="cov-id">${r.id}</div><div class="cov-dt">${r.date?new Date(r.date+'T12:00:00').toLocaleDateString(pdfLang==='es'?'es-CL':'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}):''}</div></div>
+    <div class="cov-r"><div class="cov-id">${r.id}</div><div class="cov-dt">${r.date?new Date(r.date+'T12:00:00').toLocaleDateString(LOCALE_MAP[pdfLang]||'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}):''}</div></div>
     ${proj&&proj.logo2?`<img src="${proj.logo2}" style="height:42px;max-width:90px;object-fit:contain;">`:''}
     ${custObj?.logo?`<img src="${custObj.logo}" style="height:42px;max-width:90px;object-fit:contain;">` :''}
   </div>
@@ -4464,21 +4466,21 @@ ${photoGrid}`:''}
   <div class="sig-box">
     ${sig?`<img src="${sig}">`:'<span style="font-size:9px;color:#ccc;margin-bottom:8px;">—</span>'}
     <div class="sig-lbl">${r.sigName?(r.sigName+(r.sigRole?' · '+r.sigRole:'')):pt('submitted_by')}</div>
-    ${r.submittedAt?`<div style="font-size:7px;color:#bbb;font-family:monospace;margin-top:2px;">${new Date(r.submittedAt).toLocaleDateString(pdfLang==='es'?'es-CL':'en-US')}</div>`:''}
+    ${r.submittedAt?`<div style="font-size:7px;color:#bbb;font-family:monospace;margin-top:2px;">${new Date(r.submittedAt).toLocaleDateString(LOCALE_MAP[pdfLang]||'en-US')}</div>`:''}
   </div>
   <div class="sig-box">
     ${r.approveSignature?`<img src="${r.approveSignature}">`:'<span style="font-size:9px;color:#ccc;margin-bottom:8px;">—</span>'}
     <div class="sig-lbl">${r.approvedBy?(r.approvedBy+(r.approvedByRole?' · '+r.approvedByRole:'')):pt('approved_by')}</div>
-    ${r.approvedAt?`<div style="font-size:7px;color:#bbb;font-family:monospace;margin-top:2px;">${new Date(r.approvedAt).toLocaleDateString(pdfLang==='es'?'es-CL':'en-US')}</div>`:''}
+    ${r.approvedAt?`<div style="font-size:7px;color:#bbb;font-family:monospace;margin-top:2px;">${new Date(r.approvedAt).toLocaleDateString(LOCALE_MAP[pdfLang]||'en-US')}</div>`:''}
   </div>
   ${proj?.requireCustomerApproval?`<div class="sig-box">
     ${r.customerSignature?`<img src="${r.customerSignature}">`:'<span style="font-size:9px;color:#ccc;margin-bottom:8px;">—</span>'}
     <div class="sig-lbl">${r.customerName?(r.customerName+(r.customerRole?' · '+r.customerRole:'')):pt('customer_signoff')}</div>
-    ${r.customerApprovedAt?`<div style="font-size:7px;color:#bbb;font-family:monospace;margin-top:2px;">${new Date(r.customerApprovedAt).toLocaleDateString(pdfLang==='es'?'es-CL':'en-US')}</div>`:''}
+    ${r.customerApprovedAt?`<div style="font-size:7px;color:#bbb;font-family:monospace;margin-top:2px;">${new Date(r.customerApprovedAt).toLocaleDateString(LOCALE_MAP[pdfLang]||'en-US')}</div>`:''}
   </div>`:''}
 </div>
 
-<div class="ft"><span>FIELDLOG · ${pt('daily_report')}</span><span>${r.id}</span><span id="ft-gen">${pt('generated')} ${new Date().toLocaleString(pdfLang==='es'?'es-CL':'en-US')}</span></div>
+<div class="ft"><span>FIELDLOG · ${pt('daily_report')}</span><span>${r.id}</span><span id="ft-gen">${pt('generated')} ${new Date().toLocaleString(LOCALE_MAP[pdfLang]||'en-US')}</span></div>
 </div><!-- /content -->
 </td></tr></tbody></table>
 <scr'+'ipt>
@@ -4917,7 +4919,6 @@ function applyLang(){
   _setPlh('cust-search',t('ph_search_customer'));
   _setPlh('proj-search',t('ph_search_project'));
   _setPlh('ar-search',t('ph_search_report'));
-  _setPlh('cust-search',t('ph_search_customer'));
   _setPlh('r-notes', t('r_notes_ph'));
   _setPlh('r-tom', t('r_tom_ph'));
   _setPlh('lb-cap-in', t('photo_caption_ph'));
