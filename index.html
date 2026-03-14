@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.7 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Full i18n Architecture -->
+<!-- FieldLog v1.6.8 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1424,6 +1424,13 @@ const I18N={
     projects_lbl:'PROYECTOS',
     user_access_projects:'ACCESO A PROYECTOS',
     report_subheader:'Informe de Campo',
+    proj_status_active:'Activo',proj_status_on_hold:'En pausa',
+    proj_status_completed:'Completado',proj_status_cancelled:'Cancelado',
+    logo_appears_hint:'Este logo aparecerá en los informes asociados a este cliente.',
+    crej_desc_full:'Indica qué correcciones necesita este informe antes de aprobarlo. El supervisor recibirá tu comentario y deberá volver a enviar para tu revisión.',
+    rej_desc_full:'El informe será devuelto al técnico para correcciones. Por favor explica el motivo.',
+    cust_user_projects_hint:'Selecciona qué proyectos de esta empresa puede ver este usuario.',
+    no_cust_projects_hint:'Este cliente no tiene proyectos asignados aún. Asígnalos desde la pestaña Clientes.',
     manage_users:'👥 Gestionar Usuarios',
 role_customer:'Cliente',
   },
@@ -1742,6 +1749,13 @@ role_customer:'Cliente',
     projects_lbl:'PROJECTS',
     user_access_projects:'PROJECT ACCESS',
     report_subheader:'Field Report',
+    proj_status_active:'Active',proj_status_on_hold:'On Hold',
+    proj_status_completed:'Completed',proj_status_cancelled:'Cancelled',
+    logo_appears_hint:'This logo will appear on reports associated with this customer.',
+    crej_desc_full:'Indicate what corrections this report needs before you can approve it. The supervisor will receive your comment and must resubmit for your review.',
+    rej_desc_full:'The report will be returned to the technician for corrections. Please explain the reason.',
+    cust_user_projects_hint:'Select which projects from this company this user can see.',
+    no_cust_projects_hint:'This customer has no assigned projects yet. Assign them from the Customers tab.',
     manage_users:'👥 Manage Users',
 role_customer:'Customer',
   },
@@ -2018,6 +2032,13 @@ role_customer:'Customer',
     projects_lbl:'PROJETOS',
     user_access_projects:'ACESSO AO PROJETO',
     report_subheader:'Relatório de Campo',
+    proj_status_active:'Ativo',proj_status_on_hold:'Em pausa',
+    proj_status_completed:'Concluído',proj_status_cancelled:'Cancelado',
+    logo_appears_hint:'Este logo aparecerá nos relatórios associados a este cliente.',
+    crej_desc_full:'Indique as correções que este relatório precisa antes de aprová-lo. O supervisor receberá seu comentário e deverá reenviar para sua revisão.',
+    rej_desc_full:'O relatório será devolvido ao técnico para correções. Por favor explique o motivo.',
+    cust_user_projects_hint:'Selecione quais projetos desta empresa este usuário pode ver.',
+    no_cust_projects_hint:'Este cliente não tem projetos atribuídos ainda. Atribua-os na aba Clientes.',
     manage_users:'👥 Gerenciar Usuários',
 role_customer:'Cliente',
   },
@@ -2294,6 +2315,13 @@ role_customer:'Cliente',
     projects_lbl:'PROGETTI',
     user_access_projects:'ACCESSO AL PROGETTO',
     report_subheader:'Rapporto di Campo',
+    proj_status_active:'Attivo',proj_status_on_hold:'In pausa',
+    proj_status_completed:'Completato',proj_status_cancelled:'Annullato',
+    logo_appears_hint:'Questo logo apparirà nei rapporti associati a questo cliente.',
+    crej_desc_full:"Indica le correzioni necessarie prima di approvare. Il supervisore riceverà il commento e dovrà reinviare per la revisione.",
+    rej_desc_full:'Il rapporto sarà restituito al tecnico per correzioni. Spiega il motivo.',
+    cust_user_projects_hint:'Seleziona quali progetti di questa azienda può vedere questo utente.',
+    no_cust_projects_hint:'Questo cliente non ha ancora progetti assegnati. Assegnali dalla scheda Clienti.',
     manage_users:'👥 Gestisci Utenti',
 role_customer:'Cliente',
   },
@@ -2437,7 +2465,7 @@ function renderDash(){
     return`<div class="pc" onclick="viewProj('${p.id}')">
       <div class="pc-top">
         <div><div class="pc-name">${E(p.name)}</div><div class="pc-meta">${p.code?'📌 '+E(p.code)+'  ':''}${p.client?'🏢 '+E(p.client)+'  ':''}${p.location?'📍 '+E(p.location):''}</div></div>
-        <div style="display:flex;gap:5px;align-items:flex-start;flex-shrink:0;"><span class="bx ${stCls(p.status)}">${p.status}</span><span class="bx">${rc} rpt${rc!==1?'s':''}</span></div>
+        <div style="display:flex;gap:5px;align-items:flex-start;flex-shrink:0;"><span class="bx ${stCls(p.status)}">${t('proj_status_'+p.status.toLowerCase().replace(/ /g,'_'))||p.status}</span><span class="bx">${rc} ${t('reports')}</span></div>
       </div>
     </div>`;
   }).join(''):(`<div class="emp"><div class="eic">🏗</div>${t('no_projects_yet')}</div>`);
@@ -2511,9 +2539,9 @@ function rptRow(r,withProj=false){
     <div class="rr-photo-count"><span class="st-${(r.status||'draft').toLowerCase().replace(/ /g,'-')}">${tRptStatus(r.status||'Draft')}</span></div>
     <div class="rr-actions">
       ${!isCust?(()=>{const lk=isReportLocked(r);const _en=currentUser?.lang==='en';if(lk==='customer')return`<span class="bx" style="font-family:var(--mo);font-size:8px;border-color:var(--gn);color:var(--gn);">🔒 ${_en?'CLOSED':'CERRADO'}</span>`;if(lk==='approved')return hasPerm('approve_reports')?`<button class="ib" style="color:var(--rd);border-color:var(--rd);" onclick="openReject('${r.id}')">↩ ${_en?'Reject':'Rechazar'}</button>`:'';return`<button class="ib ed" onclick="editR('${r.id}')">✏ ${_en?'Edit':'Editar'}</button>`;})():''}
-      <button class="ib" onclick="viewReport('${r.id}')">👁 ${currentUser?.lang==='en'?'View':'Ver'}</button>
+      <button class="ib" onclick="viewReport('${r.id}')">👁 ${currentUser?.t('view_label')}</button>
       ${!isCust?`<button class="ib gn" onclick="genPDF('${r.id}')">📄 PDF</button>`:''}
-      ${isCust&&r.status==='Pending Customer'?`<button class="ib" style="background:rgba(100,149,237,.15);border-color:#6495ed;color:#6495ed;" onclick="openCustAppr('${r.id}')">🤝 ${currentUser?.lang==='en'?'Sign':'Firmar'}</button><button class="ib" style="border-color:var(--am);color:var(--am);" onclick="openCustReject('${r.id}')">↩ ${currentUser?.lang==='en'?'Correct':'Corregir'}</button>`:''}
+      ${isCust&&r.status==='Pending Customer'?`<button class="ib" style="background:rgba(100,149,237,.15);border-color:#6495ed;color:#6495ed;" onclick="openCustAppr('${r.id}')">🤝 ${currentUser?.t('sign_label')}</button><button class="ib" style="border-color:var(--am);color:var(--am);" onclick="openCustReject('${r.id}')">↩ ${currentUser?.t('correct_label')}</button>`:''}
       ${!isCust?(()=>{const lk2=isReportLocked(r);const _en2=currentUser?.lang==='en';if(lk2==='customer')return currentUser?.role==='admin'?`<button class="ib rd" onclick="delR('${r.id}')" title="${t('admin_only_closed')}">🗑</button>`:'';return`<button class="ib" onclick="delR('${r.id}')">🗑</button>`;})():''}
     </div>
   </div>`;
@@ -2666,9 +2694,9 @@ function renderProjs(){
         </div>
         <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:flex-start;flex-shrink:0;">
           ${(()=>{const od=p.end&&new Date(p.end+'T23:59:00')<new Date()&&p.status!=='Completed'&&p.status!=='Cancelled';return od?'<span class="bx" style="background:rgba(224,82,82,.15);border-color:var(--rd);color:var(--rd);" title="End date passed">⚠ Atrasado</span>':''})()}
-          <span class="bx ${stCls(p.status)}">${p.status}</span>
+          <span class="bx ${stCls(p.status)}">${t('proj_status_'+p.status.toLowerCase().replace(/ /g,'_'))||p.status}</span>
           ${p.requireCustomerApproval?'<span class="bx" style="background:rgba(100,149,237,.12);border-color:#6495ed;color:#6495ed;" title="Requires customer sign-off">🤝 Cust.</span>':''}
-          <span class="bx">${rc} rpt${rc!==1?'s':''}</span>
+          <span class="bx">${rc} ${t('reports')}</span>
           <button class="ib vw" onclick="viewProj('${p.id}')" title="View">📋</button>
           ${canMgr?`<button class="ib ed" onclick="openPM('${p.id}')" title="Edit">✏</button>`:''}
           ${canMgr?`<button class="ib" onclick="delP('${p.id}')" title="Delete">🗑</button>`:''}
@@ -2929,23 +2957,49 @@ function delM(id){if(!confirm((t('confirm_delete_short'))))return;DB.materials=D
 // CHECKLISTS PAGE
 // ═══════════════════════════════════════════════
 const CATS=['General','Safety','Electrical','Mechanical','Equipment','Admin','Environment','Quality'];
+const CATS_ES=['General','Seguridad','Eléctrico','Mecánico','Equipos','Admin','Ambiente','Calidad'];
+const CATS_PT=['Geral','Segurança','Elétrico','Mecânico','Equipamentos','Admin','Ambiente','Qualidade'];
+const CATS_IT=['Generale','Sicurezza','Elettrico','Meccanico','Attrezzatura','Admin','Ambiente','Qualità'];
+function getCats(){
+  const lang=currentUser?.lang||'es';
+  if(lang==='en') return CATS;
+  if(lang==='pt') return CATS_PT;
+  if(lang==='it') return CATS_IT;
+  return CATS_ES;
+}
+// Map display cat back to EN key for storage consistency
+function catToKey(displayCat){
+  const lang=currentUser?.lang||'es';
+  if(lang==='en') return displayCat;
+  const map={es:CATS_ES,pt:CATS_PT,it:CATS_IT}[lang]||CATS_ES;
+  const idx=map.indexOf(displayCat);
+  return idx>=0?CATS[idx]:displayCat;
+}
+// Map EN key to display label
+function keyToCat(key){
+  const lang=currentUser?.lang||'es';
+  if(lang==='en') return key;
+  const map={es:CATS_ES,pt:CATS_PT,it:CATS_IT}[lang]||CATS_ES;
+  const idx=CATS.indexOf(key);
+  return idx>=0?map[idx]:key;
+}
 function openCLB(id=null){
   const _en=currentUser?.lang==='en';
   editCL=id;
   document.getElementById('lbl-cl-modal-title').textContent=id?t('cl_modal_edit'):t('cl_modal_new');
   document.getElementById('clb-name').value='';
   document.getElementById('clb-items').innerHTML='';
-  document.getElementById('clb-sna1').value=_en?'Yes':'Sí';
-  document.getElementById('clb-sna2').value='No';
+  document.getElementById('clb-sna1').value=t('yes_label');
+  document.getElementById('clb-sna2').value=t('no');
   document.getElementById('clb-sna3').value='N/A';
   if(id){const c=DB.checklists.find(cl=>cl.id===id);if(c){
     document.getElementById('clb-name').value=c.name;
-    document.getElementById('clb-sna1').value=c.snaLabels?.[0]||(_en?'Yes':'Sí');
-    document.getElementById('clb-sna2').value=c.snaLabels?.[1]||'No';
+    document.getElementById('clb-sna1').value=c.snaLabels?.[0]||t('yes_label');
+    document.getElementById('clb-sna2').value=c.snaLabels?.[1]||t('no');
     document.getElementById('clb-sna3').value=c.snaLabels?.[2]||'N/A';
-    c.items.forEach(i=>addCLBI(i.text,i.category,i.type||'sna'));
+    c.items.forEach(i=>addCLBI(i.text,keyToCat(i.category),i.type||'sna'));
   }}
-  else{addCLBI('','Safety','sna');addCLBI('','General','sna');}
+  else{addCLBI('',keyToCat('Safety'),'sna');addCLBI('',keyToCat('General'),'sna');}
   openMO('mo-clb');
 }
 const ITEM_TYPES_ES=[
@@ -2962,12 +3016,32 @@ const ITEM_TYPES_EN=[
   {v:'text',l:'Free text'},
   {v:'yesno',l:'Yes / No'},
 ];
-function getItemTypes(){return currentUser?.lang==='en'?ITEM_TYPES_EN:ITEM_TYPES_ES;}
+const ITEM_TYPES_PT=[
+  {v:'sna',l:'Sim/Não/N/A'},
+  {v:'single',l:'Opção única'},
+  {v:'multi',l:'Múltipla escolha'},
+  {v:'text',l:'Texto livre'},
+  {v:'yesno',l:'Sim / Não'},
+];
+const ITEM_TYPES_IT=[
+  {v:'sna',l:'Sì/No/N/A'},
+  {v:'single',l:'Scelta singola'},
+  {v:'multi',l:'Scelta multipla'},
+  {v:'text',l:'Testo libero'},
+  {v:'yesno',l:'Sì / No'},
+];
+function getItemTypes(){
+  const lang=currentUser?.lang||'es';
+  if(lang==='en') return ITEM_TYPES_EN;
+  if(lang==='pt') return ITEM_TYPES_PT;
+  if(lang==='it') return ITEM_TYPES_IT;
+  return ITEM_TYPES_ES;
+}
 function addCLBI(txt='',cat='General',tp='sna'){
   const d=document.createElement('div');d.className='bi';d.style.flexWrap='wrap';
   d.innerHTML=`<span style="color:var(--mu);font-size:12px;">⠿</span>
     <input type="text" placeholder="${t('item_description_ph')}" class="cl-item-plh" value="${E(txt)}" style="flex:1;min-width:160px;">
-    <select class="cs" style="font-size:11px;">${CATS.map(ca=>`<option${ca===cat?' selected':''}>${ca}</option>`).join('')}</select>
+    <select class="cs" style="font-size:11px;">${getCats().map((ca,i)=>`<option value="${CATS[i]}"${CATS[i]===cat||ca===cat?' selected':''}>${ca}</option>`).join('')}</select>
     <select class="cs it-type" style="font-size:11px;">${getItemTypes().map(x=>`<option value="${x.v}"${x.v===tp?' selected':''}>${x.l}</option>`).join('')}</select>
     <button class="ib" onclick="this.closest('.bi').remove()">✕</button>`;
   document.getElementById('clb-items').appendChild(d);
@@ -3199,7 +3273,8 @@ const ROLES=['Electrician','Plumber','Carpenter','Welder','Equipment Operator','
 const ROLES_ES={'Electrician':'Electricista','Plumber':'Gasfiter','Carpenter':'Carpintero','Welder':'Soldador','Equipment Operator':'Operador de Equipos','Laborer':'Jornalero','Engineer':'Ingeniero','Inspector':'Inspector','Foreman':'Capataz','Site Manager':'Jefe de Obra','Supervisor':'Supervisor','Technician':'Técnico','Other':'Otro'};
 const ROLES_EN={'Electrician':'Electrician','Plumber':'Plumber','Carpenter':'Carpenter','Welder':'Welder','Equipment Operator':'Equipment Operator','Laborer':'Laborer','Engineer':'Engineer','Inspector':'Inspector','Foreman':'Foreman','Site Manager':'Site Manager','Supervisor':'Supervisor','Technician':'Technician','Other':'Other'};
 // Traduce rol de trabajador al idioma actual
-function tRole(s){const lang=currentUser?.lang||'es';return(lang==='en'?ROLES_EN:ROLES_ES)[s]||s||'—';}
+const ROLES_ALL={es:ROLES_ES,en:ROLES_EN,pt:ROLES_PT,it:ROLES_IT};
+function tRole(s){const lang=currentUser?.lang||'es';return(ROLES_ALL[lang]||ROLES_ES)[s]||s||'—';}
 // Translate a weather key (stored as data-en value) to current user's language
 function tWeather(key){
   if(!key) return '';
@@ -3213,22 +3288,34 @@ function tWeatherArr(arr,lang){
   if(!arr||!arr.length) return [];
   return arr.map(w=>tWeather(w));
 }
-function tRoleOpt(sel){const lang=currentUser?.lang||'es';const map=lang==='en'?ROLES_EN:ROLES_ES;return ROLES.map(v=>`<option value="${v}"${v===sel?' selected':''}>${map[v]||v}</option>`).join('');}
+function tRoleOpt(sel){const lang=currentUser?.lang||'es';const map=ROLES_ALL[lang]||ROLES_ES;return ROLES.map(v=>`<option value="${v}"${v===sel?' selected':''}>${map[v]||v}</option>`).join('');}
 const ESTAT=['In use','Idle','Off-site','Under repair'];
+const ROLES_PT={'Electrician':'Eletricista','Plumber':'Encanador','Carpenter':'Carpinteiro','Welder':'Soldador','Equipment Operator':'Operador de Equipamentos','Laborer':'Trabalhador','Engineer':'Engenheiro','Inspector':'Inspetor','Foreman':'Encarregado','Site Manager':'Gerente de Obra','Supervisor':'Supervisor','Technician':'Técnico','Other':'Outro'};
+const ROLES_IT={'Electrician':'Elettricista','Plumber':'Idraulico','Carpenter':'Falegname','Welder':'Saldatore','Equipment Operator':'Operatore Attrezzature','Laborer':'Manovale','Engineer':'Ingegnere','Inspector':'Ispettore','Foreman':'Caposquadra','Site Manager':'Direttore Cantiere','Supervisor':'Supervisore','Technician':'Tecnico','Other':'Altro'};
+
 const ESTAT_ES={'In use':'En uso','Idle':'Disponible','Off-site':'Fuera de sitio','Under repair':'En reparación'};
+const ESTAT_PT={'In use':'Em uso','Idle':'Disponível','Off-site':'Fora do local','Under repair':'Em manutenção'};
+const ESTAT_IT={'In use':'In uso','Idle':'Disponibile','Off-site':'Fuori cantiere','Under repair':'In riparazione'};
+const ESTAT_ALL={es:ESTAT_ES,en:ESTAT_EN,pt:ESTAT_PT,it:ESTAT_IT};
 const ESTAT_EN={'In use':'In use','Idle':'Idle','Off-site':'Off-site','Under repair':'Under repair'};
 // Traduce estado de equipo al idioma actual
-function tEstat(s){const lang=currentUser?.lang||'es';return(lang==='en'?ESTAT_EN:ESTAT_ES)[s]||s||'—';}
-function tEstatOpt(s){const lang=currentUser?.lang||'es';return ESTAT.map(v=>`<option value="${v}"${v===s?' selected':''}>${(lang==='en'?ESTAT_EN:ESTAT_ES)[v]||v}</option>`).join('');}
+function tEstat(s){const lang=currentUser?.lang||'es';return(ESTAT_ALL[lang]||ESTAT_ES)[s]||s||'—';}
+function tEstatOpt(s){const lang=currentUser?.lang||'es';const map=ESTAT_ALL[lang]||ESTAT_ES;return ESTAT.map(v=>`<option value="${v}"${v===s?' selected':''}>${map[v]||v}</option>`).join('');}
 const TSTAT=['Pending','In Progress','Completed'];
 const TSTAT_ES={Pending:'Pendiente','In Progress':'En curso',Completed:'Completado'};
 const TSTAT_EN={Pending:'Pending','In Progress':'In Progress',Completed:'Completed'};
-// Traduce estado de tarea: Pending→Pendiente, etc.
-function tStat(s){const lang=currentUser?.lang||'es';return(lang==='en'?TSTAT_EN:TSTAT_ES)[s]||s;}
+const TSTAT_PT={Pending:'Pendente','In Progress':'Em andamento',Completed:'Concluído'};
+const TSTAT_IT={Pending:'In attesa','In Progress':'In corso',Completed:'Completato'};
+const TSTAT_ALL={es:TSTAT_ES,en:TSTAT_EN,pt:TSTAT_PT,it:TSTAT_IT};
+// Traduce estado de tarea
+function tStat(s){const lang=currentUser?.lang||'es';return(TSTAT_ALL[lang]||TSTAT_ES)[s]||s;}
 const RSTATUS_ES={Draft:'Borrador',Filling:'En proceso',Review:'En revisión',Approved:'Aprobado','Pending Customer':'Firma cliente',Rejected:'Rechazado'};
 const RSTATUS_EN={Draft:'Draft',Filling:'Filling',Review:'In Review',Approved:'Approved','Pending Customer':'Customer Sign-Off',Rejected:'Rejected'};
-function tRptStatus(s){const lang=currentUser?.lang||'es';return(lang==='en'?RSTATUS_EN:RSTATUS_ES)[s]||s||'—';}
-function tStatOpt(s){const lang=currentUser?.lang||'es';return TSTAT.map(v=>`<option value="${v}"${v===s?' selected':''}>${(lang==='en'?TSTAT_EN:TSTAT_ES)[v]||v}</option>`).join('');}
+const RSTATUS_PT={Draft:'Rascunho',Filling:'Em preenchimento',Review:'Em revisão',Approved:'Aprovado','Pending Customer':'Assinatura do cliente',Rejected:'Rejeitado'};
+const RSTATUS_IT={Draft:'Bozza',Filling:'In compilazione',Review:'In revisione',Approved:'Approvato','Pending Customer':'Firma del cliente',Rejected:'Rifiutato'};
+const RSTATUS_ALL={es:RSTATUS_ES,en:RSTATUS_EN,pt:RSTATUS_PT,it:RSTATUS_IT};
+function tRptStatus(s){const lang=currentUser?.lang||'es';return(RSTATUS_ALL[lang]||RSTATUS_ES)[s]||s||'—';}
+function tStatOpt(s){const lang=currentUser?.lang||'es';const map=TSTAT_ALL[lang]||TSTAT_ES;return TSTAT.map(v=>`<option value="${v}"${v===s?' selected':''}>${map[v]||v}</option>`).join('');}
 // Agrega una fila de trabajador al formulario de informe
 function addLR(name='',role='Electrician',start='07:00',end='16:00',hrs=''){
   const d=document.createElement('div');d.className='ri';d.style.gridTemplateColumns='2fr 1.2fr 58px 58px 50px 26px';
@@ -3365,8 +3452,8 @@ function addMR(name='',unit='pcs',qty=''){
   document.getElementById('r-mats').appendChild(d);upB('r-mats','bl-m','item');
 }
 function upB(rid,bid,u){const n=document.getElementById(rid).querySelectorAll('.ri').length;const es3=currentUser?.lang!=='en';const units={item:es3?'ítem':'item',task:es3?'tarea':'task',photo:es3?'foto':'photo',entry:es3?'entrada':'entry'};const u2=units[u]||u;document.getElementById(bid).textContent=n+' '+u2+(n!==1&&!es3?'s':n!==1&&es3?'s':'');}
-function impW(){if(!DB.workers.length){toast(t('no_workers_taskforce'),'var(--am)');return;}const act=DB.workers.filter(w=>w.status==='Active');act.forEach(w=>addLR(w.name,w.role,'07:00','16:00',''));toast('✓ '+(currentUser?.lang==='en'?'IMPORTED':'IMPORTADOS')+' '+act.length+' '+(currentUser?.lang==='en'?'WORKERS':'TRABAJADORES'));}
-function impM(){if(!DB.materials.length){toast(t('no_materials_catalog'),'var(--am)');return;}DB.materials.forEach(m=>addMR(m.name,m.unit,m.qty||''));toast('✓ '+(currentUser?.lang==='en'?'IMPORTED':'IMPORTADOS')+' '+DB.materials.length+' '+(currentUser?.lang==='en'?'MATERIALS':'MATERIALES'));}
+function impW(){if(!DB.workers.length){toast(t('no_workers_taskforce'),'var(--am)');return;}const act=DB.workers.filter(w=>w.status==='Active');act.forEach(w=>addLR(w.name,w.role,'07:00','16:00',''));toast('✓ '+(currentUser?.t('imported'))+' '+act.length+' '+(currentUser?.t('workers_stat')));}
+function impM(){if(!DB.materials.length){toast(t('no_materials_catalog'),'var(--am)');return;}DB.materials.forEach(m=>addMR(m.name,m.unit,m.qty||''));toast('✓ '+(currentUser?.t('imported'))+' '+DB.materials.length+' '+(currentUser?.t('materials')));}
 
 // PHOTOS — list layout with inline caption
 let reportPhotos=[]; // [{src, caption}]
@@ -3490,7 +3577,7 @@ function openCLP(){
 function loadCL(id){
   const cl=DB.checklists.find(c=>c.id===id);if(!cl)return;
   activeCL={templateId:id,name:cl.name,snaLabels:cl.snaLabels||['Si','No','N/A'],items:cl.items.map(i=>({...i,type:i.type||'sna',checked:false,sna:'',multiSel:[],textAns:'',photos:[],note:''}))};
-  renderCLR();closeMO('mo-clpick');toast('✓ '+(currentUser?.lang==='en'?'LOADED: ':'CARGADO: ')+cl.name.toUpperCase());
+  renderCLR();closeMO('mo-clpick');toast('✓ '+(currentUser?.t('loaded_label'))+cl.name.toUpperCase());
 }
 
 function renderCLR(){
@@ -3529,7 +3616,7 @@ function renderCLR(){
       } else if(tp==='yesno'){
         ansHtml=`<div class="sna">
           <button class="sna-btn si ${item.singleSel==='si'?'on':''}" onclick="setCLISingle('${item.id}','si')">${t('yes_label')}</button>
-          <button class="sna-btn no ${item.singleSel==='no'?'on':''}" onclick="setCLISingle('${item.id}','no')">${currentUser?.lang==='en'?'No':'No'}</button>
+          <button class="sna-btn no ${item.singleSel==='no'?'on':''}" onclick="setCLISingle('${item.id}','no')">${currentUser?.t('no')}</button>
         </div>`;
       } else if(tp==='single'){
         const opts=item.opts||(activeCL.snaLabels||['Si','No','N/A']);
@@ -3543,7 +3630,7 @@ function renderCLR(){
           <button onclick="addCLIOpt('${item.id}')" style="background:none;border:1px dashed var(--bd);color:var(--mu);font-size:10px;padding:2px 7px;cursor:pointer;">＋</button>
         </div>`;
       } else if(tp==='text'){
-        ansHtml=`<input type="text" placeholder="${currentUser?.lang==='en'?'Free text answer...':'Respuesta libre...'}" value="${E(item.textAns||'')}" oninput="setCLIText('${item.id}',this.value)" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:5px 8px;font-size:12px;outline:none;border-left:2px solid var(--am);">`;
+        ansHtml=`<input type="text" placeholder="${currentUser?.t('free_text_ph')}" value="${E(item.textAns||'')}" oninput="setCLIText('${item.id}',this.value)" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:5px 8px;font-size:12px;outline:none;border-left:2px solid var(--am);">`;
       }
       row.innerHTML=`
         <div class="cli-top" style="${unanswered?'border-left:2px solid var(--rd);padding-left:6px;':'border-left:2px solid var(--gn);padding-left:6px;'}">
@@ -3995,7 +4082,15 @@ function doReject(){
 
 const OCC_TYPES_ES=['Casi accidente','Primeros auxilios','Tratamiento médico','Daño a la propiedad','Ambiental','Falla de equipo','Incidente de seguridad','Otro'];
 const OCC_TYPES_EN=['Near miss','First aid','Medical treatment','Property damage','Environmental','Equipment failure','Security incident','Other'];
-function getOccTypes(){return (currentUser?.lang||'es')==='es'?OCC_TYPES_ES:OCC_TYPES_EN;}
+const OCC_TYPES_PT=['Quase acidente','Primeiros socorros','Tratamento médico','Dano à propriedade','Ambiental','Falha de equipamento','Incidente de segurança','Outro'];
+const OCC_TYPES_IT=['Quasi incidente','Primo soccorso','Trattamento medico','Danno alla proprietà','Ambientale','Guasto attrezzatura','Incidente di sicurezza','Altro'];
+function getOccTypes(){
+  const lang=currentUser?.lang||'es';
+  if(lang==='en') return OCC_TYPES_EN;
+  if(lang==='pt') return OCC_TYPES_PT;
+  if(lang==='it') return OCC_TYPES_IT;
+  return OCC_TYPES_ES;
+}
 // Agrega un bloque de ocurrencia/incidente al formulario
 function addOCC(type='',time='',desc='',action='',photos=[],captions=[]){
   if(!type)type=t('near_miss_label');
@@ -4109,7 +4204,7 @@ function genPDF(id,dataOverride){
   let r=dataOverride;
   if(!r&&id){r=DB.reports.find(rp=>rp.id===id);}
   if(!r){r=collectRpt();}
-  toast(currentUser?.lang==='en'?'\ud83d\udcc4 OPENING PDF...':'\ud83d\udcc4 ABRIENDO PDF...');
+  toast(t('opening_pdf'));
   const sig=r.signature||'';
   const proj=DB.projects.find(p=>p.id===r.projId)||null;
   const clit=r.checklist?.items||[];
@@ -4241,7 +4336,7 @@ tr:nth-child(even) td{background:#fafafa;}
     ${custObj?.logo?`<img src="${custObj.logo}" style="height:42px;max-width:90px;object-fit:contain;">` :''}
   </div>
 </div>
-<div class="status-bar">${pdfLang==='es'?(RSTATUS_ES[r.status]||r.status||'Borrador'):(RSTATUS_EN[r.status]||r.status||'Draft')}</div>
+<div class="status-bar">${(RSTATUS_ALL[pdfLang]||RSTATUS_ES)[r.status]||r.status||pt('draft')}</div>
 ${r.status==='Rejected'&&r.rejectionReason?`<div style="background:#fff0f0;border-left:4px solid #c43c3c;padding:8px 28px;font-size:10px;color:#8b1a1a;"><strong>${pt('rejected_by')}:</strong> ${r.rejectedBy||'—'} &nbsp;|&nbsp; <strong>${pt('rejection_reason')}:</strong> ${r.rejectionReason}</div>`:''}
 <table class="rpt-outer"><thead><tr><td><div class="rpt-hdr-cell"><div class="rpt-hdr-inner">
   <div style="display:flex;align-items:center;gap:10px;">
@@ -4266,7 +4361,7 @@ ${!r.disabledSections?.includes('sec-job')?`
 <div class="sec-title">${pt('report_info')}</div>
 <table>
   <tr><th>${pt('report_id_lbl')}</th><th>${pt('report_number')}</th><th>${pt('date')}</th><th>${pt('status')}</th></tr>
-  <tr><td><strong>${r.id}</strong></td><td>#${r.num||'—'}</td><td>${r.date||'—'}</td><td style="color:${statusColor};font-weight:700;">${pdfLang==='es'?(RSTATUS_ES[r.status]||r.status||'Borrador'):(RSTATUS_EN[r.status]||r.status||'Draft')}</td></tr>
+  <tr><td><strong>${r.id}</strong></td><td>#${r.num||'—'}</td><td>${r.date||'—'}</td><td style="color:${statusColor};font-weight:700;">${(RSTATUS_ALL[pdfLang]||RSTATUS_ES)[r.status]||r.status||'—'}</td></tr>
 </table>
 <div class="sec-title">${pt('report_info')}</div>
 <div class="g2">
@@ -4291,13 +4386,13 @@ ${!r.disabledSections?.includes('sec-weather')&&(r.weather?.length||r.temp)?`
 ${!r.disabledSections?.includes('sec-labor')&&r.labor?.length?`
 <div class="sec-title">${pt('labor')} (${r.labor.length})</div>
 <table><thead><tr><th>${pt('name')}</th><th>${pt('role')}</th><th>${pt('start')}</th><th>${pt('end')}</th><th>${pt('hours')}</th></tr></thead><tbody>
-${r.labor.map(w=>`<tr><td><strong>${w.name||'—'}</strong></td><td>${pdfLang==='en'?w.role:(ROLES_ES[w.role]||w.role||'—')}</td><td>${w.start||'—'}</td><td>${w.end||'—'}</td><td>${w.hrs||'—'}</td></tr>`).join('')}
+${r.labor.map(w=>`<tr><td><strong>${w.name||'—'}</strong></td><td>${(ROLES_ALL[pdfLang]||ROLES_ES)[w.role]||w.role||'—'}</td><td>${w.start||'—'}</td><td>${w.end||'—'}</td><td>${w.hrs||'—'}</td></tr>`).join('')}
 </tbody></table>`:''}
 
 ${!r.disabledSections?.includes('sec-equip')&&r.equip?.length?`
 <div class="sec-title">${pt('equipment')} (${r.equip.length})</div>
 <table><thead><tr><th>${pt('equipment')}</th><th>${pt('status')}</th></tr></thead><tbody>
-${r.equip.map(e=>`<tr><td><strong>${e.desc||'—'}</strong></td><td>${pdfLang==='en'?e.status:(ESTAT_ES[e.status]||e.status||'—')}</td></tr>`).join('')}
+${r.equip.map(e=>`<tr><td><strong>${e.desc||'—'}</strong></td><td>${(ESTAT_ALL[pdfLang]||ESTAT_ES)[e.status]||e.status||'—'}</td></tr>`).join('')}
 </tbody></table>`:''}
 
 ${(()=>{
@@ -4306,7 +4401,7 @@ ${(()=>{
   const taskTable=`
 <div class="sec-title">${pt('tasks')} (${r.tasks.length})</div>
 <table><thead><tr><th style="width:70%">${pt('task_description')}</th><th>${pt('status')}</th></tr></thead><tbody>
-${r.tasks.map(t=>`<tr><td>${t.desc||'—'}${t.comment?`<div style="font-size:9px;color:#888;margin-top:2px;font-style:italic;">${t.comment}</div>`:''}</td><td class="${t.status==='Completed'?'sd':t.status==='In Progress'?'sp':'sk'}" style="white-space:nowrap;">${pdfLang==='en'?t.status:(TSTAT_ES[t.status]||t.status||'—')}</td></tr>`).join('')}
+${r.tasks.map(t=>`<tr><td>${t.desc||'—'}${t.comment?`<div style="font-size:9px;color:#888;margin-top:2px;font-style:italic;">${t.comment}</div>`:''}</td><td class="${t.status==='Completed'?'sd':t.status==='In Progress'?'sp':'sk'}" style="white-space:nowrap;">${(TSTAT_ALL[pdfLang]||TSTAT_ES)[t.status]||t.status||'—'}</td></tr>`).join('')}
 </tbody></table>`;
   // Photo evidence section — same style as checklist photo evidence
   const tasksWithPhotos=r.tasks.filter(t=>(t.photos||[]).length>0);
@@ -4319,7 +4414,7 @@ ${r.tasks.map(t=>`<tr><td>${t.desc||'—'}${t.comment?`<div style="font-size:9px
       return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;">'+imgs+empty+'</div>';
     }).join('');
     const statusCls=t.status==='Completed'?'color:#2e7d52;':t.status==='In Progress'?'color:#c97800;':'color:#888;';
-    const tStatLabel=pdfLang==='en'?t.status:(TSTAT_ES[t.status]||t.status||'—');
+    const tStatLabel=(TSTAT_ALL[pdfLang]||TSTAT_ES)[t.status]||t.status||'—';
     return '<div style="margin-bottom:14px;page-break-inside:avoid;"><div style="font-size:9px;letter-spacing:1px;color:#5a5040;background:#f5f2ed;padding:5px 8px;margin-bottom:8px;border-left:3px solid #f5a623;font-weight:600;">'+(t.desc||'—')+'<span style="float:right;'+statusCls+'">'+tStatLabel+'</span></div>'+pairHTML+'</div>';
   }).join('');
   const photoSection=tasksWithPhotos.length?`
@@ -4719,7 +4814,7 @@ function applyLang(){
   _setTxt('lbl-cm-phone',t('cust_phone_lbl'));
   _setTxt('lbl-cm-notes',t('cust_notes_lbl'));
   _setTxt('lbl-cust-logo-sec',t('cust_logo_lbl'));
-  _setTxt('lbl-cust-logo-hint',es?'Este logo aparecerá en los informes asociados a este cliente.':'This logo will appear on reports associated with this customer.');
+  _setTxt('lbl-cust-logo-hint',t('logo_appears_hint'));
   _setTxt('lbl-cm-proj-sec',t('cust_projects_lbl'));
   _setTxt('btn-cust-cancel',t('cancel'));
   _setTxt('btn-cust-save',t('cust_save_btn'));
@@ -4966,14 +5061,14 @@ function applyLang(){
   _setPlh('csig-role', t('ph_supervisor'));
   // Customer reject modal
   _setTxt('crej-title', t('crej_title'));
-  _setTxt('crej-desc', es?'Indica qué correcciones necesita este informe antes de aprobarlo. El supervisor recibirá tu comentario y deberá volver a enviar para tu revisión.':'Indicate what corrections this report needs before you can approve it. The supervisor will receive your comment and must resubmit for your review.');
+  _setTxt('crej-desc', t('crej_desc_full'));
   _setTxt('crej-lbl', t('crej_reason_lbl'));
   _setPlh('cust-reject-comment', t('ph_notes_obs'));
   _setTxt('crej-cancel', t('cancel'));
   _setTxt('crej-submit', t('crej_title'));
   // Reject modal
   _setTxt('rej-title', t('rej_title'));
-  _setTxt('reject-desc', es?'El informe será devuelto al técnico para correcciones. Por favor explica el motivo.':'The report will be returned to the technician for corrections. Please explain the reason.');
+  _setTxt('reject-desc', t('rej_desc_full'));
   _setTxt('reject-reason-lbl', t('rej_reason_lbl'));
   _setPlh('reject-comment', t('rej_reason_ph'));
   _setTxt('rej-cancel', t('cancel'));
@@ -5495,9 +5590,9 @@ function refreshUCustProjs(){
   if(cust){
     ps.style.display='block';
     if(lbl)lbl.textContent=es?'PROYECTOS DE '+cust.name.toUpperCase():'PROJECTS FROM '+cust.name.toUpperCase();
-    if(hint)hint.textContent=es?'Selecciona qué proyectos de esta empresa puede ver este usuario.':'Select which projects from this company this user can see.';
+    if(hint)hint.textContent=t('cust_user_projects_hint');
     const custProjs=DB.projects.filter(p=>(cust.projects||[]).includes(p.id));
-    const noProjs=es?'Este cliente no tiene proyectos asignados aún. Asígnalos desde la pestaña Clientes.':'This customer has no assigned projects yet.';
+    const noProjs=t('no_cust_projects_hint');
     pg.innerHTML=custProjs.length?custProjs.map(p=>{
       const checked=user&&(user.projects||[]).includes(p.id)?'checked':'';
       return`<label class="pi"><input type="checkbox" value="${p.id}" ${checked}> ${E(p.name)}</label>`;
