@@ -1047,6 +1047,7 @@ function ALL_PERMS(){return Object.keys(PERM_LABELS);}
 
 // ═══════════════════════════════════════════════
 // i18n — TRANSLATIONS
+let currentUser=null;
 // ═══════════════════════════════════════════════
 const I18N={
   es:{
@@ -1204,7 +1205,6 @@ let curProjId=null;
 let sgCanvas=null,sgCtx=null,sgDrawing=false,sgMarked=false;
 let curReportStatus='Draft';
 // Auth
-let currentUser=null;
 // Lightbox
 let lbPhotos=[],lbCaptions=[],lbIdx=0,lbContext=null;
 
@@ -3305,8 +3305,9 @@ async function doLogin(){
   }
 }
 function applyLang(){
-  // Guard: ensure required variables are initialized
-  if(typeof ROLES_ES==='undefined'||typeof currentUser==='undefined')return;
+  // Guard: ensure required variables are initialized before running
+  try{if(currentUser===undefined||currentUser===null)return;}catch(e){return;}
+  try{if(typeof ROLES_ES==='undefined')return;}catch(e){return;}
   const lang=currentUser?.lang||'es';
   const es=lang==='es';
 
