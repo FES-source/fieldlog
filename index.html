@@ -1,4 +1,4 @@
-<!-- FieldLog v1.4.2 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.4.3 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -594,7 +594,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   </div>
   <div class="sbx"><input type="text" id="wk-search" placeholder="🔍  Buscar por nombre, cargo, estado…" oninput="renderWorkers()"><span class="sbx-ic">⌕</span></div>
   <div class="card">
-    <div class="ch"><div class="ct">👷 Team Members</div><span class="bx" id="wk-bx">0 members</span></div>
+    <div class="ch"><div class="ct" id="lbl-team-members">👷 Team Members</div><span class="bx" id="wk-bx">0 members</span></div>
     <div class="cb" style="padding-top:0;">
       <div class="tw"><table><thead><tr><th data-i18n="name">Nombre</th><th data-i18n="user_role">Rol</th><th data-i18n="contact">Contacto</th><th data-i18n="user_status">Estado</th><th></th></tr></thead><tbody id="wk-tb"></tbody></table></div>
       <div class="emp" id="wk-emp" style="display:none;"><div class="eic">👷</div>NO MEMBERS YET</div>
@@ -616,7 +616,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="ch"><div class="ct" id="mat-cat-hdr">📦 Materials Catalog</div><span class="bx" id="mc-bx">0 items</span></div>
     <div class="cb" style="padding-top:0;">
       <div class="tw"><table><thead><tr><th data-i18n="mat_item">Ítem</th><th data-i18n="mat_category">Categoría</th><th data-i18n="unit">Unidad</th><th data-i18n="mat_default_qty">Cant. por defecto</th><th></th></tr></thead><tbody id="mc-tb"></tbody></table></div>
-      <div class="emp" id="mc-emp" style="display:none;"><div class="eic">📦</div>NO MATERIALS YET</div>
+      <div class="emp" id="mc-emp" style="display:none;"><div class="eic">📦</div><span id="lbl-no-materials">NO MATERIALS YET</span></div>
     </div>
   </div>
 </div></div>
@@ -871,7 +871,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div id="p-mdisp" style="margin-bottom:8px;min-height:24px;"></div>
     <div style="display:flex;gap:7px;"><select id="p-msel" style="flex:1;font-size:12px;"><option value="">— Agregar de Cuadrilla —</option></select><button class="btn sm bs" onclick="addPM()"><span id="lbl-add-member-btn">+ Agregar</span></button></div>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-proj')" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveP()" data-i18n="save">Guardar</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-proj')" data-i18n="cancel" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveP()" data-i18n="save">Guardar</button></div>
 </div></div>
 
 <!-- WORKER MODAL -->
@@ -882,7 +882,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="fg f2" style="margin-top:10px;"><div><label>Teléfono</label><input type="text" id="w-phone" placeholder="+56 9 0000 0000"></div><div><label data-i18n="user_email">Email</label><input type="email" id="w-email" placeholder="correo@empresa.com"></div></div>
     <div class="fg f2" style="margin-top:10px;"><div><label>ID Empleado</label><input type="text" id="w-id" placeholder="EMP-001"></div><div><label>Estado</label><select id="w-stat"><option value="Active">Activo</option><option value="On Leave">Con permiso</option><option value="Inactive">Inactivo</option></select></div></div>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-worker')" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveW()" data-i18n="save">Guardar</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-worker')" data-i18n="cancel" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveW()" data-i18n="save">Guardar</button></div>
 </div></div>
 
 <!-- MATERIAL MODAL -->
@@ -893,7 +893,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="fg f3" style="margin-top:10px;"><div><label>Categoría</label><select id="m-cat"><option>Eléctrico</option><option>Gasfitería</option><option>Estructural</option><option>Mecánico</option><option>Fijaciones</option><option>Seguridad</option><option>Hormigón</option><option>Terminaciones</option><option>Otro</option></select></div><div><label>Unidad</label><select id="m-unit"><option>pcs</option><option>ft</option><option>m</option><option>lbs</option><option>kg</option><option>boxes</option><option>rolls</option><option>bags</option><option>gal</option><option>L</option><option>set</option></select></div><div><label>Cantidad</label><input type="number" id="m-qty" placeholder="0" min="0"></div></div>
     <div class="fg f1" style="margin-top:10px;"><div><label>Notas</label><input type="text" id="m-notes" placeholder="Especificación, marca o info..."></div></div>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-mat')">Cancelar</button><button class="btn bp" onclick="saveM()">Save</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-mat')" data-i18n="cancel" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveM()">Save</button></div>
 </div></div>
 
 <!-- CL PICKER -->
@@ -920,7 +920,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <label id="lbl-cl-items">Ítems</label><div id="clb-items" style="margin-top:7px;"></div>
     <button class="adb" onclick="addCLBI()"><span id="lbl-add-cl-item">＋ Agregar Ítem</span></button>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-clb')">Cancelar</button><button class="btn bp" onclick="saveCLT()"><span id="lbl-save-cl">Guardar Plantilla</span></button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-clb')" data-i18n="cancel" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveCLT()"><span id="lbl-save-cl">Guardar Plantilla</span></button></div>
 </div></div>
 
 
@@ -964,7 +964,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
       <div id="u-perm-grid" class="pg-perm"></div>
     </div>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-user')" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveUser()" data-i18n="save">Guardar</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-user')" data-i18n="cancel" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveUser()" data-i18n="save">Guardar</button></div>
 </div></div>
 
 <!-- CHANGE PASSWORD MODAL -->
@@ -974,7 +974,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div style="margin-bottom:10px;"><label>Nueva Contraseña *</label><input type="password" id="chpw-new" placeholder="Mín. 6 caracteres"></div>
     <div><label>Confirmar *</label><input type="password" id="chpw-cfm" placeholder="Repetir contraseña"></div>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-chpw')">Cancelar</button><button class="btn bp" onclick="saveChPW()">Change</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-chpw')" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveChPW()">Change</button></div>
 </div></div>
 
 <!-- CUSTOMER MODAL -->
@@ -1004,7 +1004,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:8px;" id="lbl-cm-proj-sec">PROYECTOS ASIGNADOS AL CLIENTE</div>
     <div id="cm-proj-grid" class="pg-perm"></div>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-cust')" id="btn-cust-cancel">Cancelar</button><button class="btn bp" onclick="saveCust()" id="btn-cust-save">Guardar Cliente</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-cust')" id="btn-cust-cancel" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveCust()" id="btn-cust-save">Guardar Cliente</button></div>
 </div></div>
 
 <script>
@@ -1062,7 +1062,7 @@ const I18N={
     submitted_by:'FIRMA TÉCNICO',approved_by:'FIRMA SUPERVISOR',customer_signoff:'FIRMA CLIENTE',
     // PDF sections
     daily_report:'INFORME DIARIO DE CAMPO',report_number:'N° Informe',date:'Fecha',status:'Estado',supervisor:'Supervisor',
-    client:(currentUser?.lang==='en'?'Customer':'Cliente'),location:'Ubicación',shift:'Turno',temperature:'Temperatura',wind:'Viento',work_impact:'Impacto en obra',
+    client:'Cliente',location:'Ubicación',shift:'Turno',temperature:'Temperatura',wind:'Viento',work_impact:'Impacto en obra',
     name:'Nombre',role:'Rol',hours:'Horas',start:'Inicio',end:'Término',
     task_description:'Descripción de tarea',activity:'Actividades',
     material:'Material',unit:'Unidad',qty:'Cant.',
@@ -1090,7 +1090,7 @@ const I18N={
     project_desc:'Descripción / Alcance',project_logos:'LOGOS DEL PROYECTO',
     logo_contractor:'Logo 1 (Empresa / Contratista)',logo_owner:'Logo 2 (Cliente / Propietario)',
     customer_approval_step:'PASO DE APROBACIÓN DEL CLIENTE',customer_approval_desc:'Requiere firma del cliente después de la aprobación del supervisor',
-    assigned_team:'MIEMBROS ASIGNADOS AL EQUIPO',add_from_taskforce:(currentUser?.lang==='en'?'— Add from Taskforce —':'— Agregar de Cuadrilla —'),
+    assigned_team:'MIEMBROS ASIGNADOS AL EQUIPO',add_from_taskforce:'— Agregar de Cuadrilla —',
     project_customer:'Cliente del Proyecto',
     // User modal
     user_username:'Usuario',user_fullname:'Nombre Completo',user_password:'Contraseña',user_email:'Correo',
@@ -1104,7 +1104,7 @@ const I18N={
     checklist_section:'Checklist de Verificación',photos_section:'Registro Fotográfico',notes_section:'Notas y Comentarios',
     general_notes_label:'Notas Generales',tomorrows_plan_label:'Plan para mañana',
     select_project:'— Seleccionar Proyecto —',add_occurrence:'+ Agregar Ocurrencia',
-    select_checklist:(currentUser?.lang==='en'?'+ Select Checklist':'+ Seleccionar Checklist'),
+    select_checklist:'+ Seleccionar Checklist',
     // Status labels
     all_statuses:'Todos los estados',
     // Misc
@@ -1166,7 +1166,7 @@ const I18N={
     general_notes_label:'General Notes',tomorrows_plan_label:"Tomorrow's Plan",
     select_project:'— Select Project —',add_occurrence:'+ Add Occurrence',
     select_checklist:'+ Select Checklist',
-    select_checklist_es:(currentUser?.lang==='en'?'+ Select Checklist':'+ Seleccionar Checklist'),
+    
     // Status labels
     all_statuses:'All statuses',
     // Misc
@@ -1749,7 +1749,7 @@ function renderWorkers(){
   let wks=DB.workers;
   if(q)wks=wks.filter(w=>[w.name,w.role,w.status,w.empId,w.phone,w.email].some(f=>(f||'').toLowerCase().includes(q)));
   document.getElementById('wk-bx').textContent=DB.workers.length+' members';
-  if(!wks.length){tb.innerHTML='';em.style.display=DB.workers.length?'none':'block';if(!DB.workers.length)em.style.display='block';else{em.textContent=(currentUser?.lang==='en'?'No results':'Sin resultados');em.style.display='block';}return;}
+  if(!wks.length){tb.innerHTML='';em.style.display=DB.workers.length?'none':'block';if(!DB.workers.length)em.style.display='block';else{em.innerHTML=(currentUser?.lang==='en'?'No results':'Sin resultados');em.style.display='block';}return;}
   em.style.display='none';
   tb.innerHTML=wks.map(w=>`<tr>
     <td><strong>${E(w.name)}</strong>${w.empId?` <span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${E(w.empId)}</span>`:''}</td>
@@ -1791,7 +1791,7 @@ function renderMats(){
   let mats=DB.materials;
   if(q)mats=mats.filter(m=>[m.name,m.cat,m.unit,m.notes].some(f=>(f||'').toLowerCase().includes(q)));
   const _matLng=currentUser?.lang==='en';document.getElementById('mc-bx').textContent=DB.materials.length+' items';document.getElementById('mat-cat-hdr').textContent=_matLng?'📦 Materials Catalog':(currentUser?.lang==='en'?'📦 Materials Catalog':'📦 Catálogo de Materiales');
-  if(!mats.length){tb.innerHTML='';em.style.display='block';em.innerHTML=DB.materials.length?'<div class="eic">🔍</div>SIN RESULTADOS':`<div class="eic">📦</div>${currentUser?.lang==='en'?'NO MATERIALS YET':'SIN MATERIALES AÚN'}`;return;}
+  if(!mats.length){tb.innerHTML='';em.style.display='block';em.innerHTML=DB.materials.length?`<div class="eic">🔍</div>${t('no_results')||'SIN RESULTADOS'}`:`<div class="eic">📦</div>${currentUser?.lang==='en'?'NO MATERIALS YET':'SIN MATERIALES AÚN'}`;return;}
   em.style.display='none';
   tb.innerHTML=mats.map(m=>`<tr>
     <td><strong>${E(m.name)}</strong>${m.notes?`<br><span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${E(m.notes)}</span>`:''}</td>
@@ -1840,7 +1840,7 @@ const ITEM_TYPES=[
 function addCLBI(t='',cat='General',tp='sna'){
   const d=document.createElement('div');d.className='bi';d.style.flexWrap='wrap';
   d.innerHTML=`<span style="color:var(--mu);font-size:12px;">⠿</span>
-    <input type="text" placeholder="Descripción del ítem..." class="cl-item-plh" value="${E(t)}" style="flex:1;min-width:160px;">
+    <input type="text" placeholder="${currentUser?.lang==='en'?'Item description...':'Descripción del ítem...'}" class="cl-item-plh" value="${E(t)}" style="flex:1;min-width:160px;">
     <select class="cs" style="font-size:11px;">${CATS.map(ca=>`<option${ca===cat?' selected':''}>${ca}</option>`).join('')}</select>
     <select class="cs it-type" style="font-size:11px;">${ITEM_TYPES.map(x=>`<option value="${x.v}"${x.v===tp?' selected':''}>${x.l}</option>`).join('')}</select>
     <button class="ib" onclick="this.closest('.bi').remove()">✕</button>`;
@@ -3353,6 +3353,7 @@ function applyLang(){
   // ── Section headers ──────────────────────────────
   _setTxt('mat-cat-hdr', es?(currentUser?.lang==='en'?'📦 Materials Catalog':'📦 Catálogo de Materiales'):'📦 Materials Catalog');
   _setTxt('users-hdr', es?'👥 Usuarios del Sistema':'👥 System Users');
+  _setTxt('lbl-team-members', es?'👷 Miembros del Equipo':'👷 Team Members');
   _setTxt('mm-title', es?'📦 Agregar Material':'📦 Add Material');
   _setTxt('wm-title', es?'👷 Agregar Miembro':'👷 Add Member');
   _setTxt('mm-save-btn', es?'Guardar':'Save');
@@ -3529,6 +3530,13 @@ function applyLang(){
   // ── Section label translations (backup - already set via _setTxt below) ──
   // These are set via _setTxt calls in the section toggles section
   // ── Static placeholders ──────────────────────────────────────────────
+  // ── Page search placeholders ─────────────────────────────────────────
+  _setPlh('wk-search', es?'🔍  Buscar por nombre, cargo, estado…':'🔍  Search by name, role, status...');
+  _setPlh('mc-search', es?'🔍  Buscar por nombre, categoría, unidad…':'🔍  Search by name, category, unit...');
+  _setPlh('cust-search', es?'🔍  Buscar clientes...':'🔍  Search customers...');
+  _setPlh('proj-search', es?'🔍  Buscar proyectos…':'🔍  Search projects...');
+  _setPlh('ar-search', es?'Buscar supervisor, fecha...':'Search supervisor, date...');
+  _setPlh('cust-search', es?'🔍  Buscar clientes...':'🔍  Search customers...');
   _setPlh('r-notes', es?'Observaciones, instrucciones o comentarios...':'General observations and notes...');
   _setPlh('r-tom', es?'Descripción de actividades programadas para mañana...':'Planned activities for tomorrow...');
   // ── Photo drop zone ──────────────────────────────────────────────────
@@ -3552,6 +3560,7 @@ function applyLang(){
   document.querySelectorAll('.cl-item-plh').forEach(el=>el.placeholder=es?'Descripción del ítem...':'Item description...');
   _setTxt('lbl-save-cl', es?'Guardar Plantilla':'Save Template');
   _setTxt('lbl-no-templates', es?'SIN PLANTILLAS AÚN':'NO TEMPLATES YET');
+  _setTxt('lbl-no-materials', es?'SIN MATERIALES AÚN':'NO MATERIALS YET');
   _setTxt('lbl-ar-empty', es?'SIN INFORMES AÚN':'NO REPORTS YET');
 
   // ── Buttons & dropdowns without data-i18n ────────────────────────────
@@ -4170,7 +4179,7 @@ document.getElementById('lin-u').addEventListener('keydown',e=>{if(e.key==='Ente
     <label id="reject-reason-lbl">Motivo del rechazo *</label>
     <textarea id="reject-comment" placeholder="Describe qué se necesita corregir..." style="width:100%;min-height:90px;margin-top:6px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:8px;font-size:12px;resize:vertical;outline:none;"></textarea>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-reject')">Cancelar</button><button class="btn" style="background:var(--rd);border-color:var(--rd);color:#fff;" onclick="doReject()">❌ Rechazar y Devolver</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-reject')" data-i18n="cancel">Cancelar</button><button class="btn" style="background:var(--rd);border-color:var(--rd);color:#fff;" onclick="doReject()">❌ Rechazar y Devolver</button></div>
 </div></div>
 
 <!-- SUBMIT SIGNATURE MODAL -->
