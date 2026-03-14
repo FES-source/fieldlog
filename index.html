@@ -1,4 +1,4 @@
-<!-- FieldLog v1.5.3 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
+<!-- FieldLog v1.5.4 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2572,13 +2572,13 @@ function saveReport(){
       const existing=DB.reports[idx];
       Object.assign(existing,data);
       logActivity(existing,'saved');
-      fbSave('reports',existing.id,existing).catch(console.error);
+      fbSave('reports',existing.id,existing).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});
     }
   } else {
     data.activityLog=[];
     logActivity(data,'created');
     DB.reports.push(data);curRptId=data.id;editingRpt=true;
-    fbSave('reports',data.id,data).catch(console.error);
+    fbSave('reports',data.id,data).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});
   }
   renderDash();updateNavBadge();toast(currentUser?.lang==='en'?'✓ SAVED':'✓ GUARDADO');
 }
@@ -2661,12 +2661,12 @@ function doSubmitSigned(){
   const isNew=!(editingRpt&&curRptId);
   if(!isNew){
     const idx=DB.reports.findIndex(r=>r.id===curRptId);
-    if(idx>-1){const ex=DB.reports[idx];Object.assign(ex,data);logActivity(ex,'submitted',currentUser?.lang==='en'?'Signed and sent for review':'Firmado y enviado a revisión');fbSave('reports',ex.id,ex).catch(console.error);}
+    if(idx>-1){const ex=DB.reports[idx];Object.assign(ex,data);logActivity(ex,'submitted',currentUser?.lang==='en'?'Signed and sent for review':'Firmado y enviado a revisión');fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});}
   } else {
     data.activityLog=[];data.createdAt=new Date().toISOString();
     logActivity(data,'created',currentUser?.lang==='en'?'Report created':'Informe creado');logActivity(data,'submitted',currentUser?.lang==='en'?'Signed and sent for review':'Firmado y enviado a revisión');
     DB.reports.push(data);curRptId=data.id;editingRpt=true;
-    fbSave('reports',data.id,data).catch(console.error);
+    fbSave('reports',data.id,data).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});
   }
   closeMO('mo-submit-sig');setBBStatus(nextStatus);renderDash();updateNavBadge();
   toast(currentUser?.lang==='en'?'✓ SIGNED AND SENT FOR REVIEW':'✓ FIRMADO Y ENVIADO A REVISIÓN','var(--am)');
@@ -2699,7 +2699,7 @@ function doApproveSigned(){
   ex.approveSignature=sigData;ex.approvedBy=sigName;ex.approvedByRole=sigRole;ex.approvedAt=new Date().toISOString();
   ex.status=needsCust?'Pending Customer':'Approved';
   const _appLang=currentUser?.lang||'es';logActivity(ex,'approved',(_appLang==='en'?'Signed by ':'Firmado por ')+sigName+(_appLang==='en'?(needsCust?' — awaiting customer sign-off':''):(needsCust?' — esperando firma del cliente':'')));
-  fbSave('reports',ex.id,ex).catch(console.error);closeMO('mo-approve-sig');setBBStatus(ex.status);renderDash();updateNavBadge();
+  fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});closeMO('mo-approve-sig');setBBStatus(ex.status);renderDash();updateNavBadge();
   toast(needsCust?(currentUser?.lang==='en'?'✓ APPROVED — AWAITING CUSTOMER SIGN-OFF':'✓ APROBADO — ESPERANDO FIRMA DEL CLIENTE'):(currentUser?.lang==='en'?'✓ REPORT APPROVED':'✓ INFORME APROBADO'),'var(--gn)');
 }
 
@@ -2728,7 +2728,7 @@ function doCustApprSigned(){
   const ex=DB.reports[idx];
   ex.customerSignature=sigData;ex.customerName=sigName;ex.customerRole=sigRole;
   ex.customerApprovedAt=new Date().toISOString();ex.status='Approved';
-  fbSave('reports',ex.id,ex).catch(console.error);
+  fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});
   logActivity(ex,'approved',(currentUser?.lang==='en'?'Customer sign-off by ':'Firma del cliente por ')+sigName);
   closeMO('mo-custappr-sig');
   closeMO('mo-view');
@@ -2760,7 +2760,7 @@ function doCustReject(){
   ex.custRejectedAt=new Date().toISOString();
   ex.custRejectionReason=reason;
   logActivity(ex,'rejected',(currentUser?.lang==='en'?'Customer requested correction: ':'Cliente solicitó corrección: ')+reason);
-  fbSave('reports',ex.id,ex).catch(console.error);
+  fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});
   closeMO('mo-cust-reject');
   renderDash();renderAllReports();updateNavBadge();
   toast(currentUser?.lang==='en'?'↩ CORRECTION REQUESTED — SENT BACK FOR REVIEW':'↩ CORRECCIÓN SOLICITADA — ENVIADO A REVISIÓN','var(--am)');
@@ -3777,7 +3777,21 @@ async function loadAllData(){
   DB.customers=cus.docs.map(d=>({id:d.id,...d.data()}));
 }
 // Guarda o actualiza un documento en Firestore
-async function fbSave(col,id,data){await fbFns.setDoc(fbFns.doc(fbDB,col,id),data);}
+async function fbSave(col,id,data){
+  // Strip non-serializable fields before saving to Firestore
+  const clean=JSON.parse(JSON.stringify(data, (k,v)=>{
+    // Remove photoData (File/Blob objects) - photos stored as base64 in 'photos' array
+    if(k==='photoData') return undefined;
+    // Firestore doesn't support undefined values
+    return v===undefined?null:v;
+  }));
+  try{
+    await fbFns.setDoc(fbFns.doc(fbDB,col,id),clean);
+  }catch(e){
+    console.error('fbSave error:',col,id,e);
+    throw e;
+  }
+}
 async function fbUpdate(col,id,data){await fbFns.updateDoc(fbFns.doc(fbDB,col,id),data);}
 // Elimina un documento de Firestore
 async function fbDelete(col,id){await fbFns.deleteDoc(fbFns.doc(fbDB,col,id));}
