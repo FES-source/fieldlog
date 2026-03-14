@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.0 | Build: 2026-03-14 | Firebase + PWA Edition | Multi-language Architecture -->
+<!-- FieldLog v1.6.1 | Build: 2026-03-14 | Firebase + PWA Edition | Multi-language Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2094,10 +2094,10 @@ const ITEM_TYPES_EN=[
   {v:'yesno',l:'Yes / No'},
 ];
 function getItemTypes(){return currentUser?.lang==='en'?ITEM_TYPES_EN:ITEM_TYPES_ES;}
-function addCLBI(t='',cat='General',tp='sna'){
+function addCLBI(txt='',cat='General',tp='sna'){
   const d=document.createElement('div');d.className='bi';d.style.flexWrap='wrap';
   d.innerHTML=`<span style="color:var(--mu);font-size:12px;">⠿</span>
-    <input type="text" placeholder="${t('item_description_ph')}" class="cl-item-plh" value="${E(t)}" style="flex:1;min-width:160px;">
+    <input type="text" placeholder="${t('item_description_ph')}" class="cl-item-plh" value="${E(txt)}" style="flex:1;min-width:160px;">
     <select class="cs" style="font-size:11px;">${CATS.map(ca=>`<option${ca===cat?' selected':''}>${ca}</option>`).join('')}</select>
     <select class="cs it-type" style="font-size:11px;">${getItemTypes().map(x=>`<option value="${x.v}"${x.v===tp?' selected':''}>${x.l}</option>`).join('')}</select>
     <button class="ib" onclick="this.closest('.bi').remove()">✕</button>`;
@@ -2111,7 +2111,7 @@ function saveCLT(){
     (document.getElementById('clb-sna3').value.trim()||'N/A')
   ];
   const rows=document.querySelectorAll('#clb-items .bi');const items=[];
-  rows.forEach((r,i)=>{const t=r.querySelector('input').value.trim(),sels=r.querySelectorAll('select'),cat=sels[0]?.value||'General',tp=sels[1]?.value||'sna';if(t)items.push({id:'ci'+Date.now()+i,text:t,category:cat,type:tp});});
+  rows.forEach((r,i)=>{const itemText=r.querySelector('input').value.trim(),sels=r.querySelectorAll('select'),cat=sels[0]?.value||'General',tp=sels[1]?.value||'sna';if(itemText)items.push({id:'ci'+Date.now()+i,text:itemText,category:cat,type:tp});});
   if(!items.length){toast(t('add_at_least_item'),'var(--rd)');return;}
   if(editCL){const ecl=DB.checklists.find(c=>c.id===editCL);Object.assign(ecl,{name,items,snaLabels});fbSave('checklists',editCL,ecl).catch(console.error);toast(t('updated_toast'));}
   else{const ncl={id:'cl'+Date.now(),name,items,snaLabels};DB.checklists.push(ncl);fbSave('checklists',ncl.id,ncl).catch(console.error);toast(t('template_saved'));}
