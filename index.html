@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.18 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.20 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2476,7 +2476,7 @@ function renderDash(){
 
   const dr=document.getElementById('dash-rpts');
   const rr=[...myRpts].slice(-6).reverse();
-  dr.innerHTML=rr.length?rr.map(r=>rptRow(r,true)).join(''):`<div class="emp"><div class="eic">📋</div>${t('no_reports_yet')}</div>`;
+  dr.innerHTML=rr.length?rr.map(r=>rptRow(r,true)).join(''):`<div class="emp"><div class="eic">📋</div>${t('no_reports_yet2')}</div>`;
 }
 
 function stCls(s){return s==='Active'||s==='Approved'?'g':s==='Review'?'r':s==='Filling'||s==='On Hold'?'a':'';}
@@ -2836,7 +2836,7 @@ function renderPDOverview(){
     <div class="card">
       <div class="ch"><div class="ct">📋 ${t('latest_reports_label')}</div><button class="btn sm bs" onclick="switchPDTab('reports')">${t('view_all_label')}</button></div>
       <div class="cb" style="padding-top:8px;">
-        ${rpts.length?[...rpts].slice(-5).reverse().map(r=>rptRow(r,false)).join(''):`<div class="emp"><div class="eic">📋</div>${t('no_reports_yet')}</div>`}
+        ${rpts.length?[...rpts].slice(-5).reverse().map(r=>rptRow(r,false)).join(''):`<div class="emp"><div class="eic">📋</div>${t('no_reports_yet2')}</div>`}
       </div>
     </div>
   `;
@@ -3551,7 +3551,7 @@ function initSig(){
     sgCanvas=nc;
     const w=Math.max(wrap.clientWidth||400,200);
     sgCanvas.width=w;sgCanvas.height=130;
-    sgCtx=sgCanvas.getContext('2d');
+    sgCtx=sgCanvas.getContext('2d',{willReadFrequently:true});
     sgCtx.strokeStyle='#f5a623';sgCtx.lineWidth=2.5;sgCtx.lineCap='round';sgCtx.lineJoin='round';
     sgMarked=false;sgDrawing=false;
     // Events
@@ -3980,7 +3980,7 @@ function initSigModal(canvasId,wrapId){
       if(old)wrap.replaceChild(nc,old);else wrap.appendChild(nc);
       const w=Math.max(wrap.clientWidth||460,200);
       nc.width=w;nc.height=120;
-      const ctx=nc.getContext('2d');
+      const ctx=nc.getContext('2d',{willReadFrequently:true});
       ctx.strokeStyle='#f5a623';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';
       let drawing=false,marked=false;
       function gp(e){const r=nc.getBoundingClientRect();return[(e.clientX-r.left)*nc.width/r.width,(e.clientY-r.top)*nc.height/r.height];}
@@ -3997,12 +3997,12 @@ function initSigModal(canvasId,wrapId){
 }
 function clearSigModal(canvasId){
   const c=document.getElementById(canvasId);if(!c)return;
-  const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);
+  const ctx=c.getContext('2d',{willReadFrequently:true});ctx.clearRect(0,0,c.width,c.height);
 }
 function getSigData(canvasId){
   const c=document.getElementById(canvasId);if(!c)return '';
   // Check if anything drawn by sampling pixels
-  const ctx=c.getContext('2d');
+  const ctx=c.getContext('2d',{willReadFrequently:true});
   const d=ctx.getImageData(0,0,c.width,c.height).data;
   const hasData=d.some((v,i)=>i%4===3&&v>0);
   return hasData?c.toDataURL():'';
