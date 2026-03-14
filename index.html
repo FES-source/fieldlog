@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.12 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.13 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -976,7 +976,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
         <option value="viewer" id="u-role-opt-viewer">Visualizador</option>
         <option value="customer" id="opt-role-customer">Cliente</option>
       </select></div>
-      <div><label data-i18n="user_status">Estado</label><select id="u-stat"><option value="Active">Activo</option><option value="Inactive">Inactivo</option></select></div>
+      <div><label data-i18n="user_status">Estado</label><select id="u-stat"><option value="Active" id="u-opt-active">Activo</option><option value="Inactive" id="u-opt-inactive">Inactivo</option></select></div>
       <div><label data-i18n="user_language">Idioma / Language</label><select id="u-lang"><option value="es" selected>Español</option><option value="en">English</option><option value="pt">Português</option><option value="it">Italiano</option></select></div>
     </div>
     <div class="fg f1" style="margin-top:10px;" id="u-worker-row">
@@ -1054,32 +1054,31 @@ tr:hover td{background:rgba(255,255,255,.018);}
 // PERMISSIONS
 // ═══════════════════════════════════════════════
 const PERM_LABELS={
-  view_reports:'View Reports',
-  create_reports:'Create Reports',
-  edit_reports:'Edit Reports',
-  delete_reports:'Delete Reports',
-  manage_projects:'Manage Projects',
-  manage_taskforce:'Manage Taskforce',
-  manage_materials:'Manage Materials',
-  manage_checklists:'Manage Checklists',
-  approve_reports:'Approve Reports',
-  export_pdf:'Export PDF',
-  customer_signoff:'Customer Sign-Off',
+  view_reports:'View Reports',create_reports:'Create Reports',edit_reports:'Edit Reports',
+  delete_reports:'Delete Reports',manage_projects:'Manage Projects',manage_taskforce:'Manage Taskforce',
+  manage_materials:'Manage Materials',manage_checklists:'Manage Checklists',
+  approve_reports:'Approve Reports',export_pdf:'Export PDF',customer_signoff:'Customer Sign-Off',
 };
 const PERM_LABELS_ES={
-  view_reports:'Ver Informes',
-  create_reports:'Crear Informes',
-  edit_reports:'Editar Informes',
-  delete_reports:'Eliminar Informes',
-  manage_projects:'Gestionar Proyectos',
-  manage_taskforce:'Gestionar Cuadrilla',
-  manage_materials:'Gestionar Materiales',
-  manage_checklists:'Gestionar Checklists',
-  approve_reports:'Aprobar Informes',
-  export_pdf:'Exportar PDF',
-  customer_signoff:'Firma del Cliente',
+  view_reports:'Ver Informes',create_reports:'Crear Informes',edit_reports:'Editar Informes',
+  delete_reports:'Eliminar Informes',manage_projects:'Gestionar Proyectos',manage_taskforce:'Gestionar Cuadrilla',
+  manage_materials:'Gestionar Materiales',manage_checklists:'Gestionar Checklists',
+  approve_reports:'Aprobar Informes',export_pdf:'Exportar PDF',customer_signoff:'Firma del Cliente',
 };
-function getPermLabel(pk){return (currentUser?.lang==='en'?PERM_LABELS:PERM_LABELS_ES)[pk]||pk;}
+const PERM_LABELS_PT={
+  view_reports:'Ver Relatórios',create_reports:'Criar Relatórios',edit_reports:'Editar Relatórios',
+  delete_reports:'Excluir Relatórios',manage_projects:'Gerir Projetos',manage_taskforce:'Gerir Equipe',
+  manage_materials:'Gerir Materiais',manage_checklists:'Gerir Checklists',
+  approve_reports:'Aprovar Relatórios',export_pdf:'Exportar PDF',customer_signoff:'Assinatura do Cliente',
+};
+const PERM_LABELS_IT={
+  view_reports:'Visualizza Rapporti',create_reports:'Crea Rapporti',edit_reports:'Modifica Rapporti',
+  delete_reports:'Elimina Rapporti',manage_projects:'Gestisci Progetti',manage_taskforce:'Gestisci Squadra',
+  manage_materials:'Gestisci Materiali',manage_checklists:'Gestisci Checklist',
+  approve_reports:'Approva Rapporti',export_pdf:'Esporta PDF',customer_signoff:'Firma del Cliente',
+};
+const PERM_LABELS_ALL={es:PERM_LABELS_ES,en:PERM_LABELS,pt:PERM_LABELS_PT,it:PERM_LABELS_IT};
+function getPermLabel(pk){const lang=currentUser?.lang||'es';return(PERM_LABELS_ALL[lang]||PERM_LABELS_ES)[pk]||pk;}
 // Perms available per role (customer only gets customer_signoff)
 const ROLE_PERMS={
   admin:()=>Object.keys(PERM_LABELS),
@@ -2605,7 +2604,7 @@ function openPM(id=null){
 function fillPMS(){
   const s=document.getElementById('p-msel');
   const lang=currentUser?.lang||'es';
-  s.innerHTML=`<option value="">${lang==='es'?'— Agregar de Cuadrilla —':'— Add from Taskforce —'}</option>`;
+  s.innerHTML=`<option value="">${t('add_from_taskforce')}</option>`;
   DB.workers.forEach(w=>{if(!pmems.includes(w.id))s.innerHTML+=`<option value="${w.id}">${E(w.name)} — ${E(w.role)}</option>`;});
 }
 function addPM(){const v=document.getElementById('p-msel').value;if(!v)return;pmems.push(v);fillPMS();renderPMD();}
@@ -4835,8 +4834,7 @@ function applyLang(){
   const wrole=document.getElementById('w-role');
   if(wrole){
     const curVal=wrole.value;
-    const wRoleMap=es?ROLES_ES:ROLES_EN;
-    wrole.innerHTML=ROLES.map(v=>`<option value="${v}"${v===curVal?' selected':''}>${wRoleMap[v]||v}</option>`).join('');
+    wrole.innerHTML=tRoleOpt(curVal);
   }
   // Role options in user modal
   const urole=document.getElementById('u-role');
@@ -5097,6 +5095,11 @@ function applyLang(){
   _setPlh('w-email', t('w_email_ph'));
   _setTxt('w-lbl-empid', t('w_emp_id'));
   _setTxt('w-lbl-stat', t('status_label'));
+  _setTxt('w-opt-active', t('opt_active'));
+  _setTxt('w-opt-leave', t('w_on_leave'));
+  _setTxt('w-opt-inactive', t('inactive'));
+  _setTxt('u-opt-active', t('opt_active'));
+  _setTxt('u-opt-inactive', t('inactive'));
   const wStat=document.getElementById('w-stat');
   if(wStat)[...wStat.options].forEach(o=>{
     if(o.value==='Active')o.textContent=t('opt_active');
@@ -5274,7 +5277,7 @@ function openUM(id=null){
   document.getElementById('u-stat').value='Active';
   document.getElementById('u-lang').value='es';
   // Populate worker select
-  const ws=document.getElementById('u-worker');ws.innerHTML='<option value="">— None —</option>';
+  const ws=document.getElementById('u-worker');ws.innerHTML=`<option value="">— ${t('no_results_label')||'None'} —</option>`;
   DB.workers.forEach(w=>ws.innerHTML+=`<option value="${w.id}">${E(w.name)} — ${E(w.role)}</option>`);
   if(id){
     const u=DB.users.find(x=>x.id===id);
