@@ -1,4 +1,4 @@
-<!-- FieldLog v1.4.0 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.4.1 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -484,7 +484,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 <div class="pg on" id="page-dashboard"><div class="wrap">
   <div class="ph">
     <div class="pht"><small data-i18n="overview_label">// OVERVIEW</small><span data-i18n="dashboard">Dashboard</span></div>
-    <div class="pha"><button class="btn bp" onclick="startNewReport(null)" id="btn-new-report-dash">＋ <span id="lbl-new-report-dash">Nuevo Informe</span></button></div>
+    <div class="pha"><button class="btn bp" onclick="startNewReport(null)">＋ <span id="lbl-new-report-ar">Nuevo Informe</span></button></div>
   </div>
   <div class="sg">
     <div class="sv"><div class="svl">Projects</div><div class="svv" id="s-proj">0</div><div class="svs" data-i18n="active">Activos</div></div>
@@ -511,12 +511,12 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="ph">
     <div class="pht"><small id="ph-ar-small">// HISTORIAL</small><span id="ph-ar-title">Informes</span></div>
     <div class="pha">
-      <input type="text" id="ar-search" placeholder="Buscar supervisor, fecha..." oninput="renderAllReports()" style="font-family:var(--mo);font-size:10px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);width:160px;letter-spacing:1px;">
+      <input type="text" id="ar-search" placeholder="Buscar supervisor, fecha..." id="ar-search" oninput="renderAllReports()" style="font-family:var(--mo);font-size:10px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);width:160px;letter-spacing:1px;">
       <select id="ar-filter-proj" onchange="renderAllReports()" style="font-family:var(--mo);font-size:10px;letter-spacing:1px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);max-width:180px;">
         <option value="" id="opt-all-projects">Todos los proyectos</option>
       </select>
       <select id="ar-filter-status" onchange="renderAllReports()" style="font-family:var(--mo);font-size:10px;letter-spacing:1px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);">
-        <option value="">Todos los estados</option>
+        <option value="" id="opt-all-statuses">Todos los estados</option>
         <option value="Draft">Borrador</option>
         <option value="Filling">Llenando</option>
         <option value="Review">En revisión</option>
@@ -524,14 +524,14 @@ tr:hover td{background:rgba(255,255,255,.018);}
         <option value="Pending Customer">Firma cliente</option>
         <option value="Rejected">Rechazado</option>
       </select>
-      <button class="btn bp" onclick="startNewReport(null)" id="btn-new-report-dash">＋ <span id="lbl-new-report-dash">Nuevo Informe</span></button>
+      <button class="btn bp" onclick="startNewReport(null)">＋ <span id="lbl-new-report-ar">Nuevo Informe</span></button>
     </div>
   </div>
   <div style="font-family:var(--mo);font-size:10px;color:var(--mu);margin-bottom:10px;letter-spacing:1px;display:flex;gap:14px;flex-wrap:wrap;">
     <span id="ar-counts"></span>
   </div>
   <div id="ar-list"></div>
-  <div class="emp" id="ar-empty" style="display:none;"><div class="eic">📋</div>NO REPORTS YET</div>
+  <div class="emp" id="ar-empty" style="display:none;"><div class="eic">📋</div><span id="lbl-ar-empty">NO REPORTS YET</span></div>
 </div></div>
 
 <!-- ══════════════════════════════════════════════════
@@ -546,7 +546,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
     <div class="sbx" style="flex:1;min-width:180px;margin:0;"><input type="text" id="proj-search" placeholder="🔍  Buscar proyectos…" oninput="renderProjs()"><span class="sbx-ic">⌕</span></div>
     <select id="proj-filter-status" onchange="renderProjs()" style="font-size:12px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);cursor:pointer;">
-      <option value="">Todos los estados</option>
+      <option value="" id="opt-all-statuses">Todos los estados</option>
       <option value="Active">Activo</option>
       <option value="On Hold">En pausa</option>
       <option value="Completed">Completado</option>
@@ -631,7 +631,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="pha"><button class="btn bp" onclick="openCLB()"><span id="btn-add-cl-txt">＋ Nueva Plantilla</span></button></div>
   </div>
   <div id="cl-tmpl-list"></div>
-  <div class="emp" id="cl-emp"><div class="eic">☑️</div>NO TEMPLATES YET</div>
+  <div class="emp" id="cl-emp"><div class="eic">☑️</div><span id="lbl-no-templates">NO TEMPLATES YET</span></div>
 </div></div>
 
 <!-- ══════════════════════════════════════════════════
@@ -906,18 +906,18 @@ tr:hover td{background:rgba(255,255,255,.018);}
 <!-- QUICK BUILD -->
 <!-- CL BUILDER (checklists page) -->
 <div class="mo" id="mo-clb"><div class="modal">
-  <div class="mh"><div class="mtt" id="clb-title">☑ Nueva Plantilla</div><button class="mcl" onclick="closeMO('mo-clb')">✕</button></div>
+  <div class="mh"><div class="mtt" id="clb-title"><span id="lbl-cl-modal-title">☑ Nueva Plantilla</span></div><button class="mcl" onclick="closeMO('mo-clb')">✕</button></div>
   <div class="mb">
-    <div class="fg f1" style="margin-bottom:12px;"><div><label>Nombre de Plantilla *</label><input type="text" id="clb-name" placeholder="ej. Inspección de Equipos"></div></div>
+    <div class="fg f1" style="margin-bottom:12px;"><div><label id="lbl-cl-name-title">Nombre de Plantilla *</label><input type="text" id="clb-name" placeholder="ej. Inspección de Equipos" id="inp-cl-name"></div></div>
     <div style="background:var(--s2);border:1px solid var(--bd);padding:10px;margin-bottom:12px;">
-      <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:7px;">ANSWER OPTIONS (Si / No / N/A labels)</div>
+      <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:7px;"><span id="lbl-cl-answer-opts">ANSWER OPTIONS (Si / No / N/A labels)</span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;">
-        <div><label style="font-size:10px;">Opción 1 (Sí)</label><input type="text" id="clb-sna1" value="Si" style="margin-top:3px;"></div>
-        <div><label style="font-size:10px;">Opción 2 (No)</label><input type="text" id="clb-sna2" value="No" style="margin-top:3px;"></div>
-        <div><label style="font-size:10px;">Opción 3 (N/A)</label><input type="text" id="clb-sna3" value="N/A" style="margin-top:3px;"></div>
+        <div><label style="font-size:10px;" id="lbl-cl-opt1">Opción 1 (Sí)</label><input type="text" id="clb-sna1" value="Si" style="margin-top:3px;"></div>
+        <div><label style="font-size:10px;" id="lbl-cl-opt2">Opción 2 (No)</label><input type="text" id="clb-sna2" value="No" style="margin-top:3px;"></div>
+        <div><label style="font-size:10px;" id="lbl-cl-opt3">Opción 3 (N/A)</label><input type="text" id="clb-sna3" value="N/A" style="margin-top:3px;"></div>
       </div>
     </div>
-    <label>Ítems</label><div id="clb-items" style="margin-top:7px;"></div>
+    <label id="lbl-cl-items">Ítems</label><div id="clb-items" style="margin-top:7px;"></div>
     <button class="adb" onclick="addCLBI()"><span id="lbl-add-cl-item">＋ Agregar Ítem</span></button>
   </div>
   <div class="mf"><button class="btn bs" onclick="closeMO('mo-clb')">Cancelar</button><button class="btn bp" onclick="saveCLT()"><span id="lbl-save-cl">Guardar Plantilla</span></button></div>
@@ -1236,8 +1236,8 @@ function goPage(p){
   if(p==='checklists')renderCLTs();
   if(p==='dashboard')renderDash();
   if(p==='all-reports')renderAllReports();
-  if(p==='users'){if(currentUser?.role!=='admin'){toast('SOLO ADMINISTRADORES','var(--rd)');return;}renderUsers();}
-  if(p==='customers'){if(currentUser?.role!=='admin'){toast('SOLO ADMINISTRADORES','var(--rd)');return;}renderCustomers();}
+  if(p==='users'){if(currentUser?.role!=='admin'){toast(currentUser?.lang==='en'?'ADMINISTRATORS ONLY':'SOLO ADMINISTRADORES','var(--rd)');return;}renderUsers();}
+  if(p==='customers'){if(currentUser?.role!=='admin'){toast(currentUser?.lang==='en'?'ADMINISTRATORS ONLY':'SOLO ADMINISTRADORES','var(--rd)');return;}renderCustomers();}
   if(p==='projects'){populateProjCustFilter();}
   if(window.innerWidth<=680){document.getElementById('sn').classList.remove('mob');navOpen=false;}
   updateNavBadge();
@@ -1367,7 +1367,7 @@ function renderAllReports(){
     const lang2=currentUser?.lang||'es';const es2=lang2==='es';
     countsEl.innerHTML=`<span style="color:#6495ed;">⏳ ${es2?'Pendiente tu firma':'Pending your signature'}: ${myCnt['Pending Customer']}</span> · <span style="color:var(--gn);">✓ ${es2?'Aprobados':'Approved'}: ${myCnt['Approved']}</span>`;
   } else {
-    countsEl.textContent=`Llenando: ${cnt.Filling}  ·  En revisión: ${cnt.Review}  ·  Aprobados: ${cnt.Approved}  ·  Borradores: ${cnt.Draft}`;
+    const _es2=currentUser?.lang!=='en';countsEl.textContent=`${_es2?'Llenando':'Filling'}: ${cnt.Filling}  ·  ${_es2?'En revisión':'In review'}: ${cnt.Review}  ·  ${_es2?'Aprobados':'Approved'}: ${cnt.Approved}  ·  ${_es2?'Borradores':'Drafts'}: ${cnt.Draft}`;
   }
   const c=document.getElementById('ar-list'),e=document.getElementById('ar-empty');
   if(!rpts.length){c.innerHTML='';e.style.display='block';return;}
@@ -1684,7 +1684,7 @@ function renderPDOverview(){
     <div class="card">
       <div class="ch"><div class="ct">📋 Últimos Informes</div><button class="btn sm bs" onclick="switchPDTab('reports')">Ver todos</button></div>
       <div class="cb" style="padding-top:8px;">
-        ${rpts.length?[...rpts].slice(-5).reverse().map(r=>rptRow(r,false)).join(''):'<div class="emp"><div class="eic">📋</div>SIN INFORMES AÚN</div>'}
+        ${rpts.length?[...rpts].slice(-5).reverse().map(r=>rptRow(r,false)).join(''):`<div class="emp"><div class="eic">📋</div>${currentUser?.lang==='en'?'NO REPORTS YET':'SIN INFORMES AÚN'}</div>`}
       </div>
     </div>
   `;
@@ -1695,7 +1695,7 @@ function infoRow(lbl,val){return val?`<div style="display:flex;gap:10px;padding:
 function renderPDReports(){
   const rpts=DB.reports.filter(r=>r.projId===curProjId);
   const c=document.getElementById('pd-panel-reports');
-  if(!rpts.length){c.innerHTML='<div class="emp"><div class="eic">📋</div>SIN INFORMES PARA ESTE PROYECTO</div>';return;}
+  if(!rpts.length){c.innerHTML=`<div class="emp"><div class="eic">📋</div>${currentUser?.lang==='en'?'NO REPORTS FOR THIS PROJECT':'SIN INFORMES PARA ESTE PROYECTO'}</div>`;return;}
   c.innerHTML=`
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
       <div style="font-family:var(--mo);font-size:10px;color:var(--mu);letter-spacing:1px;">
@@ -1837,7 +1837,7 @@ const ITEM_TYPES=[
 function addCLBI(t='',cat='General',tp='sna'){
   const d=document.createElement('div');d.className='bi';d.style.flexWrap='wrap';
   d.innerHTML=`<span style="color:var(--mu);font-size:12px;">⠿</span>
-    <input type="text" placeholder="Descripción del ítem..." value="${E(t)}" style="flex:1;min-width:160px;">
+    <input type="text" placeholder="Descripción del ítem..." class="cl-item-plh" value="${E(t)}" style="flex:1;min-width:160px;">
     <select class="cs" style="font-size:11px;">${CATS.map(ca=>`<option${ca===cat?' selected':''}>${ca}</option>`).join('')}</select>
     <select class="cs it-type" style="font-size:11px;">${ITEM_TYPES.map(x=>`<option value="${x.v}"${x.v===tp?' selected':''}>${x.l}</option>`).join('')}</select>
     <button class="ib" onclick="this.closest('.bi').remove()">✕</button>`;
@@ -2300,7 +2300,7 @@ window.addEventListener('resize',()=>{
 // ═══════════════════════════════════════════════
 function openCLP(){
   const c=document.getElementById('clp-list');
-  if(!DB.checklists.length){c.innerHTML='<div class="emp"><div class="eic">☑️</div>SIN PLANTILLAS — CREA ALGUNAS EN LA SECCIÓN CHECKLISTS</div>';openMO('mo-clpick');return;}
+  if(!DB.checklists.length){c.innerHTML=`<div class="emp"><div class="eic">☑️</div>${currentUser?.lang==='en'?'NO TEMPLATES — CREATE SOME IN THE CHECKLISTS SECTION':'SIN PLANTILLAS — CREA ALGUNAS EN LA SECCIÓN CHECKLISTS'}</div>`;openMO('mo-clpick');return;}
   c.innerHTML=DB.checklists.map(cl=>`<div class="rr"><div class="rr-info"><div class="rr-date">${E(cl.name)}</div><div class="rr-summary">${cl.items.length} items · ${[...new Set(cl.items.map(i=>i.category))].join(', ')}</div></div><button class="btn sm bp" onclick="loadCL('${cl.id}')">▶ ${(currentUser?.lang||'es')==='es'?'Usar':'Use'}</button></div>`).join('');
   openMO('mo-clpick');
 }
@@ -3501,6 +3501,26 @@ function applyLang(){
   // ── Photo drop zone ──────────────────────────────────────────────────
   _setTxt('lbl-photo-drop', es?'TOCA O ARRASTRA FOTOS AQUÍ':'TAP OR DRAG PHOTOS HERE');
 
+  // ── All Reports page ──────────────────────────────────────────────────
+  const _optAS=document.getElementById('opt-all-statuses');
+  if(_optAS)_optAS.textContent=es?'Todos los estados':'All statuses';
+  _setTxt('lbl-new-report-ar', es?'Nuevo Informe':'New Report');
+
+  // ── Checklist modal ───────────────────────────────────────────────────
+  _setTxt('lbl-cl-modal-title', es?'☑ Nueva Plantilla':'☑ New Template');
+  _setTxt('lbl-cl-name-title', es?'Nombre de Plantilla *':'Template Name *');
+  _setPlh('inp-cl-name', es?'ej. Inspección de Equipos':'e.g. Equipment Inspection');
+  _setTxt('lbl-cl-answer-opts', es?'OPCIONES DE RESPUESTA (etiquetas Sí / No / N/A)':'ANSWER OPTIONS (Yes / No / N/A labels)');
+  _setTxt('lbl-cl-opt1', es?'Opción 1 (Sí)':'Option 1 (Yes)');
+  _setTxt('lbl-cl-opt2', es?'Opción 2 (No)':'Option 2 (No)');
+  _setTxt('lbl-cl-opt3', es?'Opción 3 (N/A)':'Option 3 (N/A)');
+  _setTxt('lbl-cl-items', es?'Ítems':'Items');
+  // Update checklist item placeholders
+  document.querySelectorAll('.cl-item-plh').forEach(el=>el.placeholder=es?'Descripción del ítem...':'Item description...');
+  _setTxt('lbl-save-cl', es?'Guardar Plantilla':'Save Template');
+  _setTxt('lbl-no-templates', es?'SIN PLANTILLAS AÚN':'NO TEMPLATES YET');
+  _setTxt('lbl-ar-empty', es?'SIN INFORMES AÚN':'NO REPORTS YET');
+
   // ── Buttons & dropdowns without data-i18n ────────────────────────────
   _setTxt('lbl-new-report-dash', es?'Nuevo Informe':'New Report');
   _setTxt('lbl-sign-btn', es?'Firma Cliente':'Customer Sign-Off');
@@ -3660,7 +3680,7 @@ function canAccessProject(projId){
 // USERS CRUD
 // ═══════════════════════════════════════════════
 function openUM(id=null){
-  if(currentUser?.role!=='admin'){toast('SOLO ADMINISTRADORES','var(--rd)');return;}
+  if(currentUser?.role!=='admin'){toast(currentUser?.lang==='en'?'ADMINISTRATORS ONLY':'SOLO ADMINISTRADORES','var(--rd)');return;}
   editUSR=id;
   document.getElementById('um2-title').textContent=id?'✏ Edit User':'👥 New User';
   ['u-uname','u-fname','u-email'].forEach(f=>document.getElementById(f).value='');
