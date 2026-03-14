@@ -1,4 +1,4 @@
-<!-- FieldLog v1.3.0 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.3.3 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -598,7 +598,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   </div>
   <div class="sbx"><input type="text" id="mc-search" placeholder="🔍  Buscar por nombre, categoría, unidad…" oninput="renderMats()"><span class="sbx-ic">⌕</span></div>
   <div class="card">
-    <div class="ch"><div class="ct">📦 Materials Catalog</div><span class="bx" id="mc-bx">0 items</span></div>
+    <div class="ch"><div class="ct" id="mat-cat-hdr">📦 Materials Catalog</div><span class="bx" id="mc-bx">0 items</span></div>
     <div class="cb" style="padding-top:0;">
       <div class="tw"><table><thead><tr><th data-i18n="mat_item">Ítem</th><th data-i18n="mat_category">Categoría</th><th data-i18n="unit">Unidad</th><th data-i18n="mat_default_qty">Cant. por defecto</th><th></th></tr></thead><tbody id="mc-tb"></tbody></table></div>
       <div class="emp" id="mc-emp" style="display:none;"><div class="eic">📦</div>NO MATERIALS YET</div>
@@ -619,14 +619,14 @@ tr:hover td{background:rgba(255,255,255,.018);}
 <!-- ══════════════════ REPORT FORM ══════════════════ -->
 <div class="pg" id="page-report"><div class="wrap">
   <div class="ph">
-    <div class="pht"><small id="rml">// NEW REPORT</small>Field Report</div>
+    <div class="pht"><small id="rml">// NEW REPORT</small><span id="rml2">Field Report</span></div>
     <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
       <div class="rid2" id="rrid">RPT-XXX</div>
       <div class="rid2" id="r-status-disp" style="color:var(--am);">DRAFT</div>
-      <button class="btn sm bs" id="rback" onclick="backFromReport()" style="display:none;">← Back</button>
+      <button class="btn sm bs" id="rback" onclick="backFromReport()" style="display:none;" data-i18n="back">← Back</button>
     </div>
   </div>
-  <div class="cbar">⚙ TOGGLE SECTIONS ON/OFF — DISABLED SECTIONS ARE EXCLUDED FROM PDF</div>
+  <div class="cbar" id="cbar-toggle">⚙ TOGGLE SECTIONS ON/OFF — DISABLED SECTIONS ARE EXCLUDED FROM PDF</div>
   <!-- Rejection reason banner — shown when editing a rejected report -->
   <div id="r-reject-banner" style="display:none;background:rgba(224,82,82,.1);border:1px solid rgba(224,82,82,.4);border-left:4px solid var(--rd);padding:11px 16px;margin-bottom:14px;">
     <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--rd);margin-bottom:5px;">⚠ REPORT REJECTED — PLEASE CORRECT AND RESUBMIT</div>
@@ -636,7 +636,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 
   <!-- JOB INFO -->
   <div class="sec op" id="sec-job">
-    <div class="sh" onclick="togS('sec-job')"><div class="sl"><span class="si">🏗</span><span class="st2" id="sec-job-label">Información del Trabajo</span><span class="bx" style="margin-left:6px;">REQUIRED</span></div><div class="sc"><span class="schev">▼</span></div></div>
+    <div class="sh" onclick="togS('sec-job')"><div class="sl"><span class="si">🏗</span><span class="st2" id="sec-job-label">Información del Trabajo</span><span class="bx" style="margin-left:6px;" id="sec-job-required">REQUIRED</span></div><div class="sc"><span class="schev">▼</span></div></div>
     <div class="sb">
       <div class="fg f2"><div><label id="lbl-r-proj">Proyecto</label><select id="r-proj" onchange="onPC()"><option value="">— Seleccionar Proyecto —</option></select></div><div><label id="lbl-r-date">Fecha del Informe</label><input type="date" id="r-date" oninput="updateRID()"></div></div>
       <div class="fg f3" style="margin-top:10px;"><div><label id="lbl-r-start">Inicio Turno</label><input type="time" id="r-start" value="07:00"></div><div><label id="lbl-r-end">Fin Turno</label><input type="time" id="r-end" value="16:00"></div><div><label id="lbl-r-super">Supervisor</label><input type="text" id="r-super" placeholder="Nombre del supervisor"></div></div>
@@ -755,7 +755,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="pha"><button class="btn bp" id="btn-add-user" onclick="openUM()"><span id="btn-add-user-txt">＋ Nuevo Usuario</span></button></div>
   </div>
   <div class="card">
-    <div class="ch"><div class="ct">👥 System Users</div><span class="bx" id="ub-cnt">0 users</span></div>
+    <div class="ch"><div class="ct" id="users-hdr">👥 System Users</div><span class="bx" id="ub-cnt">0 users</span></div>
     <div class="cb" style="padding-top:0;">
       <div class="tw"><table><thead><tr><th data-i18n="user_username">Usuario</th><th data-i18n="user_fullname">Nombre completo</th><th data-i18n="user_role">Rol</th><th data-i18n="projects">Proyectos</th><th data-i18n="user_status">Estado</th><th></th></tr></thead><tbody id="users-tb"></tbody></table></div>
       <div class="emp" id="users-emp" style="display:none;"><div class="eic">👥</div>NO USERS</div>
@@ -1080,6 +1080,9 @@ const I18N={
     upload:'+ SUBIR',remove:'Eliminar',yes:'Sí',no:'No',
     required:'REQUERIDO',no_results:'SIN RESULTADOS',
     search:'Buscar...',active:'Activo',inactive:'Inactivo',
+    back:'← Volver',members:'Miembros',no_projects_yet:'SIN PROYECTOS AÚN',overview_label:'// RESUMEN',workforce:'Cuadrilla',
+    site_name:'Nombre del Sitio',site_address:'Dirección del Sitio',approved_by:'Aprobado por',occurrences:'Ocurrencias',labor:'Mano de Obra',tasks:'Tareas y Actividades',equipment:'Equipos',
+    created:'Creado',saved:'Guardado',submitted:'Enviado',rejected:'Rechazado',edited:'Editado',work_site:'SITIO DE TRABAJO',
   },
   en:{
     dashboard:'Dashboard',projects:'Projects',all_reports:'All Reports',taskforce:'Taskforce',materials:'Materials',checklists:'Checklists',users:'Users',customers:'Customers',new_report:'NEW REPORT',
@@ -1136,6 +1139,9 @@ const I18N={
     upload:'+ UPLOAD',remove:'Remove',yes:'Yes',no:'No',
     required:'REQUIRED',no_results:'NO RESULTS',
     search:'Search...',active:'Active',inactive:'Inactive',
+    back:'← Back',members:'Members',no_projects_yet:'NO PROJECTS YET',overview_label:'// OVERVIEW',workforce:'Workforce',
+    site_name:'Site Name',site_address:'Site Address',approved_by:'Approved by',occurrences:'Occurrences',labor:'Labor',tasks:'Tasks & Activities',equipment:'Equipment',
+    created:'Created',saved:'Saved',submitted:'Submitted',rejected:'Rejected',edited:'Edited',work_site:'WORK SITE',
   }
 };
 function t(key){const lang=(currentUser?.lang)||'es';return (I18N[lang]||I18N.es)[key]||I18N.en[key]||key;}
@@ -1687,7 +1693,7 @@ function renderWorkers(){
     <td style="white-space:nowrap;"><button class="ib ed" onclick="openWM('${w.id}')">✏</button><button class="ib" onclick="delW('${w.id}')">🗑</button></td>
   </tr>`).join('');
 }
-function delW(id){if(!confirm('Remove?'))return;DB.workers=DB.workers.filter(w=>w.id!==id);DB.projects.forEach(p=>{p.members=(p.members||[]).filter(m=>m!==id);});fbDelete('workers',id).catch(console.error);renderWorkers();renderDash();toast('REMOVED','var(--rd)');}
+function delW(id){if(!confirm((currentUser?.lang==='en'?'Remove?':'¿Eliminar?')))return;DB.workers=DB.workers.filter(w=>w.id!==id);DB.projects.forEach(p=>{p.members=(p.members||[]).filter(m=>m!==id);});fbDelete('workers',id).catch(console.error);renderWorkers();renderDash();toast((currentUser?.lang==='en'?'REMOVED':'ELIMINADO'),'var(--rd)');}
 
 // ═══════════════════════════════════════════════
 // MATERIALS
@@ -1712,7 +1718,7 @@ function renderMats(){
   const q=(document.getElementById('mc-search')?.value||'').toLowerCase().trim();
   let mats=DB.materials;
   if(q)mats=mats.filter(m=>[m.name,m.cat,m.unit,m.notes].some(f=>(f||'').toLowerCase().includes(q)));
-  document.getElementById('mc-bx').textContent=DB.materials.length+' items';
+  const _matLng=currentUser?.lang==='en';document.getElementById('mc-bx').textContent=DB.materials.length+' items';document.getElementById('mat-cat-hdr').textContent=_matLng?'📦 Materials Catalog':'📦 Catálogo de Materiales';
   if(!mats.length){tb.innerHTML='';em.style.display='block';em.innerHTML=DB.materials.length?'<div class="eic">🔍</div>SIN RESULTADOS':'<div class="eic">📦</div>SIN MATERIALES AÚN';return;}
   em.style.display='none';
   tb.innerHTML=mats.map(m=>`<tr>
@@ -1723,7 +1729,7 @@ function renderMats(){
     <td style="white-space:nowrap;"><button class="ib ed" onclick="openMM('${m.id}')">✏</button><button class="ib" onclick="delM('${m.id}')">🗑</button></td>
   </tr>`).join('');
 }
-function delM(id){if(!confirm('Delete?'))return;DB.materials=DB.materials.filter(m=>m.id!==id);fbDelete('materials',id).catch(console.error);renderMats();renderDash();toast('ELIMINADO','var(--rd)');}
+function delM(id){if(!confirm((currentUser?.lang==='en'?'Delete?':'¿Eliminar?')))return;DB.materials=DB.materials.filter(m=>m.id!==id);fbDelete('materials',id).catch(console.error);renderMats();renderDash();toast('ELIMINADO','var(--rd)');}
 
 // ═══════════════════════════════════════════════
 // CHECKLISTS PAGE
@@ -1893,7 +1899,7 @@ function editR(id){
   showPage('page-report');
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
   updateRID();
-  toast('EDITING: '+r.id,'var(--am)');
+  toast((currentUser?.lang==='en'?'EDITING: ':'EDITANDO: ')+r.id,'var(--am)');
 }
 
 function backFromReport(){if(curProjId)viewProj(curProjId);else goPage('all-reports');}
@@ -1901,7 +1907,10 @@ function backFromReport(){if(curProjId)viewProj(curProjId);else goPage('all-repo
 function setBBStatus(s){
   curReportStatus=s;
   const stColors={'Draft':'var(--mu)','Filling':'var(--am)','Review':'var(--rd)','Approved':'var(--gn)','Pending Customer':'#6495ed','Rejected':'var(--rd)'};
-  document.getElementById('bb-st').textContent=s.toUpperCase();
+  const es3=currentUser?.lang!=='en';
+  const statusMap={es:{Draft:'BORRADOR',Filling:'EN PROCESO',Review:'EN REVISIÓN',Approved:'APROBADO','Pending Customer':'FIRMA CLIENTE',Rejected:'RECHAZADO'},
+    en:{Draft:'DRAFT',Filling:'FILLING',Review:'REVIEW',Approved:'APPROVED','Pending Customer':'PENDING CUSTOMER',Rejected:'REJECTED'}};
+  document.getElementById('bb-st').textContent=(statusMap[es3?'es':'en'][s]||s.toUpperCase());
   document.getElementById('bb-st').style.color=stColors[s]||'var(--mu)';
   const disp=document.getElementById('r-status-disp');
   if(disp){disp.textContent=s.toUpperCase();disp.style.color=stColors[s]||'var(--am)';}
@@ -3018,7 +3027,7 @@ window.onload=()=>{
 </body></html>`;
 
   const win=window.open('','_blank','width=920,height=1100');
-  if(!win){toast('POP-UP BLOCKED — ALLOW POP-UPS','var(--rd)');return;}
+  if(!win){toast((currentUser?.lang==='en'?'POP-UP BLOCKED — ALLOW POP-UPS':'POPUP BLOQUEADO — PERMITE POPUPS'),'var(--rd)');return;}
   win.document.write(html);win.document.close();
 }
 
@@ -3038,14 +3047,14 @@ function viewReport(id){
       <span style="color:${statusColor};font-family:var(--mo);font-size:9px;border:1px solid ${statusColor};padding:3px 10px;letter-spacing:2px;">${r.status||'Draft'}</span>
     </div>`;
   html+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px 14px;background:var(--s2);border:1px solid var(--bd);padding:11px;margin-bottom:11px;">
-    ${vRow('Supervisor',r.supervisor)}${vRow('Client',r.client)}${vRow('Location',r.location)}${(r.siteEnabled||(r.siteName||r.siteAddr))?`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);margin:8px 0 4px;">📍 ${currentUser?.lang==='en'?'WORK SITE':'SITIO DE TRABAJO'}</div>${vRow(currentUser?.lang==='en'?'Site Name':'Nombre del Sitio',r.siteName||'—')}${vRow(currentUser?.lang==='en'?'Site Address':'Dirección del Sitio',r.siteAddr||'—')}`:''}${vRow('Shift',(r.shiftStart||'')+'–'+(r.shiftEnd||''))}
-    ${r.weather?.length?vRow('Weather',r.weather.join(' · ')):''}${r.temp?vRow('Temperature',r.temp):''}
-    ${r.approvedBy?vRow(currentUser?.lang==='en'?'Approved by':'Aprobado por',r.approvedBy):''}
+    ${vRow(t('supervisor'),r.supervisor)}${vRow(t('client'),r.client)}${vRow(t('location'),r.location)}${(r.siteEnabled||(r.siteName||r.siteAddr))?`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);margin:8px 0 4px;">📍 ${t('site_name')?.toUpperCase()||'SITIO DE TRABAJO'}</div>${vRow(t('site_name'),r.siteName||'—')}${vRow(t('site_address'),r.siteAddr||'—')}`:''}${vRow(t('shift'),(r.shiftStart||'')+'–'+(r.shiftEnd||''))}
+    ${r.weather?.length?vRow(t('weather'),r.weather.join(' · ')):''}${r.temp?vRow(t('temperature'),r.temp):''}
+    ${r.approvedBy?vRow(t('approved_by')||'Approved by',r.approvedBy):''}
   </div>`;
-  if(r.labor?.length){const _vlng2=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">👷 ${_vlng2==='en'?'Labor':'Mano de Obra'} (${r.labor.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.labor.forEach(w=>{html+=`<div style="display:flex;gap:10px;padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><strong style="flex:1;">${E(w.name)}</strong><span style="color:var(--mu);font-family:var(--mo);font-size:10px;">${E(w.role)}</span>${w.start?`<span style="font-family:var(--mo);font-size:10px;color:var(--mu);">${w.start}–${w.end}</span>`:''}</div>`;});html+='</div>';}
-  if(r.tasks?.length){const _vlng=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">📋 ${_vlng==='en'?'Tasks':'Tareas'} (${r.tasks.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.tasks.forEach(t=>{const sc={'Completed':'var(--gn)','In Progress':'var(--am)','Pending':'var(--mu)'}[t.status]||'var(--mu)';html+=`<div style="display:flex;gap:10px;padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><span style="flex:1;">${E(t.desc)}</span><span style="font-family:var(--mo);font-size:9px;color:${sc};">${tStat(t.status)}</span></div>`;});html+='</div>';}
-  if(r.equip?.length){const _vlng3=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">🔧 ${_vlng3==='en'?'Equipment':'Equipos'} (${r.equip.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.equip.forEach(eq=>{html+=`<div style="display:flex;gap:10px;padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><strong style="flex:1;">${E(eq.desc)}</strong><span style="font-family:var(--mo);font-size:10px;color:var(--mu);">${tEstat(eq.status)}</span></div>`;});html+='</div>';}
-  if(r.occurrences?.length){const _vlng4=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--rd);text-transform:uppercase;margin:10px 0 5px;">⚠ ${_vlng4==='en'?'Occurrences':'Ocurrencias'} (${r.occurrences.length})</div>`;r.occurrences.forEach(o=>{html+=`<div style="background:rgba(224,82,82,.05);border:1px solid rgba(224,82,82,.2);border-left:3px solid var(--rd);padding:9px;margin-bottom:5px;font-size:12px;"><div style="font-family:var(--mo);font-size:9px;color:var(--rd);margin-bottom:4px;">${o.type}${o.time?' · '+o.time:''}</div><div>${E(o.desc)}</div>${o.action?`<div style="margin-top:5px;color:var(--mu);font-size:11px;">→ ${E(o.action)}</div>`:''}</div>`;});}
+  if(r.labor?.length){const _vlng2=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">👷 ${t('labor')} (${r.labor.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.labor.forEach(w=>{html+=`<div style="display:flex;gap:10px;padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><strong style="flex:1;">${E(w.name)}</strong><span style="color:var(--mu);font-family:var(--mo);font-size:10px;">${E(w.role)}</span>${w.start?`<span style="font-family:var(--mo);font-size:10px;color:var(--mu);">${w.start}–${w.end}</span>`:''}</div>`;});html+='</div>';}
+  if(r.tasks?.length){const _vlng=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">📋 ${t('tasks')} (${r.tasks.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.tasks.forEach(t=>{const sc={'Completed':'var(--gn)','In Progress':'var(--am)','Pending':'var(--mu)'}[t.status]||'var(--mu)';html+=`<div style="display:flex;gap:10px;padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><span style="flex:1;">${E(t.desc)}</span><span style="font-family:var(--mo);font-size:9px;color:${sc};">${tStat(t.status)}</span></div>`;});html+='</div>';}
+  if(r.equip?.length){const _vlng3=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">🔧 ${t('equipment')} (${r.equip.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.equip.forEach(eq=>{html+=`<div style="display:flex;gap:10px;padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><strong style="flex:1;">${E(eq.desc)}</strong><span style="font-family:var(--mo);font-size:10px;color:var(--mu);">${tEstat(eq.status)}</span></div>`;});html+='</div>';}
+  if(r.occurrences?.length){const _vlng4=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--rd);text-transform:uppercase;margin:10px 0 5px;">⚠ ${t('occurrences')} (${r.occurrences.length})</div>`;r.occurrences.forEach(o=>{html+=`<div style="background:rgba(224,82,82,.05);border:1px solid rgba(224,82,82,.2);border-left:3px solid var(--rd);padding:9px;margin-bottom:5px;font-size:12px;"><div style="font-family:var(--mo);font-size:9px;color:var(--rd);margin-bottom:4px;">${o.type}${o.time?' · '+o.time:''}</div><div>${E(o.desc)}</div>${o.action?`<div style="margin-top:5px;color:var(--mu);font-size:11px;">→ ${E(o.action)}</div>`:''}</div>`;});}
   if(clit.length){
     const pct=clit.length?Math.round(done/clit.length*100):0;
     html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">☑ Checklist: ${E(r.checklist.name)} (${done}/${clit.length})</div>`;
@@ -3074,7 +3083,7 @@ function viewReport(id){
   const log=r.activityLog||[];
   if(log.length){
     const actionColors={created:'var(--bl)',saved:'var(--mu)',submitted:'var(--am)',approved:'var(--gn)',rejected:'var(--rd)',edited:'var(--pu)'};
-    const vwActLabels_es={created:'Creado',saved:'Guardado',submitted:'Enviado',approved:'Aprobado',rejected:'Rechazado',edited:'Editado'};
+    const vwActLabels_es={created:t('created')||'Creado',saved:t('saved')||'Guardado',submitted:t('submitted')||'Enviado',approved:t('approved')||'Aprobado',rejected:t('rejected')||'Rechazado',edited:t('edited')||'Editado'};
     const vwActLabels_en={created:'Created',saved:'Saved',submitted:'Submitted',approved:'Approved',rejected:'Rejected',edited:'Edited'};
     const vwActLabels=currentUser?.lang==='en'?vwActLabels_en:vwActLabels_es;
     const vwLogTitle=currentUser?.lang==='en'?'Activity Log':'Registro de Actividad';
@@ -3242,6 +3251,20 @@ function applyLang(){
   if(workSvs)workSvs.textContent=es?'Miembros':'Members';
   // Re-render dash if visible to apply language
   if(document.getElementById('page-dashboard')?.style.display!=='none')renderDash();
+
+  // ── Section headers ──────────────────────────────
+  _setTxt('mat-cat-hdr', es?'📦 Catálogo de Materiales':'📦 Materials Catalog');
+  _setTxt('users-hdr', es?'👥 Usuarios del Sistema':'👥 System Users');
+  _setTxt('mm-title', es?'📦 Agregar Material':'📦 Add Material');
+  _setTxt('wm-title', es?'👷 Agregar Miembro':'👷 Add Member');
+  _setTxt('mm-save-btn', es?'Guardar':'Save');
+  _setTxt('wm-save-btn', es?'Guardar':'Save');
+
+  // ── Stats badges ─────────────────────────────────
+  const mcBx=document.getElementById('mc-bx');
+  if(mcBx){const n=mcBx.textContent.match(/\d+/)?.[0]||'0';mcBx.textContent=n+(es?' items':' items');}
+  const ubCnt=document.getElementById('ub-cnt');
+  if(ubCnt){const n=ubCnt.textContent.match(/\d+/)?.[0]||'0';ubCnt.textContent=n+(es?' usuarios':' users');}
   _setTxt('ph-tf-title',es?'Cuadrilla':'Taskforce');
   _setTxt('btn-add-worker-txt',es?'＋ Nuevo Miembro':'＋ New Member');
 
@@ -3340,6 +3363,14 @@ function applyLang(){
   if(bbSubmit)bbSubmit.textContent=es?'Enviar →':'Submit →';
   const bbSave=document.querySelector('#bb .btn.bs[onclick*="saveReport"]');
   // Section toggles
+  // Report form header texts
+  _setTxt('rml',es?'// NUEVO INFORME':'// NEW REPORT');
+  _setTxt('rml2',es?'Field Report':'Field Report');
+  _setTxt('cbar-toggle',es?'⚙ ACTIVAR/DESACTIVAR SECCIONES — LAS SECCIONES DESACTIVADAS NO APARECEN EN EL PDF':'⚙ TOGGLE SECTIONS ON/OFF — DISABLED SECTIONS ARE EXCLUDED FROM PDF');
+  _setTxt('sec-job-label',es?'Información del Trabajo':'Job Information');
+  _setTxt('sec-job-required',es?'REQUERIDO':'REQUIRED');
+  // Back button
+  document.querySelectorAll('[data-i18n="back"]').forEach(el=>el.textContent=es?'← Volver':'← Back');
   _setTxt('sec-weather-label',es?'Clima':'Weather');
   _setTxt('sec-labor-label',es?'Mano de Obra':'Labor');
   _setTxt('sec-equip-label',es?'Equipos':'Equipment');
@@ -3572,10 +3603,10 @@ async function saveUser(){
     const u=DB.users.find(x=>x.id===editUSR);
     Object.assign(u,data);
     if(pass.length>=6)u.password=pass;
-    else if(pass.length>0&&pass.length<6){toast('PASSWORD MIN 6 CHARS','var(--rd)');return;}
+    else if(pass.length>0&&pass.length<6){toast((currentUser?.lang==='en'?'PASSWORD MIN 6 CHARS':'CONTRASEÑA: MÍN. 6 CARACTERES'),'var(--rd)');return;}
     toast('✓ USUARIO ACTUALIZADO');
   } else {
-    if(pass.length<6){toast('PASSWORD MIN 6 CHARS','var(--rd)');return;}
+    if(pass.length<6){toast((currentUser?.lang==='en'?'PASSWORD MIN 6 CHARS':'CONTRASEÑA: MÍN. 6 CARACTERES'),'var(--rd)');return;}
     let fbUid='usr'+Date.now();try{const fbCred=await fbAuth.createUserWithEmailAndPassword(data.email||fbUid+'@fieldlog.app',pass);fbUid=fbCred.user.uid;}catch(authErr){console.warn('Auth create error:',authErr);}
     const nu={id:fbUid,...data,createdAt:new Date().toISOString()};DB.users.push(nu);fbSave('users',fbUid,nu).catch(console.error);
     toast('✓ USER CREATED');
@@ -3584,7 +3615,7 @@ async function saveUser(){
 }
 function renderUsers(){
   const tb=document.getElementById('users-tb'),em=document.getElementById('users-emp');
-  document.getElementById('ub-cnt').textContent=DB.users.length+' users';
+  const _usrLng=currentUser?.lang==='en';document.getElementById('ub-cnt').textContent=DB.users.length+(_usrLng?' users':' usuarios');document.getElementById('users-hdr').textContent=_usrLng?'👥 System Users':'👥 Usuarios del Sistema';
   if(!DB.users.length){tb.innerHTML='';em.style.display='block';return;}
   em.style.display='none';
   tb.innerHTML=DB.users.map(u=>{
@@ -3608,7 +3639,7 @@ function renderUsers(){
 }
 function delUser(id){
   if(id===currentUser?.id){toast(currentUser?.lang==='en'?'CANNOT DELETE YOURSELF':'NO PUEDES ELIMINARTE A TI MISMO','var(--rd)');return;}
-  if(!confirm('Delete this user?'))return;
+  if(!confirm((currentUser?.lang==='en'?'Delete this user?':'¿Eliminar este usuario?')))return;
   DB.users=DB.users.filter(u=>u.id!==id);
   fbDelete('users',id).catch(console.error);
   renderUsers();toast('ELIMINADO','var(--rd)');
@@ -3622,7 +3653,7 @@ function openChPW(id){
 function saveChPW(){
   const np=document.getElementById('chpw-new').value;
   const cp=document.getElementById('chpw-cfm').value;
-  if(np.length<6){toast('MIN 6 CHARS','var(--rd)');return;}
+  if(np.length<6){toast((currentUser?.lang==='en'?'MIN 6 CHARS':'MÍN. 6 CARACTERES'),'var(--rd)');return;}
   if(np!==cp){toast('PASSWORDS DON\'T MATCH','var(--rd)');return;}
   const u=DB.users.find(x=>x.id===chpwUID);
   if(u){u.password=np;toast('✓ PASSWORD CHANGED');}
@@ -3791,7 +3822,7 @@ function renderCustomers(){
     const projHtml=projs.length?projs.map(p=>{
       const overdue=p.end&&new Date(p.end+'T23:59:00')<new Date()&&p.status!=='Completed'&&p.status!=='Cancelled';
       return`<span class="bx" style="cursor:pointer;${overdue?'border-color:var(--rd);color:var(--rd);':''}" onclick="viewProj('${p.id}')" title="${E(p.name+(overdue?' — ATRASADO':''))}">${E(p.name)}${p.status?` <span style="opacity:.6;font-size:8px;">${p.status}</span>`:''}</span>`;
-    }).join(''):`<span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${es?'Sin proyectos':'No projects'}</span>`;
+    }).join(''):`<span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${es?(es?'Sin proyectos':'No projects'):'No projects'}</span>`;
     return`<div class="pc" style="margin-bottom:10px;">
       <div class="pc-top">
         <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
