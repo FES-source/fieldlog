@@ -1,4 +1,4 @@
-<!-- FieldLog v1.5.12 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
+<!-- FieldLog v1.5.13 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2072,7 +2072,7 @@ function resetRF(){
   const _es3=currentUser?.lang!=='en';
   [['bl-l',_es3?'trabajador':'worker'],['bl-e',_es3?'ítem':'item'],['bl-t',_es3?'tarea':'task'],['bl-m',_es3?'ítem':'item']].forEach(([b,u])=>document.getElementById(b).textContent='0 '+u+'s');
   document.getElementById('bl-occ').textContent=currentUser?.lang==='en'?'0 entries':'0 entradas';
-  reportPhotos=[];renderPhotos();
+  reportPhotos=[];renderPhotos();_uploadSessionId=null;
   // Section enables
   const onByDef=['sec-weather','sec-labor','sec-equip','sec-tasks','sec-mats','sec-checklist','sec-notes'];
   ['sec-weather','sec-labor','sec-equip','sec-tasks','sec-mats','sec-incidents','sec-checklist','sec-photos','sec-notes'].forEach(id=>{
@@ -2094,10 +2094,16 @@ function updateRID(){
   const s=document.getElementById('r-proj');
   const code=(s.selectedOptions[0]?.dataset?.code||'XXX').toUpperCase();
   const d=(gv('r-date')||'00000000').replace(/-/g,'');
-  // Compute report number
+  // Compute report number for this project
   const projRpts=DB.reports.filter(r=>r.projId===s.value);
-  const num=editingRpt?DB.reports.find(r=>r.id===curRptId)?.num||projRpts.length+1:projRpts.length+1;
-  document.getElementById('rrid').textContent='RPT-'+code+'-'+d;
+  if(editingRpt&&curRptId){
+    // Editing: keep existing ID
+    const existing=DB.reports.find(r=>r.id===curRptId);
+    if(existing){document.getElementById('rrid').textContent=existing.id;return;}
+  }
+  // New report: generate unique ID with sequential number to avoid same-day collisions
+  const num=projRpts.length+1;
+  document.getElementById('rrid').textContent='RPT-'+code+'-'+d+'-'+num;
 }
 
 // ROWS
@@ -2277,6 +2283,13 @@ function impM(){if(!DB.materials.length){toast(currentUser?.lang==='en'?'NO MATE
 
 // PHOTOS — list layout with inline caption
 let reportPhotos=[]; // [{src, caption}]
+// Stable upload session ID - generated once per new report session
+let _uploadSessionId=null;
+function getUploadSessionId(){
+  if(!_uploadSessionId)_uploadSessionId='rpt-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);
+  return _uploadSessionId;
+}
+
 function addPhotos(e){
   Array.from(e.target.files).forEach(f=>{
     const rd=new FileReader();
@@ -2284,7 +2297,6 @@ function addPhotos(e){
       reportPhotos.push({src:ev.target.result,caption:'',uploading:true});
       const idx=reportPhotos.length-1;
       renderPhotos();
-      // Upload to Firebase Storage
       uploadPhotoToStorage(ev.target.result, idx);
     };
     rd.readAsDataURL(f);
@@ -2293,8 +2305,8 @@ function addPhotos(e){
 
 async function uploadPhotoToStorage(base64, idx){
   try{
-    const rptId=document.getElementById('rrid')?.textContent||('tmp-'+Date.now());
-    const path=`reports/${rptId}/photo_${idx}_${Date.now()}.jpg`;
+    const sessionId=getUploadSessionId();
+    const path=`reports/${sessionId}/photo_${idx}_${Date.now()}.jpg`;
     const ref=fbFns.ref(fbStorage,path);
     await fbFns.uploadString(ref,base64,'data_url');
     const url=await fbFns.getDownloadURL(ref);
@@ -2305,9 +2317,12 @@ async function uploadPhotoToStorage(base64, idx){
     }
   }catch(e){
     console.error('Photo upload failed:',e);
-    // Keep base64 as fallback if Storage upload fails
-    if(reportPhotos[idx])reportPhotos[idx].uploading=false;
+    if(reportPhotos[idx]){
+      reportPhotos[idx].uploading=false;
+      // Keep base64 as fallback
+    }
     renderPhotos();
+    toast(currentUser?.lang==='en'?'⚠ PHOTO UPLOAD FAILED — CHECK STORAGE RULES':'⚠ ERROR AL SUBIR FOTO — REVISA REGLAS DE STORAGE','var(--rd)');
   }
 }
 function renderPhotos(){
