@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.4 | Build: 2026-03-14 | Firebase + PWA Edition | 4 Languages + Session Persist -->
+<!-- FieldLog v1.6.5 | Build: 2026-03-14 | Firebase + PWA Edition | 4 Languages + Session Persist -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1297,7 +1297,41 @@ const I18N={
     ph_search_customer:'🔍  Buscar clientes...',ph_search_project:'🔍  Buscar proyectos…',
     ph_search_report:'Buscar supervisor, fecha...',
     role_admin:'Administrador',role_manager:'Supervisor',role_technician:'Técnico',
-    role_viewer:'Visualizador',role_customer:'Cliente',
+    role_viewer:'Visualizador',    cl_modal_new:'☑ Nueva Plantilla',cl_modal_edit:'✏ Editar Plantilla',
+    cl_name_label:'Nombre de Plantilla *',cl_answer_opts:'OPCIONES DE RESPUESTA (etiquetas Sí / No / N/A)',
+    cl_opt1:'Opción 1 (Sí)',cl_opt2:'Opción 2 (No)',cl_opt3:'Opción 3 (N/A)',
+    cl_items_label:'Ítems',cl_add_item:'＋ Agregar Ítem',cl_save_btn:'Guardar Plantilla',
+    cl_load_btn:'Cargar Plantilla',cl_load_title:'Cargar Plantilla de Checklist',
+    ssig_title:'✍️ Firmar y Enviar a Revisión',ssig_desc:'Al firmar, confirmas que este informe está completo y es correcto.',
+    ssig_signed_by:'Firmado por',ssig_role:'Cargo / Título',ssig_draw:'Dibujar Firma',
+    ssig_clear:'Limpiar',ssig_submit:'Enviar →',
+    asig_title:'✍️ Firmar y Aprobar Informe',asig_desc:'Al firmar, apruebas este informe. Quedará marcado como Aprobado.',
+    asig_approved_by:'Aprobado por',asig_role:'Cargo / Título',asig_draw:'Dibujar Firma',
+    asig_clear:'Limpiar',asig_submit:'✓ Aprobar',
+    csig_title:'✍️ Firma del Cliente',csig_desc_lbl:'Firma final del cliente. Esto marcará el informe como completamente cerrado.',
+    csig_name_lbl:'Nombre del Cliente',csig_role_lbl:'Cargo / Empresa',
+    rej_title:'❌ Rechazar Informe',rej_submit:'❌ Rechazar y Devolver',
+    crej_title:'↩ Solicitar Corrección',crej_reason_lbl:'Motivo / Correcciones solicitadas',
+    chpw_title:'🔒 Cambiar Contraseña',chpw_new:'Nueva Contraseña *',chpw_cfm:'Confirmar *',
+    chpw_submit:'Cambiar',chpw_new_ph:'Mín. 6 caracteres',chpw_cfm_ph:'Repetir contraseña',
+    lbl_cl_answer:'OPCIONES DE RESPUESTA (etiquetas Sí / No / N/A)',
+    lbl_cl_opt1:'Opción 1 (Sí)',lbl_cl_opt2:'Opción 2 (No)',lbl_cl_opt3:'Opción 3 (N/A)',
+    view_crej:'Solicitar corrección',view_rej:'Rechazar',
+    no_reports_yet2:'SIN INFORMES AÚN',u_cust_assoc:'Cliente Asociado *',
+    u_cust_hint:'Selecciona el cliente al que pertenece este usuario',
+    r_proj:'Proyecto',r_date:'Fecha del Informe',r_start:'Inicio Turno',r_end:'Fin Turno',
+    r_super:'Supervisor',r_client:'Cliente / Propietario',r_loc:'Ubicación / Dirección',
+    r_temp:'Temperatura',r_wind:'Viento',r_imp:'Impacto en obra',
+    r_notes_gen:'Notas Generales',r_tom:'Plan para Mañana',
+    r_site_name:'Nombre del Sitio',r_site_addr:'Dirección del Sitio',
+    r_site_hdr:'📍 SITIO DE TRABAJO',r_site_toggle:'+ AGREGAR SITIO ESPECÍFICO',
+    r_task_photos:'📷 FOTOS DE TAREAS',r_photo_drop:'TOCA O ARRASTRA FOTOS AQUÍ',
+    lbl_add_worker:'Agregar Trabajador',lbl_import_crew:'Importar Cuadrilla',
+    lbl_add_equip:'Agregar Equipo',lbl_add_task:'Agregar Tarea',
+    lbl_add_occ:'Agregar Ocurrencia',lbl_add_mat:'Agregar Material',lbl_import_cat:'Importar Catálogo',
+    no_checklist:'SIN CHECKLIST CARGADO',no_materials_yet:'SIN MATERIALES AÚN',no_templates_yet:'SIN PLANTILLAS AÚN',
+    manage_users:'👥 Gestionar Usuarios',
+role_customer:'Cliente',
   },
   en:{
     dashboard:'Dashboard',projects:'Projects',all_reports:'All Reports',taskforce:'Taskforce',materials:'Materials',checklists:'Checklists',users:'Users',customers:'Customers',new_report:'NEW REPORT',
@@ -1496,7 +1530,41 @@ const I18N={
     ph_search_customer:'🔍  Search customers...',ph_search_project:'🔍  Search projects...',
     ph_search_report:'Search supervisor, date...',
     role_admin:'Administrator',role_manager:'Manager',role_technician:'Technician',
-    role_viewer:'Viewer',role_customer:'Customer',
+    role_viewer:'Viewer',    cl_modal_new:'☑ New Template',cl_modal_edit:'✏ Edit Template',
+    cl_name_label:'Template Name *',cl_answer_opts:'ANSWER OPTIONS (Yes / No / N/A labels)',
+    cl_opt1:'Option 1 (Yes)',cl_opt2:'Option 2 (No)',cl_opt3:'Option 3 (N/A)',
+    cl_items_label:'Items',cl_add_item:'＋ Add Item',cl_save_btn:'Save Template',
+    cl_load_btn:'Load Template',cl_load_title:'Load Checklist Template',
+    ssig_title:'✍️ Sign & Submit for Review',ssig_desc:'By signing, you confirm this report is complete and accurate.',
+    ssig_signed_by:'Signed by',ssig_role:'Role / Title',ssig_draw:'Draw Signature',
+    ssig_clear:'Clear',ssig_submit:'Submit →',
+    asig_title:'✍️ Sign & Approve Report',asig_desc:'By signing, you approve this report. It will be marked as Approved.',
+    asig_approved_by:'Approved by',asig_role:'Role / Title',asig_draw:'Draw Signature',
+    asig_clear:'Clear',asig_submit:'✓ Approve',
+    csig_title:'✍️ Customer Sign-Off',csig_desc_lbl:'Final customer signature. This will mark the report as fully closed.',
+    csig_name_lbl:'Customer Name',csig_role_lbl:'Title / Company',
+    rej_title:'❌ Reject Report',rej_submit:'❌ Reject & Return',
+    crej_title:'↩ Request Correction',crej_reason_lbl:'Reason / Corrections requested',
+    chpw_title:'🔒 Change Password',chpw_new:'New Password *',chpw_cfm:'Confirm *',
+    chpw_submit:'Change',chpw_new_ph:'Min 6 chars',chpw_cfm_ph:'Repeat password',
+    lbl_cl_answer:'ANSWER OPTIONS (Yes / No / N/A labels)',
+    lbl_cl_opt1:'Option 1 (Yes)',lbl_cl_opt2:'Option 2 (No)',lbl_cl_opt3:'Option 3 (N/A)',
+    view_crej:'Request correction',view_rej:'Reject',
+    no_reports_yet2:'NO REPORTS YET',u_cust_assoc:'Associated Customer *',
+    u_cust_hint:'Select the customer this user belongs to',
+    r_proj:'Project',r_date:'Report Date',r_start:'Shift Start',r_end:'Shift End',
+    r_super:'Supervisor',r_client:'Client / Owner',r_loc:'Location / Address',
+    r_temp:'Temperature',r_wind:'Wind',r_imp:'Work Impact',
+    r_notes_gen:'General Notes',r_tom:"Tomorrow's Plan",
+    r_site_name:'Site Name',r_site_addr:'Site Address',
+    r_site_hdr:'📍 WORK SITE',r_site_toggle:'+ ADD SPECIFIC SITE',
+    r_task_photos:'📷 TASK PHOTOS',r_photo_drop:'TAP OR DRAG PHOTOS HERE',
+    lbl_add_worker:'Add Worker',lbl_import_crew:'Import Crew',
+    lbl_add_equip:'Add Equipment',lbl_add_task:'Add Task',
+    lbl_add_occ:'Add Occurrence',lbl_add_mat:'Add Material',lbl_import_cat:'Import Catalog',
+    no_checklist:'NO CHECKLIST LOADED',no_materials_yet:'NO MATERIALS YET',no_templates_yet:'NO TEMPLATES YET',
+    manage_users:'👥 Manage Users',
+role_customer:'Customer',
   },
   pt:{
     dashboard:'Painel',projects:'Projetos',all_reports:'Relatórios',taskforce:'Equipe',materials:'Materiais',checklists:'Checklists',users:'Usuários',customers:'Clientes',new_report:'NOVO RELATÓRIO',
@@ -1632,7 +1700,41 @@ const I18N={
     ph_search_customer:'🔍  Buscar clientes...',ph_search_project:'🔍  Buscar projetos...',
     ph_search_report:'Buscar supervisor, data...',
     role_admin:'Administrador',role_manager:'Supervisor',role_technician:'Técnico',
-    role_viewer:'Visualizador',role_customer:'Cliente',
+    role_viewer:'Visualizador',    cl_modal_new:'☑ Novo Modelo',cl_modal_edit:'✏ Editar Modelo',
+    cl_name_label:'Nome do Modelo *',cl_answer_opts:'OPÇÕES DE RESPOSTA (etiquetas Sim / Não / N/A)',
+    cl_opt1:'Opção 1 (Sim)',cl_opt2:'Opção 2 (Não)',cl_opt3:'Opção 3 (N/A)',
+    cl_items_label:'Itens',cl_add_item:'＋ Adicionar Item',cl_save_btn:'Salvar Modelo',
+    cl_load_btn:'Carregar Modelo',cl_load_title:'Carregar Modelo de Checklist',
+    ssig_title:'✍️ Assinar e Enviar para Revisão',ssig_desc:'Ao assinar, você confirma que este relatório está completo e correto.',
+    ssig_signed_by:'Assinado por',ssig_role:'Cargo / Título',ssig_draw:'Desenhar Assinatura',
+    ssig_clear:'Limpar',ssig_submit:'Enviar →',
+    asig_title:'✍️ Assinar e Aprovar Relatório',asig_desc:'Ao assinar, você aprova este relatório. Será marcado como Aprovado.',
+    asig_approved_by:'Aprovado por',asig_role:'Cargo / Título',asig_draw:'Desenhar Assinatura',
+    asig_clear:'Limpar',asig_submit:'✓ Aprovar',
+    csig_title:'✍️ Assinatura do Cliente',csig_desc_lbl:'Assinatura final do cliente. Isso marcará o relatório como totalmente fechado.',
+    csig_name_lbl:'Nome do Cliente',csig_role_lbl:'Cargo / Empresa',
+    rej_title:'❌ Rejeitar Relatório',rej_submit:'❌ Rejeitar e Devolver',
+    crej_title:'↩ Solicitar Correção',crej_reason_lbl:'Motivo / Correções solicitadas',
+    chpw_title:'🔒 Alterar Senha',chpw_new:'Nova Senha *',chpw_cfm:'Confirmar *',
+    chpw_submit:'Alterar',chpw_new_ph:'Mín. 6 caracteres',chpw_cfm_ph:'Repetir senha',
+    lbl_cl_answer:'OPÇÕES DE RESPOSTA (etiquetas Sim / Não / N/A)',
+    lbl_cl_opt1:'Opção 1 (Sim)',lbl_cl_opt2:'Opção 2 (Não)',lbl_cl_opt3:'Opção 3 (N/A)',
+    view_crej:'Solicitar correção',view_rej:'Rejeitar',
+    no_reports_yet2:'SEM RELATÓRIOS AINDA',u_cust_assoc:'Cliente Associado *',
+    u_cust_hint:'Selecione o cliente ao qual este usuário pertence',
+    r_proj:'Projeto',r_date:'Data do Relatório',r_start:'Início Turno',r_end:'Fim Turno',
+    r_super:'Supervisor',r_client:'Cliente / Proprietário',r_loc:'Localização / Endereço',
+    r_temp:'Temperatura',r_wind:'Vento',r_imp:'Impacto no trabalho',
+    r_notes_gen:'Notas Gerais',r_tom:'Plano para Amanhã',
+    r_site_name:'Nome do Local',r_site_addr:'Endereço do Local',
+    r_site_hdr:'📍 LOCAL DE TRABALHO',r_site_toggle:'+ ADICIONAR LOCAL ESPECÍFICO',
+    r_task_photos:'📷 FOTOS DE TAREFAS',r_photo_drop:'TOQUE OU ARRASTE FOTOS AQUI',
+    lbl_add_worker:'Adicionar Trabalhador',lbl_import_crew:'Importar Equipe',
+    lbl_add_equip:'Adicionar Equipamento',lbl_add_task:'Adicionar Tarefa',
+    lbl_add_occ:'Adicionar Ocorrência',lbl_add_mat:'Adicionar Material',lbl_import_cat:'Importar Catálogo',
+    no_checklist:'NENHUM CHECKLIST CARREGADO',no_materials_yet:'SEM MATERIAIS AINDA',no_templates_yet:'SEM MODELOS AINDA',
+    manage_users:'👥 Gerenciar Usuários',
+role_customer:'Cliente',
   },
   it:{
     dashboard:'Pannello',projects:'Progetti',all_reports:'Rapporti',taskforce:'Squadra',materials:'Materiali',checklists:'Checklist',users:'Utenti',customers:'Clienti',new_report:'NUOVO RAPPORTO',
@@ -1768,7 +1870,41 @@ const I18N={
     ph_search_customer:'🔍  Cerca clienti...',ph_search_project:'🔍  Cerca progetti...',
     ph_search_report:'Cerca supervisore, data...',
     role_admin:'Amministratore',role_manager:'Supervisore',role_technician:'Tecnico',
-    role_viewer:'Visualizzatore',role_customer:'Cliente',
+    role_viewer:'Visualizzatore',    cl_modal_new:'☑ Nuovo Modello',cl_modal_edit:'✏ Modifica Modello',
+    cl_name_label:'Nome Modello *',cl_answer_opts:'OPZIONI DI RISPOSTA (etichette Sì / No / N/A)',
+    cl_opt1:'Opzione 1 (Sì)',cl_opt2:'Opzione 2 (No)',cl_opt3:'Opzione 3 (N/A)',
+    cl_items_label:'Elementi',cl_add_item:'＋ Aggiungi Elemento',cl_save_btn:'Salva Modello',
+    cl_load_btn:'Carica Modello',cl_load_title:'Carica Modello Checklist',
+    ssig_title:'✍️ Firma e Invia alla Revisione',ssig_desc:'Firmando, confermi che questo rapporto è completo e corretto.',
+    ssig_signed_by:'Firmato da',ssig_role:'Ruolo / Titolo',ssig_draw:'Disegna Firma',
+    ssig_clear:'Cancella',ssig_submit:'Invia →',
+    asig_title:'✍️ Firma e Approva Rapporto',asig_desc:'Firmando, approvi questo rapporto. Sarà contrassegnato come Approvato.',
+    asig_approved_by:'Approvato da',asig_role:'Ruolo / Titolo',asig_draw:'Disegna Firma',
+    asig_clear:'Cancella',asig_submit:'✓ Approva',
+    csig_title:'✍️ Firma del Cliente',csig_desc_lbl:'Firma finale del cliente. Questo contrassegnerà il rapporto come completamente chiuso.',
+    csig_name_lbl:'Nome del Cliente',csig_role_lbl:'Ruolo / Azienda',
+    rej_title:'❌ Rifiuta Rapporto',rej_submit:'❌ Rifiuta e Restituisci',
+    crej_title:'↩ Richiedi Correzione',crej_reason_lbl:'Motivo / Correzioni richieste',
+    chpw_title:'🔒 Cambia Password',chpw_new:'Nuova Password *',chpw_cfm:'Conferma *',
+    chpw_submit:'Cambia',chpw_new_ph:'Min. 6 caratteri',chpw_cfm_ph:'Ripeti password',
+    lbl_cl_answer:'OPZIONI DI RISPOSTA (etichette Sì / No / N/A)',
+    lbl_cl_opt1:'Opzione 1 (Sì)',lbl_cl_opt2:'Opzione 2 (No)',lbl_cl_opt3:'Opzione 3 (N/A)',
+    view_crej:'Richiedi correzione',view_rej:'Rifiuta',
+    no_reports_yet2:'NESSUN RAPPORTO ANCORA',u_cust_assoc:'Cliente Associato *',
+    u_cust_hint:"Seleziona il cliente a cui appartiene questo utente",
+    r_proj:'Progetto',r_date:'Data Rapporto',r_start:'Inizio Turno',r_end:'Fine Turno',
+    r_super:'Supervisore',r_client:'Cliente / Proprietario',r_loc:'Posizione / Indirizzo',
+    r_temp:'Temperatura',r_wind:'Vento',r_imp:'Impatto sul lavoro',
+    r_notes_gen:'Note Generali',r_tom:'Piano per Domani',
+    r_site_name:'Nome del Sito',r_site_addr:'Indirizzo del Sito',
+    r_site_hdr:'📍 SITO DI LAVORO',r_site_toggle:'+ AGGIUNGI SITO SPECIFICO',
+    r_task_photos:'📷 FOTO ATTIVITÀ',r_photo_drop:'TOCCA O TRASCINA FOTO QUI',
+    lbl_add_worker:'Aggiungi Lavoratore',lbl_import_crew:'Importa Squadra',
+    lbl_add_equip:'Aggiungi Attrezzatura',lbl_add_task:'Aggiungi Attività',
+    lbl_add_occ:'Aggiungi Occorrenza',lbl_add_mat:'Aggiungi Materiale',lbl_import_cat:'Importa Catalogo',
+    no_checklist:'NESSUNA CHECKLIST CARICATA',no_materials_yet:'NESSUN MATERIALE ANCORA',no_templates_yet:'NESSUN MODELLO ANCORA',
+    manage_users:'👥 Gestisci Utenti',
+role_customer:'Cliente',
   },
 };
 function t(key){const lang=(typeof currentUser!=='undefined'&&currentUser?.lang)||'es';return (I18N[lang]||I18N.es)[key]||I18N.en[key]||key;}
@@ -1959,7 +2095,7 @@ function renderAllReports(){
     const lang2=currentUser?.lang||'es';const es2=lang2==='es';
     countsEl.innerHTML=`<span style="color:#6495ed;">⏳ ${es2?'Pendiente tu firma':'Pending your signature'}: ${myCnt['Pending Customer']}</span> · <span style="color:var(--gn);">✓ ${es2?'Aprobados':'Approved'}: ${myCnt['Approved']}</span>`;
   } else {
-    const _es2=currentUser?.lang!=='en';countsEl.textContent=`${_es2?'Llenando':'Filling'}: ${cnt.Filling} · ${_es2?'En revisión':'In Review'}: ${cnt.Review} · ${_es2?'Aprobados':'Approved'}: ${cnt.Approved} · ${_es2?'Borradores':'Drafts'}: ${cnt.Draft}`;
+    countsEl.textContent=`${t('opt_filling')}: ${cnt.Filling} · ${t('opt_review')}: ${cnt.Review} · ${t('opt_approved')}: ${cnt.Approved} · ${t('opt_draft')}s: ${cnt.Draft}`;
   }
   const c=document.getElementById('ar-list'),e=document.getElementById('ar-empty');
   if(!rpts.length){c.innerHTML='';e.style.display='block';return;}
@@ -2190,7 +2326,7 @@ function viewProj(projId){
   document.getElementById('pd-stats').innerHTML=`
     <div class="sv"><div class="svl">${t('reports')}</div><div class="svv">${rpts.length}</div><div class="svs">${t('total')}</div></div>
     <div class="sv"><div class="svl">${t('approved')}</div><div class="svv" style="color:var(--gn)">${rpts.filter(r=>r.status==='Approved').length}</div><div class="svs">${t('reports')}</div></div>
-    <div class="sv"><div class="svl">${_pdEn?'Pending':'Pendientes'}</div><div class="svv" style="color:${pending?'var(--am)':'var(--mu)'}">${pending}</div><div class="svs">${_pdEn?'In Review':'En revisión'}</div></div>
+    <div class="sv"><div class="svl">${t('pending_label')}</div><div class="svv" style="color:${pending?'var(--am)':'var(--mu)'}">${pending}</div><div class="svs">${t('in_review_label')}</div></div>
     <div class="sv"><div class="svl">${_pdEn?'Workers':'Trabajadores'}</div><div class="svv">${(p.members||[]).length}</div><div class="svs">${_pdEn?'Assigned':'Asignados'}</div></div>
     <div class="sv"><div class="svl">${t('photos')}</div><div class="svv">${allPhotos.length}</div><div class="svs">${t('total')}</div></div>
     ${isOverdue?`<div class="sv" style="border-color:var(--rd);"><div class="svl" style="color:var(--rd);">⚠ ${_pdEn?'OVERDUE':'ATRASADO'}</div><div class="svv" style="color:var(--rd);font-size:16px;">${Math.abs(daysToEnd)}</div><div class="svs" style="color:var(--rd);">${_pdEn?'days ago':'días atrás'}</div></div>`
@@ -2593,9 +2729,8 @@ function setBBStatus(s){
   curReportStatus=s;
   const stColors={'Draft':'var(--mu)','Filling':'var(--am)','Review':'var(--rd)','Approved':'var(--gn)','Pending Customer':'#6495ed','Rejected':'var(--rd)'};
   const es3=currentUser?.lang!=='en';
-  const statusMap={es:{Draft:'BORRADOR',Filling:'EN PROCESO',Review:'EN REVISIÓN',Approved:'APROBADO','Pending Customer':'FIRMA CLIENTE',Rejected:'RECHAZADO'},
-    en:{Draft:'DRAFT',Filling:'FILLING',Review:'REVIEW',Approved:'APPROVED','Pending Customer':'PENDING CUSTOMER',Rejected:'REJECTED'}};
-  document.getElementById('bb-st').textContent=(statusMap[es3?'es':'en'][s]||s.toUpperCase());
+  const statusLabels={Draft:t('opt_draft'),Filling:t('opt_filling'),Review:t('opt_review'),Approved:t('opt_approved'),'Pending Customer':t('opt_pending'),Rejected:t('opt_rejected')};
+  document.getElementById('bb-st').textContent=(statusLabels[s]||s).toUpperCase();
   document.getElementById('bb-st').style.color=stColors[s]||'var(--mu)';
   const disp=document.getElementById('r-status-disp');
   if(disp){disp.textContent=s.toUpperCase();disp.style.color=stColors[s]||'var(--am)';}
