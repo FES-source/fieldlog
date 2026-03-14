@@ -1,4 +1,4 @@
-<!-- FieldLog v1.5.1 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
+<!-- FieldLog v1.5.2 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -490,7 +490,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="pha"><button class="btn bp" onclick="startNewReport(null)">＋ <span id="lbl-new-report-dash">Nuevo Informe</span></button></div>
   </div>
   <div class="sg">
-    <div class="sv"><div class="svl">Projects</div><div class="svv" id="s-proj">0</div><div class="svs" data-i18n="active">Activos</div></div>
+    <div class="sv"><div class="svl" id="dash-svl-proj">Projects</div><div class="svv" id="s-proj">0</div><div class="svs" data-i18n="active">Activos</div></div>
     <div class="sv"><div class="svl" data-i18n="workforce">Workforce</div><div class="svv" id="s-work">0</div><div class="svs" data-i18n="members">Members</div></div>
     <div class="sv"><div class="svl" data-i18n="materials">Materiales</div><div class="svv" id="s-mat">0</div><div class="svs" data-i18n="catalog">Catálogo</div></div>
     <div class="sv"><div class="svl" data-i18n="reports">Informes</div><div class="svv" id="s-rpt">0</div><div class="svs" data-i18n="total">Total</div></div>
@@ -1693,7 +1693,7 @@ function renderPDOverview(){
         <div class="cb" style="padding-top:8px;">
           ${mn.length?mn.map(w=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--bd);">
             <div style="flex:1;"><div style="font-size:12px;font-weight:600;">${E(w.name)}</div><div style="font-family:var(--mo);font-size:9px;color:var(--mu);">${E(w.role)}</div></div>
-            <span class="bx ${w.status==='Active'?'g':w.status==='On Leave'?'a':'r'}">${w.status}</span>
+            <span class="bx ${w.status==='Active'?'g':w.status==='On Leave'?'a':'r'}">${w.status==="Active"?(currentUser?.lang==="en"?"Active":"Activo"):w.status==="On Leave"?(currentUser?.lang==="en"?"On Leave":"Con permiso"):(currentUser?.lang==="en"?"Inactive":"Inactivo")}</span>
           </div>`).join(''):'<div style="font-family:var(--mo);font-size:10px;color:var(--mu);padding:10px 0;">SIN MIEMBROS ASIGNADOS</div>'}
         </div>
       </div>
@@ -1769,7 +1769,7 @@ function renderWorkers(){
     <td><strong>${E(w.name)}</strong>${w.empId?` <span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${E(w.empId)}</span>`:''}</td>
     <td>${E(w.role)}</td>
     <td style="font-family:var(--mo);font-size:10px;color:var(--mu);">${w.phone||w.email||'—'}</td>
-    <td><span class="bx ${w.status==='Active'?'g':w.status==='On Leave'?'a':'r'}">${w.status}</span></td>
+    <td><span class="bx ${w.status==='Active'?'g':w.status==='On Leave'?'a':'r'}">${w.status==="Active"?(currentUser?.lang==="en"?"Active":"Activo"):w.status==="On Leave"?(currentUser?.lang==="en"?"On Leave":"Con permiso"):(currentUser?.lang==="en"?"Inactive":"Inactivo")}</span></td>
     <td style="white-space:nowrap;"><button class="ib ed" onclick="openWM('${w.id}')">✏</button><button class="ib" onclick="delW('${w.id}')">🗑</button></td>
   </tr>`).join('');
 }
@@ -2004,7 +2004,7 @@ function editR(id){
       rejBanner.style.display='none';
     }
   }
-  showPage('page-report');
+  showPage('page-report');applyLang();
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
   updateRID();
   toast((currentUser?.lang==='en'?'EDITING: ':'EDITANDO: ')+r.id,'var(--am)');
@@ -2338,7 +2338,7 @@ function loadCL(id){
 
 function renderCLR(){
   const c=document.getElementById('r-cl-render');c.innerHTML='';
-  const emp=document.createElement('div');emp.className='emp';emp.id='r-cl-empty';emp.textContent='SIN CHECKLIST CARGADO';c.appendChild(emp);
+  const emp=document.createElement('div');emp.className='emp';emp.id='r-cl-empty';const _noClSpan=document.createElement('span');_noClSpan.id='lbl-no-cl';_noClSpan.textContent=currentUser?.lang==='en'?'NO CHECKLIST LOADED':'NO HAY CHECKLIST CARGADO';emp.appendChild(_noClSpan);c.appendChild(emp);
   if(!activeCL){updCLB();return;}
   emp.style.display='none';
   // Header + progress
@@ -2422,7 +2422,7 @@ function setSNA(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)re
 function setCLISingle(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)return;item.singleSel=val;item.checked=true;renderCLR();}
 function toggleCLIMulti(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)return;if(!item.multiSel)item.multiSel=[];const idx=item.multiSel.indexOf(val);if(idx>-1)item.multiSel.splice(idx,1);else item.multiSel.push(val);item.checked=item.multiSel.length>0;renderCLR();}
 function setCLIText(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)return;item.textAns=val;item.checked=!!val.trim();}
-function addCLIOpt(id){const item=activeCL.items.find(i=>i.id===id);if(!item)return;const v=prompt('Nueva opción:');if(!v)return;if(!item.opts)item.opts=activeCL.snaLabels?[...activeCL.snaLabels]:['Si','No','N/A'];item.opts.push(v.trim());renderCLR();}
+function addCLIOpt(id){const item=activeCL.items.find(i=>i.id===id);if(!item)return;const v=prompt(currentUser?.lang==='en'?'New option:':'Nueva opción:');if(!v)return;if(!item.opts)item.opts=activeCL.snaLabels?[...activeCL.snaLabels]:['Si','No','N/A'];item.opts.push(v.trim());renderCLR();}
 function togCLI(id){
   if(!activeCL)return;
   const item=activeCL.items.find(i=>i.id===id);if(!item)return;
@@ -3365,6 +3365,7 @@ function applyLang(){
   _setTxt('ph-tf-small',es?'// GESTIÓN DE PERSONAL':'// WORKFORCE MANAGEMENT');
   // data-i18n elements handled by t() above
   // Dashboard section headers
+  _setTxt('dash-svl-proj', es?'Proyectos':'Projects');
   const recentLbl=document.getElementById('dash-recent-lbl');
   if(recentLbl)recentLbl.textContent='🏗 '+(es?'Proyectos Recientes':'Recent Projects');
   const rptsLbl=document.getElementById('dash-rpts-lbl');
@@ -3996,7 +3997,7 @@ function renderUsers(){
       <td>${E(u.name)}${custName?`<br><span style="font-family:var(--mo);font-size:9px;color:#6495ed;">🤝 ${E(custName)}</span>`:''}</td>
       <td><span class="rbadge ${rmap[u.role]||''}">${u.role}</span></td>
       <td style="font-size:11px;color:var(--mu2);">${u.role==='admin'?'<span style="color:var(--am);font-family:var(--mo);font-size:9px;">ALL</span>':(projNames||'—')}</td>
-      <td><span class="bx ${u.status==='Active'?'g':'r'}">${u.status}</span></td>
+      <td><span class="bx ${u.status==='Active'?'g':'r'}">${u.status==='Active'?(currentUser?.lang==='en'?'Active':'Activo'):(currentUser?.lang==='en'?'Inactive':'Inactivo')}</span></td>
       <td style="white-space:nowrap;">
         <button class="ib ed" onclick="openUM('${u.id}')">✏</button>
         <button class="ib gn" onclick="openChPW('${u.id}')">🔒</button>
