@@ -1,4 +1,4 @@
-<!-- FieldLog v1.5.15 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
+<!-- FieldLog v1.5.16 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2981,10 +2981,11 @@ async function confirmDelR(){
   const btn=document.getElementById('del-rpt-confirm-btn');
   btn.disabled=true;btn.textContent=_en?'Verifying...':'Verificando...';
   try{
-    // Re-authenticate with Firebase using stored email
     const userEmail=currentUser.email;
     if(!userEmail){errEl.textContent=_en?'No email on file — contact admin':'Sin email registrado — contacta al admin';errEl.style.display='block';btn.disabled=false;btn.textContent=_en?'🗑 Delete':'🗑 Eliminar';return;}
-    await fbFns.signInWithEmailAndPassword(fbAuth,userEmail,pw);
+    // Use reauthenticateWithCredential — correct method for already-logged-in user
+    const credential=firebase.auth.EmailAuthProvider.credential(userEmail,pw);
+    await fbAuth.currentUser.reauthenticateWithCredential(credential);
     // Auth OK — proceed with deletion
     const id=_delRPendingId;
     const r=DB.reports.find(x=>x.id===id);
