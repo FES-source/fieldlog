@@ -549,9 +549,9 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
     <div class="sbx" style="flex:1;min-width:180px;margin:0;"><input type="text" id="proj-search" placeholder="🔍  Buscar proyectos…" oninput="renderProjs()"><span class="sbx-ic">⌕</span></div>
     <select id="proj-filter-status" onchange="renderProjs()" style="font-size:12px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);cursor:pointer;">
-      <option value="" id="opt-all-statuses">Todos los estados</option>
-      <option value="Active" id="proj-opt-active" id="pm-opt-active">Activo</option>
-      <option value="On Hold" id="proj-opt-hold" id="pm-opt-hold">En pausa</option>
+      <option value="" id="proj-opt-all-status">Todos los estados</option>
+      <option value="Active" id="proj-opt-active">Activo</option>
+      <option value="On Hold" id="proj-opt-hold">En pausa</option>
       <option value="Completed" id="proj-opt-completed">Completado</option>
       <option value="Cancelled" id="proj-opt-cancelled">Cancelado</option>
     </select>
@@ -822,7 +822,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <button class="btn bp" id="bb-submit-btn" onclick="submitReport()">Enviar →</button>
     <button class="btn bg" id="bb-approve-btn" onclick="approveReport()" style="display:none;">✓ Aprobar</button>
     <button class="btn sm" id="bb-reject-btn" onclick="openReject()" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">❌ Rechazar</button>
-    <button class="btn sm" id="bb-custappr-btn" onclick="openCustAppr(curRptId)" style="display:none;background:var(--bl);border-color:var(--bl);color:#fff;" id="btn-sign-lbl">🤝 <span id="lbl-sign-btn">Firma Cliente</span></button>
+    <button class="btn sm" id="bb-custappr-btn" onclick="openCustAppr(curRptId)" style="display:none;background:var(--bl);border-color:var(--bl);color:#fff;">🤝 <span id="lbl-sign-btn-bb">Firma Cliente</span></button>
   </div>
 </div>
 <div class="toast" id="tst"></div>
@@ -911,7 +911,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 
 <!-- CL PICKER -->
 <div class="mo" id="mo-clpick"><div class="modal">
-  <div class="mh"><div class="mtt" id="clpick-title">📂 <span id="lbl-load-cl">Cargar Plantilla</span> de Checklist</div><button class="mcl" onclick="closeMO('mo-clpick')">✕</button></div>
+  <div class="mh"><div class="mtt" id="clpick-title">📂 <span id="lbl-load-cl-title">Cargar Plantilla</span> de Checklist</div><button class="mcl" onclick="closeMO('mo-clpick')">✕</button></div>
   <div class="mb" id="clp-list"></div>
   <div class="mf"><button class="btn bs" onclick="closeMO('mo-clpick')" id="clpick-close">Cerrar</button></div>
 </div></div>
@@ -3528,6 +3528,7 @@ function applyLang(){
   _setTxt('lbl-add-occ', es?'Agregar Ocurrencia':'Add Occurrence');
   _setTxt('lbl-no-cl', es?'NO HAY CHECKLIST CARGADO':'NO CHECKLIST LOADED');
   _setTxt('lbl-load-cl', es?'Cargar Plantilla':'Load Template');
+  _setTxt('lbl-load-cl-title', es?'Cargar Plantilla':'Load Template');
 
   // ── Dynamic counters in section headers ─────────────────
   // Labor/equip/task counters use addLR/addEQ/addTK which run after
@@ -3594,6 +3595,7 @@ function applyLang(){
   // ── Buttons & dropdowns without data-i18n ────────────────────────────
   _setTxt('lbl-new-report-dash', es?'Nuevo Informe':'New Report');
   _setTxt('lbl-sign-btn', es?'Firma Cliente':'Customer Sign-Off');
+  _setTxt('lbl-sign-btn-bb', es?'Firma Cliente':'Customer Sign-Off');
   _setTxt('lbl-add-member-btn', es?'+ Agregar':'+ Add');
   _setTxt('lbl-add-cl-item', es?'＋ Agregar Ítem':'＋ Add Item');
   _setTxt('lbl-save-cl', es?'Guardar Plantilla':'Save Template');
@@ -4366,7 +4368,7 @@ document.getElementById('lin-u').addEventListener('keydown',e=>{if(e.key==='Ente
       <button class="btn sm bg" id="mo-view-approve" style="display:none;">✓ <span id="mo-view-approve-lbl">Aprobar</span></button>
       <button class="btn sm" id="mo-view-cust-reject" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">↩ <span id="mo-view-crej-lbl">Solicitar corrección</span></button>
       <button class="btn sm" id="mo-view-reject" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">❌ <span id="mo-view-rej-lbl">Rechazar</span></button>
-      <button class="btn sm bs" id="mo-view-custappr" style="display:none;" id="btn-sign-lbl">🤝 <span id="lbl-sign-btn">Firma Cliente</span></button>
+      <button class="btn sm bs" id="mo-view-custappr" style="display:none;">🤝 <span id="lbl-sign-btn">Firma Cliente</span></button>
       <button class="btn sm bs" id="mo-view-edit">✏ Editar</button>
       <button class="btn sm bs" id="mo-view-pdf">📄 PDF</button>
       <button class="mcl" onclick="closeMO('mo-view')">✕</button>
