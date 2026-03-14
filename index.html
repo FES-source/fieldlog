@@ -411,7 +411,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="lsub" data-i18n="app_subtitle">Sistema de Informes de Campo</div>
     <div class="lerr" id="lerr">Invalid username or password.</div>
     <div style="margin-bottom:10px;"><label data-i18n="user_username">Usuario</label><input type="text" id="lin-u" placeholder="email@empresa.com" autocomplete="email" type="email" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <div style="margin-bottom:18px;"><label data-i18n="user_password">Contraseña</label><input type="password" id="lin-p" placeholder="Contraseña" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div style="margin-bottom:18px;"><label data-i18n="user_password">Contraseña</label><input type="password" id="lin-p" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="btn bp" style="width:100%;justify-content:center;padding:11px;" onclick="doLogin()">Sign In ›</button>
     <div style="margin-top:18px;background:var(--s2);border:1px solid var(--bd);padding:10px 12px;font-family:var(--mo);font-size:9px;color:var(--mu);letter-spacing:1px;">
       DEFAULT ADMIN<br><span style="color:var(--am);">admin / admin123</span>
@@ -555,7 +555,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <select id="proj-filter-cust" onchange="renderProjs()" style="font-size:12px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);cursor:pointer;">
       <option value="" id="opt-all-customers">Todos los clientes</option>
     </select>
-    <button class="btn sm bs" onclick="clearProjFilters()" style="font-size:10px;padding:5px 10px;white-space:nowrap;" id="proj-filter-clear" title="Limpiar filtros">✕ Limpiar</button>
+    <button class="btn sm bs" onclick="clearProjFilters()" style="font-size:10px;padding:5px 10px;white-space:nowrap;" id="proj-filter-clear" title="Clear filters">✕ <span id="lbl-proj-clear">Limpiar</span></button>
   </div>
   <div id="plist"></div>
 </div></div>
@@ -918,7 +918,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 <div class="mo" id="mo-clb"><div class="modal">
   <div class="mh"><div class="mtt" id="clb-title"><span id="lbl-cl-modal-title">☑ Nueva Plantilla</span></div><button class="mcl" onclick="closeMO('mo-clb')">✕</button></div>
   <div class="mb">
-    <div class="fg f1" style="margin-bottom:12px;"><div><label id="lbl-cl-name-title">Nombre de Plantilla *</label><input type="text" id="clb-name" placeholder="ej. Inspección de Equipos" id="inp-cl-name"></div></div>
+    <div class="fg f1" style="margin-bottom:12px;"><div><label id="lbl-cl-name-title">Nombre de Plantilla *</label><input type="text" id="clb-name" placeholder="ej. Inspección de Equipos"></div></div>
     <div style="background:var(--s2);border:1px solid var(--bd);padding:10px;margin-bottom:12px;">
       <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:7px;"><span id="lbl-cl-answer-opts">ANSWER OPTIONS (Si / No / N/A labels)</span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;">
@@ -957,9 +957,9 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <!-- Customer role: link to a customer company and select which of their projects this user can see -->
     <div class="fg f1" style="margin-top:10px;display:none;" id="u-customer-row">
       <div>
-        <label>Cliente Asociado *</label>
+        <label id="lbl-u-cust-assoc">Cliente Asociado *</label>
         <select id="u-customer-sel" onchange="refreshUCustProjs()" style="width:100%;font-size:12px;"><option value="" id="opt-sel-cust">— Seleccionar empresa cliente —</option></select>
-        <div style="font-size:10px;color:var(--mu2);margin-top:4px;">Selecciona la empresa para ver qué proyectos se pueden asignar a este usuario.</div>
+        <div id="lbl-u-cust-hint" style="font-size:10px;color:var(--mu2);margin-top:4px;">Selecciona la empresa para ver qué proyectos se pueden asignar a este usuario.</div>
       </div>
     </div>
     <div class="dv"></div>
@@ -1481,7 +1481,7 @@ function onProjCustChange(){
   const cid=document.getElementById('p-customer-sel')?.value;
   const cust=cid?DB.customers.find(x=>x.id===cid):null;
   const hint=document.getElementById('p-cust-hint');
-  if(hint)hint.textContent=cust?'✓ El proyecto se asignará automáticamente a '+cust.name:'';
+  if(hint)hint.textContent=cust?(currentUser?.lang==='en'?'✓ Project will be automatically assigned to ':'✓ El proyecto se asignará automáticamente a ')+cust.name:'';
 }
 function saveP(){
   if(!hasPerm('manage_projects')){toast('SIN PERMISO','var(--rd)');return;}
@@ -1492,8 +1492,8 @@ function saveP(){
   const customerId=document.getElementById('p-customer-sel')?.value||null;
   const projId=editPJ||('p'+Date.now());
   const d={name,code:gv('p-code'),client:gv('p-cli'),location:gv('p-loc'),desc:gv('p-desc'),start:gv('p-start'),end:gv('p-end'),status:gv('p-stat'),members:[...pmems],logo1,logo2,requireCustomerApproval,customerId};
-  if(editPJ){const ep=DB.projects.find(p=>p.id===editPJ);Object.assign(ep,d);fbSave('projects',editPJ,ep).catch(console.error);toast('✓ PROYECTO ACTUALIZADO');}
-  else{const np={id:projId,...d};DB.projects.push(np);fbSave('projects',projId,np).catch(console.error);toast('✓ PROYECTO CREADO');}
+  if(editPJ){const ep=DB.projects.find(p=>p.id===editPJ);Object.assign(ep,d);fbSave('projects',editPJ,ep).catch(console.error);toast(currentUser?.lang==='en'?'✓ PROJECT UPDATED':'✓ PROYECTO ACTUALIZADO');}
+  else{const np={id:projId,...d};DB.projects.push(np);fbSave('projects',projId,np).catch(console.error);toast(currentUser?.lang==='en'?'✓ PROJECT CREATED':'✓ PROYECTO CREADO');}
   // Auto-assign project to customer's project list
   if(customerId){
     const cust=DB.customers.find(x=>x.id===customerId);
@@ -1607,15 +1607,16 @@ function viewProj(projId){
   const elapsedDays=(startDate&&startDate<=today)?Math.round((today-startDate)/(86400000)):0;
   const pct=totalDays>0?Math.min(100,Math.round(elapsedDays/totalDays*100)):null;
   const pending=rpts.filter(r=>r.status==='Review'||r.status==='Pending Customer').length;
+  const _pdEn=currentUser?.lang==='en';
   document.getElementById('pd-stats').innerHTML=`
     <div class="sv"><div class="svl">${t('reports')}</div><div class="svv">${rpts.length}</div><div class="svs">${t('total')}</div></div>
     <div class="sv"><div class="svl">${t('approved')}</div><div class="svv" style="color:var(--gn)">${rpts.filter(r=>r.status==='Approved').length}</div><div class="svs">${t('reports')}</div></div>
-    <div class="sv"><div class="svl">Pendientes</div><div class="svv" style="color:${pending?'var(--am)':'var(--mu)'}">${pending}</div><div class="svs">En revisión</div></div>
-    <div class="sv"><div class="svl">Trabajadores</div><div class="svv">${(p.members||[]).length}</div><div class="svs">Asignados</div></div>
+    <div class="sv"><div class="svl">${_pdEn?'Pending':'Pendientes'}</div><div class="svv" style="color:${pending?'var(--am)':'var(--mu)'}">${pending}</div><div class="svs">${_pdEn?'In Review':'En revisión'}</div></div>
+    <div class="sv"><div class="svl">${_pdEn?'Workers':'Trabajadores'}</div><div class="svv">${(p.members||[]).length}</div><div class="svs">${_pdEn?'Assigned':'Asignados'}</div></div>
     <div class="sv"><div class="svl">${t('photos')}</div><div class="svv">${allPhotos.length}</div><div class="svs">${t('total')}</div></div>
-    ${isOverdue?`<div class="sv" style="border-color:var(--rd);"><div class="svl" style="color:var(--rd);">⚠ ATRASADO</div><div class="svv" style="color:var(--rd);font-size:16px;">${Math.abs(daysToEnd)}</div><div class="svs" style="color:var(--rd);">días atrás</div></div>`
-    :daysToEnd!==null&&daysToEnd<=14&&p.status!=='Completed'?`<div class="sv" style="border-color:var(--am);"><div class="svl" style="color:var(--am);">⚡ Por vencer</div><div class="svv" style="color:var(--am);">${daysToEnd}</div><div class="svs" style="color:var(--am);">días restantes</div></div>`:
-    daysToEnd!==null?`<div class="sv"><div class="svl">Plazo</div><div class="svv">${daysToEnd>0?daysToEnd:0}</div><div class="svs">días rest.</div></div>`:''}
+    ${isOverdue?`<div class="sv" style="border-color:var(--rd);"><div class="svl" style="color:var(--rd);">⚠ ${_pdEn?'OVERDUE':'ATRASADO'}</div><div class="svv" style="color:var(--rd);font-size:16px;">${Math.abs(daysToEnd)}</div><div class="svs" style="color:var(--rd);">${_pdEn?'days ago':'días atrás'}</div></div>`
+    :daysToEnd!==null&&daysToEnd<=14&&p.status!=='Completed'?`<div class="sv" style="border-color:var(--am);"><div class="svl" style="color:var(--am);">⚡ ${_pdEn?'Due soon':'Por vencer'}</div><div class="svv" style="color:var(--am);">${daysToEnd}</div><div class="svs" style="color:var(--am);">${_pdEn?'days left':'días restantes'}</div></div>`:
+    daysToEnd!==null?`<div class="sv"><div class="svl">${_pdEn?'Deadline':'Plazo'}</div><div class="svv">${daysToEnd>0?daysToEnd:0}</div><div class="svs">${_pdEn?'days left':'días rest.'}</div></div>`:''}
   `;
   switchPDTab('overview');
   showPage('page-proj-detail');
@@ -1678,8 +1679,8 @@ function renderPDOverview(){
         <div class="ch"><div class="ct">📋 Información del Proyecto</div></div>
         <div class="cb" style="padding-top:11px;">
           ${infoRow((currentUser?.lang==='en'?'Customer':'Cliente'),p.client)}
-          ${cust2?infoRow('Empresa',cust2.name):''}
-          ${infoRow('Ubicación',p.location)}${infoRow('Inicio',p.start)}${infoRow('Término',p.end||'—')}${infoRow('Estado',p.status)}
+          ${cust2?infoRow(currentUser?.lang==='en'?'Company':'Empresa',cust2.name):''}
+          ${infoRow(currentUser?.lang==='en'?'Location':'Ubicación',p.location)}${infoRow(currentUser?.lang==='en'?'Start':'Inicio',p.start)}${infoRow(currentUser?.lang==='en'?'End':'Término',p.end||'—')}${infoRow(currentUser?.lang==='en'?'Status':'Estado',p.status)}
           ${progHtml}
           ${p.desc?`<div style="margin-top:9px;font-size:12px;color:var(--mu2);">${E(p.desc)}</div>`:''}
         </div>
@@ -1739,7 +1740,7 @@ function renderPDPhotos(){
 // ═══════════════════════════════════════════════
 function openWM(id=null){
   editWK=id;
-  document.getElementById('wm-title').textContent=id?'✏ Edit Member':'👷 Add Member';
+  document.getElementById('wm-title').textContent=id?(currentUser?.lang==='en'?'✏ Edit Member':'✏ Editar Miembro'):(currentUser?.lang==='en'?'👷 Add Member':'👷 Agregar Miembro');
   ['w-name','w-phone','w-email','w-id'].forEach(f=>document.getElementById(f).value='');
   document.getElementById('w-role').value='Electrician'; // stored value, display handled by applyLangdocument.getElementById('w-stat').value='Active';
   if(id){const w=DB.workers.find(wk=>wk.id===id);if(w){document.getElementById('w-name').value=w.name||'';document.getElementById('w-role').value=w.role||'Electrician';document.getElementById('w-phone').value=w.phone||'';document.getElementById('w-email').value=w.email||'';document.getElementById('w-id').value=w.empId||'';document.getElementById('w-stat').value=w.status||'Active';}}
@@ -1748,8 +1749,8 @@ function openWM(id=null){
 function saveW(){
   const name=gv('w-name').trim();if(!name){toast('NOMBRE REQUERIDO','var(--rd)');return;}
   const d={name,role:gv('w-role'),phone:gv('w-phone'),email:gv('w-email'),empId:gv('w-id'),status:gv('w-stat')};
-  if(editWK){const ew=DB.workers.find(w=>w.id===editWK);Object.assign(ew,d);fbSave('workers',editWK,ew).catch(console.error);toast('✓ ACTUALIZADO');}
-  else{const nw={id:'w'+Date.now(),...d};DB.workers.push(nw);fbSave('workers',nw.id,nw).catch(console.error);toast('✓ MEMBER ADDED');}
+  if(editWK){const ew=DB.workers.find(w=>w.id===editWK);Object.assign(ew,d);fbSave('workers',editWK,ew).catch(console.error);toast(currentUser?.lang==='en'?'✓ UPDATED':'✓ ACTUALIZADO');}
+  else{const nw={id:'w'+Date.now(),...d};DB.workers.push(nw);fbSave('workers',nw.id,nw).catch(console.error);toast(currentUser?.lang==='en'?'✓ MEMBER ADDED':'✓ MIEMBRO AGREGADO');}
   closeMO('mo-worker');renderWorkers();renderDash();
 }
 // Renderiza el listado de trabajadores
@@ -1781,7 +1782,7 @@ function delW(id){if(!confirm((currentUser?.lang==='en'?'Remove?':'¿Eliminar?')
 // ═══════════════════════════════════════════════
 function openMM(id=null){
   editMT=id;
-  document.getElementById('mm-title').textContent=id?'✏ Edit Material':'📦 Add Material';
+  document.getElementById('mm-title').textContent=id?(currentUser?.lang==='en'?'✏ Edit Material':'✏ Editar Material'):(currentUser?.lang==='en'?'📦 Add Material':'📦 Agregar Material');
   ['m-name','m-notes'].forEach(f=>document.getElementById(f).value='');
   document.getElementById('m-qty').value='';document.getElementById('m-cat').value='Electrical';document.getElementById('m-unit').value='pcs';
   if(id){const m=DB.materials.find(mt=>mt.id===id);if(m){document.getElementById('m-name').value=m.name||'';document.getElementById('m-cat').value=m.cat||'Electrical';document.getElementById('m-unit').value=m.unit||'pcs';document.getElementById('m-qty').value=m.qty||'';document.getElementById('m-notes').value=m.notes||'';}}
@@ -1790,8 +1791,8 @@ function openMM(id=null){
 function saveM(){
   const name=gv('m-name').trim();if(!name){toast('NOMBRE REQUERIDO','var(--rd)');return;}
   const d={name,cat:gv('m-cat'),unit:gv('m-unit'),qty:gv('m-qty'),notes:gv('m-notes')};
-  if(editMT){const em=DB.materials.find(m=>m.id===editMT);Object.assign(em,d);fbSave('materials',editMT,em).catch(console.error);toast('✓ ACTUALIZADO');}
-  else{const nm={id:'m'+Date.now(),...d};DB.materials.push(nm);fbSave('materials',nm.id,nm).catch(console.error);toast('✓ ADDED');}
+  if(editMT){const em=DB.materials.find(m=>m.id===editMT);Object.assign(em,d);fbSave('materials',editMT,em).catch(console.error);toast(currentUser?.lang==='en'?'✓ UPDATED':'✓ ACTUALIZADO');}
+  else{const nm={id:'m'+Date.now(),...d};DB.materials.push(nm);fbSave('materials',nm.id,nm).catch(console.error);toast(currentUser?.lang==='en'?'✓ ADDED':'✓ AGREGADO');}
   closeMO('mo-mat');renderMats();renderDash();
 }
 // Renderiza el catálogo de materiales
@@ -1823,16 +1824,17 @@ function delM(id){if(!confirm((currentUser?.lang==='en'?'Delete?':'¿Eliminar?')
 // ═══════════════════════════════════════════════
 const CATS=['General','Safety','Electrical','Mechanical','Equipment','Admin','Environment','Quality'];
 function openCLB(id=null){
+  const _en=currentUser?.lang==='en';
   editCL=id;
-  document.getElementById('clb-title').textContent=id?'✏ Edit Template':'☑ New Template';
+  document.getElementById('clb-title').textContent=id?(_en?'✏ Edit Template':'✏ Editar Plantilla'):(_en?'☑ New Template':'☑ Nueva Plantilla');
   document.getElementById('clb-name').value='';
   document.getElementById('clb-items').innerHTML='';
-  document.getElementById('clb-sna1').value='Si';
+  document.getElementById('clb-sna1').value=_en?'Yes':'Sí';
   document.getElementById('clb-sna2').value='No';
   document.getElementById('clb-sna3').value='N/A';
   if(id){const c=DB.checklists.find(cl=>cl.id===id);if(c){
     document.getElementById('clb-name').value=c.name;
-    document.getElementById('clb-sna1').value=c.snaLabels?.[0]||'Si';
+    document.getElementById('clb-sna1').value=c.snaLabels?.[0]||(_en?'Yes':'Sí');
     document.getElementById('clb-sna2').value=c.snaLabels?.[1]||'No';
     document.getElementById('clb-sna3').value=c.snaLabels?.[2]||'N/A';
     c.items.forEach(i=>addCLBI(i.text,i.category,i.type||'sna'));
@@ -1840,24 +1842,32 @@ function openCLB(id=null){
   else{addCLBI('','Safety','sna');addCLBI('','General','sna');}
   openMO('mo-clb');
 }
-const ITEM_TYPES=[
+const ITEM_TYPES_ES=[
   {v:'sna',l:'Si/No/N/A'},
   {v:'single',l:'Opción única'},
   {v:'multi',l:'Múltiple opción'},
   {v:'text',l:'Texto libre'},
   {v:'yesno',l:'Sí / No'},
 ];
+const ITEM_TYPES_EN=[
+  {v:'sna',l:'Yes/No/N/A'},
+  {v:'single',l:'Single choice'},
+  {v:'multi',l:'Multiple choice'},
+  {v:'text',l:'Free text'},
+  {v:'yesno',l:'Yes / No'},
+];
+function getItemTypes(){return currentUser?.lang==='en'?ITEM_TYPES_EN:ITEM_TYPES_ES;}
 function addCLBI(t='',cat='General',tp='sna'){
   const d=document.createElement('div');d.className='bi';d.style.flexWrap='wrap';
   d.innerHTML=`<span style="color:var(--mu);font-size:12px;">⠿</span>
     <input type="text" placeholder="${currentUser?.lang==='en'?'Item description...':'Descripción del ítem...'}" class="cl-item-plh" value="${E(t)}" style="flex:1;min-width:160px;">
     <select class="cs" style="font-size:11px;">${CATS.map(ca=>`<option${ca===cat?' selected':''}>${ca}</option>`).join('')}</select>
-    <select class="cs it-type" style="font-size:11px;">${ITEM_TYPES.map(x=>`<option value="${x.v}"${x.v===tp?' selected':''}>${x.l}</option>`).join('')}</select>
+    <select class="cs it-type" style="font-size:11px;">${getItemTypes().map(x=>`<option value="${x.v}"${x.v===tp?' selected':''}>${x.l}</option>`).join('')}</select>
     <button class="ib" onclick="this.closest('.bi').remove()">✕</button>`;
   document.getElementById('clb-items').appendChild(d);
 }
 function saveCLT(){
-  const name=gv('clb-name').trim();if(!name){toast('NOMBRE REQUERIDO','var(--rd)');return;}
+  const name=gv('clb-name').trim();if(!name){toast(currentUser?.lang==='en'?'NAME REQUIRED':'NOMBRE REQUERIDO','var(--rd)');return;}
   const snaLabels=[
     (document.getElementById('clb-sna1').value.trim()||'Si'),
     (document.getElementById('clb-sna2').value.trim()||'No'),
@@ -1865,9 +1875,9 @@ function saveCLT(){
   ];
   const rows=document.querySelectorAll('#clb-items .bi');const items=[];
   rows.forEach((r,i)=>{const t=r.querySelector('input').value.trim(),sels=r.querySelectorAll('select'),cat=sels[0]?.value||'General',tp=sels[1]?.value||'sna';if(t)items.push({id:'ci'+Date.now()+i,text:t,category:cat,type:tp});});
-  if(!items.length){toast('AGREGA AL MENOS UN ÍTEM','var(--rd)');return;}
-  if(editCL){const ecl=DB.checklists.find(c=>c.id===editCL);Object.assign(ecl,{name,items,snaLabels});fbSave('checklists',editCL,ecl).catch(console.error);toast('✓ ACTUALIZADO');}
-  else{const ncl={id:'cl'+Date.now(),name,items,snaLabels};DB.checklists.push(ncl);fbSave('checklists',ncl.id,ncl).catch(console.error);toast('✓ PLANTILLA GUARDADA');}
+  if(!items.length){toast(currentUser?.lang==='en'?'ADD AT LEAST ONE ITEM':'AGREGA AL MENOS UN ÍTEM','var(--rd)');return;}
+  if(editCL){const ecl=DB.checklists.find(c=>c.id===editCL);Object.assign(ecl,{name,items,snaLabels});fbSave('checklists',editCL,ecl).catch(console.error);toast(currentUser?.lang==='en'?'✓ UPDATED':'✓ ACTUALIZADO');}
+  else{const ncl={id:'cl'+Date.now(),name,items,snaLabels};DB.checklists.push(ncl);fbSave('checklists',ncl.id,ncl).catch(console.error);toast(currentUser?.lang==='en'?'✓ TEMPLATE SAVED':'✓ PLANTILLA GUARDADA');}
   closeMO('mo-clb');renderCLTs();
 }
 function renderCLTs(){
@@ -1876,7 +1886,7 @@ function renderCLTs(){
   e.style.display='none';
   c.innerHTML=DB.checklists.map(cl=>`<div class="card coll op" style="border-top-color:var(--bl);">
     <div class="ch" onclick="this.closest('.card').classList.toggle('op')">
-      <div class="ct">☑ ${E(cl.name)} <span class="bx">${cl.items.length} ítems</span></div>
+      <div class="ct">☑ ${E(cl.name)} <span class="bx">${cl.items.length} ${currentUser?.lang==='en'?'items':'ítems'}</span></div>
       <div style="display:flex;gap:5px;align-items:center;"><button class="ib ed" onclick="event.stopPropagation();openCLB('${cl.id}')">✏</button><button class="ib" onclick="event.stopPropagation();delCLT('${cl.id}')">🗑</button><span class="chv">▼</span></div>
     </div>
     <div class="cbody" style="padding:8px 16px 12px;">
@@ -1916,9 +1926,9 @@ function startNewReport(projId=null){
 function editR(id){
   const r=DB.reports.find(rp=>rp.id===id);if(!r)return;
   const lock=isReportLocked(r);
-  if(lock==='customer'){toast('INFORME CERRADO — FIRMADO POR CLIENTE. SOLO ADMIN PUEDE ELIMINAR.','var(--rd)');return;}
+  if(lock==='customer'){toast(currentUser?.lang==='en'?'REPORT CLOSED — SIGNED BY CUSTOMER. ONLY ADMIN CAN DELETE.':'INFORME CERRADO — FIRMADO POR CLIENTE. SOLO ADMIN PUEDE ELIMINAR.','var(--rd)');return;}
   if(lock==='approved'){
-    if(!hasPerm('approve_reports')){toast('INFORME APROBADO — SOLO SUPERVISORES PUEDEN RECHAZARLO','var(--am)');return;}
+    if(!hasPerm('approve_reports')){toast(currentUser?.lang==='en'?'REPORT APPROVED — ONLY SUPERVISORS CAN REJECT IT':'INFORME APROBADO — SOLO SUPERVISORES PUEDEN RECHAZARLO','var(--am)');return;}
     // Admin/manager can still reject via reject modal
     openReject(id);return;
   }
@@ -1976,7 +1986,7 @@ function editR(id){
     if(r.status==='Rejected'&&r.rejectionReason){
       rejBanner.style.display='block';
       document.getElementById('r-reject-reason').textContent=r.rejectionReason;
-      document.getElementById('r-reject-by').textContent=(r.rejectedBy?'Rechazado por: '+r.rejectedBy:'')+
+      document.getElementById('r-reject-by').textContent=(r.rejectedBy?(currentUser?.lang==='en'?'Rejected by: ':'Rechazado por: ')+r.rejectedBy:'')+
         (r.rejectedAt?' · '+new Date(r.rejectedAt).toLocaleString():'');
     } else if(r.status==='Review'&&r.custRejectionReason){
       // Customer requested corrections — show in amber
@@ -1985,7 +1995,7 @@ function editR(id){
       rejBanner.style.background='rgba(245,166,35,.08)';
       document.getElementById('r-reject-reason').textContent=r.custRejectionReason;
       document.getElementById('r-reject-reason').style.color='var(--am)';
-      document.getElementById('r-reject-by').textContent=(r.custRejectedBy?'Corrección solicitada por: '+r.custRejectedBy:'')+
+      document.getElementById('r-reject-by').textContent=(r.custRejectedBy?(currentUser?.lang==='en'?'Correction requested by: ':'Corrección solicitada por: ')+r.custRejectedBy:'')+
         (r.custRejectedAt?' · '+new Date(r.custRejectedAt).toLocaleString():'');
     } else {
       rejBanner.style.display='none';
@@ -2168,9 +2178,9 @@ function renderTaskPhotoGallery(){
             <img src="${p}" style="width:100%;height:100%;object-fit:cover;">
             <div class="rmv" onclick="event.stopPropagation();rmTaskPhoto('${uid}',${i})">🗑</div>
           </div>
-          <input type="text" placeholder="Descripción de la foto..." value="${E(cap)}" oninput="setTaskPhotoCaption('${uid}',${i},this.value)" style="width:160px;font-size:10px;padding:3px 5px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);outline:none;">
+          <input type="text" placeholder="${currentUser?.lang==='en'?'Photo description...':'Descripción de la foto...'}" value="${E(cap)}" oninput="setTaskPhotoCaption('${uid}',${i},this.value)" style="width:160px;font-size:10px;padding:3px 5px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);outline:none;">
         </div>`;}).join('')}
-        ${!photos.length?`<div style="font-family:var(--mo);font-size:9px;color:var(--mu);padding:8px 0;letter-spacing:1px;">Sin fotos — usa el botón para agregar</div>`:''}
+        ${!photos.length?`<div style="font-family:var(--mo);font-size:9px;color:var(--mu);padding:8px 0;letter-spacing:1px;">${currentUser?.lang==='en'?'No photos — use the button to add':'Sin fotos — usa el botón para agregar'}</div>`:''}
       </div>
     </div>`;
   }).join('<div style="height:1px;background:var(--bd);margin:8px 0 14px;"></div>');
@@ -2320,7 +2330,7 @@ function openCLP(){
 function loadCL(id){
   const cl=DB.checklists.find(c=>c.id===id);if(!cl)return;
   activeCL={templateId:id,name:cl.name,snaLabels:cl.snaLabels||['Si','No','N/A'],items:cl.items.map(i=>({...i,type:i.type||'sna',checked:false,sna:'',multiSel:[],textAns:'',photos:[],note:''}))};
-  renderCLR();closeMO('mo-clpick');toast('✓ CARGADO: '+cl.name.toUpperCase());
+  renderCLR();closeMO('mo-clpick');toast('✓ '+(currentUser?.lang==='en'?'LOADED: ':'CARGADO: ')+cl.name.toUpperCase());
 }
 
 function renderCLR(){
@@ -2373,7 +2383,7 @@ function renderCLR(){
           <button onclick="addCLIOpt('${item.id}')" style="background:none;border:1px dashed var(--bd);color:var(--mu);font-size:10px;padding:2px 7px;cursor:pointer;">＋</button>
         </div>`;
       } else if(tp==='text'){
-        ansHtml=`<input type="text" placeholder="Respuesta libre..." value="${E(item.textAns||'')}" oninput="setCLIText('${item.id}',this.value)" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:5px 8px;font-size:12px;outline:none;border-left:2px solid var(--am);">`;
+        ansHtml=`<input type="text" placeholder="${currentUser?.lang==='en'?'Free text answer...':'Respuesta libre...'}" value="${E(item.textAns||'')}" oninput="setCLIText('${item.id}',this.value)" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:5px 8px;font-size:12px;outline:none;border-left:2px solid var(--am);">`;
       }
       row.innerHTML=`
         <div class="cli-top" style="${unanswered?'border-left:2px solid var(--rd);padding-left:6px;':'border-left:2px solid var(--gn);padding-left:6px;'}">
@@ -2394,7 +2404,7 @@ function renderCLR(){
           <div class="cli-photos" id="clip-${item.id}" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
             ${(item.photos||[]).map((p,pi)=>{const cap=(item.photoCaptions||[])[pi]||'';return`<div class="cli-pt" onclick="openCLILB('${item.id}',${pi})"><img src="${p}" style="width:100%;height:100%;object-fit:cover;"><div class="rmv" onclick="event.stopPropagation();rmCLIPhoto('${item.id}',${pi})">🗑</div>${cap?`<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);font-size:8px;color:#ddd;padding:2px 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${cap}</div>`:''}</div>`;}).join('')}
           </div>
-          <input type="text" placeholder="Nota para este ítem..." value="${E(item.note||'')}" onchange="setCLINote('${item.id}',this.value)" style="margin-top:7px;font-size:11px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:4px 7px;width:100%;outline:none;">
+          <input type="text" placeholder="${currentUser?.lang==='en'?'Note for this item...':'Nota para este ítem...'}" value="${E(item.note||'')}" onchange="setCLINote('${item.id}',this.value)" style="margin-top:7px;font-size:11px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:4px 7px;width:100%;outline:none;">
         </div>`;
       row.querySelector('.cli-top').addEventListener('click',e=>{if(e.target.tagName==='BUTTON'||e.target.tagName==='INPUT')return;toggleCI(item.id);});
       g.appendChild(row);
@@ -2642,8 +2652,7 @@ function doSubmitSigned(){
   const sigData=getSigData('ssigc');
   const sigName=document.getElementById('ssig-name').value.trim();
   const sigRole=document.getElementById('ssig-role').value.trim();
-  if(!sigData){toast('POR FAVOR DIBUJE SU FIRMA','var(--rd)');return;}
-  const nextStatus=(curReportStatus==='Draft'||curReportStatus==='Filling'||curReportStatus==='Rejected')?'Review':curReportStatus;
+  if(!sigData){toast(currentUser?.lang==='en'?'PLEASE DRAW YOUR SIGNATURE':'POR FAVOR DIBUJE SU FIRMA','var(--rd)');return;}||curReportStatus==='Filling'||curReportStatus==='Rejected')?'Review':curReportStatus;
   const data={...collectRpt(),status:nextStatus,signature:sigData,sigName,sigRole,submittedAt:new Date().toISOString()};
   const isNew=!(editingRpt&&curRptId);
   if(!isNew){
@@ -2655,7 +2664,7 @@ function doSubmitSigned(){
     DB.reports.push(data);curRptId=data.id;editingRpt=true;
   }
   closeMO('mo-submit-sig');setBBStatus(nextStatus);renderDash();updateNavBadge();
-  toast('\u2713 FIRMADO Y ENVIADO A REVISIÓN','var(--am)');
+  toast(currentUser?.lang==='en'?'✓ SIGNED AND SENT FOR REVIEW':'✓ FIRMADO Y ENVIADO A REVISIÓN','var(--am)');
 }
 
 function approveReport(){
@@ -2674,10 +2683,10 @@ function doApproveSigned(){
   const sigData=getSigData('asigc');
   const sigName=document.getElementById('asig-name').value.trim();
   const sigRole=document.getElementById('asig-role').value.trim();
-  if(!sigData){toast('POR FAVOR DIBUJE SU FIRMA','var(--rd)');return;}
-  if(!curRptId){toast('INFORME NO ENCONTRADO','var(--rd)');return;}
+  if(!sigData){toast(currentUser?.lang==='en'?'PLEASE DRAW YOUR SIGNATURE':'POR FAVOR DIBUJE SU FIRMA','var(--rd)');return;}
+  if(!curRptId){toast(currentUser?.lang==='en'?'REPORT NOT FOUND':'INFORME NO ENCONTRADO','var(--rd)');return;}
   const idx=DB.reports.findIndex(r=>r.id===curRptId);
-  if(idx<0){toast('INFORME NO ENCONTRADO','var(--rd)');return;}
+  if(idx<0){toast(currentUser?.lang==='en'?'REPORT NOT FOUND':'INFORME NO ENCONTRADO','var(--rd)');return;}
   const ex=DB.reports[idx];
   // Check if project requires customer approval
   const proj=DB.projects.find(p=>p.id===ex.projId);
@@ -2686,14 +2695,14 @@ function doApproveSigned(){
   ex.status=needsCust?'Pending Customer':'Approved';
   const _appLang=currentUser?.lang||'es';logActivity(ex,'approved',(_appLang==='en'?'Signed by ':'Firmado por ')+sigName+(_appLang==='en'?(needsCust?' — awaiting customer sign-off':''):(needsCust?' — esperando firma del cliente':'')));
   fbSave('reports',ex.id,ex).catch(console.error);closeMO('mo-approve-sig');setBBStatus(ex.status);renderDash();updateNavBadge();
-  toast(needsCust?'\u2713 APROBADO — ESPERANDO FIRMA DEL CLIENTE':'\u2713 INFORME APROBADO','var(--gn)');
+  toast(needsCust?(currentUser?.lang==='en'?'✓ APPROVED — AWAITING CUSTOMER SIGN-OFF':'✓ APROBADO — ESPERANDO FIRMA DEL CLIENTE'):(currentUser?.lang==='en'?'✓ REPORT APPROVED':'✓ INFORME APROBADO'),'var(--gn)');
 }
 
 function openCustAppr(rptId){
   // Allow both managers (approve_reports) and customers (customer_signoff)
-  if(!hasPerm('approve_reports')&&!hasPerm('customer_signoff')){toast('SIN PERMISO','var(--rd)');return;}
+  if(!hasPerm('approve_reports')&&!hasPerm('customer_signoff')){toast(currentUser?.lang==='en'?'NO PERMISSION':'SIN PERMISO','var(--rd)');return;}
   const r=DB.reports.find(x=>x.id===rptId);
-  if(!r||r.status!=='Pending Customer'){toast('NO LISTO PARA FIRMA DEL CLIENTE','var(--am)');return;}
+  if(!r||r.status!=='Pending Customer'){toast(currentUser?.lang==='en'?'NOT READY FOR CUSTOMER SIGN-OFF':'NO LISTO PARA FIRMA DEL CLIENTE','var(--am)');return;}
   clearSigModal('csigc');
   openMO('mo-custappr-sig');
   setTimeout(()=>initSigModal('csigc','csigwrap'),150);
@@ -2707,10 +2716,10 @@ function doCustApprSigned(){
   const sigData=getSigData('csigc');
   const sigName=document.getElementById('csig-name').value.trim();
   const sigRole=document.getElementById('csig-role').value.trim();
-  if(!sigData){toast('POR FAVOR DIBUJE LA FIRMA DEL CLIENTE','var(--rd)');return;}
+  if(!sigData){toast(currentUser?.lang==='en'?'PLEASE DRAW THE CUSTOMER SIGNATURE':'POR FAVOR DIBUJE LA FIRMA DEL CLIENTE','var(--rd)');return;}
   const rptId=document.getElementById('mo-custappr-sig').dataset.rptId||curRptId;
   const idx=DB.reports.findIndex(r=>r.id===rptId);
-  if(idx<0){toast('INFORME NO ENCONTRADO','var(--rd)');return;}
+  if(idx<0){toast(currentUser?.lang==='en'?'REPORT NOT FOUND':'INFORME NO ENCONTRADO','var(--rd)');return;}
   const ex=DB.reports[idx];
   ex.customerSignature=sigData;ex.customerName=sigName;ex.customerRole=sigRole;
   ex.customerApprovedAt=new Date().toISOString();ex.status='Approved';
@@ -2720,7 +2729,7 @@ function doCustApprSigned(){
   closeMO('mo-view');
   if(curRptId===rptId)setBBStatus('Approved');
   renderDash();renderAllReports();updateNavBadge();
-  toast('\u2713 FIRMA COMPLETADA — INFORME APROBADO','var(--gn)');
+  toast(currentUser?.lang==='en'?'✓ SIGN-OFF COMPLETE — REPORT APPROVED':'✓ FIRMA COMPLETADA — INFORME APROBADO','var(--gn)');
   // Auto-navigate to all-reports so customer sees updated status
   setTimeout(()=>goPage('all-reports'),400);
 }
@@ -2728,35 +2737,35 @@ function doCustApprSigned(){
 // ─── CUSTOMER REJECT FLOW ────────────────────────
 let _custRejectRptId=null;
 function openCustReject(rptId){
-  if(!hasPerm('customer_signoff')){toast('SIN PERMISO','var(--rd)');return;}
+  if(!hasPerm('customer_signoff')){toast(currentUser?.lang==='en'?'NO PERMISSION':'SIN PERMISO','var(--rd)');return;}
   const r=DB.reports.find(x=>x.id===rptId);
-  if(!r||r.status!=='Pending Customer'){toast('INFORME NO LISTO PARA REVISAR','var(--am)');return;}
+  if(!r||r.status!=='Pending Customer'){toast(currentUser?.lang==='en'?'REPORT NOT READY FOR REVIEW':'INFORME NO LISTO PARA REVISAR','var(--am)');return;}
   _custRejectRptId=rptId;
   document.getElementById('cust-reject-comment').value='';
   openMO('mo-cust-reject');
 }
 function doCustReject(){
   const reason=document.getElementById('cust-reject-comment').value.trim();
-  if(!reason){toast('POR FAVOR INGRESE EL MOTIVO','var(--rd)');return;}
+  if(!reason){toast(currentUser?.lang==='en'?'PLEASE ENTER THE REASON':'POR FAVOR INGRESE EL MOTIVO','var(--rd)');return;}
   const idx=DB.reports.findIndex(r=>r.id===_custRejectRptId);
-  if(idx<0){toast('INFORME NO ENCONTRADO','var(--rd)');return;}
+  if(idx<0){toast(currentUser?.lang==='en'?'REPORT NOT FOUND':'INFORME NO ENCONTRADO','var(--rd)');return;}
   const ex=DB.reports[idx];
   ex.status='Review';
   ex.custRejectedBy=currentUser?.name||(currentUser?.lang==='en'?'Customer':'Cliente');
   ex.custRejectedAt=new Date().toISOString();
   ex.custRejectionReason=reason;
-  logActivity(ex,'rejected','Cliente solicitó corrección: '+reason);
+  logActivity(ex,'rejected',(currentUser?.lang==='en'?'Customer requested correction: ':'Cliente solicitó corrección: ')+reason);
   fbSave('reports',ex.id,ex).catch(console.error);
   closeMO('mo-cust-reject');
   renderDash();renderAllReports();updateNavBadge();
-  toast('↩ CORRECCIÓN SOLICITADA — ENVIADO A REVISIÓN','var(--am)');
+  toast(currentUser?.lang==='en'?'↩ CORRECTION REQUESTED — SENT BACK FOR REVIEW':'↩ CORRECCIÓN SOLICITADA — ENVIADO A REVISIÓN','var(--am)');
   setTimeout(()=>goPage('all-reports'),400);
 }
 
 // ─── REJECT FLOW ────────────────────────────────
 let _rejectRptId=null; // which report we're rejecting (null = current editing report)
 function openReject(rptId){
-  if(!hasPerm('approve_reports')){toast('SIN PERMISO','var(--rd)');return;}
+  if(!hasPerm('approve_reports')){toast(currentUser?.lang==='en'?'NO PERMISSION':'SIN PERMISO','var(--rd)');return;}
   _rejectRptId=rptId||curRptId;
   const r=DB.reports.find(x=>x.id===_rejectRptId);
   if(!r||r.status!=='Review'){toast(currentUser?.lang==='en'?'REPORT MUST BE IN REVIEW STATUS':'EL INFORME DEBE ESTAR EN REVISIÓN','var(--am)');return;}
@@ -2768,9 +2777,7 @@ function doReject(){
   if(!reason){toast(currentUser?.lang==='en'?'PLEASE ENTER A REJECTION REASON':'INGRESE EL MOTIVO DEL RECHAZO','var(--rd)');return;}
   const rptId=_rejectRptId||curRptId;
   const idx=DB.reports.findIndex(r=>r.id===rptId);
-  if(idx<0){toast('INFORME NO ENCONTRADO','var(--rd)');return;}
-  const ex=DB.reports[idx];
-  ex.status='Rejected';
+  if(idx<0){toast(currentUser?.lang==='en'?'REPORT NOT FOUND':'INFORME NO ENCONTRADO','var(--rd)');return;}
   ex.rejectedBy=currentUser?.name||'Manager';
   ex.rejectedByRole=currentUser?.role||'';
   ex.rejectedAt=new Date().toISOString();
@@ -3309,10 +3316,12 @@ async function doLogin(){
   renderDash();
   }catch(e){
     console.error('Login error:',e);
+    const _ien=navigator.language?.toLowerCase().startsWith('en');
     err.style.display='block';
-    err.textContent=e.code==='auth/invalid-credential'?'Email o contraseña incorrectos':'Error al iniciar sesión';
+    err.textContent=e.code==='auth/invalid-credential'?(_ien?'Incorrect email or password':'Email o contraseña incorrectos'):(_ien?'Error signing in':'Error al iniciar sesión');
   }finally{
-    if(btn){btn.textContent='Iniciar Sesión ›';btn.disabled=false;}
+    const _ienf=navigator.language?.toLowerCase().startsWith('en');
+    if(btn){btn.textContent=_ienf?'Sign In ›':'Ingresar ›';btn.disabled=false;}
   }
 }
 function applyLang(){
@@ -3345,6 +3354,7 @@ function applyLang(){
   _setTxt('ph-proj-small',es?'// GESTIÓN DE PROYECTOS':'// PROJECT MANAGEMENT');
   _setTxt('ph-proj-title',es?'Proyectos':'Projects');
   _setPlh('proj-search',es?'Buscar proyectos...':'Search projects...');
+  _setTxt('lbl-proj-clear', es?'Limpiar':'Clear');
   _setTxt('btn-add-proj-txt',es?'＋ Nuevo Proyecto':'＋ New Project');
 
   // ── Taskforce page ─────────────────────────────
@@ -3563,7 +3573,7 @@ function applyLang(){
   // ── Checklist modal ───────────────────────────────────────────────────
   _setTxt('lbl-cl-modal-title', es?'☑ Nueva Plantilla':'☑ New Template');
   _setTxt('lbl-cl-name-title', es?'Nombre de Plantilla *':'Template Name *');
-  _setPlh('inp-cl-name', es?'ej. Inspección de Equipos':'e.g. Equipment Inspection');
+  _setPlh('clb-name', es?'ej. Inspección de Equipos':'e.g. Equipment Inspection');
   _setTxt('lbl-cl-answer-opts', es?'OPCIONES DE RESPUESTA (etiquetas Sí / No / N/A)':'ANSWER OPTIONS (Yes / No / N/A labels)');
   _setTxt('lbl-cl-opt1', es?'Opción 1 (Sí)':'Option 1 (Yes)');
   _setTxt('lbl-cl-opt2', es?'Opción 2 (No)':'Option 2 (No)');
@@ -3621,6 +3631,8 @@ function applyLang(){
   _setTxt('sec-photos-label',es?'Registro Fotográfico':'Photo Log');
   _setTxt('sec-notes-label',es?'Notas y Comentarios':'Notes & Comments');
 
+  _setTxt('lbl-u-cust-assoc', es?'Cliente Asociado *':'Associated Customer *');
+  _setTxt('lbl-u-cust-hint', es?'Selecciona la empresa para ver qué proyectos se pueden asignar a este usuario.':'Select the company to see which projects can be assigned to this user.');
   // ── Change password modal ─────────────────────────────────────────────
   _setTxt('chpw-title', es?'🔒 Cambiar Contraseña':'🔒 Change Password');
   _setTxt('chpw-lbl-new', es?'Nueva Contraseña *':'New Password *');
@@ -3685,6 +3697,7 @@ function applyLang(){
 
   // ── Worker modal ──────────────────────────────────────────────────────
   _setTxt('w-lbl-name', es?'Nombre Completo *':'Full Name *');
+  _setPlh('w-name', es?'Nombre Apellido':'First Last');
   _setTxt('w-lbl-role', es?'Cargo / Oficio *':'Role / Trade *');
   _setTxt('w-lbl-phone', es?'Teléfono':'Phone');
   _setPlh('w-phone', es?'+56 9 0000 0000':'+1 555 000 0000');
@@ -3828,7 +3841,7 @@ function canAccessProject(projId){
 function openUM(id=null){
   if(currentUser?.role!=='admin'){toast(currentUser?.lang==='en'?'ADMINISTRATORS ONLY':'SOLO ADMINISTRADORES','var(--rd)');return;}
   editUSR=id;
-  document.getElementById('um2-title').textContent=id?'✏ Edit User':'👥 New User';
+  document.getElementById('um2-title').textContent=id?(currentUser?.lang==='en'?'✏ Edit User':'✏ Editar Usuario'):(currentUser?.lang==='en'?'👥 New User':'👥 Nuevo Usuario');
   ['u-uname','u-fname','u-email'].forEach(f=>document.getElementById(f).value='');
   document.getElementById('u-pass').value='';
   document.getElementById('u-role').value='technician';
@@ -3924,7 +3937,7 @@ async function saveUser(){
   if(!uname||!fname){toast(currentUser?.lang==='en'?'USERNAME + NAME REQUIRED':'USUARIO Y NOMBRE OBLIGATORIOS','var(--rd)');return;}
   // Check duplicate username
   const dup=DB.users.find(u=>u.username===uname&&u.id!==editUSR);
-  if(dup){toast('EL USUARIO YA EXISTE','var(--rd)');return;}
+  if(dup){toast(currentUser?.lang==='en'?'USERNAME ALREADY EXISTS':'EL USUARIO YA EXISTE','var(--rd)');return;}
   const role=document.getElementById('u-role').value;
   // Collect projects
   const projChecks=[...document.querySelectorAll('#u-proj-grid input:checked')].map(c=>c.value);
@@ -3951,7 +3964,7 @@ async function saveUser(){
     Object.assign(u,data);
     if(pass.length>=6)u.password=pass;
     else if(pass.length>0&&pass.length<6){toast((currentUser?.lang==='en'?'PASSWORD MIN 6 CHARS':'CONTRASEÑA: MÍN. 6 CARACTERES'),'var(--rd)');return;}
-    toast('✓ USUARIO ACTUALIZADO');
+    toast(currentUser?.lang==='en'?'✓ USER UPDATED':'✓ USUARIO ACTUALIZADO');
   } else {
     if(pass.length<6){toast((currentUser?.lang==='en'?'PASSWORD MIN 6 CHARS':'CONTRASEÑA: MÍN. 6 CARACTERES'),'var(--rd)');return;}
     let fbUid='usr'+Date.now();try{const fbCred=await fbAuth.createUserWithEmailAndPassword(data.email||fbUid+'@fieldlog.app',pass);fbUid=fbCred.user.uid;}catch(authErr){console.warn('Auth create error:',authErr);}
@@ -4258,6 +4271,21 @@ function saveLBCap(){
 // ═══════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════
+// Pre-login: apply browser language to login screen labels
+(function(){
+  const browserLang=navigator.language||navigator.userLanguage||'es';
+  const isEn=!browserLang.toLowerCase().startsWith('es');
+  const lsub=document.querySelector('.lsub');
+  if(lsub)lsub.textContent=isEn?'Daily Field Report System':'Sistema de Informes de Campo';
+  const lblUser=document.querySelector('label[data-i18n="user_username"]');
+  if(lblUser)lblUser.textContent=isEn?'Username':'Usuario';
+  const lblPass=document.querySelector('label[data-i18n="user_password"]');
+  if(lblPass)lblPass.textContent=isEn?'Password':'Contraseña';
+  const pinp=document.getElementById('lin-p');
+  if(pinp)pinp.placeholder=isEn?'Password':'Contraseña';
+  const loginBtn=document.querySelector('#login-screen .btn.bp');
+  if(loginBtn)loginBtn.textContent=isEn?'Sign In ›':'Ingresar ›';
+})();
 // Show login screen — app starts locked
 tick();setInterval(tick,1000);
 // Enter key on username field
