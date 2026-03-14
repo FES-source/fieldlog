@@ -1,4 +1,4 @@
-<!-- FieldLog v1.3.5 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.3.6 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -664,7 +664,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="sec op" id="sec-weather">
     <div class="sh" onclick="togS('sec-weather')"><div class="sl"><span class="si">🌤</span><span class="st2" id="sec-weather-label">Clima</span></div><div class="sc"><label class="tog" onclick="event.stopPropagation()"><input type="checkbox" id="tog-w" checked onchange="togSE('sec-weather',this)"><span class="tt"></span></label><span class="schev">▼</span></div></div>
     <div class="sb">
-      <div class="wps" id="weather-pills"><div class="wp on" data-en="☀️ Clear" onclick="this.classList.toggle('on')">☀️ Despejado</div><div class="wp" data-en="⛅ Partly Cloudy" onclick="this.classList.toggle('on')">⛅ Parcial nublado</div><div class="wp" data-en="☁️ Overcast" onclick="this.classList.toggle('on')">☁️ Cubierto</div><div class="wp" data-en="🌧 Rain" onclick="this.classList.toggle('on')">🌧 Lluvia</div><div class="wp" data-en="⛈ Storm" onclick="this.classList.toggle('on')">⛈ Tormenta</div><div class="wp" data-en="❄️ Snow" onclick="this.classList.toggle('on')">❄️ Nieve</div><div class="wp" data-en="🌬 High Winds" onclick="this.classList.toggle('on')">🌬 Viento fuerte</div><div class="wp" data-en="🌫 Fog" onclick="this.classList.toggle('on')">🌫 Niebla</div></div>
+      <div class="wps" id="weather-pills"><div class="wp on" data-en="☀️ Clear" data-es="☀️ Despejado" data-es="☀️ Despejado" onclick="this.classList.toggle('on')">☀️ Despejado</div><div class="wp" data-en="⛅ Partly Cloudy" data-es="⛅ Parcial nublado" onclick="this.classList.toggle('on')">⛅ Parcial nublado</div><div class="wp" data-en="☁️ Overcast" data-es="☁️ Cubierto" onclick="this.classList.toggle('on')">☁️ Cubierto</div><div class="wp" data-en="🌧 Rain" data-es="🌧 Lluvia" onclick="this.classList.toggle('on')">🌧 Lluvia</div><div class="wp" data-en="⛈ Storm" data-es="⛈ Tormenta" onclick="this.classList.toggle('on')">⛈ Tormenta</div><div class="wp" data-en="❄️ Snow" data-es="❄️ Nieve" onclick="this.classList.toggle('on')">❄️ Nieve</div><div class="wp" data-en="🌬 High Winds" data-es="🌬 Viento fuerte" onclick="this.classList.toggle('on')">🌬 Viento fuerte</div><div class="wp" data-en="🌫 Fog" data-es="🌫 Niebla" onclick="this.classList.toggle('on')">🌫 Niebla</div></div>
       <div class="fg f3" style="margin-top:10px;"><div><label id="lbl-r-temp">Temperatura</label><input type="text" id="r-temp" placeholder="ej. 22°C"></div><div><label id="lbl-r-wind">Viento</label><input type="text" id="r-wind" placeholder="ej. 12 km/h"></div><div><label id="lbl-r-imp">Impacto en obra</label><select id="r-imp"><option data-es="Sin impacto" data-en="No impact">Sin impacto</option><option data-es="Demora leve" data-en="Minor delay">Demora leve</option><option data-es="Demora significativa" data-en="Significant delay">Demora significativa</option><option data-es="Trabajo detenido" data-en="Work stopped">Trabajo detenido</option></select></div></div>
     </div>
   </div>
@@ -1205,6 +1205,8 @@ function goPage(p){
   if(window.innerWidth<=680){document.getElementById('sn').classList.remove('mob');navOpen=false;}
   updateNavBadge();
 }
+  applyLang();
+
 function showPage(id){
   document.querySelectorAll('.pg').forEach(el=>el.classList.remove('on'));
   const el=document.getElementById(id);if(el)el.classList.add('on');
@@ -1809,11 +1811,11 @@ function startNewReport(projId=null){
   curRptId=null;editingRpt=false;activeCL=null;curReportStatus='Draft';
   resetRF();applyLang();
   if(projId){document.getElementById('r-proj').value=projId;onPC();curProjId=projId;}
-  document.getElementById('rml').textContent='// NUEVO INFORME';
+  document.getElementById('rml').textContent=currentUser?.lang==='en'?'// NEW REPORT':'// NUEVO INFORME';
   document.getElementById('rback').style.display=projId?'inline-flex':'none';
   document.getElementById('rback').onclick=projId?()=>viewProj(projId):()=>goPage('projects');
   setBBStatus('Draft');
-  showPage('page-report');
+  showPage('page-report');applyLang();
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
   document.querySelector('[data-p="report"]')?.classList.add('on');
   setTimeout(initSig,100);
@@ -3388,6 +3390,11 @@ function applyLang(){
   // Back button
   document.querySelectorAll('[data-i18n="back"]').forEach(el=>el.textContent=es?'← Volver':'← Back');
   _setTxt('sec-weather-label',es?'Clima':'Weather');
+  // Weather pills translation
+  document.querySelectorAll('#weather-pills .wp').forEach(pill=>{
+    const txt=pill.getAttribute(es?'data-es':'data-en');
+    if(txt)pill.textContent=txt;
+  });
   _setTxt('sec-labor-label',es?'Mano de Obra':'Labor');
   _setTxt('sec-equip-label',es?'Equipos':'Equipment');
   _setTxt('sec-tasks-label',es?'Tareas y Actividades':'Tasks & Activities');
