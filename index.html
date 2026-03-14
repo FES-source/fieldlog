@@ -1,4 +1,4 @@
-<!-- FieldLog v1.5.8 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
+<!-- FieldLog v1.5.9 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2572,7 +2572,7 @@ function translateNote(entry, lang){
   const es=lang!=='en';
   const nd=entry.noteData||{};
   const k=entry.noteKey||entry.note||'';
-  // Structured note keys
+  // Structured note keys (new format — v1.5.5+)
   if(k==='report.created')        return es?'Informe creado':'Report created';
   if(k==='report.saved')          return es?'Guardado':'Saved';
   if(k==='report.submitted')      return es?'Firmado y enviado a revisión':'Signed and sent for review';
@@ -2581,7 +2581,23 @@ function translateNote(entry, lang){
   if(k==='report.cust_approved')  return (es?'Firma del cliente por ':'Customer sign-off by ')+(nd.by||'');
   if(k==='report.rejected')       return (es?'Rechazado por ':'Rejected by ')+(nd.by||'')+': '+(nd.reason||'');
   if(k==='report.cust_rejected')  return (es?'Cliente solicitó corrección: ':'Customer requested correction: ')+(nd.reason||'');
-  // Legacy: plain text note stored directly - return as-is (old entries)
+  // Legacy: plain text stored directly (pre-v1.5.5) — translate known Spanish phrases
+  if(!es) {
+    const legacyMap={
+      'Informe creado':'Report created',
+      'Guardado':'Saved',
+      'Firmado y enviado a revisión':'Signed and sent for review',
+      'Informe editado':'Report edited',
+      'Rechazado':'Rejected',
+    };
+    if(legacyMap[k]) return legacyMap[k];
+    // Partial match for dynamic legacy notes
+    if(k.startsWith('Firmado por '))         return 'Signed by '+k.slice('Firmado por '.length);
+    if(k.startsWith('Firma del cliente por ')) return 'Customer sign-off by '+k.slice('Firma del cliente por '.length);
+    if(k.startsWith('Rechazado por '))        return 'Rejected by '+k.slice('Rechazado por '.length);
+    if(k.startsWith('Cliente solicitó corrección: ')) return 'Customer requested correction: '+k.slice('Cliente solicitó corrección: '.length);
+    if(k.includes('esperando firma del cliente')) return k.replace('Firmado por ','Signed by ').replace(' — esperando firma del cliente',' — awaiting customer sign-off');
+  }
   return k;
 }
 function openActivityLog(){
