@@ -1,4 +1,4 @@
-<!-- FieldLog v1.3.9 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.4.0 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -477,7 +477,10 @@ tr:hover td{background:rgba(255,255,255,.018);}
 
 <main class="mn" id="mn">
 
-<!-- ══════════════════ DASHBOARD ══════════════════ -->
+<!-- ══════════════════════════════════════════════════
+     DASHBOARD — Panel principal
+     Muestra resumen de proyectos, informes y cuadrilla
+     ══════════════════════════════════════════════════ -->
 <div class="pg on" id="page-dashboard"><div class="wrap">
   <div class="ph">
     <div class="pht"><small data-i18n="overview_label">// OVERVIEW</small><span data-i18n="dashboard">Dashboard</span></div>
@@ -500,7 +503,10 @@ tr:hover td{background:rgba(255,255,255,.018);}
   </div>
 </div></div>
 
-<!-- ══════════════════ ALL REPORTS ══════════════════ -->
+<!-- ══════════════════════════════════════════════════
+     ALL REPORTS — Todos los informes
+     Lista filtrable de todos los informes del sistema
+     ══════════════════════════════════════════════════ -->
 <div class="pg" id="page-all-reports"><div class="wrap">
   <div class="ph">
     <div class="pht"><small id="ph-ar-small">// HISTORIAL</small><span id="ph-ar-title">Informes</span></div>
@@ -528,7 +534,10 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="emp" id="ar-empty" style="display:none;"><div class="eic">📋</div>NO REPORTS YET</div>
 </div></div>
 
-<!-- ══════════════════ PROJECTS ══════════════════ -->
+<!-- ══════════════════════════════════════════════════
+     PROJECTS — Gestión de proyectos
+     Lista, creación y detalle de proyectos
+     ══════════════════════════════════════════════════ -->
 <div class="pg" id="page-projects"><div class="wrap">
   <div class="ph">
     <div class="pht"><small id="ph-proj-small">// GESTIÓN DE PROYECTOS</small><span id="ph-proj-title">Proyectos</span></div>
@@ -574,7 +583,10 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div id="pd-panel-photos" style="display:none;"></div>
 </div></div>
 
-<!-- ══════════════════ TASKFORCE ══════════════════ -->
+<!-- ══════════════════════════════════════════════════
+     TASKFORCE — Cuadrilla de trabajadores
+     Gestión del equipo de trabajo
+     ══════════════════════════════════════════════════ -->
 <div class="pg" id="page-taskforce"><div class="wrap">
   <div class="ph">
     <div class="pht"><small id="ph-tf-small">// GESTIÓN DE PERSONAL</small><span id="ph-tf-title">Cuadrilla</span></div>
@@ -590,7 +602,10 @@ tr:hover td{background:rgba(255,255,255,.018);}
   </div>
 </div></div>
 
-<!-- ══════════════════ MATERIALS ══════════════════ -->
+<!-- ══════════════════════════════════════════════════
+     MATERIALS — Catálogo de materiales
+     Gestión del catálogo de materiales reutilizables
+     ══════════════════════════════════════════════════ -->
 <div class="pg" id="page-materials"><div class="wrap">
   <div class="ph">
     <div class="pht"><small id="ph-mat-small">// INVENTARIO</small><span id="ph-mat-title">Materiales</span></div>
@@ -606,7 +621,10 @@ tr:hover td{background:rgba(255,255,255,.018);}
   </div>
 </div></div>
 
-<!-- ══════════════════ CHECKLISTS ══════════════════ -->
+<!-- ══════════════════════════════════════════════════
+     CHECKLISTS — Plantillas de verificación
+     Creación y gestión de plantillas de checklist
+     ══════════════════════════════════════════════════ -->
 <div class="pg" id="page-checklists"><div class="wrap">
   <div class="ph">
     <div class="pht"><small id="ph-cl-small">// PLANTILLAS</small><span id="ph-cl-title">Checklists</span></div>
@@ -616,7 +634,11 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="emp" id="cl-emp"><div class="eic">☑️</div>NO TEMPLATES YET</div>
 </div></div>
 
-<!-- ══════════════════ REPORT FORM ══════════════════ -->
+<!-- ══════════════════════════════════════════════════
+     REPORT FORM — Formulario de informe diario
+     Secciones: Job Info, Weather, Labor, Equipment,
+     Tasks, Materials, Occurrences, Checklist, Photos, Notes
+     ══════════════════════════════════════════════════ -->
 <div class="pg" id="page-report"><div class="wrap">
   <div class="ph">
     <div class="pht"><small id="rml">// NEW REPORT</small><span id="rml2">Field Report</span></div>
@@ -748,7 +770,10 @@ tr:hover td{background:rgba(255,255,255,.018);}
 </div></div><!-- /page-report -->
 
 
-<!-- ══════════════════ USERS ══════════════════ -->
+<!-- ══════════════════════════════════════════════════
+     USERS — Gestión de usuarios
+     Solo visible para administradores
+     ══════════════════════════════════════════════════ -->
 <div class="pg" id="page-users"><div class="wrap">
   <div class="ph">
     <div class="pht"><small id="ph-users-small">// ADMINISTRACIÓN</small><span id="ph-users-title">Usuarios</span></div>
@@ -763,7 +788,10 @@ tr:hover td{background:rgba(255,255,255,.018);}
   </div>
 </div></div>
 
-<!-- ══════════════════ CUSTOMERS ══════════════════ -->
+<!-- ══════════════════════════════════════════════════
+     CUSTOMERS — Gestión de clientes/empresas
+     Solo visible para administradores
+     ══════════════════════════════════════════════════ -->
 <div class="pg" id="page-customers"><div class="wrap">
   <div class="ph">
     <div class="pht"><small id="ph-cust-small">// GESTIÓN DE CLIENTES</small><span id="ph-cust-title">Clientes</span></div>
@@ -981,6 +1009,10 @@ tr:hover td{background:rgba(255,255,255,.018);}
 
 <script>
 // ═══════════════════════════════════════════════
+// PERMISOS Y ROLES
+// Define qué acciones puede realizar cada rol de usuario
+// Roles: admin, manager, technician, viewer, customer
+// ═══════════════════════════════════════════════
 // PERMISSIONS
 // ═══════════════════════════════════════════════
 const PERM_LABELS={
@@ -1149,6 +1181,10 @@ const I18N={
 function t(key){const lang=(typeof currentUser!=='undefined'&&currentUser?.lang)||'es';return (I18N[lang]||I18N.es)[key]||I18N.en[key]||key;}
 
 // ═══════════════════════════════════════════════
+// BASE DE DATOS LOCAL (caché en memoria)
+// DB se carga desde Firestore al iniciar sesión via loadAllData()
+// Cada operación de escritura sincroniza con Firestore automáticamente
+// ═══════════════════════════════════════════════
 // DATABASE
 // ═══════════════════════════════════════════════
 const DB={customers:[],projects:[],workers:[],materials:[],checklists:[],reports:[]};
@@ -1187,6 +1223,7 @@ function toggleNav(){
   if(window.innerWidth<=680){sn.classList.toggle('mob',navOpen);}
   else{sn.classList.toggle('col',!navOpen);mn.classList.toggle('wd',!navOpen);bb.classList.toggle('wd',!navOpen);}
 }
+// Navega entre secciones de la app y aplica traducciones
 function goPage(p){
   document.querySelectorAll('.pg').forEach(el=>el.classList.remove('on'));
   document.querySelectorAll('.ni').forEach(el=>el.classList.remove('on'));
@@ -1258,7 +1295,12 @@ function togSE(id,cb){
 
 // ═══════════════════════════════════════════════
 // DASHBOARD
+// renderDash() → actualiza contadores y listas del panel principal
+// Muestra proyectos recientes e informes recientes
 // ═══════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════
+// Actualiza contadores y listas del panel principal
 function renderDash(){
   // Accessible projects for current user
   const myProjs=DB.projects.filter(p=>canAccessProject(p.id));
@@ -1289,8 +1331,13 @@ function renderDash(){
 function stCls(s){return s==='Active'||s==='Approved'?'g':s==='Review'?'r':s==='Filling'||s==='On Hold'?'a':'';}
 
 // ═══════════════════════════════════════════════
+// TODOS LOS INFORMES
+// renderAllReports() → lista todos los informes con filtros
+// rptRow() → genera una fila HTML para un informe
+// ═══════════════════════════════════════════════
 // ALL REPORTS
 // ═══════════════════════════════════════════════
+// Renderiza todos los informes con filtros y búsqueda
 function renderAllReports(){
   const sf=document.getElementById('ar-filter-status').value;
   const pf=document.getElementById('ar-filter-proj')?.value||'';
@@ -1353,6 +1400,11 @@ function rptRow(r,withProj=false){
   </div>`;
 }
 
+// ═══════════════════════════════════════════════
+// PROYECTOS
+// renderProjs() → lista proyectos con filtros
+// saveP() → crea o actualiza un proyecto en DB y Firestore
+// viewProj() → abre el detalle de un proyecto
 // ═══════════════════════════════════════════════
 // PROJECTS
 // ═══════════════════════════════════════════════
@@ -1457,6 +1509,7 @@ function populateProjCustFilter(){
   DB.customers.forEach(c=>sel.innerHTML+=`<option value="${c.id}"${c.id===cur?' selected':''}>${E(c.name)}</option>`);
   if(cur)sel.value=cur;
 }
+// Renderiza la lista de proyectos con filtros
 function renderProjs(){
   const c=document.getElementById('plist');
   const q=(document.getElementById('proj-search')?.value||'').toLowerCase().trim();
@@ -1664,6 +1717,11 @@ function renderPDPhotos(){
 }
 
 // ═══════════════════════════════════════════════
+// CUADRILLA (Trabajadores)
+// renderWorkers() → lista los miembros del equipo
+// saveW() → crea o actualiza un trabajador
+// ROLES/ROLES_ES/ROLES_EN → catálogo de roles bilingüe
+// ═══════════════════════════════════════════════
 // TASKFORCE
 // ═══════════════════════════════════════════════
 function openWM(id=null){
@@ -1681,6 +1739,7 @@ function saveW(){
   else{const nw={id:'w'+Date.now(),...d};DB.workers.push(nw);fbSave('workers',nw.id,nw).catch(console.error);toast('✓ MEMBER ADDED');}
   closeMO('mo-worker');renderWorkers();renderDash();
 }
+// Renderiza el listado de trabajadores
 function renderWorkers(){
   const tb=document.getElementById('wk-tb'),em=document.getElementById('wk-emp');
   const q=(document.getElementById('wk-search')?.value||'').toLowerCase().trim();
@@ -1700,6 +1759,11 @@ function renderWorkers(){
 function delW(id){if(!confirm((currentUser?.lang==='en'?'Remove?':'¿Eliminar?')))return;DB.workers=DB.workers.filter(w=>w.id!==id);DB.projects.forEach(p=>{p.members=(p.members||[]).filter(m=>m!==id);});fbDelete('workers',id).catch(console.error);renderWorkers();renderDash();toast((currentUser?.lang==='en'?'REMOVED':'ELIMINADO'),'var(--rd)');}
 
 // ═══════════════════════════════════════════════
+// MATERIALES
+// renderMats() → lista el catálogo de materiales
+// saveMat() → crea o actualiza un material
+// impM() → importa materiales del catálogo al informe actual
+// ═══════════════════════════════════════════════
 // MATERIALS
 // ═══════════════════════════════════════════════
 function openMM(id=null){
@@ -1717,6 +1781,7 @@ function saveM(){
   else{const nm={id:'m'+Date.now(),...d};DB.materials.push(nm);fbSave('materials',nm.id,nm).catch(console.error);toast('✓ ADDED');}
   closeMO('mo-mat');renderMats();renderDash();
 }
+// Renderiza el catálogo de materiales
 function renderMats(){
   const tb=document.getElementById('mc-tb'),em=document.getElementById('mc-emp');
   const q=(document.getElementById('mc-search')?.value||'').toLowerCase().trim();
@@ -1735,6 +1800,11 @@ function renderMats(){
 }
 function delM(id){if(!confirm((currentUser?.lang==='en'?'Delete?':'¿Eliminar?')))return;DB.materials=DB.materials.filter(m=>m.id!==id);fbDelete('materials',id).catch(console.error);renderMats();renderDash();toast('ELIMINADO','var(--rd)');}
 
+// ═══════════════════════════════════════════════
+// CHECKLISTS (Plantillas de Verificación)
+// renderCLists() / renderCLTs() → lista plantillas disponibles
+// saveCL() → guarda una plantilla nueva o editada
+// renderCLR() → renderiza el checklist activo en el informe
 // ═══════════════════════════════════════════════
 // CHECKLISTS PAGE
 // ═══════════════════════════════════════════════
@@ -1804,8 +1874,16 @@ function renderCLTs(){
 function delCLT(id){if(!confirm('¿Eliminar esta plantilla?'))return;DB.checklists=DB.checklists.filter(c=>c.id!==id);fbDelete('checklists',id).catch(console.error);if(activeCL?.templateId===id){activeCL=null;renderCLR();}renderCLTs();toast('ELIMINADO','var(--rd)');}
 
 // ═══════════════════════════════════════════════
+// FORMULARIO DE INFORME
+// startNewReport() → inicia un informe nuevo
+// editR() → abre un informe existente para editar
+// collectRpt() → recopila todos los datos del formulario
+// saveReport() → guarda el informe (Draft/Filling)
+// addLR/addER/addTR/addMR/addOCC → agregan filas de Labor/Equipo/Tarea/Material/Ocurrencia
+// ═══════════════════════════════════════════════
 // REPORT FORM
 // ═══════════════════════════════════════════════
+// Inicia un informe nuevo - resetea el formulario y aplica el idioma
 function startNewReport(projId=null){
   if(isCustomerRole()){toast('CLIENTES NO PUEDEN CREAR INFORMES','var(--rd)');return;}
   curRptId=null;editingRpt=false;activeCL=null;curReportStatus='Draft';
@@ -1908,6 +1986,7 @@ function editR(id){
 
 function backFromReport(){if(curProjId)viewProj(curProjId);else goPage('all-reports');}
 
+// Actualiza la barra de estado inferior según el estado del informe
 function setBBStatus(s){
   curReportStatus=s;
   const stColors={'Draft':'var(--mu)','Filling':'var(--am)','Review':'var(--rd)','Approved':'var(--gn)','Pending Customer':'#6495ed','Rejected':'var(--rd)'};
@@ -1984,21 +2063,25 @@ function updateRID(){
 const ROLES=['Electrician','Plumber','Carpenter','Welder','Equipment Operator','Laborer','Engineer','Inspector','Foreman','Site Manager','Supervisor','Technician','Other'];
 const ROLES_ES={'Electrician':'Electricista','Plumber':'Gasfiter','Carpenter':'Carpintero','Welder':'Soldador','Equipment Operator':'Operador de Equipos','Laborer':'Jornalero','Engineer':'Ingeniero','Inspector':'Inspector','Foreman':'Capataz','Site Manager':'Jefe de Obra','Supervisor':'Supervisor','Technician':'Técnico','Other':'Otro'};
 const ROLES_EN={'Electrician':'Electrician','Plumber':'Plumber','Carpenter':'Carpenter','Welder':'Welder','Equipment Operator':'Equipment Operator','Laborer':'Laborer','Engineer':'Engineer','Inspector':'Inspector','Foreman':'Foreman','Site Manager':'Site Manager','Supervisor':'Supervisor','Technician':'Technician','Other':'Other'};
+// Traduce rol de trabajador al idioma actual
 function tRole(s){const lang=currentUser?.lang||'es';return(lang==='en'?ROLES_EN:ROLES_ES)[s]||s||'—';}
 function tRoleOpt(sel){const lang=currentUser?.lang||'es';const map=lang==='en'?ROLES_EN:ROLES_ES;return ROLES.map(v=>`<option value="${v}"${v===sel?' selected':''}>${map[v]||v}</option>`).join('');}
 const ESTAT=['In use','Idle','Off-site','Under repair'];
 const ESTAT_ES={'In use':'En uso','Idle':'Disponible','Off-site':'Fuera de sitio','Under repair':'En reparación'};
 const ESTAT_EN={'In use':'In use','Idle':'Idle','Off-site':'Off-site','Under repair':'Under repair'};
+// Traduce estado de equipo al idioma actual
 function tEstat(s){const lang=currentUser?.lang||'es';return(lang==='en'?ESTAT_EN:ESTAT_ES)[s]||s||'—';}
 function tEstatOpt(s){const lang=currentUser?.lang||'es';return ESTAT.map(v=>`<option value="${v}"${v===s?' selected':''}>${(lang==='en'?ESTAT_EN:ESTAT_ES)[v]||v}</option>`).join('');}
 const TSTAT=['Pending','In Progress','Completed'];
 const TSTAT_ES={Pending:'Pendiente','In Progress':'En curso',Completed:'Completado'};
 const TSTAT_EN={Pending:'Pending','In Progress':'In Progress',Completed:'Completed'};
+// Traduce estado de tarea: Pending→Pendiente, etc.
 function tStat(s){const lang=currentUser?.lang||'es';return(lang==='en'?TSTAT_EN:TSTAT_ES)[s]||s;}
 const RSTATUS_ES={Draft:'Borrador',Filling:'En proceso',Review:'En revisión',Approved:'Aprobado','Pending Customer':'Firma cliente',Rejected:'Rechazado'};
 const RSTATUS_EN={Draft:'Draft',Filling:'Filling',Review:'In Review',Approved:'Approved','Pending Customer':'Customer Sign-Off',Rejected:'Rejected'};
 function tRptStatus(s){const lang=currentUser?.lang||'es';return(lang==='en'?RSTATUS_EN:RSTATUS_ES)[s]||s||'—';}
 function tStatOpt(s){const lang=currentUser?.lang||'es';return TSTAT.map(v=>`<option value="${v}"${v===s?' selected':''}>${(lang==='en'?TSTAT_EN:TSTAT_ES)[v]||v}</option>`).join('');}
+// Agrega una fila de trabajador al formulario de informe
 function addLR(name='',role='Electrician',start='07:00',end='16:00',hrs=''){
   const d=document.createElement('div');d.className='ri';d.style.gridTemplateColumns='2fr 1.2fr 58px 58px 50px 26px';
   d.innerHTML=`<input type="text" placeholder="${currentUser?.lang==='en'?'Name / Crew':(currentUser?.lang==='en'?'Name / Crew':'Nombre / Cuadrilla')}" value="${E(name)}">
@@ -2009,6 +2092,7 @@ function addLR(name='',role='Electrician',start='07:00',end='16:00',hrs=''){
     <button class="ib" onclick="this.closest('.ri').remove();upB('r-labor','bl-l','worker')">✕</button>`;
   document.getElementById('r-labor').appendChild(d);upB('r-labor','bl-l','worker');
 }
+// Agrega una fila de equipo al formulario de informe
 function addER(desc='',status='In use'){
   const d=document.createElement('div');d.className='ri';d.style.gridTemplateColumns='2fr 1fr 26px';
   d.innerHTML=`<input type="text" placeholder="${currentUser?.lang==='en'?'Equipment description':'Descripción del equipo'}" value="${E(desc)}">
@@ -2016,6 +2100,7 @@ function addER(desc='',status='In use'){
     <button class="ib" onclick="this.closest('.ri').remove();upB('r-equip','bl-e','item')">✕</button>`;
   document.getElementById('r-equip').appendChild(d);upB('r-equip','bl-e','item');
 }
+// Agrega una fila de tarea al formulario de informe
 function addTR(desc='',status='Pending',comment='',photos=[],captions=[]){
   const uid='tr'+Date.now()+Math.random().toString(36).slice(2,6);
   const d=document.createElement('div');d.className='task-entry';d.dataset.uid=uid;
@@ -2122,6 +2207,7 @@ function openTaskPhotoLB(uid,idx){
   lbPhotos=photos;lbCaptions=[...caps];lbIdx=idx;
   showLBSlide();document.getElementById('lightbox').style.display='flex';
 }
+// Agrega una fila de material al formulario de informe
 function addMR(name='',unit='pcs',qty=''){
   const d=document.createElement('div');d.className='ri';d.style.gridTemplateColumns='2fr 65px 60px 26px';
   d.innerHTML=`<input type="text" placeholder="${currentUser?.lang==='en'?'Material / item':'Material / ítem'}" value="${E(name)}">
@@ -2368,6 +2454,7 @@ function updCLB(){
 // ═══════════════════════════════════════════════
 // COLLECT REPORT
 // ═══════════════════════════════════════════════
+// Recopila todos los campos del formulario en un objeto de datos
 function collectRpt(){
   const sel=document.getElementById('r-proj');
   const projId=sel.value,projName=sel.selectedOptions[0]?.textContent||'';
@@ -2410,6 +2497,7 @@ function collectRpt(){
 // ═══════════════════════════════════════════════
 // ACTIVITY LOG HELPERS
 // ═══════════════════════════════════════════════
+// Registra una acción en el log de actividad del informe
 function logActivity(rpt, action, extraNote=''){
   if(!rpt.activityLog)rpt.activityLog=[];
   rpt.activityLog.push({
@@ -2448,6 +2536,7 @@ function openActivityLog(){
   openMO('mo-log');
 }
 
+// Guarda el informe actual (Draft/Filling) y sincroniza con Firestore
 function saveReport(){
   const data=collectRpt();
   const isNew=!(editingRpt&&curRptId);
@@ -2683,6 +2772,7 @@ function doReject(){
 const OCC_TYPES_ES=['Casi accidente','Primeros auxilios','Tratamiento médico','Daño a la propiedad','Ambiental','Falla de equipo','Incidente de seguridad','Otro'];
 const OCC_TYPES_EN=['Near miss','First aid','Medical treatment','Property damage','Environmental','Equipment failure','Security incident','Other'];
 function getOccTypes(){return (currentUser?.lang||'es')==='es'?OCC_TYPES_ES:OCC_TYPES_EN;}
+// Agrega un bloque de ocurrencia/incidente al formulario
 function addOCC(type='',time='',desc='',action='',photos=[],captions=[]){
   if(!type)type=currentUser?.lang==='en'?'Near miss':'Casi accidente';
   const uid='occ'+Date.now()+Math.random().toString(36).slice(2,6);
@@ -3036,8 +3126,13 @@ window.onload=()=>{
 }
 
 // ═══════════════════════════════════════════════
+// MODAL DE VISTA DE INFORME
+// viewReport(id) → abre un informe en modo lectura
+// Muestra todos los datos, log de actividad y permite acciones
+// ═══════════════════════════════════════════════
 // REPORT VIEW MODAL
 // ═══════════════════════════════════════════════
+// Abre el modal de lectura de un informe
 function viewReport(id){
   const r=DB.reports.find(rp=>rp.id===id);if(!r)return;
   const clit=r.checklist?.items||[];
@@ -3149,6 +3244,7 @@ function gv(id){const el=document.getElementById(id);return el?el.value:'';}
 // ═══════════════════════════════════════════════
 // AUTH SYSTEM
 // ═══════════════════════════════════════════════
+// Autentica con Firebase Auth, carga perfil desde Firestore y redirige según rol
 async function doLogin(){
   const u=document.getElementById('lin-u').value.trim();
   const p=document.getElementById('lin-p').value;
@@ -3456,8 +3552,15 @@ const THEMES=['dark','blue','light','slate'];
 const THEME_ICONS={dark:'🌑',blue:'🌊',light:'☀️',slate:'🔮'};
 const THEME_NAMES={dark:'Industrial',blue:'Ocean',light:'Claro',slate:'Slate'};
 // ═══════════════════════════════════════════════
+// CAPA DE DATOS FIREBASE
+// loadAllData() → carga todas las colecciones desde Firestore al iniciar sesión
+// fbSave(col,id,data) → guarda/actualiza un documento en Firestore
+// fbDelete(col,id) → elimina un documento de Firestore
+// Colecciones: users, projects, workers, materials, checklists, reports, customers
+// ═══════════════════════════════════════════════
 // FIREBASE DATA LAYER
 // ═══════════════════════════════════════════════
+// Carga todas las colecciones de Firestore en paralelo al hacer login
 async function loadAllData(){
   const [us,ps,ws,ms,cs,rs,cus]=await Promise.all([
     fbFns.getDocs(fbFns.collection(fbDB,'users')),
@@ -3476,8 +3579,10 @@ async function loadAllData(){
   DB.reports=rs.docs.map(d=>({id:d.id,...d.data()}));
   DB.customers=cus.docs.map(d=>({id:d.id,...d.data()}));
 }
+// Guarda o actualiza un documento en Firestore
 async function fbSave(col,id,data){await fbFns.setDoc(fbFns.doc(fbDB,col,id),data);}
 async function fbUpdate(col,id,data){await fbFns.updateDoc(fbFns.doc(fbDB,col,id),data);}
+// Elimina un documento de Firestore
 async function fbDelete(col,id){await fbFns.deleteDoc(fbFns.doc(fbDB,col,id));}
 
 let currentTheme=localStorage.getItem('fl-theme')||'dark';
@@ -3509,6 +3614,7 @@ document.addEventListener('click',e=>{
   const m=document.getElementById('umenu');
   if(m&&!m.contains(e.target)&&!document.getElementById('uav').contains(e.target))m.classList.remove('op');
 });
+// Retorna true si el usuario actual tiene el permiso dado
 function hasPerm(perm){
   if(!currentUser)return false;
   if(currentUser.role==='admin')return true;
@@ -3523,6 +3629,7 @@ function isReportLocked(r){
   return false;
 }
 function isCustomerRole(){return currentUser?.role==='customer';}
+// Retorna true si el usuario puede ver/editar el proyecto dado
 function canAccessProject(projId){
   if(!currentUser)return false;
   if(currentUser.role==='admin')return true;
@@ -3544,6 +3651,11 @@ function canAccessProject(projId){
   return false;
 }
 
+// ═══════════════════════════════════════════════
+// USUARIOS
+// renderUsers() → lista usuarios del sistema (solo admin)
+// saveUser() → crea usuario en Firebase Auth + Firestore
+// Roles: admin, manager, technician, viewer, customer
 // ═══════════════════════════════════════════════
 // USERS CRUD
 // ═══════════════════════════════════════════════
@@ -3682,6 +3794,7 @@ async function saveUser(){
   }
   closeMO('mo-user');renderUsers();
 }
+// Renderiza usuarios del sistema (solo admin)
 function renderUsers(){
   const tb=document.getElementById('users-tb'),em=document.getElementById('users-emp');
   const _usrLng=currentUser?.lang==='en';document.getElementById('ub-cnt').textContent=DB.users.length+(_usrLng?' users':' usuarios');document.getElementById('users-hdr').textContent=_usrLng?'👥 System Users':'👥 Usuarios del Sistema';
@@ -3730,6 +3843,11 @@ function saveChPW(){
 }
 
 // ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// CLIENTES (Empresas)
+// renderCustomers() → lista empresas clientes
+// saveCust() → crea o actualiza un cliente
+// Los clientes se vinculan a proyectos y usuarios con rol "customer"
 // ═══════════════════════════════════════════════
 // CUSTOMERS CRUD (DB.customers — independent from users)
 // ═══════════════════════════════════════════════
@@ -3869,6 +3987,7 @@ function refreshUCustProjs(){
   }
 }
 
+// Renderiza lista de empresas/clientes
 function renderCustomers(){
   const list=document.getElementById('cust-list'),em=document.getElementById('cust-emp');
   const q=(document.getElementById('cust-search')?.value||'').toLowerCase().trim();
