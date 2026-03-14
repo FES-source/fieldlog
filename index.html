@@ -1,4 +1,4 @@
-<!-- FieldLog v1.5.2 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
+<!-- FieldLog v1.5.3 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1487,7 +1487,7 @@ function onProjCustChange(){
   if(hint)hint.textContent=cust?(currentUser?.lang==='en'?'✓ Project will be automatically assigned to ':'✓ El proyecto se asignará automáticamente a ')+cust.name:'';
 }
 function saveP(){
-  if(!hasPerm('manage_projects')){toast('SIN PERMISO','var(--rd)');return;}
+  if(!hasPerm('manage_projects')){toast(currentUser?.lang==='en'?'NO PERMISSION':'SIN PERMISO','var(--rd)');return;}
   const name=gv('p-name').trim();if(!name){toast('NOMBRE REQUERIDO','var(--rd)');return;}
   const logo1=document.getElementById('p-logo1-inp')._logoData||null;
   const logo2=document.getElementById('p-logo2-inp')._logoData||null;
@@ -2627,7 +2627,7 @@ function getSigData(canvasId){
 }
 
 function submitReport(){
-  if(!hasPerm('create_reports')){toast('SIN PERMISO','var(--rd)');return;}
+  if(!hasPerm('create_reports')){toast(currentUser?.lang==='en'?'NO PERMISSION':'SIN PERMISO','var(--rd)');return;}
   // Validate required fields
   const projVal=document.getElementById('r-proj')?.value;
   if(!projVal){toast(currentUser?.lang==='en'?'SELECT A PROJECT FIRST':'SELECCIONE UN PROYECTO PRIMERO','var(--rd)');document.getElementById('r-proj')?.focus();return;}
@@ -2639,7 +2639,7 @@ function submitReport(){
   // If a checklist template is loaded, all items must be answered
   if(clEnabled&&activeCL){
     const unanswered=activeCL.items.filter(i=>{const tp=i.type||'sna';return tp==='sna'?!i.sna:tp==='text'?!i.textAns:tp==='multi'?!(i.multiSel||[]).length:!i.singleSel;});
-    if(unanswered.length>0){toast('TODOS LOS ÍTEMS DEL CHECKLIST DEBEN SER RESPONDIDOS ('+unanswered.length+' restantes)','var(--rd)');return;}
+    if(unanswered.length>0){toast(currentUser?.lang==='en'?'ALL CHECKLIST ITEMS MUST BE ANSWERED ('+unanswered.length+' remaining)':'TODOS LOS ÍTEMS DEL CHECKLIST DEBEN SER RESPONDIDOS ('+unanswered.length+' restantes)','var(--rd)');return;}
   }
   // Pre-fill signer name from current user
   const sn=document.getElementById('ssig-name');
@@ -2661,19 +2661,20 @@ function doSubmitSigned(){
   const isNew=!(editingRpt&&curRptId);
   if(!isNew){
     const idx=DB.reports.findIndex(r=>r.id===curRptId);
-    if(idx>-1){const ex=DB.reports[idx];Object.assign(ex,data);logActivity(ex,'submitted',currentUser?.lang==='en'?'Signed and sent for review':'Firmado y enviado a revisión');}
+    if(idx>-1){const ex=DB.reports[idx];Object.assign(ex,data);logActivity(ex,'submitted',currentUser?.lang==='en'?'Signed and sent for review':'Firmado y enviado a revisión');fbSave('reports',ex.id,ex).catch(console.error);}
   } else {
     data.activityLog=[];data.createdAt=new Date().toISOString();
     logActivity(data,'created',currentUser?.lang==='en'?'Report created':'Informe creado');logActivity(data,'submitted',currentUser?.lang==='en'?'Signed and sent for review':'Firmado y enviado a revisión');
     DB.reports.push(data);curRptId=data.id;editingRpt=true;
+    fbSave('reports',data.id,data).catch(console.error);
   }
   closeMO('mo-submit-sig');setBBStatus(nextStatus);renderDash();updateNavBadge();
   toast(currentUser?.lang==='en'?'✓ SIGNED AND SENT FOR REVIEW':'✓ FIRMADO Y ENVIADO A REVISIÓN','var(--am)');
 }
 
 function approveReport(){
-  if(!hasPerm('approve_reports')){toast('SIN PERMISO PARA APROBAR','var(--rd)');return;}
-  if(!curRptId){toast('INFORME NO ENCONTRADO','var(--am)');return;}
+  if(!hasPerm('approve_reports')){toast(currentUser?.lang==='en'?'NO PERMISSION TO APPROVE':'SIN PERMISO PARA APROBAR','var(--rd)');return;}
+  if(!curRptId){toast(currentUser?.lang==='en'?'REPORT NOT FOUND':'INFORME NO ENCONTRADO','var(--am)');return;}
   const an=document.getElementById('asig-name');
   const ar=document.getElementById('asig-role');
   if(an)an.value=currentUser?.name||'';
