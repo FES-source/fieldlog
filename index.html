@@ -1,4 +1,4 @@
-<!-- FieldLog v1.4.3 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.5.0 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -426,7 +426,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="lb-cap">
     <div class="lb-caption-display" id="lb-cap-show"></div>
     <div class="lb-cap-row" style="margin-top:6px;">
-      <input type="text" id="lb-cap-in" placeholder="Agregar descripción o comentario a la foto…">
+      <input type="text" id="lb-cap-in" placeholder="Add photo description or comment…">
       <button class="lb-save-btn" onclick="saveLBCap()">💾 Save</button>
     </div>
   </div>
@@ -878,22 +878,32 @@ tr:hover td{background:rgba(255,255,255,.018);}
 <div class="mo" id="mo-worker"><div class="modal" style="max-width:510px;">
   <div class="mh"><div class="mtt" id="wm-title">👷 Add Member</div><button class="mcl" onclick="closeMO('mo-worker')">✕</button></div>
   <div class="mb">
-    <div class="fg f2"><div><label>Nombre Completo *</label><input type="text" id="w-name" placeholder="Nombre Apellido"></div><div><label>Cargo / Oficio *</label><select id="w-role"><option value="Electrician">Electricista</option><option value="Plumber">Gasfiter</option><option value="Carpenter">Carpintero</option><option value="Welder">Soldador</option><option value="Equipment Operator">Operador de Equipos</option><option value="Laborer">Jornalero</option><option value="Engineer">Ingeniero</option><option value="Inspector">Inspector</option><option value="Foreman">Capataz</option><option value="Site Manager">Jefe de Obra</option><option value="Supervisor">Supervisor</option><option value="Technician">Técnico</option><option value="Other">Otro</option></select></div></div>
-    <div class="fg f2" style="margin-top:10px;"><div><label>Teléfono</label><input type="text" id="w-phone" placeholder="+56 9 0000 0000"></div><div><label data-i18n="user_email">Email</label><input type="email" id="w-email" placeholder="correo@empresa.com"></div></div>
-    <div class="fg f2" style="margin-top:10px;"><div><label>ID Empleado</label><input type="text" id="w-id" placeholder="EMP-001"></div><div><label>Estado</label><select id="w-stat"><option value="Active">Activo</option><option value="On Leave">Con permiso</option><option value="Inactive">Inactivo</option></select></div></div>
+    <div class="fg f2"><div><label id="w-lbl-name">Nombre Completo *</label><input type="text" id="w-name" placeholder="Nombre Apellido"></div><div><label id="w-lbl-role">Cargo / Oficio *</label><select id="w-role"><option value="Electrician">Electricista</option><option value="Plumber">Gasfiter</option><option value="Carpenter">Carpintero</option><option value="Welder">Soldador</option><option value="Equipment Operator">Operador de Equipos</option><option value="Laborer">Jornalero</option><option value="Engineer">Ingeniero</option><option value="Inspector">Inspector</option><option value="Foreman">Capataz</option><option value="Site Manager">Jefe de Obra</option><option value="Supervisor">Supervisor</option><option value="Technician">Técnico</option><option value="Other">Otro</option></select></div></div>
+    <div class="fg f2" style="margin-top:10px;"><div><label id="w-lbl-phone">Teléfono</label><input type="text" id="w-phone" placeholder="+56 9 0000 0000"></div><div><label data-i18n="user_email">Email</label><input type="email" id="w-email" placeholder="correo@empresa.com"></div></div>
+    <div class="fg f2" style="margin-top:10px;"><div><label id="w-lbl-empid">ID Empleado</label><input type="text" id="w-id" placeholder="EMP-001"></div><div><label id="w-lbl-stat">Estado</label><select id="w-stat"><option value="Active" id="w-opt-active">Activo</option><option value="On Leave" id="w-opt-leave">Con permiso</option><option value="Inactive" id="w-opt-inactive">Inactivo</option></select></div></div>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-worker')" data-i18n="cancel" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveW()" data-i18n="save">Guardar</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-worker')" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveW()" data-i18n="save">Guardar</button></div>
 </div></div>
 
 <!-- MATERIAL MODAL -->
 <div class="mo" id="mo-mat"><div class="modal" style="max-width:510px;">
   <div class="mh"><div class="mtt" id="mm-title">📦 Add Material</div><button class="mcl" onclick="closeMO('mo-mat')">✕</button></div>
   <div class="mb">
-    <div class="fg f1"><div><label>Nombre del Ítem *</label><input type="text" id="m-name" placeholder="ej. Cable THHN #10"></div></div>
-    <div class="fg f3" style="margin-top:10px;"><div><label>Categoría</label><select id="m-cat"><option>Eléctrico</option><option>Gasfitería</option><option>Estructural</option><option>Mecánico</option><option>Fijaciones</option><option>Seguridad</option><option>Hormigón</option><option>Terminaciones</option><option>Otro</option></select></div><div><label>Unidad</label><select id="m-unit"><option>pcs</option><option>ft</option><option>m</option><option>lbs</option><option>kg</option><option>boxes</option><option>rolls</option><option>bags</option><option>gal</option><option>L</option><option>set</option></select></div><div><label>Cantidad</label><input type="number" id="m-qty" placeholder="0" min="0"></div></div>
-    <div class="fg f1" style="margin-top:10px;"><div><label>Notas</label><input type="text" id="m-notes" placeholder="Especificación, marca o info..."></div></div>
+    <div class="fg f1"><div><label id="m-lbl-name">Nombre del Ítem *</label><input type="text" id="m-name" placeholder="ej. Cable THHN #10"></div></div>
+    <div class="fg f3" style="margin-top:10px;"><div><label id="m-lbl-cat">Categoría</label><select id="m-cat">
+      <option id="m-cat-elec">Eléctrico</option>
+      <option id="m-cat-plmb">Gasfitería</option>
+      <option id="m-cat-strc">Estructural</option>
+      <option id="m-cat-mech">Mecánico</option>
+      <option id="m-cat-fix">Fijaciones</option>
+      <option id="m-cat-safe">Seguridad</option>
+      <option id="m-cat-conc">Hormigón</option>
+      <option id="m-cat-fin">Terminaciones</option>
+      <option id="m-cat-oth">Otro</option>
+    </select></div><div><label id="m-lbl-unit">Unidad</label><select id="m-unit"><option>pcs</option><option>ft</option><option>m</option><option>lbs</option><option>kg</option><option>boxes</option><option>rolls</option><option>bags</option><option>gal</option><option>L</option><option>set</option></select></div><div><label id="m-lbl-qty">Cantidad</label><input type="number" id="m-qty" placeholder="0" min="0"></div></div>
+    <div class="fg f1" style="margin-top:10px;"><div><label id="m-lbl-notes">Notas</label><input type="text" id="m-notes" placeholder="Especificación, marca o info..."></div></div>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-mat')" data-i18n="cancel" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveM()">Save</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-mat')" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveM()" id="mm-save-lbl">Guardar</button></div>
 </div></div>
 
 <!-- CL PICKER -->
@@ -969,12 +979,12 @@ tr:hover td{background:rgba(255,255,255,.018);}
 
 <!-- CHANGE PASSWORD MODAL -->
 <div class="mo" id="mo-chpw"><div class="modal" style="max-width:400px;">
-  <div class="mh"><div class="mtt">🔒 Cambiar Contraseña</div><button class="mcl" onclick="closeMO('mo-chpw')">✕</button></div>
+  <div class="mh"><div class="mtt" id="chpw-title">🔒 Cambiar Contraseña</div><button class="mcl" onclick="closeMO('mo-chpw')">✕</button></div>
   <div class="mb">
-    <div style="margin-bottom:10px;"><label>Nueva Contraseña *</label><input type="password" id="chpw-new" placeholder="Mín. 6 caracteres"></div>
-    <div><label>Confirmar *</label><input type="password" id="chpw-cfm" placeholder="Repetir contraseña"></div>
+    <div style="margin-bottom:10px;"><label id="chpw-lbl-new">Nueva Contraseña *</label><input type="password" id="chpw-new" placeholder="Mín. 6 caracteres"></div>
+    <div><label id="chpw-lbl-cfm">Confirmar *</label><input type="password" id="chpw-cfm" placeholder="Repetir contraseña"></div>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-chpw')" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveChPW()">Change</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-chpw')" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveChPW()" id="chpw-submit">Cambiar</button></div>
 </div></div>
 
 <!-- CUSTOMER MODAL -->
@@ -1288,7 +1298,7 @@ function togSiteRow(cb){
   }
   const es2=currentUser?.lang!=='en';
   const lbl=document.getElementById('lbl-site-toggle-txt');
-  if(lbl)lbl.textContent=cb.checked?(es2?'— OCULTAR SITIO ESPECÍFICO':'— HIDE SPECIFIC SITE'):(es2?(currentUser?.lang==='en'?'+ ADD SPECIFIC SITE':'+ AGREGAR SITIO ESPECÍFICO'):'+ ADD SPECIFIC SITE');
+  if(lbl)lbl.textContent=cb.checked?(es2?'— OCULTAR SITIO ESPECÍFICO':'— HIDE SPECIFIC SITE'):(es2?'+ AGREGAR SITIO ESPECÍFICO':'+ ADD SPECIFIC SITE');
 }
 function togSE(id,cb){
   const el=document.getElementById(id);
@@ -1368,7 +1378,7 @@ function renderAllReports(){
     const myRptsCust=[...DB.reports].filter(r=>canAccessProject(r.projId));
     const myCnt={'Pending Customer':myRptsCust.filter(r=>r.status==='Pending Customer').length,'Approved':myRptsCust.filter(r=>r.status==='Approved').length};
     const lang2=currentUser?.lang||'es';const es2=lang2==='es';
-    countsEl.innerHTML=`<span style="color:#6495ed;">⏳ ${es2?'Pendiente tu firma':'Pending your signature'}: ${myCnt['Pending Customer']}</span> · <span style="color:var(--gn);">✓ ${es2?(currentUser?.lang==='en'?'Approved':'Aprobados'):'Approved'}: ${myCnt['Approved']}</span>`;
+    countsEl.innerHTML=`<span style="color:#6495ed;">⏳ ${es2?'Pendiente tu firma':'Pending your signature'}: ${myCnt['Pending Customer']}</span> · <span style="color:var(--gn);">✓ ${es2?'Aprobados':'Approved'}: ${myCnt['Approved']}</span>`;
   } else {
     const _es2=currentUser?.lang!=='en';countsEl.textContent=`${_es2?'Llenando':'Filling'}: ${cnt.Filling} · ${_es2?'En revisión':'In Review'}: ${cnt.Review} · ${_es2?'Aprobados':'Approved'}: ${cnt.Approved} · ${_es2?'Borradores':'Drafts'}: ${cnt.Draft}`;
   }
@@ -1429,14 +1439,14 @@ function clearLogo(n){setLogoPreview(n,null);}
 function fillPCSel(selId,selectedId){
   const sel=document.getElementById(selId);if(!sel)return;
   const lang=currentUser?.lang||'es';
-  sel.innerHTML=`<option value="">${lang==='es'?(currentUser?.lang==='en'?'— No customer assigned —':'— Sin cliente asignado —'):'— No customer assigned —'}</option>`;
+  sel.innerHTML=`<option value="">${lang==='es'?'— Sin cliente asignado —':'— No customer assigned —'}</option>`;
   DB.customers.forEach(c=>sel.innerHTML+=`<option value="${c.id}"${c.id===selectedId?' selected':''}>${E(c.name)}</option>`);
 }
 function openPM(id=null){
   if(!hasPerm('manage_projects')){toast(t('no_permission')||'NO PERMISSION','var(--rd)');return;}
   editPJ=id;pmems=[];
   const lang=currentUser?.lang||'es';
-  document.getElementById('pm-title').textContent=id?(lang==='es'?(currentUser?.lang==='en'?'✏ Edit Project':'✏ Editar Proyecto'):'✏ Edit Project'):(lang==='es'?(currentUser?.lang==='en'?'🏗 New Project':'🏗 Nuevo Proyecto'):'🏗 New Project');
+  document.getElementById('pm-title').textContent=id?(lang==='es'?'✏ Editar Proyecto':'✏ Edit Project'):(lang==='es'?'🏗 Nuevo Proyecto':'🏗 New Project');
   ['p-name','p-code','p-cli','p-loc','p-desc'].forEach(f=>document.getElementById(f).value='');
   document.getElementById('p-start').value='';document.getElementById('p-end').value='';
   document.getElementById('p-stat').value='Active';
@@ -1460,7 +1470,7 @@ function openPM(id=null){
 function fillPMS(){
   const s=document.getElementById('p-msel');
   const lang=currentUser?.lang||'es';
-  s.innerHTML=`<option value="">${lang==='es'?(currentUser?.lang==='en'?'— Add from Taskforce —':'— Agregar de Cuadrilla —'):'— Add from Taskforce —'}</option>`;
+  s.innerHTML=`<option value="">${lang==='es'?'— Agregar de Cuadrilla —':'— Add from Taskforce —'}</option>`;
   DB.workers.forEach(w=>{if(!pmems.includes(w.id))s.innerHTML+=`<option value="${w.id}">${E(w.name)} — ${E(w.role)}</option>`;});
 }
 function addPM(){const v=document.getElementById('p-msel').value;if(!v)return;pmems.push(v);fillPMS();renderPMD();}
@@ -1508,7 +1518,7 @@ function populateProjCustFilter(){
   const sel=document.getElementById('proj-filter-cust');if(!sel)return;
   const cur=sel.value;
   const lang=currentUser?.lang||'es';
-  sel.innerHTML=`<option value="">${lang==='es'?(currentUser?.lang==='en'?'All customers':'Todos los clientes'):'All customers'}</option>`;
+  sel.innerHTML=`<option value="">${lang==='es'?'Todos los clientes':'All customers'}</option>`;
   DB.customers.forEach(c=>sel.innerHTML+=`<option value="${c.id}"${c.id===cur?' selected':''}>${E(c.name)}</option>`);
   if(cur)sel.value=cur;
 }
@@ -1563,8 +1573,8 @@ function renderProjs(){
   }).join('');
 }
 function delP(id){
-  if(!hasPerm('manage_projects')){toast('SIN PERMISO','var(--rd)');return;}
-  if(!confirm('¿Eliminar proyecto?'))return;DB.projects=DB.projects.filter(p=>p.id!==id);renderProjs();renderDash();toast('ELIMINADO','var(--rd)');
+  if(!hasPerm('manage_projects')){toast(currentUser?.lang==='en'?'NO PERMISSION':'SIN PERMISO','var(--rd)');return;}
+  if(!confirm(currentUser?.lang==='en'?'Delete project?':'¿Eliminar proyecto?'))return;DB.projects=DB.projects.filter(p=>p.id!==id);renderProjs();renderDash();toast(currentUser?.lang==='en'?'DELETED':'ELIMINADO','var(--rd)');
 }
 
 // ═══════════════════════════════════════════════
@@ -1790,8 +1800,8 @@ function renderMats(){
   const q=(document.getElementById('mc-search')?.value||'').toLowerCase().trim();
   let mats=DB.materials;
   if(q)mats=mats.filter(m=>[m.name,m.cat,m.unit,m.notes].some(f=>(f||'').toLowerCase().includes(q)));
-  const _matLng=currentUser?.lang==='en';document.getElementById('mc-bx').textContent=DB.materials.length+' items';document.getElementById('mat-cat-hdr').textContent=_matLng?'📦 Materials Catalog':(currentUser?.lang==='en'?'📦 Materials Catalog':'📦 Catálogo de Materiales');
-  if(!mats.length){tb.innerHTML='';em.style.display='block';em.innerHTML=DB.materials.length?`<div class="eic">🔍</div>${t('no_results')||'SIN RESULTADOS'}`:`<div class="eic">📦</div>${currentUser?.lang==='en'?'NO MATERIALS YET':'SIN MATERIALES AÚN'}`;return;}
+  const _matLng=currentUser?.lang==='en';document.getElementById('mc-bx').textContent=DB.materials.length+' items';document.getElementById('mat-cat-hdr').textContent=_matLng?'📦 Materials Catalog':'📦 Catálogo de Materiales';
+  if(!mats.length){tb.innerHTML='';em.style.display='block';em.innerHTML=DB.materials.length?`<div class="eic">🔍</div>${_matLng?'NO RESULTS':'SIN RESULTADOS'}`:`<div class="eic">📦</div>${_matLng?'NO MATERIALS YET':'SIN MATERIALES AÚN'}`;return;}
   em.style.display='none';
   tb.innerHTML=mats.map(m=>`<tr>
     <td><strong>${E(m.name)}</strong>${m.notes?`<br><span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${E(m.notes)}</span>`:''}</td>
@@ -1801,7 +1811,7 @@ function renderMats(){
     <td style="white-space:nowrap;"><button class="ib ed" onclick="openMM('${m.id}')">✏</button><button class="ib" onclick="delM('${m.id}')">🗑</button></td>
   </tr>`).join('');
 }
-function delM(id){if(!confirm((currentUser?.lang==='en'?'Delete?':'¿Eliminar?')))return;DB.materials=DB.materials.filter(m=>m.id!==id);fbDelete('materials',id).catch(console.error);renderMats();renderDash();toast('ELIMINADO','var(--rd)');}
+function delM(id){if(!confirm((currentUser?.lang==='en'?'Delete?':'¿Eliminar?')))return;DB.materials=DB.materials.filter(m=>m.id!==id);fbDelete('materials',id).catch(console.error);renderMats();renderDash();toast(currentUser?.lang==='en'?'DELETED':'ELIMINADO','var(--rd)');}
 
 // ═══════════════════════════════════════════════
 // CHECKLISTS (Plantillas de Verificación)
@@ -1874,7 +1884,7 @@ function renderCLTs(){
     </div>
   </div>`).join('');
 }
-function delCLT(id){if(!confirm('¿Eliminar esta plantilla?'))return;DB.checklists=DB.checklists.filter(c=>c.id!==id);fbDelete('checklists',id).catch(console.error);if(activeCL?.templateId===id){activeCL=null;renderCLR();}renderCLTs();toast('ELIMINADO','var(--rd)');}
+function delCLT(id){if(!confirm(currentUser?.lang==='en'?'Delete this template?':'¿Eliminar esta plantilla?'))return;DB.checklists=DB.checklists.filter(c=>c.id!==id);fbDelete('checklists',id).catch(console.error);if(activeCL?.templateId===id){activeCL=null;renderCLR();}renderCLTs();toast(currentUser?.lang==='en'?'DELETED':'ELIMINADO','var(--rd)');}
 
 // ═══════════════════════════════════════════════
 // FORMULARIO DE INFORME
@@ -2033,7 +2043,7 @@ function resetRF(){
   // Rows
   ['r-labor','r-equip','r-tasks','r-mats','r-occ'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='';});
   ['bl-l','bl-e','bl-t','bl-m'].forEach((b,i)=>document.getElementById(b).textContent='0 '+['workers','items','tasks','items'][i]);
-  document.getElementById('bl-occ').textContent='0 entries';
+  document.getElementById('bl-occ').textContent=currentUser?.lang==='en'?'0 entries':'0 entradas';
   reportPhotos=[];renderPhotos();
   // Section enables
   const onByDef=['sec-weather','sec-labor','sec-equip','sec-tasks','sec-mats','sec-checklist','sec-notes'];
@@ -2087,7 +2097,7 @@ function tStatOpt(s){const lang=currentUser?.lang||'es';return TSTAT.map(v=>`<op
 // Agrega una fila de trabajador al formulario de informe
 function addLR(name='',role='Electrician',start='07:00',end='16:00',hrs=''){
   const d=document.createElement('div');d.className='ri';d.style.gridTemplateColumns='2fr 1.2fr 58px 58px 50px 26px';
-  d.innerHTML=`<input type="text" placeholder="${currentUser?.lang==='en'?'Name / Crew':(currentUser?.lang==='en'?'Name / Crew':'Nombre / Cuadrilla')}" value="${E(name)}">
+  d.innerHTML=`<input type="text" placeholder="${currentUser?.lang==='en'?'Name / Crew':'Nombre / Cuadrilla'}" value="${E(name)}">
     <select>${tRoleOpt(role)}</select>
     <input type="time" value="${E(start)}" style="text-align:center;" title="Start time">
     <input type="time" value="${E(end)}" style="text-align:center;" title="End time">
@@ -2220,7 +2230,7 @@ function addMR(name='',unit='pcs',qty=''){
   document.getElementById('r-mats').appendChild(d);upB('r-mats','bl-m','item');
 }
 function upB(rid,bid,u){const n=document.getElementById(rid).querySelectorAll('.ri').length;const es3=currentUser?.lang!=='en';const units={item:es3?'ítem':'item',task:es3?'tarea':'task',photo:es3?'foto':'photo',entry:es3?'entrada':'entry'};const u2=units[u]||u;document.getElementById(bid).textContent=n+' '+u2+(n!==1&&!es3?'s':n!==1&&es3?'s':'');}
-function impW(){if(!DB.workers.length){toast(currentUser?.lang==='en'?'NO WORKERS IN TASKFORCE':'SIN TRABAJADORES EN CUADRILLA','var(--am)');return;}const act=DB.workers.filter(w=>w.status==='Active');act.forEach(w=>addLR(w.name,w.role,'07:00','16:00',''));toast('✓ IMPORTED '+act.length+' WORKERS');}
+function impW(){if(!DB.workers.length){toast(currentUser?.lang==='en'?'NO WORKERS IN TASKFORCE':'SIN TRABAJADORES EN CUADRILLA','var(--am)');return;}const act=DB.workers.filter(w=>w.status==='Active');act.forEach(w=>addLR(w.name,w.role,'07:00','16:00',''));toast('✓ '+(currentUser?.lang==='en'?'IMPORTED':'IMPORTADOS')+' '+act.length+' '+(currentUser?.lang==='en'?'WORKERS':'TRABAJADORES'));}
 function impM(){if(!DB.materials.length){toast(currentUser?.lang==='en'?'NO MATERIALS IN CATALOG':'SIN MATERIALES EN CATÁLOGO','var(--am)');return;}DB.materials.forEach(m=>addMR(m.name,m.unit,m.qty||''));toast('✓ '+(currentUser?.lang==='en'?'IMPORTED':'IMPORTADOS')+' '+DB.materials.length+' '+(currentUser?.lang==='en'?'MATERIALS':'MATERIALES'));}
 
 // PHOTOS — list layout with inline caption
@@ -2784,18 +2794,18 @@ function addOCC(type='',time='',desc='',action='',photos=[],captions=[]){
   d._photos=[...photos];d._captions=[...captions];
   d.style.cssText='background:rgba(224,82,82,.05);border:1px solid rgba(224,82,82,.25);border-left:3px solid var(--rd);padding:10px;margin-bottom:8px;';
   d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-    <span style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--rd);">⚠ ${es?(currentUser?.lang==='en'?'OCCURRENCE':'OCURRENCIA'):'OCCURRENCE'}</span>
+    <span style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--rd);">⚠ ${es?'OCURRENCIA':'OCCURRENCE'}</span>
     <div style="display:flex;gap:6px;">
       <button class="ib occ-cam-btn" title="${es?'Agregar fotos':'Add photos'}" style="${photos.length?'border-color:var(--am);color:var(--am);':''}">📷</button>
-      <button class="ib" onclick="this.closest('.occ-entry').remove();upOCC()">✕ ${es?(currentUser?.lang==='en'?'Remove':'Eliminar'):'Remove'}</button>
+      <button class="ib" onclick="this.closest('.occ-entry').remove();upOCC()">✕ ${es?'Eliminar':'Remove'}</button>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 80px;gap:8px;margin-bottom:8px;">
-    <div><label>${es?(currentUser?.lang==='en'?'Type':'Tipo'):'Type'}</label><select class="occ-type" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;">${getOccTypes().map(t=>`<option${t===type?' selected':''}>${t}</option>`).join('')}</select></div>
+    <div><label>${es?'Tipo':'Type'}</label><select class="occ-type" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;">${getOccTypes().map(t=>`<option${t===type?' selected':''}>${t}</option>`).join('')}</select></div>
     <div><label>${es?'Hora':'Time'}</label><input type="time" class="occ-time" value="${E(time)}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;"></div>
   </div>
-  <div style="margin-bottom:8px;"><label>${es?(currentUser?.lang==='en'?'Description':'Descripción'):'Description'}</label><textarea class="occ-desc" rows="2" placeholder="${es?(currentUser?.lang==='en'?'Describe the occurrence...':'Describe la ocurrencia...'):'Describe the occurrence...'}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;resize:vertical;">${E(desc)}</textarea></div>
-  <div style="margin-bottom:8px;"><label>${es?(currentUser?.lang==='en'?'Corrective action taken':'Acción correctiva tomada'):'Corrective Action Taken'}</label><textarea class="occ-act" rows="2" placeholder="${es?'Acciones tomadas o planificadas...':'Actions taken or planned...'}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;resize:vertical;">${E(action)}</textarea></div>
+  <div style="margin-bottom:8px;"><label>${es?'Descripción':'Description'}</label><textarea class="occ-desc" rows="2" placeholder="${es?'Describe la ocurrencia...':'Describe the occurrence...'}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;resize:vertical;">${E(desc)}</textarea></div>
+  <div style="margin-bottom:8px;"><label>${es?'Acción correctiva tomada':'Corrective Action Taken'}</label><textarea class="occ-act" rows="2" placeholder="${es?'Acciones tomadas o planificadas...':'Actions taken or planned...'}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;resize:vertical;">${E(action)}</textarea></div>
   <input type="file" accept="image/*" multiple style="display:none;" class="occ-file-input">
   <div class="occ-photo-grid" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;"></div>`;
   // Wire up photo button
@@ -2824,12 +2834,12 @@ function renderOCCPhotos(entry){
 function upOCC(){const n=document.querySelectorAll('#r-occ .occ-entry').length;const el=document.getElementById('bl-occ');if(el)el.textContent=currentUser?.lang==='en'?n+' entr'+(n===1?'y':'ies'):n+(n===1?' entrada':' entradas');}
 
 function delR(id){
-  if(!confirm('¿Eliminar este informe?'))return;
+  if(!confirm(currentUser?.lang==='en'?'Delete this report?':'¿Eliminar este informe?'))return;
   DB.reports=DB.reports.filter(r=>r.id!==id);
   fbDelete('reports',id).catch(console.error);
   renderDash();renderAllReports();updateNavBadge();
   if(curProjId)renderPDReports();
-  toast('ELIMINADO','var(--rd)');
+  toast(currentUser?.lang==='en'?'DELETED':'ELIMINADO','var(--rd)');
 }
 
 // PDF
@@ -3267,7 +3277,8 @@ async function doLogin(){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('uav-init').textContent=user.name.charAt(0).toUpperCase();
   document.getElementById('um-nm').textContent=user.name;
-  document.getElementById('um-rl').textContent=({admin:'Administrador',manager:'Supervisor',technician:'Técnico',viewer:'Solo lectura',customer:(currentUser?.lang==='en'?'Customer':'Cliente')}[user.role]||user.role);
+  const _isEn=currentUser?.lang==='en';
+  document.getElementById('um-rl').textContent=(_isEn?{admin:'Administrator',manager:'Manager',technician:'Technician',viewer:'Read Only',customer:'Customer'}:{admin:'Administrador',manager:'Supervisor',technician:'Técnico',viewer:'Solo lectura',customer:'Cliente'})[user.role]||user.role;
   // Show/hide admin-only UI
   document.getElementById('nav-users').style.display=user.role==='admin'?'flex':'none';
   document.getElementById('um-it-users').style.display=user.role==='admin'?'block':'none';
@@ -3352,7 +3363,7 @@ function applyLang(){
   if(document.getElementById('page-dashboard')?.style.display!=='none')renderDash();
 
   // ── Section headers ──────────────────────────────
-  _setTxt('mat-cat-hdr', es?(currentUser?.lang==='en'?'📦 Materials Catalog':'📦 Catálogo de Materiales'):'📦 Materials Catalog');
+  _setTxt('mat-cat-hdr', es?'📦 Catálogo de Materiales':'📦 Materials Catalog');
   _setTxt('users-hdr', es?'👥 Usuarios del Sistema':'👥 System Users');
   _setTxt('lbl-team-members', es?'👷 Miembros del Equipo':'👷 Team Members');
   _setTxt('mm-title', es?'📦 Agregar Material':'📦 Add Material');
@@ -3424,7 +3435,7 @@ function applyLang(){
   _setTxt('btn-add-cust-txt',es?'＋ Nuevo Cliente':'＋ New Customer');
 
   // ── Project modal labels ───────────────────────
-  _setTxt('pm-title',es?(currentUser?.lang==='en'?'🏗 New Project':'🏗 Nuevo Proyecto'):'🏗 New Project');
+  _setTxt('pm-title',es?'🏗 Nuevo Proyecto':'🏗 New Project');
 
   // ── Customer modal labels ──────────────────────
   _setTxt('lbl-cm-name',es?'Empresa / Nombre *':'Company / Name *');
@@ -3459,7 +3470,7 @@ function applyLang(){
   // Role options in user modal
   const urole=document.getElementById('u-role');
   if(urole){
-    const roleLabels=es?{admin:'Administrador',manager:'Supervisor',technician:'Técnico',viewer:'Visualizador',customer:(currentUser?.lang==='en'?'Customer':'Cliente')}
+    const roleLabels=es?{admin:'Administrador',manager:'Supervisor',technician:'Técnico',viewer:'Visualizador',customer:'Cliente'}
                       :{admin:'Administrator',manager:'Manager',technician:'Technician',viewer:'Viewer',customer:'Customer'};
     [...urole.options].forEach(o=>{if(roleLabels[o.value])o.textContent=roleLabels[o.value];});
   }
@@ -3514,7 +3525,7 @@ function applyLang(){
   _setPlh('r-site-name',es?'ej. Tienda Gabriela Mistral':'e.g. Store North Branch');
   _setPlh('r-site-addr',es?'ej. Av. Gabriela Mistral 890, Temuco':'e.g. 123 Main St, City');
   const togSiteChk=document.getElementById('tog-site');
-  _setTxt('lbl-site-toggle-txt',togSiteChk?.checked?(es?'— OCULTAR SITIO ESPECÍFICO':'— HIDE SPECIFIC SITE'):(es?(currentUser?.lang==='en'?'+ ADD SPECIFIC SITE':'+ AGREGAR SITIO ESPECÍFICO'):'+ ADD SPECIFIC SITE'));
+  _setTxt('lbl-site-toggle-txt',togSiteChk?.checked?(es?'— OCULTAR SITIO ESPECÍFICO':'— HIDE SPECIFIC SITE'):(es?'+ AGREGAR SITIO ESPECÍFICO':'+ ADD SPECIFIC SITE'));
   // Project selector in report form
   const projSel=document.getElementById('r-proj');
   if(projSel&&projSel.options[0])projSel.options[0].text=t('select_project')||'— Select Project —';
@@ -3540,6 +3551,7 @@ function applyLang(){
   _setPlh('cust-search', es?'🔍  Buscar clientes...':'🔍  Search customers...');
   _setPlh('r-notes', es?'Observaciones, instrucciones o comentarios...':'General observations and notes...');
   _setPlh('r-tom', es?'Descripción de actividades programadas para mañana...':'Planned activities for tomorrow...');
+  _setPlh('lb-cap-in', es?'Agregar descripción o comentario a la foto…':'Add photo description or comment…');
   // ── Photo drop zone ──────────────────────────────────────────────────
   _setTxt('lbl-photo-drop', es?'TOCA O ARRASTRA FOTOS AQUÍ':'TAP OR DRAG PHOTOS HERE');
 
@@ -3573,11 +3585,11 @@ function applyLang(){
   const _optAP=document.getElementById('opt-all-projects');
   if(_optAP)_optAP.textContent=es?'Todos los proyectos':'All projects';
   const _optAC=document.getElementById('opt-all-customers');
-  if(_optAC)_optAC.textContent=es?(currentUser?.lang==='en'?'All customers':'Todos los clientes'):'All customers';
+  if(_optAC)_optAC.textContent=es?'Todos los clientes':'All customers';
   const _optSC=document.getElementById('opt-sel-cust');
   if(_optSC)_optSC.textContent=es?'— Seleccionar empresa cliente —':'— Select customer company —';
   const _optCR=document.getElementById('opt-role-customer');
-  if(_optCR)_optCR.textContent=es?(currentUser?.lang==='en'?'Customer':'Cliente'):'Customer';
+  if(_optCR)_optCR.textContent=es?'Cliente':'Customer';
   // ── Bottom bar buttons ─────────────────────────
   const bbSubmit=document.getElementById('bb-submit-btn');
   if(bbSubmit)bbSubmit.textContent=es?'Enviar →':'Submit →';
@@ -3608,6 +3620,97 @@ function applyLang(){
   _setTxt('sec-checklist-label',es?'Checklist de Verificación':'Verification Checklist');
   _setTxt('sec-photos-label',es?'Registro Fotográfico':'Photo Log');
   _setTxt('sec-notes-label',es?'Notas y Comentarios':'Notes & Comments');
+
+  // ── Change password modal ─────────────────────────────────────────────
+  _setTxt('chpw-title', es?'🔒 Cambiar Contraseña':'🔒 Change Password');
+  _setTxt('chpw-lbl-new', es?'Nueva Contraseña *':'New Password *');
+  _setPlh('chpw-new', es?'Mín. 6 caracteres':'Min. 6 characters');
+  _setTxt('chpw-lbl-cfm', es?'Confirmar *':'Confirm *');
+  _setPlh('chpw-cfm', es?'Repetir contraseña':'Repeat password');
+  _setTxt('chpw-submit', es?'Cambiar':'Change');
+
+  // ── Signature modals ─────────────────────────────────────────────────
+  _setTxt('ssig-title', es?'✍️ Firmar y Enviar a Revisión':'✍️ Sign & Submit for Review');
+  _setTxt('ssig-desc', es?'Al firmar, confirmas que este informe está completo y es correcto. Será enviado al supervisor para revisión.':'By signing, you confirm this report is complete and accurate. It will be sent to the supervisor for review.');
+  _setTxt('ssig-lbl-name', es?'Firmado por':'Signed by');
+  _setTxt('ssig-lbl-role', es?'Cargo / Título':'Title / Role');
+  _setTxt('ssig-lbl-draw', es?'Dibujar Firma':'Draw Signature');
+  _setTxt('ssig-clear', es?'Limpiar':'Clear');
+  _setTxt('ssig-cancel', es?'Cancelar':'Cancel');
+  _setTxt('ssig-submit', es?'Enviar →':'Submit →');
+  _setPlh('ssig-name', es?'Nombre completo':'Full name');
+  _setPlh('ssig-role', es?'ej. Técnico Líder':'e.g. Lead Technician');
+  // Approve signature modal
+  _setTxt('asig-title', es?'✍️ Firmar y Aprobar Informe':'✍️ Sign & Approve Report');
+  _setTxt('asig-desc', es?'Al firmar, apruebas este informe. Quedará marcado como Aprobado.':'By signing, you approve this report. It will be marked as Approved.');
+  _setTxt('asig-lbl-name', es?'Aprobado por':'Approved by');
+  _setTxt('asig-lbl-role', es?'Cargo / Título':'Title / Role');
+  _setTxt('asig-lbl-draw', es?'Dibujar Firma':'Draw Signature');
+  _setTxt('asig-clear', es?'Limpiar':'Clear');
+  _setTxt('asig-cancel', es?'Cancelar':'Cancel');
+  _setTxt('asig-submit', es?'✓ Aprobar':'✓ Approve');
+  _setPlh('asig-name', es?'Nombre completo':'Full name');
+  _setPlh('asig-role', es?'ej. Jefe de Obra':'e.g. Project Manager');
+  // Customer signature modal
+  _setTxt('csig-title', es?'✍️ Firma del Cliente':'✍️ Customer Sign-Off');
+  _setTxt('csig-desc', es?'Firma final del cliente. Esto marcará el informe como completamente cerrado.':'Final customer signature. This will mark the report as fully closed.');
+  _setTxt('csig-lbl-name', es?'Nombre del Cliente':'Customer Name');
+  _setTxt('csig-lbl-role', es?'Cargo / Empresa':'Title / Company');
+  _setTxt('csig-lbl-draw', es?'Dibujar Firma':'Draw Signature');
+  _setTxt('csig-clear', es?'Limpiar':'Clear');
+  _setTxt('csig-cancel', es?'Cancelar':'Cancel');
+  _setTxt('csig-submit', es?'✓ Firma del Cliente':'✓ Customer Sign-Off');
+  _setPlh('csig-name', es?'Nombre completo':'Full name');
+  _setPlh('csig-role', es?'ej. Propietario del Proyecto':'e.g. Project Owner');
+  // Customer reject modal
+  _setTxt('crej-title', es?'↩ Solicitar Corrección':'↩ Request Correction');
+  _setTxt('crej-desc', es?'Indica qué correcciones necesita este informe antes de aprobarlo. El supervisor recibirá tu comentario y deberá volver a enviar para tu revisión.':'Indicate what corrections this report needs before you can approve it. The supervisor will receive your comment and must resubmit for your review.');
+  _setTxt('crej-lbl', es?'Motivo / Correcciones solicitadas':'Reason / Corrections requested');
+  _setPlh('cust-reject-comment', es?'Describe las correcciones necesarias...':'Describe the corrections needed...');
+  _setTxt('crej-cancel', es?'Cancelar':'Cancel');
+  _setTxt('crej-submit', es?'↩ Solicitar Corrección':'↩ Request Correction');
+  // Reject modal
+  _setTxt('rej-title', es?'❌ Rechazar Informe':'❌ Reject Report');
+  _setTxt('reject-desc', es?'El informe será devuelto al técnico para correcciones. Por favor explica el motivo.':'The report will be returned to the technician for corrections. Please explain the reason.');
+  _setTxt('reject-reason-lbl', es?'Motivo del rechazo *':'Reason for rejection *');
+  _setPlh('reject-comment', es?'Describe qué se necesita corregir...':'Describe what needs to be corrected...');
+  _setTxt('rej-cancel', es?'Cancelar':'Cancel');
+  _setTxt('rej-submit', es?'❌ Rechazar y Devolver':'❌ Reject & Return');
+  // mo-view action buttons
+  _setTxt('mo-view-approve-lbl', es?'Aprobar':'Approve');
+  _setTxt('mo-view-crej-lbl', es?'Solicitar corrección':'Request correction');
+  _setTxt('mo-view-rej-lbl', es?'Rechazar':'Reject');
+  // Activity log modal
+  _setTxt('mo-log-title', es?'📋 Registro de Actividad':'📋 Activity Log');
+
+  // ── Worker modal ──────────────────────────────────────────────────────
+  _setTxt('w-lbl-name', es?'Nombre Completo *':'Full Name *');
+  _setTxt('w-lbl-role', es?'Cargo / Oficio *':'Role / Trade *');
+  _setTxt('w-lbl-phone', es?'Teléfono':'Phone');
+  _setPlh('w-phone', es?'+56 9 0000 0000':'+1 555 000 0000');
+  _setPlh('w-email', es?'correo@empresa.com':'email@company.com');
+  _setTxt('w-lbl-empid', es?'ID Empleado':'Employee ID');
+  _setTxt('w-lbl-stat', es?'Estado':'Status');
+  const wStat=document.getElementById('w-stat');
+  if(wStat)[...wStat.options].forEach(o=>{
+    if(o.value==='Active')o.textContent=es?'Activo':'Active';
+    else if(o.value==='On Leave')o.textContent=es?'Con permiso':'On Leave';
+    else if(o.value==='Inactive')o.textContent=es?'Inactivo':'Inactive';
+  });
+
+  // ── Material modal ────────────────────────────────────────────────────
+  _setTxt('m-lbl-name', es?'Nombre del Ítem *':'Item Name *');
+  _setPlh('m-name', es?'ej. Cable THHN #10':'e.g. THHN Wire #10');
+  _setTxt('m-lbl-cat', es?'Categoría':'Category');
+  _setTxt('m-lbl-unit', es?'Unidad':'Unit');
+  _setTxt('m-lbl-qty', es?'Cantidad':'Quantity');
+  _setTxt('m-lbl-notes', es?'Notas':'Notes');
+  _setPlh('m-notes', es?'Especificación, marca o info...':'Spec, brand or notes...');
+  _setTxt('mm-save-lbl', es?'Guardar':'Save');
+  const mCatMap=es?
+    {'m-cat-elec':'Eléctrico','m-cat-plmb':'Gasfitería','m-cat-strc':'Estructural','m-cat-mech':'Mecánico','m-cat-fix':'Fijaciones','m-cat-safe':'Seguridad','m-cat-conc':'Hormigón','m-cat-fin':'Terminaciones','m-cat-oth':'Otro'}:
+    {'m-cat-elec':'Electrical','m-cat-plmb':'Plumbing','m-cat-strc':'Structural','m-cat-mech':'Mechanical','m-cat-fix':'Fasteners','m-cat-safe':'Safety','m-cat-conc':'Concrete','m-cat-fin':'Finishes','m-cat-oth':'Other'};
+  Object.entries(mCatMap).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=v;});
 }
 function _setTxt(id,v){const el=document.getElementById(id);if(el&&v)el.textContent=v;}
 function _setPlh(id,v){const el=document.getElementById(id);if(el&&v)el.placeholder=v;}
@@ -3792,7 +3895,7 @@ function refreshUPerms(){
     if(!user?.customerId)ps.style.display='none';
   } else {
     ps.style.display='block';
-    const noProj=lang==='es'?(currentUser?.lang==='en'?'No projects yet':'Aún no hay proyectos'):'No projects yet';
+    const noProj=lang==='es'?'Aún no hay proyectos':'No projects yet';
     pg.innerHTML=DB.projects.length?DB.projects.map(p=>{
       const checked=user&&(user.projects||[]).includes(p.id)?'checked':'';
       return`<label class="pi"><input type="checkbox" value="${p.id}" ${checked}> ${E(p.name)}</label>`;
@@ -3887,7 +3990,7 @@ function delUser(id){
   if(!confirm((currentUser?.lang==='en'?'Delete this user?':'¿Eliminar este usuario?')))return;
   DB.users=DB.users.filter(u=>u.id!==id);
   fbDelete('users',id).catch(console.error);
-  renderUsers();toast('ELIMINADO','var(--rd)');
+  renderUsers();toast(currentUser?.lang==='en'?'DELETED':'ELIMINADO','var(--rd)');
 }
 function openChPW(id){
   chpwUID=id;
@@ -3950,7 +4053,7 @@ function openCustM(id=null){
   clearCustLogo();
   // Project grid — all projects selectable for this customer
   const pg=document.getElementById('cm-proj-grid');
-  const noProjs=isEs?(currentUser?.lang==='en'?'No projects created yet':'Aún no hay proyectos creados'):'No projects yet';
+  const noProjs=isEs?'Aún no hay proyectos creados':'No projects yet';
   if(id){
     const c=DB.customers.find(x=>x.id===id);
     if(c){
@@ -4090,7 +4193,7 @@ function renderCustomers(){
         </div>
         <div style="display:flex;gap:5px;flex-shrink:0;">
           <button class="ib ed" onclick="openCustM('${c.id}')" title="${es?'Editar':'Edit'}">✏</button>
-          <button class="ib" onclick="delCust('${c.id}')" title="${es?(currentUser?.lang==='en'?'Remove':'Eliminar'):'Delete'}">🗑</button>
+          <button class="ib" onclick="delCust('${c.id}')" title="${es?'Eliminar':'Delete'}">🗑</button>
         </div>
       </div>
       ${projs.length>0?`<div style="margin-top:8px;">
@@ -4164,62 +4267,62 @@ document.getElementById('lin-u').addEventListener('keydown',e=>{if(e.key==='Ente
 
 <!-- REJECT MODAL -->
 <div class="mo" id="mo-cust-reject"><div class="modal" style="max-width:500px;">
-  <div class="mh"><div class="mtt">↩ Solicitar Corrección</div><button class="mcl" onclick="closeMO('mo-cust-reject')">✕</button></div>
+  <div class="mh"><div class="mtt" id="crej-title">↩ Solicitar Corrección</div><button class="mcl" onclick="closeMO('mo-cust-reject')">✕</button></div>
   <div class="mb">
-    <p style="font-size:12px;color:var(--mu2);margin-bottom:12px;">Indica qué correcciones necesita este informe antes de aprobarlo. El supervisor recibirá tu comentario y deberá volver a enviar para tu revisión.</p>
-    <label>Motivo / Correcciones solicitadas</label>
+    <p style="font-size:12px;color:var(--mu2);margin-bottom:12px;" id="crej-desc">Indica qué correcciones necesita este informe antes de aprobarlo. El supervisor recibirá tu comentario y deberá volver a enviar para tu revisión.</p>
+    <label id="crej-lbl">Motivo / Correcciones solicitadas</label>
     <textarea id="cust-reject-comment" rows="4" placeholder="Describe las correcciones necesarias..." style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:8px;font-size:12px;outline:none;resize:vertical;margin-top:6px;border-left:2px solid var(--am);"></textarea>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-cust-reject')">Cancelar</button><button class="btn" style="background:var(--am);border-color:var(--am);color:#000;" onclick="doCustReject()">↩ Solicitar Corrección</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-cust-reject')" id="crej-cancel">Cancelar</button><button class="btn" style="background:var(--am);border-color:var(--am);color:#000;" onclick="doCustReject()" id="crej-submit">↩ Solicitar Corrección</button></div>
 </div></div>
 
 <div class="mo" id="mo-reject"><div class="modal" style="max-width:500px;">
-  <div class="mh"><div class="mtt">❌ Rechazar Informe</div><button class="mcl" onclick="closeMO('mo-reject')">✕</button></div>
+  <div class="mh"><div class="mtt" id="rej-title">❌ Rechazar Informe</div><button class="mcl" onclick="closeMO('mo-reject')">✕</button></div>
   <div class="mb">
     <p style="font-size:12px;color:var(--mu2);margin-bottom:14px;" id="reject-desc">El informe será devuelto al técnico para correcciones. Por favor explica el motivo.</p>
     <label id="reject-reason-lbl">Motivo del rechazo *</label>
     <textarea id="reject-comment" placeholder="Describe qué se necesita corregir..." style="width:100%;min-height:90px;margin-top:6px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:8px;font-size:12px;resize:vertical;outline:none;"></textarea>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-reject')" data-i18n="cancel">Cancelar</button><button class="btn" style="background:var(--rd);border-color:var(--rd);color:#fff;" onclick="doReject()">❌ Rechazar y Devolver</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-reject')" id="rej-cancel" data-i18n="cancel">Cancelar</button><button class="btn" style="background:var(--rd);border-color:var(--rd);color:#fff;" onclick="doReject()" id="rej-submit">❌ Rechazar y Devolver</button></div>
 </div></div>
 
 <!-- SUBMIT SIGNATURE MODAL -->
 <div class="mo" id="mo-submit-sig"><div class="modal" style="max-width:540px;">
-  <div class="mh"><div class="mtt">✍️ Firmar y Enviar a Revisión</div><button class="mcl" onclick="closeMO('mo-submit-sig')">✕</button></div>
+  <div class="mh"><div class="mtt" id="ssig-title">✍️ Firmar y Enviar a Revisión</div><button class="mcl" onclick="closeMO('mo-submit-sig')">✕</button></div>
   <div class="mb">
-    <p style="font-size:12px;color:var(--mu2);margin-bottom:14px;">Al firmar, confirmas que este informe está completo y es correcto. Será enviado al supervisor para revisión.</p>
-    <div class="fg f2" style="margin-bottom:12px;"><div><label>Firmado por</label><input type="text" id="ssig-name" placeholder="Nombre completo"></div><div><label>Cargo / Título</label><input type="text" id="ssig-role" placeholder="ej. Técnico Líder"></div></div>
-    <label>Dibujar Firma</label>
+    <p style="font-size:12px;color:var(--mu2);margin-bottom:14px;" id="ssig-desc">Al firmar, confirmas que este informe está completo y es correcto. Será enviado al supervisor para revisión.</p>
+    <div class="fg f2" style="margin-bottom:12px;"><div><label id="ssig-lbl-name">Firmado por</label><input type="text" id="ssig-name" placeholder="Nombre completo"></div><div><label id="ssig-lbl-role">Cargo / Título</label><input type="text" id="ssig-role" placeholder="ej. Técnico Líder"></div></div>
+    <label id="ssig-lbl-draw">Dibujar Firma</label>
     <div class="sig-wrap" id="ssigwrap" style="margin-top:6px;"><canvas id="ssigc"></canvas><div class="sig-hint">SIGN HERE</div></div>
-    <button class="btn sm bs" style="margin-top:6px;" onclick="clearSigModal('ssigc','ssigctx')">Limpiar</button>
+    <button class="btn sm bs" style="margin-top:6px;" onclick="clearSigModal('ssigc','ssigctx')" id="ssig-clear">Limpiar</button>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-submit-sig')">Cancelar</button><button class="btn bp" onclick="doSubmitSigned()">Enviar →</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-submit-sig')" id="ssig-cancel">Cancelar</button><button class="btn bp" onclick="doSubmitSigned()" id="ssig-submit">Enviar →</button></div>
 </div></div>
 
 <!-- APPROVE SIGNATURE MODAL -->
 <div class="mo" id="mo-approve-sig"><div class="modal" style="max-width:540px;">
-  <div class="mh"><div class="mtt">✍️ Firmar y Aprobar Informe</div><button class="mcl" onclick="closeMO('mo-approve-sig')">✕</button></div>
+  <div class="mh"><div class="mtt" id="asig-title">✍️ Firmar y Aprobar Informe</div><button class="mcl" onclick="closeMO('mo-approve-sig')">✕</button></div>
   <div class="mb">
-    <p style="font-size:12px;color:var(--mu2);margin-bottom:14px;">Al firmar, apruebas este informe. Quedará marcado como Aprobado.</p>
-    <div class="fg f2" style="margin-bottom:12px;"><div><label>Aprobado por</label><input type="text" id="asig-name" placeholder="Nombre completo"></div><div><label>Cargo / Título</label><input type="text" id="asig-role" placeholder="ej. Jefe de Obra"></div></div>
-    <label>Dibujar Firma</label>
+    <p style="font-size:12px;color:var(--mu2);margin-bottom:14px;" id="asig-desc">Al firmar, apruebas este informe. Quedará marcado como Aprobado.</p>
+    <div class="fg f2" style="margin-bottom:12px;"><div><label id="asig-lbl-name">Aprobado por</label><input type="text" id="asig-name" placeholder="Nombre completo"></div><div><label id="asig-lbl-role">Cargo / Título</label><input type="text" id="asig-role" placeholder="ej. Jefe de Obra"></div></div>
+    <label id="asig-lbl-draw">Dibujar Firma</label>
     <div class="sig-wrap" id="asigwrap" style="margin-top:6px;"><canvas id="asigc"></canvas><div class="sig-hint">SIGN HERE</div></div>
-    <button class="btn sm bs" style="margin-top:6px;" onclick="clearSigModal('asigc','asigctx')">Limpiar</button>
+    <button class="btn sm bs" style="margin-top:6px;" onclick="clearSigModal('asigc','asigctx')" id="asig-clear">Limpiar</button>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-approve-sig')">Cancelar</button><button class="btn bg" onclick="doApproveSigned()">✓ Aprobar</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-approve-sig')" id="asig-cancel">Cancelar</button><button class="btn bg" onclick="doApproveSigned()" id="asig-submit">✓ Aprobar</button></div>
 </div></div>
 
 <!-- CUSTOMER APPROVE SIGNATURE MODAL -->
 <div class="mo" id="mo-custappr-sig"><div class="modal" style="max-width:540px;">
-  <div class="mh"><div class="mtt">✍️ Firma del Cliente</div><button class="mcl" onclick="closeMO('mo-custappr-sig')">✕</button></div>
+  <div class="mh"><div class="mtt" id="csig-title">✍️ Firma del Cliente</div><button class="mcl" onclick="closeMO('mo-custappr-sig')">✕</button></div>
   <div class="mb">
-    <p style="font-size:12px;color:var(--mu2);margin-bottom:14px;">Firma final del cliente. Esto marcará el informe como completamente cerrado.</p>
-    <div class="fg f2" style="margin-bottom:12px;"><div><label>Nombre del Cliente</label><input type="text" id="csig-name" placeholder="Nombre completo"></div><div><label>Cargo / Empresa</label><input type="text" id="csig-role" placeholder="ej. Propietario del Proyecto"></div></div>
-    <label>Dibujar Firma</label>
+    <p style="font-size:12px;color:var(--mu2);margin-bottom:14px;" id="csig-desc">Firma final del cliente. Esto marcará el informe como completamente cerrado.</p>
+    <div class="fg f2" style="margin-bottom:12px;"><div><label id="csig-lbl-name">Nombre del Cliente</label><input type="text" id="csig-name" placeholder="Nombre completo"></div><div><label id="csig-lbl-role">Cargo / Empresa</label><input type="text" id="csig-role" placeholder="ej. Propietario del Proyecto"></div></div>
+    <label id="csig-lbl-draw">Dibujar Firma</label>
     <div class="sig-wrap" id="csigwrap" style="margin-top:6px;"><canvas id="csigc"></canvas><div class="sig-hint">SIGN HERE</div></div>
-    <button class="btn sm bs" style="margin-top:6px;" onclick="clearSigModal('csigc','csigctx')">Limpiar</button>
+    <button class="btn sm bs" style="margin-top:6px;" onclick="clearSigModal('csigc','csigctx')" id="csig-clear">Limpiar</button>
   </div>
-  <div class="mf"><button class="btn bs" onclick="closeMO('mo-custappr-sig')">Cancelar</button><button class="btn bp" onclick="doCustApprSigned()" style="background:var(--bl);border-color:var(--bl);">✓ Firma del Cliente</button></div>
+  <div class="mf"><button class="btn bs" onclick="closeMO('mo-custappr-sig')" id="csig-cancel">Cancelar</button><button class="btn bp" onclick="doCustApprSigned()" id="csig-submit" style="background:var(--bl);border-color:var(--bl);">✓ Firma del Cliente</button></div>
 </div></div>
 
 <!-- REPORT VIEW MODAL (kept in main app, not in PDF template) -->
@@ -4227,9 +4330,9 @@ document.getElementById('lin-u').addEventListener('keydown',e=>{if(e.key==='Ente
   <div class="mh">
     <div class="mtt" id="mo-view-title">Report</div>
     <div style="display:flex;gap:6px;align-items:center;">
-      <button class="btn sm bg" id="mo-view-approve" style="display:none;">✓ Aprobar</button>
-      <button class="btn sm" id="mo-view-cust-reject" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">↩ Solicitar corrección</button>
-      <button class="btn sm" id="mo-view-reject" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">❌ Rechazar</button>
+      <button class="btn sm bg" id="mo-view-approve" style="display:none;">✓ <span id="mo-view-approve-lbl">Aprobar</span></button>
+      <button class="btn sm" id="mo-view-cust-reject" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">↩ <span id="mo-view-crej-lbl">Solicitar corrección</span></button>
+      <button class="btn sm" id="mo-view-reject" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">❌ <span id="mo-view-rej-lbl">Rechazar</span></button>
       <button class="btn sm bs" id="mo-view-custappr" style="display:none;" id="btn-sign-lbl">🤝 <span id="lbl-sign-btn">Firma Cliente</span></button>
       <button class="btn sm bs" id="mo-view-edit">✏ Editar</button>
       <button class="btn sm bs" id="mo-view-pdf">📄 PDF</button>
@@ -4241,7 +4344,7 @@ document.getElementById('lin-u').addEventListener('keydown',e=>{if(e.key==='Ente
 
 <!-- ACTIVITY LOG MODAL -->
 <div class="mo" id="mo-log"><div class="modal" style="max-width:540px;">
-  <div class="mh"><div class="mtt">📋 Registro de Actividad</div><button class="mcl" onclick="closeMO('mo-log')">✕</button></div>
+  <div class="mh"><div class="mtt" id="mo-log-title">📋 Registro de Actividad</div><button class="mcl" onclick="closeMO('mo-log')">✕</button></div>
   <div class="mb" id="mo-log-body"></div>
 </div></div>
 
