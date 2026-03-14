@@ -2655,7 +2655,8 @@ function doSubmitSigned(){
   const sigData=getSigData('ssigc');
   const sigName=document.getElementById('ssig-name').value.trim();
   const sigRole=document.getElementById('ssig-role').value.trim();
-  if(!sigData){toast(currentUser?.lang==='en'?'PLEASE DRAW YOUR SIGNATURE':'POR FAVOR DIBUJE SU FIRMA','var(--rd)');return;}||curReportStatus==='Filling'||curReportStatus==='Rejected')?'Review':curReportStatus;
+  if(!sigData){toast(currentUser?.lang==='en'?'PLEASE DRAW YOUR SIGNATURE':'POR FAVOR DIBUJE SU FIRMA','var(--rd)');return;}
+  const nextStatus=(curReportStatus==='Draft'||curReportStatus==='Filling'||curReportStatus==='Rejected')?'Review':curReportStatus;
   const data={...collectRpt(),status:nextStatus,signature:sigData,sigName,sigRole,submittedAt:new Date().toISOString()};
   const isNew=!(editingRpt&&curRptId);
   if(!isNew){
