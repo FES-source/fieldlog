@@ -1,4 +1,4 @@
-<!-- FieldLog v1.3.4 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.3.5 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -665,7 +665,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="sh" onclick="togS('sec-weather')"><div class="sl"><span class="si">🌤</span><span class="st2" id="sec-weather-label">Clima</span></div><div class="sc"><label class="tog" onclick="event.stopPropagation()"><input type="checkbox" id="tog-w" checked onchange="togSE('sec-weather',this)"><span class="tt"></span></label><span class="schev">▼</span></div></div>
     <div class="sb">
       <div class="wps" id="weather-pills"><div class="wp on" data-en="☀️ Clear" onclick="this.classList.toggle('on')">☀️ Despejado</div><div class="wp" data-en="⛅ Partly Cloudy" onclick="this.classList.toggle('on')">⛅ Parcial nublado</div><div class="wp" data-en="☁️ Overcast" onclick="this.classList.toggle('on')">☁️ Cubierto</div><div class="wp" data-en="🌧 Rain" onclick="this.classList.toggle('on')">🌧 Lluvia</div><div class="wp" data-en="⛈ Storm" onclick="this.classList.toggle('on')">⛈ Tormenta</div><div class="wp" data-en="❄️ Snow" onclick="this.classList.toggle('on')">❄️ Nieve</div><div class="wp" data-en="🌬 High Winds" onclick="this.classList.toggle('on')">🌬 Viento fuerte</div><div class="wp" data-en="🌫 Fog" onclick="this.classList.toggle('on')">🌫 Niebla</div></div>
-      <div class="fg f3" style="margin-top:10px;"><div><label id="lbl-r-temp">Temperatura</label><input type="text" id="r-temp" placeholder="ej. 22°C"></div><div><label id="lbl-r-wind">Viento</label><input type="text" id="r-wind" placeholder="ej. 12 km/h"></div><div><label id="lbl-r-imp">Impacto en obra</label><select id="r-imp"><option>Sin impacto</option><option>Demora leve</option><option>Demora significativa</option><option>Trabajo detenido</option></select></div></div>
+      <div class="fg f3" style="margin-top:10px;"><div><label id="lbl-r-temp">Temperatura</label><input type="text" id="r-temp" placeholder="ej. 22°C"></div><div><label id="lbl-r-wind">Viento</label><input type="text" id="r-wind" placeholder="ej. 12 km/h"></div><div><label id="lbl-r-imp">Impacto en obra</label><select id="r-imp"><option data-es="Sin impacto" data-en="No impact">Sin impacto</option><option data-es="Demora leve" data-en="Minor delay">Demora leve</option><option data-es="Demora significativa" data-en="Significant delay">Demora significativa</option><option data-es="Trabajo detenido" data-en="Work stopped">Trabajo detenido</option></select></div></div>
     </div>
   </div>
 
@@ -738,8 +738,8 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="sec op" id="sec-notes">
     <div class="sh" onclick="togS('sec-notes')"><div class="sl"><span class="si">📝</span><span class="st2" id="sec-notes-label">Notas y Comentarios</span></div><div class="sc"><label class="tog" onclick="event.stopPropagation()"><input type="checkbox" checked onchange="togSE('sec-notes',this)"><span class="tt"></span></label><span class="schev">▼</span></div></div>
     <div class="sb">
-      <div class="fg f1" style="margin-top:10px;"><div><label>Notas Generales</label><textarea id="r-notes" style="min-height:80px;" placeholder="Observaciones, instrucciones o comentarios..."></textarea></div></div>
-      <div class="fg f1" style="margin-top:10px;"><div><label>Plan para Mañana</label><textarea id="r-tom" placeholder="Descripción de actividades programadas para mañana..."></textarea></div></div>
+      <div class="fg f1" style="margin-top:10px;"><div><label id="lbl-r-notes-gen">Notas Generales</label><textarea id="r-notes" style="min-height:80px;" placeholder="Observaciones, instrucciones o comentarios..."></textarea></div></div>
+      <div class="fg f1" style="margin-top:10px;"><div><label id="lbl-r-tom">Plan para Mañana</label><textarea id="r-tom" placeholder="Descripción de actividades programadas para mañana..."></textarea></div></div>
     </div>
   </div>
 
@@ -3336,6 +3336,20 @@ function applyLang(){
   });
 
   // ── Report form ────────────────────────────────
+  // ── Report form field labels ─────────────────────
+  _setTxt('lbl-r-proj',es?'Proyecto':'Project');
+  _setTxt('lbl-r-date',es?'Fecha del Informe':'Report Date');
+  _setTxt('lbl-r-start',es?'Inicio Turno':'Shift Start');
+  _setTxt('lbl-r-end',es?'Fin Turno':'Shift End');
+  _setTxt('lbl-r-super',es?'Supervisor':'Supervisor');
+  _setTxt('lbl-r-client',es?'Cliente / Propietario':'Client / Owner');
+  _setTxt('lbl-r-loc',es?'Ubicación / Dirección':'Location / Address');
+  _setTxt('lbl-r-temp',es?'Temperatura':'Temperature');
+  _setTxt('lbl-r-wind',es?'Viento':'Wind');
+  _setTxt('lbl-r-imp',es?'Impacto en obra':'Work Impact');
+  // Notes labels
+  _setTxt('lbl-r-notes-gen',es?'Notas Generales':'General Notes');
+  _setTxt('lbl-r-tom',es?'Plan para Mañana':"Tomorrow's Plan");
   _setPlh('r-super',es?'Nombre del supervisor':'Supervisor name');
   _setTxt('lbl-site-hdr',es?'📍 SITIO DE TRABAJO':'📍 WORK SITE');
   _setTxt('lbl-r-site-name',es?'Nombre del Sitio':'Site Name');
@@ -3351,6 +3365,9 @@ function applyLang(){
   _setPlh('r-loc',es?'Dirección del sitio':'Site address');
   _setPlh('r-temp',es?'ej. 18°C':'e.g. 72°F');
   _setPlh('r-wind',es?'ej. Vientos fuertes del sur':'e.g. Gusts from SW');
+  // Weather impact select options
+  const impSel=document.getElementById('r-imp');
+  if(impSel){[...impSel.options].forEach(o=>{const t2=o.getAttribute(es?'data-es':'data-en');if(t2)o.textContent=t2;});}
   _setPlh('r-notes',es?'Observaciones generales del día...':'General notes for the day...');
   _setPlh('r-tom',es?'Descripción de actividades programadas...':'Planned work description...');
 
