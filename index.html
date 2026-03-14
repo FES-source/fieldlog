@@ -1,4 +1,4 @@
-<!-- FieldLog v1.5.7 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
+<!-- FieldLog v1.5.8 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -568,9 +568,9 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="ph">
     <div class="pht"><small id="pd-subtitle">// PROJECT</small><span id="pd-name">Project</span></div>
     <div class="pha">
-      <button class="btn sm bs" onclick="goPage('projects')">← Proyectos</button>
-      <button class="btn sm bs" id="pd-edit-btn" onclick="openPM(null)">✏ Editar</button>
-      <button class="btn bp" id="pd-new-rpt-btn" onclick="startNewReport(null)">＋ Nuevo Informe</button>
+      <button class="btn sm bs" onclick="goPage('projects')" id="pd-back-btn">← Proyectos</button>
+      <button class="btn sm bs" id="pd-edit-btn" onclick="openPM(null)">✏ <span id="lbl-pd-edit">Editar</span></button>
+      <button class="btn bp" id="pd-new-rpt-btn" onclick="startNewReport(null)">＋ <span id="lbl-pd-new-rpt">Nuevo Informe</span></button>
     </div>
   </div>
   <!-- Overview stats -->
@@ -820,8 +820,8 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <button class="btn sm bs" onclick="genPDF(null)">📄 PDF</button>
     <button class="btn sm bs" onclick="saveReport()" style="border-color:var(--am);color:var(--am);">💾 Save</button>
     <button class="btn bp" id="bb-submit-btn" onclick="submitReport()">Enviar →</button>
-    <button class="btn bg" id="bb-approve-btn" onclick="approveReport()" style="display:none;">✓ Aprobar</button>
-    <button class="btn sm" id="bb-reject-btn" onclick="openReject()" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">❌ Rechazar</button>
+    <button class="btn bg" id="bb-approve-btn" onclick="approveReport()" style="display:none;">✓ <span id="lbl-bb-approve">Aprobar</span></button>
+    <button class="btn sm" id="bb-reject-btn" onclick="openReject()" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">❌ <span id="lbl-bb-reject">Rechazar</span></button>
     <button class="btn sm" id="bb-custappr-btn" onclick="openCustAppr(curRptId)" style="display:none;background:var(--bl);border-color:var(--bl);color:#fff;">🤝 <span id="lbl-sign-btn-bb">Firma Cliente</span></button>
   </div>
 </div>
@@ -1421,11 +1421,11 @@ function rptRow(r,withProj=false){
     ${photos.length?`<div class="rr-photo-count">📷 ${photos.length}</div>`:''}
     <div class="rr-photo-count"><span class="st-${(r.status||'draft').toLowerCase().replace(/ /g,'-')}">${tRptStatus(r.status||'Draft')}</span></div>
     <div class="rr-actions">
-      ${!isCust?(()=>{const lk=isReportLocked(r);if(lk==='customer')return'<span class="bx" style="font-family:var(--mo);font-size:8px;border-color:var(--gn);color:var(--gn);">🔒 CERRADO</span>';if(lk==='approved')return hasPerm('approve_reports')?`<button class="ib" style="color:var(--rd);border-color:var(--rd);" onclick="openReject('${r.id}')">↩ Rechazar</button>`:'';return`<button class="ib ed" onclick="editR('${r.id}')">✏ Editar</button>`;})():''}
-      <button class="ib" onclick="viewReport('${r.id}')">👁 Ver</button>
+      ${!isCust?(()=>{const lk=isReportLocked(r);const _en=currentUser?.lang==='en';if(lk==='customer')return`<span class="bx" style="font-family:var(--mo);font-size:8px;border-color:var(--gn);color:var(--gn);">🔒 ${_en?'CLOSED':'CERRADO'}</span>`;if(lk==='approved')return hasPerm('approve_reports')?`<button class="ib" style="color:var(--rd);border-color:var(--rd);" onclick="openReject('${r.id}')">↩ ${_en?'Reject':'Rechazar'}</button>`:'';return`<button class="ib ed" onclick="editR('${r.id}')">✏ ${_en?'Edit':'Editar'}</button>`;})():''}
+      <button class="ib" onclick="viewReport('${r.id}')">👁 ${currentUser?.lang==='en'?'View':'Ver'}</button>
       ${!isCust?`<button class="ib gn" onclick="genPDF('${r.id}')">📄 PDF</button>`:''}
-      ${isCust&&r.status==='Pending Customer'?`<button class="ib" style="background:rgba(100,149,237,.15);border-color:#6495ed;color:#6495ed;" onclick="openCustAppr('${r.id}')">🤝 Firmar</button><button class="ib" style="border-color:var(--am);color:var(--am);" onclick="openCustReject('${r.id}')">↩ Corregir</button>`:''}
-      ${!isCust?(()=>{const lk2=isReportLocked(r);if(lk2==='customer')return currentUser?.role==='admin'?`<button class="ib rd" onclick="delR('${r.id}')" title="Solo admin — informe cerrado">🗑</button>`:'';return`<button class="ib" onclick="delR('${r.id}')">🗑</button>`;})():''}
+      ${isCust&&r.status==='Pending Customer'?`<button class="ib" style="background:rgba(100,149,237,.15);border-color:#6495ed;color:#6495ed;" onclick="openCustAppr('${r.id}')">🤝 ${currentUser?.lang==='en'?'Sign':'Firmar'}</button><button class="ib" style="border-color:var(--am);color:var(--am);" onclick="openCustReject('${r.id}')">↩ ${currentUser?.lang==='en'?'Correct':'Corregir'}</button>`:''}
+      ${!isCust?(()=>{const lk2=isReportLocked(r);const _en2=currentUser?.lang==='en';if(lk2==='customer')return currentUser?.role==='admin'?`<button class="ib rd" onclick="delR('${r.id}')" title="${_en2?'Admin only — closed report':'Solo admin — informe cerrado'}">🗑</button>`:'';return`<button class="ib" onclick="delR('${r.id}')">🗑</button>`;})():''}
     </div>
   </div>`;
 }
@@ -1972,7 +1972,7 @@ function editR(id){
   document.getElementById('r-notes').value=r.notes||'';
   document.getElementById('r-tom').value=r.tomorrow||'';
   // Weather
-  document.querySelectorAll('.wp').forEach(wp=>wp.classList.toggle('on',(r.weather||[]).includes(wp.textContent.trim())));
+  document.querySelectorAll('.wp').forEach(wp=>wp.classList.toggle('on',(r.weather||[]).includes(wp.getAttribute('data-en')||wp.textContent.trim())));
   // Rows
   document.getElementById('r-labor').innerHTML='';(r.labor||[]).forEach(w=>addLR(w.name,w.role,w.start||'',w.end||'',w.hrs||''));
   document.getElementById('r-equip').innerHTML='';(r.equip||[]).forEach(e=>addER(e.desc,e.status));
@@ -2106,6 +2106,20 @@ const ROLES_ES={'Electrician':'Electricista','Plumber':'Gasfiter','Carpenter':'C
 const ROLES_EN={'Electrician':'Electrician','Plumber':'Plumber','Carpenter':'Carpenter','Welder':'Welder','Equipment Operator':'Equipment Operator','Laborer':'Laborer','Engineer':'Engineer','Inspector':'Inspector','Foreman':'Foreman','Site Manager':'Site Manager','Supervisor':'Supervisor','Technician':'Technician','Other':'Other'};
 // Traduce rol de trabajador al idioma actual
 function tRole(s){const lang=currentUser?.lang||'es';return(lang==='en'?ROLES_EN:ROLES_ES)[s]||s||'—';}
+// Translate a weather key (stored as data-en value) to current user's language
+function tWeather(key){
+  if(!key) return '';
+  const lang=currentUser?.lang||'es';
+  if(lang==='en') return key; // key IS the EN label
+  // Find the pill with matching data-en and return data-es
+  const pill=[...document.querySelectorAll('#weather-pills .wp')].find(p=>p.getAttribute('data-en')===key);
+  return pill?pill.getAttribute('data-es')||key:key;
+}
+// Translate an array of weather keys
+function tWeatherArr(arr,lang){
+  if(!arr||!arr.length) return [];
+  return arr.map(w=>tWeather(w));
+}
 function tRoleOpt(sel){const lang=currentUser?.lang||'es';const map=lang==='en'?ROLES_EN:ROLES_ES;return ROLES.map(v=>`<option value="${v}"${v===sel?' selected':''}>${map[v]||v}</option>`).join('');}
 const ESTAT=['In use','Idle','Off-site','Under repair'];
 const ESTAT_ES={'In use':'En uso','Idle':'Disponible','Off-site':'Fuera de sitio','Under repair':'En reparación'};
@@ -2509,7 +2523,7 @@ function collectRpt(){
   }).filter(t=>t.desc);
   const mats=[...document.querySelectorAll('#r-mats .ri')].map(r=>{const ins=r.querySelectorAll('input,select');return{name:ins[0]?.value||'',unit:ins[1]?.value||'',qty:ins[2]?.value||''};}).filter(r=>r.name);
   const occurrences=[...document.querySelectorAll('#r-occ .occ-entry')].map(el=>({type:el.querySelector('.occ-type')?.value||'',time:el.querySelector('.occ-time')?.value||'',desc:el.querySelector('.occ-desc')?.value||'',action:el.querySelector('.occ-act')?.value||'',photos:el._photos||[],captions:el._captions||[]})).filter(o=>o.desc);
-  const weather=[...document.querySelectorAll('.wp.on')].map(p=>p.textContent.trim());
+  const weather=[...document.querySelectorAll('.wp.on')].map(p=>p.getAttribute('data-en')||p.textContent.trim());
   const disabledSections=[...document.querySelectorAll('.sec.dis')].map(s=>s.id);
   const photos=reportPhotos.map(p=>p.src);
   const photoCaptions=reportPhotos.map(p=>p.caption||'');
@@ -3066,7 +3080,7 @@ ${(r.siteEnabled||(r.siteName||r.siteAddr))?`<div style="border-left:3px solid #
 
 ${!r.disabledSections?.includes('sec-weather')&&(r.weather?.length||r.temp)?`
 <div class="sec-title">${pt('weather')}</div>
-<div class="wps">${(r.weather||[]).map(w=>`<div class="wpx">${w}</div>`).join('')}</div>
+<div class="wps">${(r.weather||[]).map(w=>`<div class="wpx">${pdfLang==='en'?w:(tWeather(w)||w)}</div>`).join('')}</div>
 <div class="g3">
   <div class="fl"><div class="fl-l">${pt('temperature')}</div><div class="fl-v">${r.temp||'—'}</div></div>
   <div class="fl"><div class="fl-l">${pt('wind')}</div><div class="fl-v">${r.wind||'—'}</div></div>
@@ -3207,7 +3221,7 @@ function viewReport(id){
     </div>`;
   html+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px 14px;background:var(--s2);border:1px solid var(--bd);padding:11px;margin-bottom:11px;">
     ${vRow(t('supervisor'),r.supervisor)}${vRow(t('client'),r.client)}${vRow(t('location'),r.location)}${(r.siteEnabled||(r.siteName||r.siteAddr))?`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);margin:8px 0 4px;">📍 ${t('site_name')?.toUpperCase()||'SITIO DE TRABAJO'}</div>${vRow(t('site_name'),r.siteName||'—')}${vRow(t('site_address'),r.siteAddr||'—')}`:''}${vRow(t('shift'),(r.shiftStart||'')+'–'+(r.shiftEnd||''))}
-    ${r.weather?.length?vRow(t('weather'),r.weather.join(' · ')):''}${r.temp?vRow(t('temperature'),r.temp):''}
+    ${r.weather?.length?vRow(t('weather'),tWeatherArr(r.weather).join(' · ')):''}${r.temp?vRow(t('temperature'),r.temp):''}
     ${r.approvedBy?vRow(t('approved_by')||'Approved by',r.approvedBy):''}
   </div>`;
   if(r.labor?.length){const _vlng2=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">👷 ${t('labor')} (${r.labor.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.labor.forEach(w=>{html+=`<div style="display:flex;gap:10px;padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><strong style="flex:1;">${E(w.name)}</strong><span style="color:var(--mu);font-family:var(--mo);font-size:10px;">${E(w.role)}</span>${w.start?`<span style="font-family:var(--mo);font-size:10px;color:var(--mu);">${w.start}–${w.end}</span>`:''}</div>`;});html+='</div>';}
@@ -3653,8 +3667,17 @@ function applyLang(){
   if(_optSC)_optSC.textContent=es?'— Seleccionar empresa cliente —':'— Select customer company —';
   const _optCR=document.getElementById('opt-role-customer');
   if(_optCR)_optCR.textContent=es?'Cliente':'Customer';
-  // ── Bottom bar buttons ─────────────────────────
-  const bbSubmit=document.getElementById('bb-submit-btn');
+  // ── Bottom bar report buttons ──────────────────────────────────────
+  _setTxt('lbl-bb-approve', es?'Aprobar':'Approve');
+  _setTxt('lbl-bb-reject', es?'Rechazar':'Reject');
+  // ── Project detail header ────────────────────────────────────────────
+  _setTxt('pd-back-btn', es?'← Proyectos':'← Projects');
+  _setTxt('lbl-pd-edit', es?'Editar':'Edit');
+  _setTxt('lbl-pd-new-rpt', es?'Nuevo Informe':'New Report');
+  // ── Report view modal ────────────────────────────────────────────────
+  _setTxt('lbl-mo-view-edit', es?'Editar':'Edit');
+  _setTxt('lbl-sign-btn', es?'Firma Cliente':'Customer Sign-Off');
+  _setTxt('lbl-sign-btn-bb', es?'Firma Cliente':'Customer Sign-Off');
   if(bbSubmit)bbSubmit.textContent=es?'Enviar →':'Submit →';
   const bbSave=document.querySelector('#bb .btn.bs[onclick*="saveReport"]');
   // Section toggles
@@ -4429,7 +4452,7 @@ document.getElementById('lin-u').addEventListener('keydown',e=>{if(e.key==='Ente
       <button class="btn sm" id="mo-view-cust-reject" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">↩ <span id="mo-view-crej-lbl">Solicitar corrección</span></button>
       <button class="btn sm" id="mo-view-reject" style="display:none;background:var(--rd);border-color:var(--rd);color:#fff;">❌ <span id="mo-view-rej-lbl">Rechazar</span></button>
       <button class="btn sm bs" id="mo-view-custappr" style="display:none;">🤝 <span id="lbl-sign-btn">Firma Cliente</span></button>
-      <button class="btn sm bs" id="mo-view-edit">✏ Editar</button>
+      <button class="btn sm bs" id="mo-view-edit">✏ <span id="lbl-mo-view-edit">Editar</span></button>
       <button class="btn sm bs" id="mo-view-pdf">📄 PDF</button>
       <button class="mcl" onclick="closeMO('mo-view')">✕</button>
     </div>
