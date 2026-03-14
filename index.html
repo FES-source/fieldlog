@@ -1,4 +1,4 @@
-<!-- FieldLog v1.5.17 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
+<!-- FieldLog v1.6.0 | Build: 2026-03-14 | Firebase + PWA Edition | Multi-language Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1145,6 +1145,116 @@ const I18N={
     site_name:'Nombre del Sitio',site_address:'Dirección del Sitio',approved_by:'Aprobado por',occurrences:'Ocurrencias',labor:'Mano de Obra',tasks:'Tareas y Actividades',equipment:'Equipos',
     created:'Creado',saved:'Guardado',submitted:'Enviado',rejected:'Rechazado',edited:'Editado',work_site:'SITIO DE TRABAJO',
     overview:'Resumen',photos:'Fotos',all_projects:'Todos los proyectos',no_photos:'SIN FOTOS',no_results:'SIN RESULTADOS',
+    // ── Extended keys for multi-language support ──
+    confirm_delete_word:'ELIMINAR',
+    confirm_delete_instruction:'Para confirmar, escribe la palabra ELIMINAR:',
+    all_statuses_label:'Todos los estados',
+    no_permission:'SIN PERMISO',no_permission_approve:'SIN PERMISO PARA APROBAR',
+    administrators_only:'SOLO ADMINISTRADORES',
+    report_not_found:'INFORME NO ENCONTRADO',
+    report_closed_signed:'INFORME CERRADO — FIRMADO POR CLIENTE. SOLO ADMIN PUEDE ELIMINAR.',
+    report_approved_supervisors:'INFORME APROBADO — SOLO SUPERVISORES PUEDEN RECHAZARLO',
+    report_must_be_review:'EL INFORME DEBE ESTAR EN REVISIÓN',
+    report_not_ready:'INFORME NO LISTO PARA REVISAR',
+    report_rejected_returned:'INFORME RECHAZADO — DEVUELTO AL TÉCNICO',
+    select_project_first:'SELECCIONE UN PROYECTO PRIMERO',
+    report_date_required:'LA FECHA DEL INFORME ES OBLIGATORIA',
+    please_draw_signature:'POR FAVOR DIBUJE SU FIRMA',
+    please_draw_customer_sig:'POR FAVOR DIBUJE LA FIRMA DEL CLIENTE',
+    please_enter_reason:'POR FAVOR INGRESE EL MOTIVO',
+    please_enter_rejection:'INGRESE EL MOTIVO DEL RECHAZO',
+    correction_requested:'↩ CORRECCIÓN SOLICITADA — ENVIADO A REVISIÓN',
+    sign_off_complete:'✓ FIRMA COMPLETADA — INFORME APROBADO',
+    approved_awaiting_customer:'✓ APROBADO — ESPERANDO FIRMA DEL CLIENTE',
+    report_approved_toast:'✓ INFORME APROBADO',
+    signed_sent_review:'✓ FIRMADO Y ENVIADO A REVISIÓN',
+    save_failed:'ERROR AL GUARDAR — REVISA CONEXIÓN',
+    photo_upload_failed:'⚠ ERROR AL SUBIR FOTO — REVISA REGLAS DE STORAGE',
+    photos_still_uploading:'⬆ FOTOS AÚN SUBIENDO — POR FAVOR ESPERA',
+    popup_blocked:'POPUP BLOQUEADO — PERMITE POPUPS',
+    opening_pdf:'📄 ABRIENDO PDF...',
+    deleted:'ELIMINADO',removed:'ELIMINADO',
+    saved_toast:'✓ GUARDADO',updated_toast:'✓ ACTUALIZADO',added_toast:'✓ AGREGADO',
+    member_added:'✓ MIEMBRO AGREGADO',
+    project_created:'✓ PROYECTO CREADO',project_updated:'✓ PROYECTO ACTUALIZADO',
+    template_saved:'✓ PLANTILLA GUARDADA',
+    signed_sent:'✓ FIRMADO Y ENVIADO A REVISIÓN',
+    caption_saved:'✓ CAPTION GUARDADO',
+    no_checklist_loaded:'NO HAY CHECKLIST CARGADO',
+    no_workers_taskforce:'SIN TRABAJADORES EN CUADRILLA',
+    no_materials_catalog:'SIN MATERIALES EN CATÁLOGO',
+    no_templates_create:'SIN PLANTILLAS — CREA ALGUNAS EN LA SECCIÓN CHECKLISTS',
+    no_reports_project:'SIN INFORMES PARA ESTE PROYECTO',
+    not_ready_customer_signoff:'NO LISTO PARA FIRMA DEL CLIENTE',
+    report_not_ready_review:'INFORME NO LISTO PARA REVISAR',
+    name_required:'NOMBRE REQUERIDO',add_at_least_item:'AGREGA AL MENOS UN ÍTEM',
+    password_min_6:'CONTRASEÑA: MÍN. 6 CARACTERES',
+    username_name_required:'USUARIO Y NOMBRE OBLIGATORIOS',
+    username_exists:'EL USUARIO YA EXISTE',
+    email_required:'CORREO ES OBLIGATORIO',
+    email_invalid:'FORMATO DE CORREO INVÁLIDO',
+    email_in_use:'CORREO YA ESTÁ EN USO',
+    email_in_use_firebase:'CORREO YA REGISTRADO EN FIREBASE',
+    cannot_delete_yourself:'NO PUEDES ELIMINARTE A TI MISMO',
+    customers_no_reports:'CLIENTES NO PUEDEN CREAR INFORMES',
+    report_deleted:'🗑 INFORME ELIMINADO',
+    you_label:'tú',all_label:'TODOS',
+    edit_label:'Editar',view_label:'Ver',sign_label:'Firmar',correct_label:'Corregir',
+    closed_label:'CERRADO',
+    start_label:'Inicio',end_label:'Término',
+    workers_label:'trabajadores',tasks_label:'tareas',items_label:'ítems',photos_label:'fotos',
+    add_photos_label:'📷 Agregar fotos',
+    new_option_prompt:'Nueva opción:',
+    photo_description_ph:'Descripción de la foto...',
+    free_text_answer_ph:'Respuesta libre...',
+    note_for_item_ph:'Nota para este ítem...',
+    task_description_ph:'Descripción de la tarea...',
+    comment_note_ph:'Comentario o nota...',
+    name_crew_ph:'Nombre / Cuadrilla',
+    unnamed_task:'Tarea sin nombre',
+    no_photos_add:'Sin fotos — usa el botón para agregar',
+    no_results_label:'Sin resultados',
+    loaded_label:'CARGADO: ',editing_label:'EDITANDO: ',
+    rejected_by_label:'Rechazado por: ',correction_by_label:'Corrección solicitada por: ',
+    project_assigned_to:'✓ El proyecto se asignará automáticamente a ',
+    uploading_label:'SUBIENDO...',no_email_on_file:'Sin email registrado — contacta al admin',
+    confirm_delete_project:'¿Eliminar proyecto?',confirm_delete_template:'¿Eliminar esta plantilla?',
+    confirm_delete_user:'¿Eliminar este usuario?',confirm_delete_short:'¿Eliminar?',
+    confirm_delete_report:'¿Eliminar este informe?',
+    signed_sent_review_log:'Firmado y enviado a revisión',log_report_created:'Informe creado',
+    loading_label:'CARGANDO',
+    company_label:'Empresa',status_label:'Estado',
+    start_label2:'Inicio',end_label2:'Término',
+    edit_member_label:'Editar Miembro',add_member_label:'Agregar Miembro',
+    edit_material_label:'Editar Material',add_material_label:'Agregar Material',
+    item_description_ph:'Descripción del ítem...',
+    '0_entries':'0 entradas',
+    admin_only_closed:'Solo admin — informe cerrado',
+    name_crew_ph2:'Nombre / Cuadrilla',equipment_desc_ph:'Descripción del equipo',
+    task_desc_ph:'Descripción de la tarea...',add_photos_title:'Agregar fotos',
+    comment_note_ph2:'Comentario o nota...',
+    material_item_ph:'Material / ítem',unit_ph:'Unidad',qty_ph:'Cant.',
+    yes_label:'Sí',required_label:'REQUERIDO',
+    free_text_ph:'Respuesta libre...',note_item_ph:'Nota para este ítem...',
+    no_photos_button:'Sin fotos — usa el botón para agregar',
+    all_items_must_answer:'TODOS LOS ÍTEMS DEL CHECKLIST DEBEN SER RESPONDIDOS',
+    remaining_label:'restantes',
+    overdue_text_fn:'La fecha de término fue el {date} — {days} días atrás. El estado sigue como "{status}".',
+    days_remaining_fn:'Quedan {days} día(s) para el término ({date}).',
+    photo_desc_ph:'Descripción de la foto...',
+    customer_label:'Cliente',near_miss_label:'Casi accidente',entry_single:'entrada',entry_plural:'entradas',min_6_chars_short:'MÍN. 6 CARACTERES',edit_user_label:'✏ Editar Usuario',new_user_label:'👥 Nuevo Usuario',
+
+    delete_failed:'Error al eliminar — intenta de nuevo',
+    verifying_label:'Verificando...',deleting_label:'Eliminando...',
+    irreversible_action:'ACCIÓN IRREVERSIBLE',
+    report_photos_deleted:'Este informe y todas sus fotos serán eliminados permanentemente.',
+    type_to_confirm:'Para confirmar, escribe la palabra ELIMINAR:',
+    activity_log_title:'Registro de Actividad',
+    overdue_label:'ATRASADO',days_ago:'días atrás',due_soon:'Por vencer',days_left:'días restantes',
+    deadline_label:'Plazo',days_rest:'días rest.',
+    pending_label:'Pendientes',in_review_label:'En revisión',
+    workers_stat:'Trabajadores',assigned_label:'Asignados',
+    latest_reports_label:'Últimos Informes',view_all_label:'Ver todos',
   },
   en:{
     dashboard:'Dashboard',projects:'Projects',all_reports:'All Reports',taskforce:'Taskforce',materials:'Materials',checklists:'Checklists',users:'Users',customers:'Customers',new_report:'NEW REPORT',
@@ -1207,6 +1317,116 @@ const I18N={
     site_name:'Site Name',site_address:'Site Address',approved_by:'Approved by',occurrences:'Occurrences',labor:'Labor',tasks:'Tasks & Activities',equipment:'Equipment',
     created:'Created',saved:'Saved',submitted:'Submitted',rejected:'Rejected',edited:'Edited',work_site:'WORK SITE',
     overview:'Overview',photos:'Photos',all_projects:'All projects',no_photos:'NO PHOTOS',no_results:'NO RESULTS',
+    // ── Extended keys for multi-language support ──
+    confirm_delete_word:'DELETE',
+    confirm_delete_instruction:'To confirm, type the word DELETE:',
+    all_statuses_label:'All statuses',
+    no_permission:'NO PERMISSION',no_permission_approve:'NO PERMISSION TO APPROVE',
+    administrators_only:'ADMINISTRATORS ONLY',
+    report_not_found:'REPORT NOT FOUND',
+    report_closed_signed:'REPORT CLOSED — SIGNED BY CUSTOMER. ONLY ADMIN CAN DELETE.',
+    report_approved_supervisors:'REPORT APPROVED — ONLY SUPERVISORS CAN REJECT IT',
+    report_must_be_review:'REPORT MUST BE IN REVIEW STATUS',
+    report_not_ready:'REPORT NOT READY FOR REVIEW',
+    report_rejected_returned:'REPORT REJECTED — SENT BACK TO TECHNICIAN',
+    select_project_first:'SELECT A PROJECT FIRST',
+    report_date_required:'REPORT DATE IS REQUIRED',
+    please_draw_signature:'PLEASE DRAW YOUR SIGNATURE',
+    please_draw_customer_sig:'PLEASE DRAW THE CUSTOMER SIGNATURE',
+    please_enter_reason:'PLEASE ENTER THE REASON',
+    please_enter_rejection:'PLEASE ENTER A REJECTION REASON',
+    correction_requested:'↩ CORRECTION REQUESTED — SENT BACK FOR REVIEW',
+    sign_off_complete:'✓ SIGN-OFF COMPLETE — REPORT APPROVED',
+    approved_awaiting_customer:'✓ APPROVED — AWAITING CUSTOMER SIGN-OFF',
+    report_approved_toast:'✓ REPORT APPROVED',
+    signed_sent_review:'✓ SIGNED AND SENT FOR REVIEW',
+    save_failed:'SAVE FAILED — CHECK CONNECTION',
+    photo_upload_failed:'⚠ PHOTO UPLOAD FAILED — CHECK STORAGE RULES',
+    photos_still_uploading:'⬆ PHOTOS STILL UPLOADING — PLEASE WAIT',
+    popup_blocked:'POP-UP BLOCKED — ALLOW POP-UPS',
+    opening_pdf:'📄 OPENING PDF...',
+    deleted:'DELETED',removed:'REMOVED',
+    saved_toast:'✓ SAVED',updated_toast:'✓ UPDATED',added_toast:'✓ ADDED',
+    member_added:'✓ MEMBER ADDED',
+    project_created:'✓ PROJECT CREATED',project_updated:'✓ PROJECT UPDATED',
+    template_saved:'✓ TEMPLATE SAVED',
+    signed_sent:'✓ SIGNED AND SENT FOR REVIEW',
+    caption_saved:'✓ CAPTION SAVED',
+    no_checklist_loaded:'NO CHECKLIST LOADED',
+    no_workers_taskforce:'NO WORKERS IN TASKFORCE',
+    no_materials_catalog:'NO MATERIALS IN CATALOG',
+    no_templates_create:'NO TEMPLATES — CREATE SOME IN THE CHECKLISTS SECTION',
+    no_reports_project:'NO REPORTS FOR THIS PROJECT',
+    not_ready_customer_signoff:'NOT READY FOR CUSTOMER SIGN-OFF',
+    report_not_ready_review:'REPORT NOT READY FOR REVIEW',
+    name_required:'NAME REQUIRED',add_at_least_item:'ADD AT LEAST ONE ITEM',
+    password_min_6:'PASSWORD MIN 6 CHARS',
+    username_name_required:'USERNAME + NAME REQUIRED',
+    username_exists:'USERNAME ALREADY EXISTS',
+    email_required:'EMAIL IS REQUIRED',
+    email_invalid:'INVALID EMAIL FORMAT',
+    email_in_use:'EMAIL ALREADY IN USE',
+    email_in_use_firebase:'EMAIL ALREADY IN USE IN FIREBASE',
+    cannot_delete_yourself:'CANNOT DELETE YOURSELF',
+    customers_no_reports:'CUSTOMERS CANNOT CREATE REPORTS',
+    report_deleted:'🗑 REPORT DELETED',
+    you_label:'you',all_label:'ALL',
+    edit_label:'Edit',view_label:'View',sign_label:'Sign',correct_label:'Correct',
+    closed_label:'CLOSED',
+    start_label:'Start',end_label:'End',
+    workers_label:'workers',tasks_label:'tasks',items_label:'items',photos_label:'photos',
+    add_photos_label:'📷 Add photos',
+    new_option_prompt:'New option:',
+    photo_description_ph:'Photo description...',
+    free_text_answer_ph:'Free text answer...',
+    note_for_item_ph:'Note for this item...',
+    task_description_ph:'Task description...',
+    comment_note_ph:'Comment or note...',
+    name_crew_ph:'Name / Crew',
+    unnamed_task:'Unnamed task',
+    no_photos_add:'No photos — use the button to add',
+    no_results_label:'No results',
+    loaded_label:'LOADED: ',editing_label:'EDITING: ',
+    rejected_by_label:'Rejected by: ',correction_by_label:'Correction requested by: ',
+    project_assigned_to:'✓ Project will be automatically assigned to ',
+    uploading_label:'UPLOADING...',no_email_on_file:'No email on file — contact admin',
+    confirm_delete_project:'Delete project?',confirm_delete_template:'Delete this template?',
+    confirm_delete_user:'Delete this user?',confirm_delete_short:'Delete?',
+    confirm_delete_report:'Delete this report?',
+    signed_sent_review_log:'Signed and sent for review',log_report_created:'Report created',
+    loading_label:'LOADING',
+    company_label:'Company',status_label:'Status',
+    start_label2:'Start',end_label2:'End',
+    edit_member_label:'Edit Member',add_member_label:'Add Member',
+    edit_material_label:'Edit Material',add_material_label:'Add Material',
+    item_description_ph:'Item description...',
+    '0_entries':'0 entries',
+    admin_only_closed:'Admin only — closed report',
+    name_crew_ph2:'Name / Crew',equipment_desc_ph:'Equipment description',
+    task_desc_ph:'Task description...',add_photos_title:'Add photos',
+    comment_note_ph2:'Comment or note...',
+    material_item_ph:'Material / item',unit_ph:'Unit',qty_ph:'Qty',
+    yes_label:'Yes',required_label:'REQUIRED',
+    free_text_ph:'Free text answer...',note_item_ph:'Note for this item...',
+    no_photos_button:'No photos — use the button to add',
+    all_items_must_answer:'ALL CHECKLIST ITEMS MUST BE ANSWERED',
+    remaining_label:'remaining',
+    overdue_text_fn:'The deadline was {date} — {days} days ago. Status is still "{status}".',
+    days_remaining_fn:'{days} day(s) remaining until deadline ({date}).',
+    photo_desc_ph:'Photo description...',
+    customer_label:'Customer',near_miss_label:'Near miss',entry_single:'entry',entry_plural:'entries',min_6_chars_short:'MIN 6 CHARS',edit_user_label:'✏ Edit User',new_user_label:'👥 New User',
+
+    delete_failed:'Delete failed — try again',
+    verifying_label:'Verifying...',deleting_label:'Deleting...',
+    irreversible_action:'IRREVERSIBLE ACTION',
+    report_photos_deleted:'This report and all its photos will be permanently deleted.',
+    type_to_confirm:'To confirm, type the word DELETE:',
+    activity_log_title:'Activity Log',
+    overdue_label:'OVERDUE',days_ago:'days ago',due_soon:'Due soon',days_left:'days left',
+    deadline_label:'Deadline',days_rest:'days left',
+    pending_label:'Pending',in_review_label:'In Review',
+    workers_stat:'Workers',assigned_label:'Assigned',
+    latest_reports_label:'Latest Reports',view_all_label:'View All',
   }
 };
 function t(key){const lang=(typeof currentUser!=='undefined'&&currentUser?.lang)||'es';return (I18N[lang]||I18N.es)[key]||I18N.en[key]||key;}
@@ -1266,8 +1486,8 @@ function goPage(p){
   if(p==='checklists')renderCLTs();
   if(p==='dashboard')renderDash();
   if(p==='all-reports')renderAllReports();
-  if(p==='users'){if(currentUser?.role!=='admin'){toast(currentUser?.lang==='en'?'ADMINISTRATORS ONLY':'SOLO ADMINISTRADORES','var(--rd)');return;}renderUsers();}
-  if(p==='customers'){if(currentUser?.role!=='admin'){toast(currentUser?.lang==='en'?'ADMINISTRATORS ONLY':'SOLO ADMINISTRADORES','var(--rd)');return;}renderCustomers();}
+  if(p==='users'){if(currentUser?.role!=='admin'){toast(t('administrators_only'),'var(--rd)');return;}renderUsers();}
+  if(p==='customers'){if(currentUser?.role!=='admin'){toast(t('administrators_only'),'var(--rd)');return;}renderCustomers();}
   if(p==='projects'){populateProjCustFilter();}
   if(window.innerWidth<=680){document.getElementById('sn').classList.remove('mob');navOpen=false;}
   updateNavBadge();
@@ -1351,11 +1571,11 @@ function renderDash(){
         <div style="display:flex;gap:5px;align-items:flex-start;flex-shrink:0;"><span class="bx ${stCls(p.status)}">${p.status}</span><span class="bx">${rc} rpt${rc!==1?'s':''}</span></div>
       </div>
     </div>`;
-  }).join(''):(`<div class="emp"><div class="eic">🏗</div>${currentUser?.lang==='en'?'NO PROJECTS YET':'SIN PROYECTOS AÚN'}</div>`);
+  }).join(''):(`<div class="emp"><div class="eic">🏗</div>${t('no_projects_yet')}</div>`);
 
   const dr=document.getElementById('dash-rpts');
   const rr=[...myRpts].slice(-6).reverse();
-  dr.innerHTML=rr.length?rr.map(r=>rptRow(r,true)).join(''):`<div class="emp"><div class="eic">📋</div>${currentUser?.lang==='en'?'NO REPORTS YET':'SIN INFORMES AÚN'}</div>`;
+  dr.innerHTML=rr.length?rr.map(r=>rptRow(r,true)).join(''):`<div class="emp"><div class="eic">📋</div>${t('no_reports_yet')}</div>`;
 }
 
 function stCls(s){return s==='Active'||s==='Approved'?'g':s==='Review'?'r':s==='Filling'||s==='On Hold'?'a':'';}
@@ -1416,7 +1636,7 @@ function rptRow(r,withProj=false){
     <div class="rr-info">
       <div class="rr-date">${E(r.date)}</div>
       ${withProj&&projName?`<div class="rr-proj">${E(projName)}</div>`:''}
-      <div class="rr-summary">${r.laborCount||0} ${currentUser?.lang==='en'?'workers':'trabajadores'} · ${r.taskCount||0} ${currentUser?.lang==='en'?'tasks':'tareas'}${clItems.length?` · ☑ ${clDone}/${clItems.length}`:''}</div>
+      <div class="rr-summary">${r.laborCount||0} ${t('workers_label')} · ${r.taskCount||0} ${t('tasks_label')}${clItems.length?` · ☑ ${clDone}/${clItems.length}`:''}</div>
     </div>
     ${photos.length?`<div class="rr-photo-count">📷 ${photos.length}</div>`:''}
     <div class="rr-photo-count"><span class="st-${(r.status||'draft').toLowerCase().replace(/ /g,'-')}">${tRptStatus(r.status||'Draft')}</span></div>
@@ -1425,7 +1645,7 @@ function rptRow(r,withProj=false){
       <button class="ib" onclick="viewReport('${r.id}')">👁 ${currentUser?.lang==='en'?'View':'Ver'}</button>
       ${!isCust?`<button class="ib gn" onclick="genPDF('${r.id}')">📄 PDF</button>`:''}
       ${isCust&&r.status==='Pending Customer'?`<button class="ib" style="background:rgba(100,149,237,.15);border-color:#6495ed;color:#6495ed;" onclick="openCustAppr('${r.id}')">🤝 ${currentUser?.lang==='en'?'Sign':'Firmar'}</button><button class="ib" style="border-color:var(--am);color:var(--am);" onclick="openCustReject('${r.id}')">↩ ${currentUser?.lang==='en'?'Correct':'Corregir'}</button>`:''}
-      ${!isCust?(()=>{const lk2=isReportLocked(r);const _en2=currentUser?.lang==='en';if(lk2==='customer')return currentUser?.role==='admin'?`<button class="ib rd" onclick="delR('${r.id}')" title="${_en2?'Admin only — closed report':'Solo admin — informe cerrado'}">🗑</button>`:'';return`<button class="ib" onclick="delR('${r.id}')">🗑</button>`;})():''}
+      ${!isCust?(()=>{const lk2=isReportLocked(r);const _en2=currentUser?.lang==='en';if(lk2==='customer')return currentUser?.role==='admin'?`<button class="ib rd" onclick="delR('${r.id}')" title="${t('admin_only_closed')}">🗑</button>`:'';return`<button class="ib" onclick="delR('${r.id}')">🗑</button>`;})():''}
     </div>
   </div>`;
 }
@@ -1498,10 +1718,10 @@ function onProjCustChange(){
   const cid=document.getElementById('p-customer-sel')?.value;
   const cust=cid?DB.customers.find(x=>x.id===cid):null;
   const hint=document.getElementById('p-cust-hint');
-  if(hint)hint.textContent=cust?(currentUser?.lang==='en'?'✓ Project will be automatically assigned to ':'✓ El proyecto se asignará automáticamente a ')+cust.name:'';
+  if(hint)hint.textContent=cust?t('project_assigned_to')+cust.name:'';
 }
 function saveP(){
-  if(!hasPerm('manage_projects')){toast(currentUser?.lang==='en'?'NO PERMISSION':'SIN PERMISO','var(--rd)');return;}
+  if(!hasPerm('manage_projects')){toast(t('no_permission'),'var(--rd)');return;}
   const name=gv('p-name').trim();if(!name){toast('NOMBRE REQUERIDO','var(--rd)');return;}
   const logo1=document.getElementById('p-logo1-inp')._logoData||null;
   const logo2=document.getElementById('p-logo2-inp')._logoData||null;
@@ -1509,8 +1729,8 @@ function saveP(){
   const customerId=document.getElementById('p-customer-sel')?.value||null;
   const projId=editPJ||('p'+Date.now());
   const d={name,code:gv('p-code'),client:gv('p-cli'),location:gv('p-loc'),desc:gv('p-desc'),start:gv('p-start'),end:gv('p-end'),status:gv('p-stat'),members:[...pmems],logo1,logo2,requireCustomerApproval,customerId};
-  if(editPJ){const ep=DB.projects.find(p=>p.id===editPJ);Object.assign(ep,d);fbSave('projects',editPJ,ep).catch(console.error);toast(currentUser?.lang==='en'?'✓ PROJECT UPDATED':'✓ PROYECTO ACTUALIZADO');}
-  else{const np={id:projId,...d};DB.projects.push(np);fbSave('projects',projId,np).catch(console.error);toast(currentUser?.lang==='en'?'✓ PROJECT CREATED':'✓ PROYECTO CREADO');}
+  if(editPJ){const ep=DB.projects.find(p=>p.id===editPJ);Object.assign(ep,d);fbSave('projects',editPJ,ep).catch(console.error);toast(t('project_updated'));}
+  else{const np={id:projId,...d};DB.projects.push(np);fbSave('projects',projId,np).catch(console.error);toast(t('project_created'));}
   // Auto-assign project to customer's project list
   if(customerId){
     const cust=DB.customers.find(x=>x.id===customerId);
@@ -1590,8 +1810,8 @@ function renderProjs(){
   }).join('');
 }
 function delP(id){
-  if(!hasPerm('manage_projects')){toast(currentUser?.lang==='en'?'NO PERMISSION':'SIN PERMISO','var(--rd)');return;}
-  if(!confirm(currentUser?.lang==='en'?'Delete project?':'¿Eliminar proyecto?'))return;DB.projects=DB.projects.filter(p=>p.id!==id);renderProjs();renderDash();toast(currentUser?.lang==='en'?'DELETED':'ELIMINADO','var(--rd)');
+  if(!hasPerm('manage_projects')){toast(t('no_permission'),'var(--rd)');return;}
+  if(!confirm(t('confirm_delete_project')))return;DB.projects=DB.projects.filter(p=>p.id!==id);renderProjs();renderDash();toast(t('deleted'),'var(--rd)');
 }
 
 // ═══════════════════════════════════════════════
@@ -1695,9 +1915,9 @@ function renderPDOverview(){
       <div class="card" style="margin:0;">
         <div class="ch"><div class="ct">📋 Información del Proyecto</div></div>
         <div class="cb" style="padding-top:11px;">
-          ${infoRow((currentUser?.lang==='en'?'Customer':'Cliente'),p.client)}
-          ${cust2?infoRow(currentUser?.lang==='en'?'Company':'Empresa',cust2.name):''}
-          ${infoRow(currentUser?.lang==='en'?'Location':'Ubicación',p.location)}${infoRow(currentUser?.lang==='en'?'Start':'Inicio',p.start)}${infoRow(currentUser?.lang==='en'?'End':'Término',p.end||'—')}${infoRow(currentUser?.lang==='en'?'Status':'Estado',p.status)}
+          ${infoRow(t('client'),p.client)}
+          ${cust2?infoRow(t('company_label'),cust2.name):''}
+          ${infoRow(t('location'),p.location)}${infoRow(t('start_label'),p.start)}${infoRow(t('end_label'),p.end||'—')}${infoRow(t('status_label'),p.status)}
           ${progHtml}
           ${p.desc?`<div style="margin-top:9px;font-size:12px;color:var(--mu2);">${E(p.desc)}</div>`:''}
         </div>
@@ -1713,9 +1933,9 @@ function renderPDOverview(){
       </div>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">📋 ${currentUser?.lang==='en'?'Latest Reports':'Últimos Informes'}</div><button class="btn sm bs" onclick="switchPDTab('reports')">${currentUser?.lang==='en'?'View all':'Ver todos'}</button></div>
+      <div class="ch"><div class="ct">📋 ${t('latest_reports_label')}</div><button class="btn sm bs" onclick="switchPDTab('reports')">${t('view_all_label')}</button></div>
       <div class="cb" style="padding-top:8px;">
-        ${rpts.length?[...rpts].slice(-5).reverse().map(r=>rptRow(r,false)).join(''):`<div class="emp"><div class="eic">📋</div>${currentUser?.lang==='en'?'NO REPORTS YET':'SIN INFORMES AÚN'}</div>`}
+        ${rpts.length?[...rpts].slice(-5).reverse().map(r=>rptRow(r,false)).join(''):`<div class="emp"><div class="eic">📋</div>${t('no_reports_yet')}</div>`}
       </div>
     </div>
   `;
@@ -1726,7 +1946,7 @@ function infoRow(lbl,val){return val?`<div style="display:flex;gap:10px;padding:
 function renderPDReports(){
   const rpts=DB.reports.filter(r=>r.projId===curProjId);
   const c=document.getElementById('pd-panel-reports');
-  if(!rpts.length){c.innerHTML=`<div class="emp"><div class="eic">📋</div>${currentUser?.lang==='en'?'NO REPORTS FOR THIS PROJECT':'SIN INFORMES PARA ESTE PROYECTO'}</div>`;return;}
+  if(!rpts.length){c.innerHTML=`<div class="emp"><div class="eic">📋</div>${t('no_reports_project')}</div>`;return;}
   c.innerHTML=`
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
       <div style="font-family:var(--mo);font-size:10px;color:var(--mu);letter-spacing:1px;">
@@ -1757,7 +1977,7 @@ function renderPDPhotos(){
 // ═══════════════════════════════════════════════
 function openWM(id=null){
   editWK=id;
-  document.getElementById('wm-title').textContent=id?(currentUser?.lang==='en'?'✏ Edit Member':'✏ Editar Miembro'):(currentUser?.lang==='en'?'👷 Add Member':'👷 Agregar Miembro');
+  document.getElementById('wm-title').textContent=id?('✏ '+t('edit_member_label')):'👷 '+t('add_member_label');
   ['w-name','w-phone','w-email','w-id'].forEach(f=>document.getElementById(f).value='');
   document.getElementById('w-role').value='Electrician'; // stored value, display handled by applyLangdocument.getElementById('w-stat').value='Active';
   if(id){const w=DB.workers.find(wk=>wk.id===id);if(w){document.getElementById('w-name').value=w.name||'';document.getElementById('w-role').value=w.role||'Electrician';document.getElementById('w-phone').value=w.phone||'';document.getElementById('w-email').value=w.email||'';document.getElementById('w-id').value=w.empId||'';document.getElementById('w-stat').value=w.status||'Active';}}
@@ -1766,8 +1986,8 @@ function openWM(id=null){
 function saveW(){
   const name=gv('w-name').trim();if(!name){toast('NOMBRE REQUERIDO','var(--rd)');return;}
   const d={name,role:gv('w-role'),phone:gv('w-phone'),email:gv('w-email'),empId:gv('w-id'),status:gv('w-stat')};
-  if(editWK){const ew=DB.workers.find(w=>w.id===editWK);Object.assign(ew,d);fbSave('workers',editWK,ew).catch(console.error);toast(currentUser?.lang==='en'?'✓ UPDATED':'✓ ACTUALIZADO');}
-  else{const nw={id:'w'+Date.now(),...d};DB.workers.push(nw);fbSave('workers',nw.id,nw).catch(console.error);toast(currentUser?.lang==='en'?'✓ MEMBER ADDED':'✓ MIEMBRO AGREGADO');}
+  if(editWK){const ew=DB.workers.find(w=>w.id===editWK);Object.assign(ew,d);fbSave('workers',editWK,ew).catch(console.error);toast(t('updated_toast'));}
+  else{const nw={id:'w'+Date.now(),...d};DB.workers.push(nw);fbSave('workers',nw.id,nw).catch(console.error);toast(t('member_added'));}
   closeMO('mo-worker');renderWorkers();renderDash();
 }
 // Renderiza el listado de trabajadores
@@ -1777,7 +1997,7 @@ function renderWorkers(){
   let wks=DB.workers;
   if(q)wks=wks.filter(w=>[w.name,w.role,w.status,w.empId,w.phone,w.email].some(f=>(f||'').toLowerCase().includes(q)));
   document.getElementById('wk-bx').textContent=DB.workers.length+' members';
-  if(!wks.length){tb.innerHTML='';em.style.display=DB.workers.length?'none':'block';if(!DB.workers.length)em.style.display='block';else{em.innerHTML=(currentUser?.lang==='en'?'No results':'Sin resultados');em.style.display='block';}return;}
+  if(!wks.length){tb.innerHTML='';em.style.display=DB.workers.length?'none':'block';if(!DB.workers.length)em.style.display='block';else{em.innerHTML=t('no_results_label');em.style.display='block';}return;}
   em.style.display='none';
   tb.innerHTML=wks.map(w=>`<tr>
     <td><strong>${E(w.name)}</strong>${w.empId?` <span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${E(w.empId)}</span>`:''}</td>
@@ -1787,7 +2007,7 @@ function renderWorkers(){
     <td style="white-space:nowrap;"><button class="ib ed" onclick="openWM('${w.id}')">✏</button><button class="ib" onclick="delW('${w.id}')">🗑</button></td>
   </tr>`).join('');
 }
-function delW(id){if(!confirm((currentUser?.lang==='en'?'Remove?':'¿Eliminar?')))return;DB.workers=DB.workers.filter(w=>w.id!==id);DB.projects.forEach(p=>{p.members=(p.members||[]).filter(m=>m!==id);});fbDelete('workers',id).catch(console.error);renderWorkers();renderDash();toast((currentUser?.lang==='en'?'REMOVED':'ELIMINADO'),'var(--rd)');}
+function delW(id){if(!confirm((t('confirm_delete_short'))))return;DB.workers=DB.workers.filter(w=>w.id!==id);DB.projects.forEach(p=>{p.members=(p.members||[]).filter(m=>m!==id);});fbDelete('workers',id).catch(console.error);renderWorkers();renderDash();toast((t('removed')),'var(--rd)');}
 
 // ═══════════════════════════════════════════════
 // MATERIALES
@@ -1799,7 +2019,7 @@ function delW(id){if(!confirm((currentUser?.lang==='en'?'Remove?':'¿Eliminar?')
 // ═══════════════════════════════════════════════
 function openMM(id=null){
   editMT=id;
-  document.getElementById('mm-title').textContent=id?(currentUser?.lang==='en'?'✏ Edit Material':'✏ Editar Material'):(currentUser?.lang==='en'?'📦 Add Material':'📦 Agregar Material');
+  document.getElementById('mm-title').textContent=id?('✏ '+t('edit_material_label')):'📦 '+t('add_material_label');
   ['m-name','m-notes'].forEach(f=>document.getElementById(f).value='');
   document.getElementById('m-qty').value='';document.getElementById('m-cat').value='Electrical';document.getElementById('m-unit').value='pcs';
   if(id){const m=DB.materials.find(mt=>mt.id===id);if(m){document.getElementById('m-name').value=m.name||'';document.getElementById('m-cat').value=m.cat||'Electrical';document.getElementById('m-unit').value=m.unit||'pcs';document.getElementById('m-qty').value=m.qty||'';document.getElementById('m-notes').value=m.notes||'';}}
@@ -1808,8 +2028,8 @@ function openMM(id=null){
 function saveM(){
   const name=gv('m-name').trim();if(!name){toast('NOMBRE REQUERIDO','var(--rd)');return;}
   const d={name,cat:gv('m-cat'),unit:gv('m-unit'),qty:gv('m-qty'),notes:gv('m-notes')};
-  if(editMT){const em=DB.materials.find(m=>m.id===editMT);Object.assign(em,d);fbSave('materials',editMT,em).catch(console.error);toast(currentUser?.lang==='en'?'✓ UPDATED':'✓ ACTUALIZADO');}
-  else{const nm={id:'m'+Date.now(),...d};DB.materials.push(nm);fbSave('materials',nm.id,nm).catch(console.error);toast(currentUser?.lang==='en'?'✓ ADDED':'✓ AGREGADO');}
+  if(editMT){const em=DB.materials.find(m=>m.id===editMT);Object.assign(em,d);fbSave('materials',editMT,em).catch(console.error);toast(t('updated_toast'));}
+  else{const nm={id:'m'+Date.now(),...d};DB.materials.push(nm);fbSave('materials',nm.id,nm).catch(console.error);toast(t('added_toast'));}
   closeMO('mo-mat');renderMats();renderDash();
 }
 // Renderiza el catálogo de materiales
@@ -1829,7 +2049,7 @@ function renderMats(){
     <td style="white-space:nowrap;"><button class="ib ed" onclick="openMM('${m.id}')">✏</button><button class="ib" onclick="delM('${m.id}')">🗑</button></td>
   </tr>`).join('');
 }
-function delM(id){if(!confirm((currentUser?.lang==='en'?'Delete?':'¿Eliminar?')))return;DB.materials=DB.materials.filter(m=>m.id!==id);fbDelete('materials',id).catch(console.error);renderMats();renderDash();toast(currentUser?.lang==='en'?'DELETED':'ELIMINADO','var(--rd)');}
+function delM(id){if(!confirm((t('confirm_delete_short'))))return;DB.materials=DB.materials.filter(m=>m.id!==id);fbDelete('materials',id).catch(console.error);renderMats();renderDash();toast(t('deleted'),'var(--rd)');}
 
 // ═══════════════════════════════════════════════
 // CHECKLISTS (Plantillas de Verificación)
@@ -1877,14 +2097,14 @@ function getItemTypes(){return currentUser?.lang==='en'?ITEM_TYPES_EN:ITEM_TYPES
 function addCLBI(t='',cat='General',tp='sna'){
   const d=document.createElement('div');d.className='bi';d.style.flexWrap='wrap';
   d.innerHTML=`<span style="color:var(--mu);font-size:12px;">⠿</span>
-    <input type="text" placeholder="${currentUser?.lang==='en'?'Item description...':'Descripción del ítem...'}" class="cl-item-plh" value="${E(t)}" style="flex:1;min-width:160px;">
+    <input type="text" placeholder="${t('item_description_ph')}" class="cl-item-plh" value="${E(t)}" style="flex:1;min-width:160px;">
     <select class="cs" style="font-size:11px;">${CATS.map(ca=>`<option${ca===cat?' selected':''}>${ca}</option>`).join('')}</select>
     <select class="cs it-type" style="font-size:11px;">${getItemTypes().map(x=>`<option value="${x.v}"${x.v===tp?' selected':''}>${x.l}</option>`).join('')}</select>
     <button class="ib" onclick="this.closest('.bi').remove()">✕</button>`;
   document.getElementById('clb-items').appendChild(d);
 }
 function saveCLT(){
-  const name=gv('clb-name').trim();if(!name){toast(currentUser?.lang==='en'?'NAME REQUIRED':'NOMBRE REQUERIDO','var(--rd)');return;}
+  const name=gv('clb-name').trim();if(!name){toast(t('name_required'),'var(--rd)');return;}
   const snaLabels=[
     (document.getElementById('clb-sna1').value.trim()||'Si'),
     (document.getElementById('clb-sna2').value.trim()||'No'),
@@ -1892,9 +2112,9 @@ function saveCLT(){
   ];
   const rows=document.querySelectorAll('#clb-items .bi');const items=[];
   rows.forEach((r,i)=>{const t=r.querySelector('input').value.trim(),sels=r.querySelectorAll('select'),cat=sels[0]?.value||'General',tp=sels[1]?.value||'sna';if(t)items.push({id:'ci'+Date.now()+i,text:t,category:cat,type:tp});});
-  if(!items.length){toast(currentUser?.lang==='en'?'ADD AT LEAST ONE ITEM':'AGREGA AL MENOS UN ÍTEM','var(--rd)');return;}
-  if(editCL){const ecl=DB.checklists.find(c=>c.id===editCL);Object.assign(ecl,{name,items,snaLabels});fbSave('checklists',editCL,ecl).catch(console.error);toast(currentUser?.lang==='en'?'✓ UPDATED':'✓ ACTUALIZADO');}
-  else{const ncl={id:'cl'+Date.now(),name,items,snaLabels};DB.checklists.push(ncl);fbSave('checklists',ncl.id,ncl).catch(console.error);toast(currentUser?.lang==='en'?'✓ TEMPLATE SAVED':'✓ PLANTILLA GUARDADA');}
+  if(!items.length){toast(t('add_at_least_item'),'var(--rd)');return;}
+  if(editCL){const ecl=DB.checklists.find(c=>c.id===editCL);Object.assign(ecl,{name,items,snaLabels});fbSave('checklists',editCL,ecl).catch(console.error);toast(t('updated_toast'));}
+  else{const ncl={id:'cl'+Date.now(),name,items,snaLabels};DB.checklists.push(ncl);fbSave('checklists',ncl.id,ncl).catch(console.error);toast(t('template_saved'));}
   closeMO('mo-clb');renderCLTs();
 }
 function renderCLTs(){
@@ -1903,7 +2123,7 @@ function renderCLTs(){
   e.style.display='none';
   c.innerHTML=DB.checklists.map(cl=>`<div class="card coll op" style="border-top-color:var(--bl);">
     <div class="ch" onclick="this.closest('.card').classList.toggle('op')">
-      <div class="ct">☑ ${E(cl.name)} <span class="bx">${cl.items.length} ${currentUser?.lang==='en'?'items':'ítems'}</span></div>
+      <div class="ct">☑ ${E(cl.name)} <span class="bx">${cl.items.length} ${t('items_label')}</span></div>
       <div style="display:flex;gap:5px;align-items:center;"><button class="ib ed" onclick="event.stopPropagation();openCLB('${cl.id}')">✏</button><button class="ib" onclick="event.stopPropagation();delCLT('${cl.id}')">🗑</button><span class="chv">▼</span></div>
     </div>
     <div class="cbody" style="padding:8px 16px 12px;">
@@ -1911,7 +2131,7 @@ function renderCLTs(){
     </div>
   </div>`).join('');
 }
-function delCLT(id){if(!confirm(currentUser?.lang==='en'?'Delete this template?':'¿Eliminar esta plantilla?'))return;DB.checklists=DB.checklists.filter(c=>c.id!==id);fbDelete('checklists',id).catch(console.error);if(activeCL?.templateId===id){activeCL=null;renderCLR();}renderCLTs();toast(currentUser?.lang==='en'?'DELETED':'ELIMINADO','var(--rd)');}
+function delCLT(id){if(!confirm(t('confirm_delete_template')))return;DB.checklists=DB.checklists.filter(c=>c.id!==id);fbDelete('checklists',id).catch(console.error);if(activeCL?.templateId===id){activeCL=null;renderCLR();}renderCLTs();toast(t('deleted'),'var(--rd)');}
 
 // ═══════════════════════════════════════════════
 // FORMULARIO DE INFORME
@@ -1925,7 +2145,7 @@ function delCLT(id){if(!confirm(currentUser?.lang==='en'?'Delete this template?'
 // ═══════════════════════════════════════════════
 // Inicia un informe nuevo - resetea el formulario y aplica el idioma
 function startNewReport(projId=null){
-  if(isCustomerRole()){toast(currentUser?.lang==='en'?'CUSTOMERS CANNOT CREATE REPORTS':'CLIENTES NO PUEDEN CREAR INFORMES','var(--rd)');return;}
+  if(isCustomerRole()){toast(t('customers_no_reports'),'var(--rd)');return;}
   curRptId=null;editingRpt=false;activeCL=null;curReportStatus='Draft';
   resetRF();applyLang();
   if(projId){document.getElementById('r-proj').value=projId;onPC();curProjId=projId;}
@@ -1943,9 +2163,9 @@ function startNewReport(projId=null){
 function editR(id){
   const r=DB.reports.find(rp=>rp.id===id);if(!r)return;
   const lock=isReportLocked(r);
-  if(lock==='customer'){toast(currentUser?.lang==='en'?'REPORT CLOSED — SIGNED BY CUSTOMER. ONLY ADMIN CAN DELETE.':'INFORME CERRADO — FIRMADO POR CLIENTE. SOLO ADMIN PUEDE ELIMINAR.','var(--rd)');return;}
+  if(lock==='customer'){toast(t('report_closed_signed'),'var(--rd)');return;}
   if(lock==='approved'){
-    if(!hasPerm('approve_reports')){toast(currentUser?.lang==='en'?'REPORT APPROVED — ONLY SUPERVISORS CAN REJECT IT':'INFORME APROBADO — SOLO SUPERVISORES PUEDEN RECHAZARLO','var(--am)');return;}
+    if(!hasPerm('approve_reports')){toast(t('report_approved_supervisors'),'var(--am)');return;}
     // Admin/manager can still reject via reject modal
     openReject(id);return;
   }
@@ -2003,7 +2223,7 @@ function editR(id){
     if(r.status==='Rejected'&&r.rejectionReason){
       rejBanner.style.display='block';
       document.getElementById('r-reject-reason').textContent=r.rejectionReason;
-      document.getElementById('r-reject-by').textContent=(r.rejectedBy?(currentUser?.lang==='en'?'Rejected by: ':'Rechazado por: ')+r.rejectedBy:'')+
+      document.getElementById('r-reject-by').textContent=(r.rejectedBy?t('rejected_by_label')+r.rejectedBy:'')+
         (r.rejectedAt?' · '+new Date(r.rejectedAt).toLocaleString():'');
     } else if(r.status==='Review'&&r.custRejectionReason){
       // Customer requested corrections — show in amber
@@ -2012,7 +2232,7 @@ function editR(id){
       rejBanner.style.background='rgba(245,166,35,.08)';
       document.getElementById('r-reject-reason').textContent=r.custRejectionReason;
       document.getElementById('r-reject-reason').style.color='var(--am)';
-      document.getElementById('r-reject-by').textContent=(r.custRejectedBy?(currentUser?.lang==='en'?'Correction requested by: ':'Corrección solicitada por: ')+r.custRejectedBy:'')+
+      document.getElementById('r-reject-by').textContent=(r.custRejectedBy?t('correction_by_label')+r.custRejectedBy:'')+
         (r.custRejectedAt?' · '+new Date(r.custRejectedAt).toLocaleString():'');
     } else {
       rejBanner.style.display='none';
@@ -2021,7 +2241,7 @@ function editR(id){
   showPage('page-report');applyLang();
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
   updateRID();
-  toast((currentUser?.lang==='en'?'EDITING: ':'EDITANDO: ')+r.id,'var(--am)');
+  toast(t('editing_label')+r.id,'var(--am)');
 }
 
 function backFromReport(){if(curProjId)viewProj(curProjId);else goPage('all-reports');}
@@ -2063,7 +2283,7 @@ function resetRF(){
   document.getElementById('r-imp').value='No impact';
   const rejBanner=document.getElementById('r-reject-banner');if(rejBanner)rejBanner.style.display='none';
   // Project select
-  const ps=document.getElementById('r-proj');ps.innerHTML='<option value="">'+(currentUser?.lang==='en'?'— Select Project —':'— Seleccionar Proyecto —')+'</option>';
+  const ps=document.getElementById('r-proj');ps.innerHTML='<option value="">'+t('select_project')+'</option>';
   DB.projects.filter(p=>canAccessProject(p.id)).forEach(p=>{const o=document.createElement('option');o.value=p.id;o.dataset.code=p.code||p.name.slice(0,6).toUpperCase().replace(/\s/g,'');o.textContent=p.name+(p.code?' ('+p.code+')':'');ps.appendChild(o);});
   // Weather
   document.querySelectorAll('.wp').forEach((wp,i)=>wp.classList.toggle('on',i===0));
@@ -2071,7 +2291,7 @@ function resetRF(){
   ['r-labor','r-equip','r-tasks','r-mats','r-occ'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='';});
   const _es3=currentUser?.lang!=='en';
   [['bl-l',_es3?'trabajador':'worker'],['bl-e',_es3?'ítem':'item'],['bl-t',_es3?'tarea':'task'],['bl-m',_es3?'ítem':'item']].forEach(([b,u])=>document.getElementById(b).textContent='0 '+u+'s');
-  document.getElementById('bl-occ').textContent=currentUser?.lang==='en'?'0 entries':'0 entradas';
+  document.getElementById('bl-occ').textContent=t('0_entries');
   reportPhotos=[];renderPhotos();_uploadSessionId=null;
   // Section enables
   const onByDef=['sec-weather','sec-labor','sec-equip','sec-tasks','sec-mats','sec-checklist','sec-notes'];
@@ -2145,7 +2365,7 @@ function tStatOpt(s){const lang=currentUser?.lang||'es';return TSTAT.map(v=>`<op
 // Agrega una fila de trabajador al formulario de informe
 function addLR(name='',role='Electrician',start='07:00',end='16:00',hrs=''){
   const d=document.createElement('div');d.className='ri';d.style.gridTemplateColumns='2fr 1.2fr 58px 58px 50px 26px';
-  d.innerHTML=`<input type="text" placeholder="${currentUser?.lang==='en'?'Name / Crew':'Nombre / Cuadrilla'}" value="${E(name)}">
+  d.innerHTML=`<input type="text" placeholder="${t('name_crew_ph2')}" value="${E(name)}">
     <select>${tRoleOpt(role)}</select>
     <input type="time" value="${E(start)}" style="text-align:center;" title="Start time">
     <input type="time" value="${E(end)}" style="text-align:center;" title="End time">
@@ -2156,7 +2376,7 @@ function addLR(name='',role='Electrician',start='07:00',end='16:00',hrs=''){
 // Agrega una fila de equipo al formulario de informe
 function addER(desc='',status='In use'){
   const d=document.createElement('div');d.className='ri';d.style.gridTemplateColumns='2fr 1fr 26px';
-  d.innerHTML=`<input type="text" placeholder="${currentUser?.lang==='en'?'Equipment description':'Descripción del equipo'}" value="${E(desc)}">
+  d.innerHTML=`<input type="text" placeholder="${t('equipment_desc_ph')}" value="${E(desc)}">
     <select>${tEstatOpt(status)}</select>
     <button class="ib" onclick="this.closest('.ri').remove();upB('r-equip','bl-e','item')">✕</button>`;
   document.getElementById('r-equip').appendChild(d);upB('r-equip','bl-e','item');
@@ -2169,13 +2389,13 @@ function addTR(desc='',status='Pending',comment='',photos=[],captions=[]){
   const hasPh=photos.length>0;
   d.innerHTML=`
     <div class="ri" style="grid-template-columns:1fr 105px 26px 26px;align-items:center;">
-      <input type="text" class="td" placeholder="${currentUser?.lang==='en'?'Task description...':'Descripción de la tarea...'}" value="${E(desc)}" oninput="renderTaskPhotoGallery()">
+      <input type="text" class="td" placeholder="${t('task_desc_ph')}" value="${E(desc)}" oninput="renderTaskPhotoGallery()">
       <select>${tStatOpt(status)}</select>
-      <button class="ib task-cam-btn" title="${currentUser?.lang==='en'?'Add photos':'Agregar fotos'}" style="${hasPh?'border-color:var(--am);color:var(--am);':''}">📷</button>
+      <button class="ib task-cam-btn" title="${t('add_photos_title')}" style="${hasPh?'border-color:var(--am);color:var(--am);':''}">📷</button>
       <button class="ib" onclick="this.closest('.task-entry').remove();upB('r-tasks','bl-t','task');renderTaskPhotoGallery()">✕</button>
     </div>
     <input type="file" accept="image/*" multiple style="display:none;" class="task-file-input" onchange="addTaskPhotos('${uid}',event)">
-    <input type="text" class="task-comment" placeholder="${currentUser?.lang==='en'?'Comment or note...':'Comentario o nota...'}" value="${E(comment)}" style="width:100%;background:transparent;border:none;border-top:1px dashed var(--bd);color:var(--mu2);padding:4px 8px;font-size:11px;outline:none;display:${comment?'block':'none'};" onfocus="this.style.display='block'">`;
+    <input type="text" class="task-comment" placeholder="${t('comment_note_ph2')}" value="${E(comment)}" style="width:100%;background:transparent;border:none;border-top:1px dashed var(--bd);color:var(--mu2);padding:4px 8px;font-size:11px;outline:none;display:${comment?'block':'none'};" onfocus="this.style.display='block'">`;
   d.querySelector('.task-cam-btn').addEventListener('click', ()=>{
     d.querySelector('.task-file-input').click();
   });
@@ -2199,14 +2419,14 @@ function renderTaskPhotoGallery(){
   gallery.style.display='block';
   inner.innerHTML=allEntries.map(entry=>{
     const uid=entry.dataset.uid;
-    const desc=entry.querySelector('input[type=text]')?.value||(currentUser?.lang==='en'?'Unnamed task':'Tarea sin nombre');
+    const desc=entry.querySelector('input[type=text]')?.value||t('unnamed_task');
     const photos=entry._photos||[];
     const caps=entry._captions||[];
     return`<div style="margin-bottom:16px;">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
         <span style="font-family:var(--mo);font-size:9px;letter-spacing:1px;color:var(--mu);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">▸ ${E(desc)}</span>
         <label style="font-family:var(--mo);font-size:9px;letter-spacing:1px;color:var(--am);cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border:1px solid var(--am);background:var(--abg);white-space:nowrap;">
-          ${currentUser?.lang==='en'?'📷 Add photos':'📷 Agregar fotos'}
+          ${t('add_photos_label')}
           <input type="file" accept="image/*" multiple style="display:none;" onchange="addTaskPhotos('${uid}',event)">
         </label>
       </div>
@@ -2216,9 +2436,9 @@ function renderTaskPhotoGallery(){
             <img src="${p}" style="width:100%;height:100%;object-fit:cover;">
             <div class="rmv" onclick="event.stopPropagation();rmTaskPhoto('${uid}',${i})">🗑</div>
           </div>
-          <input type="text" placeholder="${currentUser?.lang==='en'?'Photo description...':'Descripción de la foto...'}" value="${E(cap)}" oninput="setTaskPhotoCaption('${uid}',${i},this.value)" style="width:160px;font-size:10px;padding:3px 5px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);outline:none;">
+          <input type="text" placeholder="${t('photo_desc_ph')}" value="${E(cap)}" oninput="setTaskPhotoCaption('${uid}',${i},this.value)" style="width:160px;font-size:10px;padding:3px 5px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);outline:none;">
         </div>`;}).join('')}
-        ${!photos.length?`<div style="font-family:var(--mo);font-size:9px;color:var(--mu);padding:8px 0;letter-spacing:1px;">${currentUser?.lang==='en'?'No photos — use the button to add':'Sin fotos — usa el botón para agregar'}</div>`:''}
+        ${!photos.length?`<div style="font-family:var(--mo);font-size:9px;color:var(--mu);padding:8px 0;letter-spacing:1px;">${t('no_photos_button')}</div>`:''}
       </div>
     </div>`;
   }).join('<div style="height:1px;background:var(--bd);margin:8px 0 14px;"></div>');
@@ -2271,15 +2491,15 @@ function openTaskPhotoLB(uid,idx){
 // Agrega una fila de material al formulario de informe
 function addMR(name='',unit='pcs',qty=''){
   const d=document.createElement('div');d.className='ri';d.style.gridTemplateColumns='2fr 65px 60px 26px';
-  d.innerHTML=`<input type="text" placeholder="${currentUser?.lang==='en'?'Material / item':'Material / ítem'}" value="${E(name)}">
-    <input type="text" placeholder="${currentUser?.lang==='en'?'Unit':'Unidad'}" style="text-align:center;" value="${E(unit)}">
-    <input type="number" placeholder="${currentUser?.lang==='en'?'Qty':'Cant.'}" min="0" style="text-align:center;" value="${E(qty)}">
+  d.innerHTML=`<input type="text" placeholder="${t('material_item_ph')}" value="${E(name)}">
+    <input type="text" placeholder="${t('unit_ph')}" style="text-align:center;" value="${E(unit)}">
+    <input type="number" placeholder="${t('qty_ph')}" min="0" style="text-align:center;" value="${E(qty)}">
     <button class="ib" onclick="this.closest('.ri').remove();upB('r-mats','bl-m','item')">✕</button>`;
   document.getElementById('r-mats').appendChild(d);upB('r-mats','bl-m','item');
 }
 function upB(rid,bid,u){const n=document.getElementById(rid).querySelectorAll('.ri').length;const es3=currentUser?.lang!=='en';const units={item:es3?'ítem':'item',task:es3?'tarea':'task',photo:es3?'foto':'photo',entry:es3?'entrada':'entry'};const u2=units[u]||u;document.getElementById(bid).textContent=n+' '+u2+(n!==1&&!es3?'s':n!==1&&es3?'s':'');}
-function impW(){if(!DB.workers.length){toast(currentUser?.lang==='en'?'NO WORKERS IN TASKFORCE':'SIN TRABAJADORES EN CUADRILLA','var(--am)');return;}const act=DB.workers.filter(w=>w.status==='Active');act.forEach(w=>addLR(w.name,w.role,'07:00','16:00',''));toast('✓ '+(currentUser?.lang==='en'?'IMPORTED':'IMPORTADOS')+' '+act.length+' '+(currentUser?.lang==='en'?'WORKERS':'TRABAJADORES'));}
-function impM(){if(!DB.materials.length){toast(currentUser?.lang==='en'?'NO MATERIALS IN CATALOG':'SIN MATERIALES EN CATÁLOGO','var(--am)');return;}DB.materials.forEach(m=>addMR(m.name,m.unit,m.qty||''));toast('✓ '+(currentUser?.lang==='en'?'IMPORTED':'IMPORTADOS')+' '+DB.materials.length+' '+(currentUser?.lang==='en'?'MATERIALS':'MATERIALES'));}
+function impW(){if(!DB.workers.length){toast(t('no_workers_taskforce'),'var(--am)');return;}const act=DB.workers.filter(w=>w.status==='Active');act.forEach(w=>addLR(w.name,w.role,'07:00','16:00',''));toast('✓ '+(currentUser?.lang==='en'?'IMPORTED':'IMPORTADOS')+' '+act.length+' '+(currentUser?.lang==='en'?'WORKERS':'TRABAJADORES'));}
+function impM(){if(!DB.materials.length){toast(t('no_materials_catalog'),'var(--am)');return;}DB.materials.forEach(m=>addMR(m.name,m.unit,m.qty||''));toast('✓ '+(currentUser?.lang==='en'?'IMPORTED':'IMPORTADOS')+' '+DB.materials.length+' '+(currentUser?.lang==='en'?'MATERIALS':'MATERIALES'));}
 
 // PHOTOS — list layout with inline caption
 let reportPhotos=[]; // [{src, caption}]
@@ -2322,7 +2542,7 @@ async function uploadPhotoToStorage(base64, idx){
       // Keep base64 as fallback
     }
     renderPhotos();
-    toast(currentUser?.lang==='en'?'⚠ PHOTO UPLOAD FAILED — CHECK STORAGE RULES':'⚠ ERROR AL SUBIR FOTO — REVISA REGLAS DE STORAGE','var(--rd)');
+    toast(t('photo_upload_failed'),'var(--rd)');
   }
 }
 function renderPhotos(){
@@ -2396,7 +2616,7 @@ window.addEventListener('resize',()=>{
 // ═══════════════════════════════════════════════
 function openCLP(){
   const c=document.getElementById('clp-list');
-  if(!DB.checklists.length){c.innerHTML=`<div class="emp"><div class="eic">☑️</div>${currentUser?.lang==='en'?'NO TEMPLATES — CREATE SOME IN THE CHECKLISTS SECTION':'SIN PLANTILLAS — CREA ALGUNAS EN LA SECCIÓN CHECKLISTS'}</div>`;openMO('mo-clpick');return;}
+  if(!DB.checklists.length){c.innerHTML=`<div class="emp"><div class="eic">☑️</div>${t('no_templates_create')}</div>`;openMO('mo-clpick');return;}
   c.innerHTML=DB.checklists.map(cl=>`<div class="rr"><div class="rr-info"><div class="rr-date">${E(cl.name)}</div><div class="rr-summary">${cl.items.length} items · ${[...new Set(cl.items.map(i=>i.category))].join(', ')}</div></div><button class="btn sm bp" onclick="loadCL('${cl.id}')">▶ ${(currentUser?.lang||'es')==='es'?'Usar':'Use'}</button></div>`).join('');
   openMO('mo-clpick');
 }
@@ -2408,7 +2628,7 @@ function loadCL(id){
 
 function renderCLR(){
   const c=document.getElementById('r-cl-render');c.innerHTML='';
-  const emp=document.createElement('div');emp.className='emp';emp.id='r-cl-empty';const _noClSpan=document.createElement('span');_noClSpan.id='lbl-no-cl';_noClSpan.textContent=currentUser?.lang==='en'?'NO CHECKLIST LOADED':'NO HAY CHECKLIST CARGADO';emp.appendChild(_noClSpan);c.appendChild(emp);
+  const emp=document.createElement('div');emp.className='emp';emp.id='r-cl-empty';const _noClSpan=document.createElement('span');_noClSpan.id='lbl-no-cl';_noClSpan.textContent=t('no_checklist_loaded');emp.appendChild(_noClSpan);c.appendChild(emp);
   if(!activeCL){updCLB();return;}
   emp.style.display='none';
   // Header + progress
@@ -2441,7 +2661,7 @@ function renderCLR(){
         </div>`;
       } else if(tp==='yesno'){
         ansHtml=`<div class="sna">
-          <button class="sna-btn si ${item.singleSel==='si'?'on':''}" onclick="setCLISingle('${item.id}','si')">${currentUser?.lang==='en'?'Yes':'Sí'}</button>
+          <button class="sna-btn si ${item.singleSel==='si'?'on':''}" onclick="setCLISingle('${item.id}','si')">${t('yes_label')}</button>
           <button class="sna-btn no ${item.singleSel==='no'?'on':''}" onclick="setCLISingle('${item.id}','no')">${currentUser?.lang==='en'?'No':'No'}</button>
         </div>`;
       } else if(tp==='single'){
@@ -2464,7 +2684,7 @@ function renderCLR(){
           <div style="flex:1;">
             <div class="cli-txt">${E(item.text)}</div>
             <div style="margin-top:5px;">${ansHtml}</div>
-            ${unanswered?`<div style="font-family:var(--mo);font-size:8px;color:var(--rd);letter-spacing:1px;margin-top:3px;">⚠ ${currentUser?.lang==='en'?'REQUIRED':'REQUERIDO'}</div>`:''}
+            ${unanswered?`<div style="font-family:var(--mo);font-size:8px;color:var(--rd);letter-spacing:1px;margin-top:3px;">⚠ ${t('required_label')}</div>`:''}
           </div>
           <span class="cli-cat">${E(item.category)}</span>
           <button style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:11px;padding:0 4px;" onclick="event.stopPropagation();togCLI('${item.id}')" title="Fotos / Nota">📷</button>
@@ -2477,7 +2697,7 @@ function renderCLR(){
           <div class="cli-photos" id="clip-${item.id}" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
             ${(item.photos||[]).map((p,pi)=>{const cap=(item.photoCaptions||[])[pi]||'';return`<div class="cli-pt" onclick="openCLILB('${item.id}',${pi})"><img src="${p}" style="width:100%;height:100%;object-fit:cover;"><div class="rmv" onclick="event.stopPropagation();rmCLIPhoto('${item.id}',${pi})">🗑</div>${cap?`<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);font-size:8px;color:#ddd;padding:2px 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${cap}</div>`:''}</div>`;}).join('')}
           </div>
-          <input type="text" placeholder="${currentUser?.lang==='en'?'Note for this item...':'Nota para este ítem...'}" value="${E(item.note||'')}" onchange="setCLINote('${item.id}',this.value)" style="margin-top:7px;font-size:11px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:4px 7px;width:100%;outline:none;">
+          <input type="text" placeholder="${t('note_item_ph')}" value="${E(item.note||'')}" onchange="setCLINote('${item.id}',this.value)" style="margin-top:7px;font-size:11px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:4px 7px;width:100%;outline:none;">
         </div>`;
       row.querySelector('.cli-top').addEventListener('click',e=>{if(e.target.tagName==='BUTTON'||e.target.tagName==='INPUT')return;toggleCI(item.id);});
       g.appendChild(row);
@@ -2492,7 +2712,7 @@ function setSNA(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)re
 function setCLISingle(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)return;item.singleSel=val;item.checked=true;renderCLR();}
 function toggleCLIMulti(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)return;if(!item.multiSel)item.multiSel=[];const idx=item.multiSel.indexOf(val);if(idx>-1)item.multiSel.splice(idx,1);else item.multiSel.push(val);item.checked=item.multiSel.length>0;renderCLR();}
 function setCLIText(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)return;item.textAns=val;item.checked=!!val.trim();}
-function addCLIOpt(id){const item=activeCL.items.find(i=>i.id===id);if(!item)return;const v=prompt(currentUser?.lang==='en'?'New option:':'Nueva opción:');if(!v)return;if(!item.opts)item.opts=activeCL.snaLabels?[...activeCL.snaLabels]:['Si','No','N/A'];item.opts.push(v.trim());renderCLR();}
+function addCLIOpt(id){const item=activeCL.items.find(i=>i.id===id);if(!item)return;const v=prompt(t('new_option_prompt'));if(!v)return;if(!item.opts)item.opts=activeCL.snaLabels?[...activeCL.snaLabels]:['Si','No','N/A'];item.opts.push(v.trim());renderCLR();}
 function togCLI(id){
   if(!activeCL)return;
   const item=activeCL.items.find(i=>i.id===id);if(!item)return;
@@ -2673,7 +2893,7 @@ function saveReport(){
   const data=collectRpt();
   // Warn if photos still uploading
   if(reportPhotos.some(p=>p.uploading)){
-    toast(currentUser?.lang==='en'?'⬆ PHOTOS STILL UPLOADING — PLEASE WAIT':'⬆ FOTOS AÚN SUBIENDO — POR FAVOR ESPERA','var(--am)');
+    toast(t('photos_still_uploading'),'var(--am)');
     return;
   }
   const isNew=!(editingRpt&&curRptId);
@@ -2683,15 +2903,15 @@ function saveReport(){
       const existing=DB.reports[idx];
       Object.assign(existing,data);
       logActivity(existing,'saved','report.saved');
-      fbSave('reports',existing.id,existing).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});
+      fbSave('reports',existing.id,existing).catch(e=>{console.error(e);toast('⚠ '+(t('save_failed')),'var(--rd)');});
     }
   } else {
     data.activityLog=[];
     logActivity(data,'created','report.created');
     DB.reports.push(data);curRptId=data.id;editingRpt=true;
-    fbSave('reports',data.id,data).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});
+    fbSave('reports',data.id,data).catch(e=>{console.error(e);toast('⚠ '+(t('save_failed')),'var(--rd)');});
   }
-  renderDash();updateNavBadge();toast(currentUser?.lang==='en'?'✓ SAVED':'✓ GUARDADO');
+  renderDash();updateNavBadge();toast(t('saved_toast'));
 }
 
 // Signature modal state
@@ -2738,20 +2958,20 @@ function getSigData(canvasId){
 }
 
 function submitReport(){
-  if(reportPhotos.some(p=>p.uploading)){toast(currentUser?.lang==='en'?'⬆ PHOTOS STILL UPLOADING — PLEASE WAIT':'⬆ FOTOS AÚN SUBIENDO — POR FAVOR ESPERA','var(--am)');return;}
-  if(!hasPerm('create_reports')){toast(currentUser?.lang==='en'?'NO PERMISSION':'SIN PERMISO','var(--rd)');return;}
+  if(reportPhotos.some(p=>p.uploading)){toast(t('photos_still_uploading'),'var(--am)');return;}
+  if(!hasPerm('create_reports')){toast(t('no_permission'),'var(--rd)');return;}
   // Validate required fields
   const projVal=document.getElementById('r-proj')?.value;
-  if(!projVal){toast(currentUser?.lang==='en'?'SELECT A PROJECT FIRST':'SELECCIONE UN PROYECTO PRIMERO','var(--rd)');document.getElementById('r-proj')?.focus();return;}
+  if(!projVal){toast(t('select_project_first'),'var(--rd)');document.getElementById('r-proj')?.focus();return;}
   const dateVal=document.getElementById('r-date')?.value;
-  if(!dateVal){toast(currentUser?.lang==='en'?'REPORT DATE IS REQUIRED':'LA FECHA DEL INFORME ES OBLIGATORIA','var(--rd)');document.getElementById('r-date')?.focus();return;}
+  if(!dateVal){toast(t('report_date_required'),'var(--rd)');document.getElementById('r-date')?.focus();return;}
   // Checklist: only validate if a template is actually loaded
   const clSec=document.getElementById('sec-checklist');
   const clEnabled=clSec&&!clSec.classList.contains('dis');
   // If a checklist template is loaded, all items must be answered
   if(clEnabled&&activeCL){
     const unanswered=activeCL.items.filter(i=>{const tp=i.type||'sna';return tp==='sna'?!i.sna:tp==='text'?!i.textAns:tp==='multi'?!(i.multiSel||[]).length:!i.singleSel;});
-    if(unanswered.length>0){toast(currentUser?.lang==='en'?'ALL CHECKLIST ITEMS MUST BE ANSWERED ('+unanswered.length+' remaining)':'TODOS LOS ÍTEMS DEL CHECKLIST DEBEN SER RESPONDIDOS ('+unanswered.length+' restantes)','var(--rd)');return;}
+    if(unanswered.length>0){toast(t('all_items_must_answer')+' ('+unanswered.length+' '+t('remaining_label')+')','var(--rd)');return;}
   }
   // Pre-fill signer name from current user
   const sn=document.getElementById('ssig-name');
@@ -2767,26 +2987,26 @@ function doSubmitSigned(){
   const sigData=getSigData('ssigc');
   const sigName=document.getElementById('ssig-name').value.trim();
   const sigRole=document.getElementById('ssig-role').value.trim();
-  if(!sigData){toast(currentUser?.lang==='en'?'PLEASE DRAW YOUR SIGNATURE':'POR FAVOR DIBUJE SU FIRMA','var(--rd)');return;}
+  if(!sigData){toast(t('please_draw_signature'),'var(--rd)');return;}
   const nextStatus=(curReportStatus==='Draft'||curReportStatus==='Filling'||curReportStatus==='Rejected')?'Review':curReportStatus;
   const data={...collectRpt(),status:nextStatus,signature:sigData,sigName,sigRole,submittedAt:new Date().toISOString()};
   const isNew=!(editingRpt&&curRptId);
   if(!isNew){
     const idx=DB.reports.findIndex(r=>r.id===curRptId);
-    if(idx>-1){const ex=DB.reports[idx];Object.assign(ex,data);logActivity(ex,'submitted','report.submitted');fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});}
+    if(idx>-1){const ex=DB.reports[idx];Object.assign(ex,data);logActivity(ex,'submitted','report.submitted');fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(t('save_failed')),'var(--rd)');});}
   } else {
     data.activityLog=[];data.createdAt=new Date().toISOString();
     logActivity(data,'created','report.created');logActivity(data,'submitted','report.submitted');
     DB.reports.push(data);curRptId=data.id;editingRpt=true;
-    fbSave('reports',data.id,data).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});
+    fbSave('reports',data.id,data).catch(e=>{console.error(e);toast('⚠ '+(t('save_failed')),'var(--rd)');});
   }
   closeMO('mo-submit-sig');setBBStatus(nextStatus);renderDash();updateNavBadge();
-  toast(currentUser?.lang==='en'?'✓ SIGNED AND SENT FOR REVIEW':'✓ FIRMADO Y ENVIADO A REVISIÓN','var(--am)');
+  toast(t('signed_sent_review'),'var(--am)');
 }
 
 function approveReport(){
-  if(!hasPerm('approve_reports')){toast(currentUser?.lang==='en'?'NO PERMISSION TO APPROVE':'SIN PERMISO PARA APROBAR','var(--rd)');return;}
-  if(!curRptId){toast(currentUser?.lang==='en'?'REPORT NOT FOUND':'INFORME NO ENCONTRADO','var(--am)');return;}
+  if(!hasPerm('approve_reports')){toast(t('no_permission_approve'),'var(--rd)');return;}
+  if(!curRptId){toast(t('report_not_found'),'var(--am)');return;}
   const an=document.getElementById('asig-name');
   const ar=document.getElementById('asig-role');
   if(an)an.value=currentUser?.name||'';
@@ -2800,10 +3020,10 @@ function doApproveSigned(){
   const sigData=getSigData('asigc');
   const sigName=document.getElementById('asig-name').value.trim();
   const sigRole=document.getElementById('asig-role').value.trim();
-  if(!sigData){toast(currentUser?.lang==='en'?'PLEASE DRAW YOUR SIGNATURE':'POR FAVOR DIBUJE SU FIRMA','var(--rd)');return;}
-  if(!curRptId){toast(currentUser?.lang==='en'?'REPORT NOT FOUND':'INFORME NO ENCONTRADO','var(--rd)');return;}
+  if(!sigData){toast(t('please_draw_signature'),'var(--rd)');return;}
+  if(!curRptId){toast(t('report_not_found'),'var(--rd)');return;}
   const idx=DB.reports.findIndex(r=>r.id===curRptId);
-  if(idx<0){toast(currentUser?.lang==='en'?'REPORT NOT FOUND':'INFORME NO ENCONTRADO','var(--rd)');return;}
+  if(idx<0){toast(t('report_not_found'),'var(--rd)');return;}
   const ex=DB.reports[idx];
   // Check if project requires customer approval
   const proj=DB.projects.find(p=>p.id===ex.projId);
@@ -2811,15 +3031,15 @@ function doApproveSigned(){
   ex.approveSignature=sigData;ex.approvedBy=sigName;ex.approvedByRole=sigRole;ex.approvedAt=new Date().toISOString();
   ex.status=needsCust?'Pending Customer':'Approved';
   logActivity(ex,'approved','report.approved',{by:sigName,pendingCust:!!needsCust});
-  fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});closeMO('mo-approve-sig');setBBStatus(ex.status);renderDash();updateNavBadge();
-  toast(needsCust?(currentUser?.lang==='en'?'✓ APPROVED — AWAITING CUSTOMER SIGN-OFF':'✓ APROBADO — ESPERANDO FIRMA DEL CLIENTE'):(currentUser?.lang==='en'?'✓ REPORT APPROVED':'✓ INFORME APROBADO'),'var(--gn)');
+  fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(t('save_failed')),'var(--rd)');});closeMO('mo-approve-sig');setBBStatus(ex.status);renderDash();updateNavBadge();
+  toast(needsCust?(t('approved_awaiting_customer')):(t('report_approved_toast')),'var(--gn)');
 }
 
 function openCustAppr(rptId){
   // Allow both managers (approve_reports) and customers (customer_signoff)
-  if(!hasPerm('approve_reports')&&!hasPerm('customer_signoff')){toast(currentUser?.lang==='en'?'NO PERMISSION':'SIN PERMISO','var(--rd)');return;}
+  if(!hasPerm('approve_reports')&&!hasPerm('customer_signoff')){toast(t('no_permission'),'var(--rd)');return;}
   const r=DB.reports.find(x=>x.id===rptId);
-  if(!r||r.status!=='Pending Customer'){toast(currentUser?.lang==='en'?'NOT READY FOR CUSTOMER SIGN-OFF':'NO LISTO PARA FIRMA DEL CLIENTE','var(--am)');return;}
+  if(!r||r.status!=='Pending Customer'){toast(t('not_ready_customer_signoff'),'var(--am)');return;}
   clearSigModal('csigc');
   openMO('mo-custappr-sig');
   setTimeout(()=>initSigModal('csigc','csigwrap'),150);
@@ -2833,20 +3053,20 @@ function doCustApprSigned(){
   const sigData=getSigData('csigc');
   const sigName=document.getElementById('csig-name').value.trim();
   const sigRole=document.getElementById('csig-role').value.trim();
-  if(!sigData){toast(currentUser?.lang==='en'?'PLEASE DRAW THE CUSTOMER SIGNATURE':'POR FAVOR DIBUJE LA FIRMA DEL CLIENTE','var(--rd)');return;}
+  if(!sigData){toast(t('please_draw_customer_sig'),'var(--rd)');return;}
   const rptId=document.getElementById('mo-custappr-sig').dataset.rptId||curRptId;
   const idx=DB.reports.findIndex(r=>r.id===rptId);
-  if(idx<0){toast(currentUser?.lang==='en'?'REPORT NOT FOUND':'INFORME NO ENCONTRADO','var(--rd)');return;}
+  if(idx<0){toast(t('report_not_found'),'var(--rd)');return;}
   const ex=DB.reports[idx];
   ex.customerSignature=sigData;ex.customerName=sigName;ex.customerRole=sigRole;
   ex.customerApprovedAt=new Date().toISOString();ex.status='Approved';
-  fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});
+  fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(t('save_failed')),'var(--rd)');});
   logActivity(ex,'approved','report.cust_approved',{by:sigName});
   closeMO('mo-custappr-sig');
   closeMO('mo-view');
   if(curRptId===rptId)setBBStatus('Approved');
   renderDash();renderAllReports();updateNavBadge();
-  toast(currentUser?.lang==='en'?'✓ SIGN-OFF COMPLETE — REPORT APPROVED':'✓ FIRMA COMPLETADA — INFORME APROBADO','var(--gn)');
+  toast(t('sign_off_complete'),'var(--gn)');
   // Auto-navigate to all-reports so customer sees updated status
   setTimeout(()=>goPage('all-reports'),400);
 }
@@ -2854,47 +3074,47 @@ function doCustApprSigned(){
 // ─── CUSTOMER REJECT FLOW ────────────────────────
 let _custRejectRptId=null;
 function openCustReject(rptId){
-  if(!hasPerm('customer_signoff')){toast(currentUser?.lang==='en'?'NO PERMISSION':'SIN PERMISO','var(--rd)');return;}
+  if(!hasPerm('customer_signoff')){toast(t('no_permission'),'var(--rd)');return;}
   const r=DB.reports.find(x=>x.id===rptId);
-  if(!r||r.status!=='Pending Customer'){toast(currentUser?.lang==='en'?'REPORT NOT READY FOR REVIEW':'INFORME NO LISTO PARA REVISAR','var(--am)');return;}
+  if(!r||r.status!=='Pending Customer'){toast(t('report_not_ready_review'),'var(--am)');return;}
   _custRejectRptId=rptId;
   document.getElementById('cust-reject-comment').value='';
   openMO('mo-cust-reject');
 }
 function doCustReject(){
   const reason=document.getElementById('cust-reject-comment').value.trim();
-  if(!reason){toast(currentUser?.lang==='en'?'PLEASE ENTER THE REASON':'POR FAVOR INGRESE EL MOTIVO','var(--rd)');return;}
+  if(!reason){toast(t('please_enter_reason'),'var(--rd)');return;}
   const idx=DB.reports.findIndex(r=>r.id===_custRejectRptId);
-  if(idx<0){toast(currentUser?.lang==='en'?'REPORT NOT FOUND':'INFORME NO ENCONTRADO','var(--rd)');return;}
+  if(idx<0){toast(t('report_not_found'),'var(--rd)');return;}
   const ex=DB.reports[idx];
   ex.status='Review';
-  ex.custRejectedBy=currentUser?.name||(currentUser?.lang==='en'?'Customer':'Cliente');
+  ex.custRejectedBy=currentUser?.name||t('customer_label');
   ex.custRejectedAt=new Date().toISOString();
   ex.custRejectionReason=reason;
   logActivity(ex,'rejected','report.cust_rejected',{reason});
-  fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(currentUser?.lang==='en'?'SAVE FAILED — CHECK CONNECTION':'ERROR AL GUARDAR — REVISA CONEXIÓN'),'var(--rd)');});
+  fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(t('save_failed')),'var(--rd)');});
   closeMO('mo-cust-reject');
   renderDash();renderAllReports();updateNavBadge();
-  toast(currentUser?.lang==='en'?'↩ CORRECTION REQUESTED — SENT BACK FOR REVIEW':'↩ CORRECCIÓN SOLICITADA — ENVIADO A REVISIÓN','var(--am)');
+  toast(t('correction_requested'),'var(--am)');
   setTimeout(()=>goPage('all-reports'),400);
 }
 
 // ─── REJECT FLOW ────────────────────────────────
 let _rejectRptId=null; // which report we're rejecting (null = current editing report)
 function openReject(rptId){
-  if(!hasPerm('approve_reports')){toast(currentUser?.lang==='en'?'NO PERMISSION':'SIN PERMISO','var(--rd)');return;}
+  if(!hasPerm('approve_reports')){toast(t('no_permission'),'var(--rd)');return;}
   _rejectRptId=rptId||curRptId;
   const r=DB.reports.find(x=>x.id===_rejectRptId);
-  if(!r||r.status!=='Review'){toast(currentUser?.lang==='en'?'REPORT MUST BE IN REVIEW STATUS':'EL INFORME DEBE ESTAR EN REVISIÓN','var(--am)');return;}
+  if(!r||r.status!=='Review'){toast(t('report_must_be_review'),'var(--am)');return;}
   document.getElementById('reject-comment').value='';
   openMO('mo-reject');
 }
 function doReject(){
   const reason=document.getElementById('reject-comment').value.trim();
-  if(!reason){toast(currentUser?.lang==='en'?'PLEASE ENTER A REJECTION REASON':'INGRESE EL MOTIVO DEL RECHAZO','var(--rd)');return;}
+  if(!reason){toast(t('please_enter_rejection'),'var(--rd)');return;}
   const rptId=_rejectRptId||curRptId;
   const idx=DB.reports.findIndex(r=>r.id===rptId);
-  if(idx<0){toast(currentUser?.lang==='en'?'REPORT NOT FOUND':'INFORME NO ENCONTRADO','var(--rd)');return;}
+  if(idx<0){toast(t('report_not_found'),'var(--rd)');return;}
   ex.rejectedBy=currentUser?.name||'Manager';
   ex.rejectedByRole=currentUser?.role||'';
   ex.rejectedAt=new Date().toISOString();
@@ -2903,7 +3123,7 @@ function doReject(){
   closeMO('mo-reject');
   if(curRptId===rptId)setBBStatus('Rejected');
   renderDash();renderAllReports();updateNavBadge();
-  toast(currentUser?.lang==='en'?'REPORT REJECTED — SENT BACK TO TECHNICIAN':'INFORME RECHAZADO — DEVUELTO AL TÉCNICO','var(--rd)');
+  toast(t('report_rejected_returned'),'var(--rd)');
 }
 
 const OCC_TYPES_ES=['Casi accidente','Primeros auxilios','Tratamiento médico','Daño a la propiedad','Ambiental','Falla de equipo','Incidente de seguridad','Otro'];
@@ -2911,7 +3131,7 @@ const OCC_TYPES_EN=['Near miss','First aid','Medical treatment','Property damage
 function getOccTypes(){return (currentUser?.lang||'es')==='es'?OCC_TYPES_ES:OCC_TYPES_EN;}
 // Agrega un bloque de ocurrencia/incidente al formulario
 function addOCC(type='',time='',desc='',action='',photos=[],captions=[]){
-  if(!type)type=currentUser?.lang==='en'?'Near miss':'Casi accidente';
+  if(!type)type=t('near_miss_label');
   const uid='occ'+Date.now()+Math.random().toString(36).slice(2,6);
   const es=currentUser?.lang!=='en';
   const d=document.createElement('div');d.className='occ-entry';d.dataset.uid=uid;
@@ -2955,7 +3175,7 @@ function renderOCCPhotos(entry){
       <input type="text" placeholder="${es?'Caption...':'Caption...'}" value="${(entry._captions[i]||'')}" oninput="this.closest('.occ-entry')._captions[${i}]=this.value" style="width:100%;background:var(--s2);border:1px solid var(--bd);border-top:none;color:var(--tx);padding:2px 4px;font-size:9px;outline:none;">
     </div>`).join('');
 }
-function upOCC(){const n=document.querySelectorAll('#r-occ .occ-entry').length;const el=document.getElementById('bl-occ');if(el)el.textContent=currentUser?.lang==='en'?n+' entr'+(n===1?'y':'ies'):n+(n===1?' entrada':' entradas');}
+function upOCC(){const n=document.querySelectorAll('#r-occ .occ-entry').length;const el=document.getElementById('bl-occ');if(el)el.textContent=n+' '+(n===1?t('entry_single'):t('entry_plural'));}
 
 // ── Delete Report — requires password confirmation ──────────────────
 let _delRPendingId=null;
@@ -2975,29 +3195,18 @@ function delR(id){
 }
 async function confirmDelR(){
   const _en=currentUser?.lang==='en';
-  const pw=document.getElementById('del-rpt-pw').value;
+  const input=document.getElementById('del-rpt-pw').value.trim();
   const errEl=document.getElementById('del-rpt-err');
-  if(!pw){errEl.textContent=_en?'Enter your password':'Ingresa tu contraseña';errEl.style.display='block';return;}
   const btn=document.getElementById('del-rpt-confirm-btn');
-  btn.disabled=true;btn.textContent=_en?'Verifying...':'Verificando...';
+  if(!input){errEl.textContent=t('type_to_confirm');errEl.style.display='block';return;}
+  const expected=t('confirm_delete_word').toUpperCase();
+  if(input.toUpperCase()!==expected){
+    errEl.textContent=t('type_to_confirm');
+    errEl.style.display='block';return;
+  }
+  btn.disabled=true;btn.textContent=_en?'Deleting...':'Eliminando...';
   errEl.style.display='none';
   try{
-    const userEmail=currentUser.email;
-    if(!userEmail){errEl.textContent=_en?'No email on file — contact admin':'Sin email registrado — contacta al admin';errEl.style.display='block';btn.disabled=false;btn.textContent=_en?'🗑 Delete':'🗑 Eliminar';return;}
-    // Use a secondary Firebase app instance to verify password without disrupting current session
-    const secondaryApp=firebase.app.length>1?firebase.app('verify'):firebase.initializeApp(firebase.app().options,'verify');
-    const secondaryAuth=secondaryApp.auth();
-    try{
-      await secondaryAuth.signInWithEmailAndPassword(userEmail,pw);
-      await secondaryAuth.signOut();
-    }catch(authErr){
-      errEl.textContent=_en?'Incorrect password':'Contraseña incorrecta';
-      errEl.style.display='block';
-      btn.disabled=false;
-      btn.textContent=_en?'🗑 Delete':'🗑 Eliminar';
-      return;
-    }
-    // Auth OK — proceed with deletion
     const id=_delRPendingId;
     const r=DB.reports.find(x=>x.id===id);
     // Delete photos from Storage
@@ -3009,10 +3218,8 @@ async function confirmDelR(){
         ...(r.checklist?.items||[]).flatMap(i=>i.photos||[]),
       ].filter(p=>p&&p.startsWith('https://firebasestorage'));
       await Promise.allSettled(allPhotos.map(async url=>{
-        try{
-          const ref=fbStorage.refFromURL(url);
-          await fbFns.deleteObject(ref);
-        }catch(e){console.warn('Storage delete failed:',url,e);}
+        try{const ref=fbStorage.refFromURL(url);await fbFns.deleteObject(ref);}
+        catch(e){console.warn('Storage delete failed:',url,e);}
       }));
     }
     DB.reports=DB.reports.filter(x=>x.id!==id);
@@ -3022,7 +3229,8 @@ async function confirmDelR(){
     if(curProjId)renderPDReports();
     toast(_en?'🗑 REPORT DELETED':'🗑 INFORME ELIMINADO','var(--rd)');
   }catch(e){
-    errEl.textContent=_en?'Incorrect password':'Contraseña incorrecta';
+    console.error(e);
+    errEl.textContent=_en?'Delete failed — try again':'Error al eliminar — intenta de nuevo';
     errEl.style.display='block';
     btn.disabled=false;
     btn.textContent=_en?'🗑 Delete':'🗑 Eliminar';
@@ -3070,7 +3278,7 @@ function genPDF(id,dataOverride){
   const clPhotoEvidenceHTML=clPhotoItems.map(item=>{
     const pairs=[];
     for(let pi=0;pi<item.photos.length;pi+=2)pairs.push(item.photos.slice(pi,pi+2));
-    const snaTxt=item.sna==='si'?(currentUser?.lang==='en'?'Yes':'Si'):item.sna==='no'?'No':item.sna==='na'?'N/A':'-';
+    const snaTxt=item.sna==='si'?(t('yes_label')):item.sna==='no'?'No':item.sna==='na'?'N/A':'-';
     const check=item.checked?'✓ ':'□ ';
     const pairHTML=pairs.map(pair=>{
       const imgs=pair.map(p=>'<div style="border:1px solid #ddd;overflow:hidden;"><img src="'+p+'" style="width:100%;height:190px;object-fit:cover;display:block;"></div>').join('');
@@ -3321,7 +3529,7 @@ window.onload=()=>{
 </body></html>`;
 
   const win=window.open('','_blank','width=920,height=1100');
-  if(!win){toast((currentUser?.lang==='en'?'POP-UP BLOCKED — ALLOW POP-UPS':'POPUP BLOQUEADO — PERMITE POPUPS'),'var(--rd)');return;}
+  if(!win){toast((t('popup_blocked')),'var(--rd)');return;}
   win.document.write(html);win.document.close();
 }
 
@@ -3358,7 +3566,7 @@ function viewReport(id){
     const pct=clit.length?Math.round(done/clit.length*100):0;
     html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">☑ Checklist: ${E(r.checklist.name)} (${done}/${clit.length})</div>`;
     html+=`<div style="background:var(--s2);height:4px;margin-bottom:6px;"><div style="width:${pct}%;height:100%;background:var(--gn);"></div></div>`;
-    Object.entries(grps).forEach(([cat,items])=>{html+=`<div style="font-family:var(--mo);font-size:8px;letter-spacing:2px;color:var(--mu);padding:4px 0;border-bottom:1px solid var(--bd);text-transform:uppercase;">${cat}</div>`;items.forEach(it=>{const sna=it.sna==='si'?`<span style="color:var(--gn);">${currentUser?.lang==='en'?'Yes':'Si'}</span>`:it.sna==='no'?'<span style="color:var(--rd);">No</span>':it.sna==='na'?'<span style="color:var(--mu);">N/A</span>':"";const photos=(it.photos||[]).map(p=>`<img src="${p}" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--bd);margin-right:3px;">`).join('');html+=`<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:11px;align-items:flex-start;"><span style="color:${it.checked?'var(--gn)':'var(--mu)'};">${it.checked?'✓':'□'}</span><div style="flex:1;">${E(it.text)}${photos?`<div style="margin-top:4px;">${photos}</div>`:''}</div>${sna}</div>`;});});
+    Object.entries(grps).forEach(([cat,items])=>{html+=`<div style="font-family:var(--mo);font-size:8px;letter-spacing:2px;color:var(--mu);padding:4px 0;border-bottom:1px solid var(--bd);text-transform:uppercase;">${cat}</div>`;items.forEach(it=>{const sna=it.sna==='si'?`<span style="color:var(--gn);">${t('yes_label')}</span>`:it.sna==='no'?'<span style="color:var(--rd);">No</span>':it.sna==='na'?'<span style="color:var(--mu);">N/A</span>':"";const photos=(it.photos||[]).map(p=>`<img src="${p}" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--bd);margin-right:3px;">`).join('');html+=`<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:11px;align-items:flex-start;"><span style="color:${it.checked?'var(--gn)':'var(--mu)'};">${it.checked?'✓':'□'}</span><div style="flex:1;">${E(it.text)}${photos?`<div style="margin-top:4px;">${photos}</div>`:''}</div>${sna}</div>`;});});
   }
   const pdata=r.photoData||(r.photos||[]).map((src,i)=>({src,caption:(r.photoCaptions||[])[i]||''}));
   if(pdata.length){
@@ -3384,8 +3592,8 @@ function viewReport(id){
     const actionColors={created:'var(--bl)',saved:'var(--mu)',submitted:'var(--am)',approved:'var(--gn)',rejected:'var(--rd)',edited:'var(--pu)'};
     const vwActLabels_es={created:t('created')||'Creado',saved:t('saved')||'Guardado',submitted:t('submitted')||'Enviado',approved:t('approved')||'Aprobado',rejected:t('rejected')||'Rechazado',edited:t('edited')||'Editado'};
     const vwActLabels_en={created:'Created',saved:'Saved',submitted:'Submitted',approved:'Approved',rejected:'Rejected',edited:'Edited'};
-    const vwActLabels=currentUser?.lang==='en'?vwActLabels_en:vwActLabels_es;
-    const vwLogTitle=currentUser?.lang==='en'?'Activity Log':'Registro de Actividad';
+    const _vwLang=currentUser?.lang||'es';const vwActLabels=(_vwLang==='en')?vwActLabels_en:((I18N[_vwLang]&&I18N[_vwLang].created)?{created:I18N[_vwLang].created,saved:I18N[_vwLang].saved,submitted:I18N[_vwLang].submitted,approved:I18N[_vwLang].approved,rejected:I18N[_vwLang].rejected,edited:I18N[_vwLang].edited||'Edited'}:vwActLabels_es);
+    const vwLogTitle=t('activity_log_title');
     html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:14px 0 6px;">📋 ${vwLogTitle}</div><div style="background:var(--s2);border:1px solid var(--bd);">`;
     log.forEach(e=>{html+=`<div style="display:flex;gap:10px;padding:7px 10px;border-bottom:1px solid var(--bd);align-items:flex-start;font-size:11px;">
       <span style="font-family:var(--mo);font-size:9px;color:${actionColors[e.action]||'var(--mu)'};letter-spacing:1px;text-transform:uppercase;width:68px;flex-shrink:0;">${vwActLabels[e.action]||e.action}</span>
@@ -3842,7 +4050,9 @@ function applyLang(){
   _setTxt('del-rpt-desc', es?'Este informe y todas sus fotos serán eliminados permanentemente.':'This report and all its photos will be permanently deleted.');
   _setTxt('del-rpt-lbl-id', es?'Informe:':'Report:');
   _setTxt('del-rpt-lbl-date', es?'Fecha:':'Date:');
-  _setTxt('del-rpt-lbl-pw', es?'Confirma tu contraseña para continuar *':'Confirm your password to continue *');
+  _setTxt('del-rpt-lbl-pw', es?'Para confirmar, escribe la palabra ELIMINAR en el campo:':'To confirm, type the word DELETE in the field:');
+  const _delPwEl=document.getElementById('del-rpt-pw');
+  if(_delPwEl)_delPwEl.placeholder=es?'ELIMINAR':'DELETE';
   _setTxt('del-rpt-cancel', es?'Cancelar':'Cancel');
   _setTxt('del-rpt-confirm-btn', es?'🗑 Eliminar':'🗑 Delete');
   // ── Change password modal ─────────────────────────────────────────────
@@ -4084,9 +4294,9 @@ function canAccessProject(projId){
 // USERS CRUD
 // ═══════════════════════════════════════════════
 function openUM(id=null){
-  if(currentUser?.role!=='admin'){toast(currentUser?.lang==='en'?'ADMINISTRATORS ONLY':'SOLO ADMINISTRADORES','var(--rd)');return;}
+  if(currentUser?.role!=='admin'){toast(t('administrators_only'),'var(--rd)');return;}
   editUSR=id;
-  document.getElementById('um2-title').textContent=id?(currentUser?.lang==='en'?'✏ Edit User':'✏ Editar Usuario'):(currentUser?.lang==='en'?'👥 New User':'👥 Nuevo Usuario');
+  document.getElementById('um2-title').textContent=id?t('edit_user_label'):t('new_user_label');
   ['u-uname','u-fname','u-email'].forEach(f=>document.getElementById(f).value='');
   document.getElementById('u-pass').value='';
   document.getElementById('u-role').value='technician';
@@ -4251,11 +4461,11 @@ function renderUsers(){
     const isMe=u.id===currentUser?.id;
     const custName=u.customerId?DB.customers.find(c=>c.id===u.customerId)?.name:'';
     return`<tr>
-      <td><strong>${E(u.username)}</strong>${isMe?` <span style="font-family:var(--mo);font-size:9px;color:var(--am);">(${currentUser?.lang==='en'?'you':'tú'})</span>`:''}</td>
+      <td><strong>${E(u.username)}</strong>${isMe?` <span style="font-family:var(--mo);font-size:9px;color:var(--am);">(${t('you_label')})</span>`:''}</td>
       <td>${E(u.name)}${custName?`<br><span style="font-family:var(--mo);font-size:9px;color:#6495ed;">🤝 ${E(custName)}</span>`:''}</td>
       <td><span class="rbadge ${rmap[u.role]||''}">${u.role}</span></td>
-      <td style="font-size:11px;color:var(--mu2);">${u.role==='admin'?`<span style="color:var(--am);font-family:var(--mo);font-size:9px;">${currentUser?.lang==='en'?'ALL':'TODOS'}</span>`:(projNames||'—')}</td>
-      <td><span class="bx ${u.status==='Active'?'g':'r'}">${u.status==='Active'?(currentUser?.lang==='en'?'Active':'Activo'):(currentUser?.lang==='en'?'Inactive':'Inactivo')}</span></td>
+      <td style="font-size:11px;color:var(--mu2);">${u.role==='admin'?`<span style="color:var(--am);font-family:var(--mo);font-size:9px;">${t('all_label')}</span>`:(projNames||'—')}</td>
+      <td><span class="bx ${u.status==='Active'?'g':'r'}">${u.status==='Active'?(currentUser?.lang==='en'?t('active'):t('active')):(currentUser?.lang==='en'?t('inactive'):t('inactive'))}</span></td>
       <td style="white-space:nowrap;">
         <button class="ib ed" onclick="openUM('${u.id}')">✏</button>
         <button class="ib gn" onclick="openChPW('${u.id}')">🔒</button>
@@ -4265,11 +4475,11 @@ function renderUsers(){
   }).join('');
 }
 function delUser(id){
-  if(id===currentUser?.id){toast(currentUser?.lang==='en'?'CANNOT DELETE YOURSELF':'NO PUEDES ELIMINARTE A TI MISMO','var(--rd)');return;}
-  if(!confirm((currentUser?.lang==='en'?'Delete this user?':'¿Eliminar este usuario?')))return;
+  if(id===currentUser?.id){toast(t('cannot_delete_yourself'),'var(--rd)');return;}
+  if(!confirm((t('confirm_delete_user'))))return;
   DB.users=DB.users.filter(u=>u.id!==id);
   fbDelete('users',id).catch(console.error);
-  renderUsers();toast(currentUser?.lang==='en'?'DELETED':'ELIMINADO','var(--rd)');
+  renderUsers();toast(t('deleted'),'var(--rd)');
 }
 function openChPW(id){
   chpwUID=id;
@@ -4280,7 +4490,7 @@ function openChPW(id){
 function saveChPW(){
   const np=document.getElementById('chpw-new').value;
   const cp=document.getElementById('chpw-cfm').value;
-  if(np.length<6){toast((currentUser?.lang==='en'?'MIN 6 CHARS':'MÍN. 6 CARACTERES'),'var(--rd)');return;}
+  if(np.length<6){toast(t('min_6_chars_short'),'var(--rd)');return;}
   if(np!==cp){toast('PASSWORDS DON\'T MATCH','var(--rd)');return;}
   const u=DB.users.find(x=>x.id===chpwUID);
   if(u){u.password=np;toast('✓ PASSWORD CHANGED');}
@@ -4531,7 +4741,7 @@ function saveLBCap(){
     if(item){if(!item.photoCaptions)item.photoCaptions=[];item.photoCaptions[lbIdx]=lbCaptions[lbIdx];}
   }
   showLBSlide();
-  toast(currentUser?.lang==='en'?'✓ CAPTION SAVED':'✓ CAPTION GUARDADO');
+  toast(t('caption_saved'));
 }
 
 // ═══════════════════════════════════════════════
@@ -4644,14 +4854,15 @@ document.getElementById('lin-u').addEventListener('keydown',e=>{if(e.key==='Ente
       <div style="font-family:var(--mo);font-size:9px;color:var(--rd);letter-spacing:2px;margin-bottom:4px;">⚠ <span id="del-rpt-warn">ACCIÓN IRREVERSIBLE</span></div>
       <div style="font-size:11px;color:var(--mu2);" id="del-rpt-desc">Este informe y todas sus fotos serán eliminados permanentemente.</div>
     </div>
-    <div style="font-family:var(--mo);font-size:10px;color:var(--mu);margin-bottom:10px;">
+    <div style="font-family:var(--mo);font-size:10px;color:var(--mu);margin-bottom:14px;">
       <span id="del-rpt-lbl-id">Informe:</span> <strong style="color:var(--tx);" id="del-rpt-id-lbl">—</strong>
       &nbsp;·&nbsp;
       <span id="del-rpt-lbl-date">Fecha:</span> <strong style="color:var(--tx);" id="del-rpt-date-lbl">—</strong>
     </div>
-    <label id="del-rpt-lbl-pw" style="font-size:11px;">Confirma tu contraseña para continuar *</label>
-    <input type="password" id="del-rpt-pw" placeholder="••••••••"
-      style="width:100%;margin-top:6px;background:var(--s2);border:1px solid var(--bd);border-left:2px solid var(--rd);color:var(--tx);padding:8px;font-size:13px;outline:none;"
+    <label id="del-rpt-lbl-pw" style="font-size:11px;line-height:1.6;"></label>
+    <input type="text" id="del-rpt-pw" autocomplete="off" spellcheck="false"
+      style="width:100%;margin-top:8px;background:var(--s2);border:1px solid var(--bd);border-left:2px solid var(--rd);color:var(--rd);padding:8px;font-size:14px;font-family:var(--mo);letter-spacing:2px;outline:none;text-transform:uppercase;"
+      oninput="this.value=this.value.toUpperCase()"
       onkeydown="if(event.key==='Enter')confirmDelR()">
     <div id="del-rpt-err" style="display:none;color:var(--rd);font-family:var(--mo);font-size:10px;margin-top:6px;letter-spacing:1px;"></div>
   </div>
