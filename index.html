@@ -834,7 +834,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="mh"><div class="mtt" id="pm-title">🏗 Nuevo Proyecto</div><button class="mcl" onclick="closeMO('mo-proj')">✕</button></div>
   <div class="mb">
     <div class="fg f2"><div><label data-i18n="project_name">Nombre del Proyecto *</label><input type="text" id="p-name" placeholder="e.g. Lider Temuco Gabriela Mistral"></div><div><label data-i18n="project_code">Código</label><input type="text" id="p-code" placeholder="120"></div></div>
-    <div class="fg f3" style="margin-top:10px;"><div><label data-i18n="project_start">Fecha inicio</label><input type="date" id="p-start"></div><div><label data-i18n="project_end">Fecha fin</label><input type="date" id="p-end"></div><div><label data-i18n="project_status">Estado</label><select id="p-stat"><option value="Active">Activo</option><option value="On Hold">En pausa</option><option value="Completed">Completado</option><option value="Cancelled">Cancelado</option></select></div></div>
+    <div class="fg f3" style="margin-top:10px;"><div><label data-i18n="project_start">Fecha inicio</label><input type="date" id="p-start"></div><div><label data-i18n="project_end">Fecha fin</label><input type="date" id="p-end"></div><div><label data-i18n="project_status">Estado</label><select id="p-stat"><option value="Active" id="pm-opt-active">Activo</option><option value="On Hold" id="pm-opt-hold">En pausa</option><option value="Completed" id="pm-opt-completed">Completado</option><option value="Cancelled" id="pm-opt-cancelled">Cancelado</option></select></div></div>
     <div class="fg f2" style="margin-top:10px;"><div><label data-i18n="project_customer">Cliente del Proyecto</label><select id="p-customer-sel" onchange="onProjCustChange()" style="width:100%;font-size:12px;"><option value="">— Sin cliente asignado —</option></select>
         <div id="p-cust-hint" style="font-size:10px;color:var(--gn);margin-top:3px;"></div></div><div><label data-i18n="project_client">Cliente / Propietario</label><input type="text" id="p-cli" placeholder="Empresa o persona"></div></div>
     <div class="fg" style="margin-top:10px;"><div><label data-i18n="project_location">Ubicación / Dirección</label><input type="text" id="p-loc" placeholder="Dirección del sitio"></div></div>
@@ -3451,6 +3451,15 @@ function applyLang(){
 
   // ── Project modal labels ───────────────────────
   _setTxt('pm-title',es?'🏗 Nuevo Proyecto':'🏗 New Project');
+  _setPlh('p-cli',es?'Empresa o persona':'Company or person');
+  _setPlh('p-loc',es?'Dirección del sitio':'Site address');
+  _setPlh('p-desc',es?'Alcance o notas del proyecto...':'Project scope or notes...');
+  // p-stat options
+  const _pStat=document.getElementById('p-stat');
+  if(_pStat){
+    const _pStatMap=es?{Active:'Activo','On Hold':'En pausa',Completed:'Completado',Cancelled:'Cancelado'}:{Active:'Active','On Hold':'On Hold',Completed:'Completed',Cancelled:'Cancelled'};
+    [..._pStat.options].forEach(o=>{if(_pStatMap[o.value])o.textContent=_pStatMap[o.value];});
+  }
 
   // ── Customer modal labels ──────────────────────
   _setTxt('lbl-cm-name',es?'Empresa / Nombre *':'Company / Name *');
@@ -3993,10 +4002,10 @@ function renderUsers(){
     const isMe=u.id===currentUser?.id;
     const custName=u.customerId?DB.customers.find(c=>c.id===u.customerId)?.name:'';
     return`<tr>
-      <td><strong>${E(u.username)}</strong>${isMe?' <span style="font-family:var(--mo);font-size:9px;color:var(--am);">(you)</span>':''}</td>
+      <td><strong>${E(u.username)}</strong>${isMe?` <span style="font-family:var(--mo);font-size:9px;color:var(--am);">(${currentUser?.lang==='en'?'you':'tú'})</span>`:''}</td>
       <td>${E(u.name)}${custName?`<br><span style="font-family:var(--mo);font-size:9px;color:#6495ed;">🤝 ${E(custName)}</span>`:''}</td>
       <td><span class="rbadge ${rmap[u.role]||''}">${u.role}</span></td>
-      <td style="font-size:11px;color:var(--mu2);">${u.role==='admin'?'<span style="color:var(--am);font-family:var(--mo);font-size:9px;">ALL</span>':(projNames||'—')}</td>
+      <td style="font-size:11px;color:var(--mu2);">${u.role==='admin'?`<span style="color:var(--am);font-family:var(--mo);font-size:9px;">${currentUser?.lang==='en'?'ALL':'TODOS'}</span>`:(projNames||'—')}</td>
       <td><span class="bx ${u.status==='Active'?'g':'r'}">${u.status==='Active'?(currentUser?.lang==='en'?'Active':'Activo'):(currentUser?.lang==='en'?'Inactive':'Inactivo')}</span></td>
       <td style="white-space:nowrap;">
         <button class="ib ed" onclick="openUM('${u.id}')">✏</button>
