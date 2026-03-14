@@ -1,14 +1,21 @@
 {
-  "name": "FieldLog - Informes de Campo",
+  "name": "FieldLog — Informes de Campo",
   "short_name": "FieldLog",
-  "description": "Sistema de Informes Diarios de Campo",
+  "description": "Sistema de informes diarios de campo para construcción e instalación",
   "start_url": "/fieldlog/",
   "scope": "/fieldlog/",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
   "background_color": "#0f0f0f",
   "theme_color": "#f5a623",
+  "lang": "es",
+  "categories": ["business", "productivity", "utilities"],
   "icons": [
+    {
+      "src": "favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
     {
       "src": "icon-192.png",
       "sizes": "192x192",
@@ -20,8 +27,11 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
     }
-  ],
-  "categories": ["productivity", "utilities"],
-  "lang": "es"
+  ]
 }
