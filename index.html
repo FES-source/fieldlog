@@ -1,4 +1,4 @@
-<!-- FieldLog v1.3.3 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
+<!-- FieldLog v1.3.4 | Build: 2026-03-13 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -495,8 +495,8 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="cb" style="padding-top:10px;" id="dash-projs"><div class="emp"><div class="eic">🏗</div><span data-i18n="no_projects_yet">NO PROJECTS YET</span></div></div>
   </div>
   <div class="card">
-    <div class="ch"><div class="ct">📋 Últimos Informes</div><button class="btn sm bs" onclick="goPage('all-reports')">Ver todos</button></div>
-    <div class="cb" style="padding-top:10px;" id="dash-rpts"><div class="emp"><div class="eic">📋</div>NO REPORTS YET</div></div>
+    <div class="ch"><div class="ct" id="dash-rpts-lbl">📋 Últimos Informes</div><button class="btn sm bs" onclick="goPage('all-reports')" data-i18n="view_all">Ver todos</button></div>
+    <div class="cb" style="padding-top:10px;" id="dash-rpts"><div class="emp"><div class="eic">📋</div><span data-i18n="no_reports_yet_rpt">NO REPORTS YET</span></div></div>
   </div>
 </div></div>
 
@@ -1080,7 +1080,8 @@ const I18N={
     upload:'+ SUBIR',remove:'Eliminar',yes:'Sí',no:'No',
     required:'REQUERIDO',no_results:'SIN RESULTADOS',
     search:'Buscar...',active:'Activo',inactive:'Inactivo',
-    back:'← Volver',members:'Miembros',no_projects_yet:'SIN PROYECTOS AÚN',overview_label:'// RESUMEN',workforce:'Cuadrilla',
+    back:'← Volver',members:'Miembros',no_projects_yet:'SIN PROYECTOS AÚN',
+    no_reports_yet_rpt:'SIN INFORMES AÚN',overview_label:'// RESUMEN',workforce:'Cuadrilla',
     site_name:'Nombre del Sitio',site_address:'Dirección del Sitio',approved_by:'Aprobado por',occurrences:'Ocurrencias',labor:'Mano de Obra',tasks:'Tareas y Actividades',equipment:'Equipos',
     created:'Creado',saved:'Guardado',submitted:'Enviado',rejected:'Rechazado',edited:'Editado',work_site:'SITIO DE TRABAJO',
   },
@@ -1139,7 +1140,8 @@ const I18N={
     upload:'+ UPLOAD',remove:'Remove',yes:'Yes',no:'No',
     required:'REQUIRED',no_results:'NO RESULTS',
     search:'Search...',active:'Active',inactive:'Inactive',
-    back:'← Back',members:'Members',no_projects_yet:'NO PROJECTS YET',overview_label:'// OVERVIEW',workforce:'Workforce',
+    back:'← Back',members:'Members',no_projects_yet:'NO PROJECTS YET',
+    no_reports_yet_rpt:'NO REPORTS YET',overview_label:'// OVERVIEW',workforce:'Workforce',
     site_name:'Site Name',site_address:'Site Address',approved_by:'Approved by',occurrences:'Occurrences',labor:'Labor',tasks:'Tasks & Activities',equipment:'Equipment',
     created:'Created',saved:'Saved',submitted:'Submitted',rejected:'Rejected',edited:'Edited',work_site:'WORK SITE',
   }
@@ -3219,7 +3221,7 @@ function applyLang(){
   // ── data-i18n elements (labels, headings, etc.) ─
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const k=el.getAttribute('data-i18n');
-    const v=t(k);if(v&&v!==k)el.textContent=v;
+    const v=t(k);if(v)el.textContent=v;
   });
 
   // ── Projects page ──────────────────────────────
@@ -3230,21 +3232,12 @@ function applyLang(){
 
   // ── Taskforce page ─────────────────────────────
   _setTxt('ph-tf-small',es?'// GESTIÓN DE PERSONAL':'// WORKFORCE MANAGEMENT');
-  // Dashboard static texts
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const k=el.getAttribute('data-i18n');
-    const map={
-      overview_label: es?'// RESUMEN':'// OVERVIEW',
-      dashboard: es?'Dashboard':'Dashboard',
-      workforce: es?'Cuadrilla':'Workforce',
-      members: es?'Miembros':'Members',
-      no_projects_yet: es?'SIN PROYECTOS AÚN':'NO PROJECTS YET',
-    };
-    if(map[k])el.textContent=map[k];
-  });
+  // data-i18n elements handled by t() above
   // Dashboard section headers
   const recentLbl=document.getElementById('dash-recent-lbl');
   if(recentLbl)recentLbl.textContent='🏗 '+(es?'Proyectos Recientes':'Recent Projects');
+  const rptsLbl=document.getElementById('dash-rpts-lbl');
+  if(rptsLbl)rptsLbl.textContent='📋 '+(es?'Últimos Informes':'Latest Reports');
   const workSvl=document.querySelector('.svl[data-i18n="workforce"]');
   if(workSvl)workSvl.textContent=es?'Cuadrilla':'Workforce';
   const workSvs=document.querySelector('.svs[data-i18n="members"]');
@@ -3351,6 +3344,9 @@ function applyLang(){
   _setPlh('r-site-addr',es?'ej. Av. Gabriela Mistral 890, Temuco':'e.g. 123 Main St, City');
   const togSiteChk=document.getElementById('tog-site');
   _setTxt('lbl-site-toggle-txt',togSiteChk?.checked?(es?'— OCULTAR SITIO ESPECÍFICO':'— HIDE SPECIFIC SITE'):(es?'+ AGREGAR SITIO ESPECÍFICO':'+ ADD SPECIFIC SITE'));
+  // Project selector in report form
+  const projSel=document.getElementById('r-proj');
+  if(projSel&&projSel.options[0])projSel.options[0].text=t('select_project')||'— Select Project —';
   _setPlh('r-client',es?'Empresa o propietario':'Company or owner');
   _setPlh('r-loc',es?'Dirección del sitio':'Site address');
   _setPlh('r-temp',es?'ej. 18°C':'e.g. 72°F');
@@ -3365,10 +3361,13 @@ function applyLang(){
   // Section toggles
   // Report form header texts
   _setTxt('rml',es?'// NUEVO INFORME':'// NEW REPORT');
-  _setTxt('rml2',es?'Field Report':'Field Report');
+  _setTxt('rml2',es?'Informe de Campo':'Field Report');
   _setTxt('cbar-toggle',es?'⚙ ACTIVAR/DESACTIVAR SECCIONES — LAS SECCIONES DESACTIVADAS NO APARECEN EN EL PDF':'⚙ TOGGLE SECTIONS ON/OFF — DISABLED SECTIONS ARE EXCLUDED FROM PDF');
   _setTxt('sec-job-label',es?'Información del Trabajo':'Job Information');
   _setTxt('sec-job-required',es?'REQUERIDO':'REQUIRED');
+  // Project selector placeholder
+  const rProjEl=document.getElementById('r-proj');
+  if(rProjEl&&rProjEl.options.length>0)rProjEl.options[0].text=es?'— Seleccionar Proyecto —':'— Select Project —';
   // Back button
   document.querySelectorAll('[data-i18n="back"]').forEach(el=>el.textContent=es?'← Volver':'← Back');
   _setTxt('sec-weather-label',es?'Clima':'Weather');
