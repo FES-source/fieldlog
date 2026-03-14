@@ -1,4 +1,4 @@
-<!-- FieldLog v1.5.11 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
+<!-- FieldLog v1.5.12 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2281,24 +2281,50 @@ function addPhotos(e){
   Array.from(e.target.files).forEach(f=>{
     const rd=new FileReader();
     rd.onload=ev=>{
-      reportPhotos.push({src:ev.target.result,caption:''});
+      reportPhotos.push({src:ev.target.result,caption:'',uploading:true});
+      const idx=reportPhotos.length-1;
       renderPhotos();
+      // Upload to Firebase Storage
+      uploadPhotoToStorage(ev.target.result, idx);
     };
     rd.readAsDataURL(f);
   });
 }
+
+async function uploadPhotoToStorage(base64, idx){
+  try{
+    const rptId=document.getElementById('rrid')?.textContent||('tmp-'+Date.now());
+    const path=`reports/${rptId}/photo_${idx}_${Date.now()}.jpg`;
+    const ref=fbFns.ref(fbStorage,path);
+    await fbFns.uploadString(ref,base64,'data_url');
+    const url=await fbFns.getDownloadURL(ref);
+    if(reportPhotos[idx]){
+      reportPhotos[idx].src=url;
+      reportPhotos[idx].uploading=false;
+      renderPhotos();
+    }
+  }catch(e){
+    console.error('Photo upload failed:',e);
+    // Keep base64 as fallback if Storage upload fails
+    if(reportPhotos[idx])reportPhotos[idx].uploading=false;
+    renderPhotos();
+  }
+}
 function renderPhotos(){
   const c=document.getElementById('r-photos');c.innerHTML='';
+  const _en=currentUser?.lang==='en';
   reportPhotos.forEach((p,i)=>{
     const row=document.createElement('div');
     row.style.cssText='display:flex;gap:9px;align-items:flex-start;background:var(--s2);border:1px solid var(--bd);padding:8px;';
+    const isUploading=p.uploading;
     row.innerHTML=`
-      <div style="flex-shrink:0;width:88px;height:66px;overflow:hidden;border:1px solid var(--bd);cursor:pointer;" onclick="openLBRaw(${i})">
-        <img src="${p.src}" style="width:100%;height:100%;object-fit:cover;">
+      <div style="flex-shrink:0;width:88px;height:66px;overflow:hidden;border:1px solid var(--bd);cursor:pointer;position:relative;" onclick="openLBRaw(${i})">
+        <img src="${p.src}" style="width:100%;height:100%;object-fit:cover;${isUploading?'opacity:0.5;':''}">
+        ${isUploading?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.4);font-family:var(--mo);font-size:8px;color:var(--am);letter-spacing:1px;">${_en?'UPLOADING...':'SUBIENDO...'}</div>`:''}
       </div>
       <div style="flex:1;display:flex;flex-direction:column;gap:5px;">
-        <div style="font-family:var(--mo);font-size:8px;color:var(--mu);letter-spacing:2px;">PHOTO ${i+1}</div>
-        <input type="text" placeholder="Caption or title for this photo..." value="${E(p.caption)}"
+        <div style="font-family:var(--mo);font-size:8px;color:${isUploading?'var(--am)':'var(--mu)'};letter-spacing:2px;">${isUploading?(_en?'⬆ UPLOADING...':'⬆ SUBIENDO...'):'PHOTO '+(i+1)}</div>
+        <input type="text" placeholder="${_en?'Caption or title...':'Título o descripción...'}" value="${E(p.caption)}"
           oninput="reportPhotos[${i}].caption=this.value"
           style="background:var(--sf);border:1px solid var(--bd);color:var(--tx);padding:5px 8px;font-size:12px;outline:none;width:100%;"
           onfocus="this.style.borderColor='var(--am)'" onblur="this.style.borderColor='var(--bd)'">
@@ -2630,6 +2656,11 @@ function openActivityLog(){
 // Guarda el informe actual (Draft/Filling) y sincroniza con Firestore
 function saveReport(){
   const data=collectRpt();
+  // Warn if photos still uploading
+  if(reportPhotos.some(p=>p.uploading)){
+    toast(currentUser?.lang==='en'?'⬆ PHOTOS STILL UPLOADING — PLEASE WAIT':'⬆ FOTOS AÚN SUBIENDO — POR FAVOR ESPERA','var(--am)');
+    return;
+  }
   const isNew=!(editingRpt&&curRptId);
   if(!isNew){
     const idx=DB.reports.findIndex(r=>r.id===curRptId);
@@ -2692,6 +2723,7 @@ function getSigData(canvasId){
 }
 
 function submitReport(){
+  if(reportPhotos.some(p=>p.uploading)){toast(currentUser?.lang==='en'?'⬆ PHOTOS STILL UPLOADING — PLEASE WAIT':'⬆ FOTOS AÚN SUBIENDO — POR FAVOR ESPERA','var(--am)');return;}
   if(!hasPerm('create_reports')){toast(currentUser?.lang==='en'?'NO PERMISSION':'SIN PERMISO','var(--rd)');return;}
   // Validate required fields
   const projVal=document.getElementById('r-proj')?.value;
