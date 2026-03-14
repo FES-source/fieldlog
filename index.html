@@ -1,4 +1,4 @@
-<!-- FieldLog v1.5.16 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
+<!-- FieldLog v1.5.17 | Build: 2026-03-14 | Firebase + PWA Edition | Sistema de Informes Diarios de Campo | i18n Full Fix -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2980,12 +2980,23 @@ async function confirmDelR(){
   if(!pw){errEl.textContent=_en?'Enter your password':'Ingresa tu contraseña';errEl.style.display='block';return;}
   const btn=document.getElementById('del-rpt-confirm-btn');
   btn.disabled=true;btn.textContent=_en?'Verifying...':'Verificando...';
+  errEl.style.display='none';
   try{
     const userEmail=currentUser.email;
     if(!userEmail){errEl.textContent=_en?'No email on file — contact admin':'Sin email registrado — contacta al admin';errEl.style.display='block';btn.disabled=false;btn.textContent=_en?'🗑 Delete':'🗑 Eliminar';return;}
-    // Use reauthenticateWithCredential — correct method for already-logged-in user
-    const credential=firebase.auth.EmailAuthProvider.credential(userEmail,pw);
-    await fbAuth.currentUser.reauthenticateWithCredential(credential);
+    // Use a secondary Firebase app instance to verify password without disrupting current session
+    const secondaryApp=firebase.app.length>1?firebase.app('verify'):firebase.initializeApp(firebase.app().options,'verify');
+    const secondaryAuth=secondaryApp.auth();
+    try{
+      await secondaryAuth.signInWithEmailAndPassword(userEmail,pw);
+      await secondaryAuth.signOut();
+    }catch(authErr){
+      errEl.textContent=_en?'Incorrect password':'Contraseña incorrecta';
+      errEl.style.display='block';
+      btn.disabled=false;
+      btn.textContent=_en?'🗑 Delete':'🗑 Eliminar';
+      return;
+    }
     // Auth OK — proceed with deletion
     const id=_delRPendingId;
     const r=DB.reports.find(x=>x.id===id);
