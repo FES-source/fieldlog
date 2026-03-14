@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.17 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.18 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1430,6 +1430,7 @@ const I18N={
     rej_desc_full:'El informe será devuelto al técnico para correcciones. Por favor explica el motivo.',
     cust_user_projects_hint:'Selecciona qué proyectos de esta empresa puede ver este usuario.',
     no_cust_projects_hint:'Este cliente no tiene proyectos asignados aún. Asígnalos desde la pestaña Clientes.',
+    saving_label:'Guardando...',
     manage_users:'👥 Gestionar Usuarios',
 role_customer:'Cliente',
   },
@@ -1755,6 +1756,7 @@ role_customer:'Cliente',
     rej_desc_full:'The report will be returned to the technician for corrections. Please explain the reason.',
     cust_user_projects_hint:'Select which projects from this company this user can see.',
     no_cust_projects_hint:'This customer has no assigned projects yet. Assign them from the Customers tab.',
+    saving_label:'Saving...',
     manage_users:'👥 Manage Users',
 role_customer:'Customer',
   },
@@ -2038,6 +2040,7 @@ role_customer:'Customer',
     rej_desc_full:'O relatório será devolvido ao técnico para correções. Por favor explique o motivo.',
     cust_user_projects_hint:'Selecione quais projetos desta empresa este usuário pode ver.',
     no_cust_projects_hint:'Este cliente não tem projetos atribuídos ainda. Atribua-os na aba Clientes.',
+    saving_label:'Salvando...',
     manage_users:'👥 Gerenciar Usuários',
 role_customer:'Cliente',
   },
@@ -2321,6 +2324,7 @@ role_customer:'Cliente',
     rej_desc_full:'Il rapporto sarà restituito al tecnico per correzioni. Spiega il motivo.',
     cust_user_projects_hint:'Seleziona quali progetti di questa azienda può vedere questo utente.',
     no_cust_projects_hint:'Questo cliente non ha ancora progetti assegnati. Assegnali dalla scheda Clienti.',
+    saving_label:'Salvataggio...',
     manage_users:'👥 Gestisci Utenti',
 role_customer:'Cliente',
   },
@@ -3848,29 +3852,117 @@ function openActivityLog(){
 }
 
 // Guarda el informe actual (Draft/Filling) y sincroniza con Firestore
-function saveReport(){
+// Upload an array of base64 photos to Storage, return array of URLs
+async function uploadPhotosArray(photos, captions, pathPrefix){
+  if(!photos||!photos.length)return{urls:[],caps:captions||[]};
+  const urls=[];
+  for(let i=0;i<photos.length;i++){
+    const p=photos[i];
+    if(!p)continue;
+    // Already a URL (https://...) — keep as is
+    if(typeof p==='string'&&p.startsWith('http')){urls.push(p);continue;}
+    // base64 — upload to Storage
+    if(typeof p==='string'&&p.startsWith('data:')){
+      try{
+        const path=`${pathPrefix}/photo_${i}_${Date.now()}.jpg`;
+        const ref=fbFns.ref(fbStorage,path);
+        await fbFns.uploadString(ref,p,'data_url');
+        const url=await fbFns.getDownloadURL(ref);
+        urls.push(url);
+      }catch(e){console.error('Photo upload failed:',e);urls.push(p);}
+    } else {
+      urls.push(typeof p==='string'?p:'');
+    }
+  }
+  return{urls,caps:captions||[]};
+}
+
+// Strip non-Firestore-serializable data from report before saving
+async function prepareRptForFirestore(data){
+  const sessionId=getUploadSessionId();
+  // ── 1. Task photos ────────────────────────────────────────────────
+  if(data.tasks){
+    for(let i=0;i<data.tasks.length;i++){
+      const task=data.tasks[i];
+      if(task.photos&&task.photos.length){
+        const {urls,caps}=await uploadPhotosArray(task.photos,task.captions,`reports/${sessionId}/task_${i}`);
+        task.photos=urls;task.captions=caps;
+      } else {task.photos=[];task.captions=[];}
+    }
+  }
+  // ── 2. Occurrence photos ──────────────────────────────────────────
+  if(data.occurrences){
+    for(let i=0;i<data.occurrences.length;i++){
+      const occ=data.occurrences[i];
+      if(occ.photos&&occ.photos.length){
+        const {urls,caps}=await uploadPhotosArray(occ.photos,occ.captions,`reports/${sessionId}/occ_${i}`);
+        occ.photos=urls;occ.captions=caps;
+      } else {occ.photos=[];occ.captions=[];}
+    }
+  }
+  // ── 3. Checklist item photos ──────────────────────────────────────
+  if(data.checklist&&data.checklist.items){
+    for(let i=0;i<data.checklist.items.length;i++){
+      const item=data.checklist.items[i];
+      if(item.photos&&item.photos.length){
+        const {urls}=await uploadPhotosArray(item.photos,[],`reports/${sessionId}/cl_${i}`);
+        item.photos=urls;
+      } else {item.photos=[];}
+      // Remove any non-serializable fields
+      delete item._file;
+    }
+  }
+  // ── 4. Strip photoData (File objects) ────────────────────────────
+  delete data.photoData;
+  // ── 5. Ensure all values are Firestore-safe (no undefined) ───────
+  const clean=(obj)=>{
+    if(Array.isArray(obj))return obj.map(clean).filter(v=>v!==undefined);
+    if(obj&&typeof obj==='object'){
+      const r={};
+      for(const[k,v]of Object.entries(obj)){
+        if(v!==undefined&&typeof v!=='function')r[k]=clean(v);
+      }
+      return r;
+    }
+    return obj;
+  };
+  return clean(data);
+}
+
+async function saveReport(){
   const data=collectRpt();
-  // Warn if photos still uploading
+  // Warn if main photos still uploading
   if(reportPhotos.some(p=>p.uploading)){
     toast(t('photos_still_uploading'),'var(--am)');
     return;
   }
-  const isNew=!(editingRpt&&curRptId);
-  if(!isNew){
-    const idx=DB.reports.findIndex(r=>r.id===curRptId);
-    if(idx>-1){
-      const existing=DB.reports[idx];
-      Object.assign(existing,data);
-      logActivity(existing,'saved','report.saved');
-      fbSave('reports',existing.id,existing).catch(e=>{console.error(e);toast('⚠ '+(t('save_failed')),'var(--rd)');});
+  const saveBtn=document.getElementById('bb-save-btn-lbl');
+  if(saveBtn)saveBtn.disabled=true;
+  toast('⏳ '+t('saving_label'),'var(--mu)');
+  try{
+    const clean=await prepareRptForFirestore(data);
+    const isNew=!(editingRpt&&curRptId);
+    if(!isNew){
+      const idx=DB.reports.findIndex(r=>r.id===curRptId);
+      if(idx>-1){
+        const existing=DB.reports[idx];
+        Object.assign(existing,clean);
+        logActivity(existing,'saved','report.saved');
+        await fbSave('reports',existing.id,existing);
+      }
+    } else {
+      clean.activityLog=[];
+      logActivity(clean,'created','report.created');
+      DB.reports.push(clean);curRptId=clean.id;editingRpt=true;
+      await fbSave('reports',clean.id,clean);
     }
-  } else {
-    data.activityLog=[];
-    logActivity(data,'created','report.created');
-    DB.reports.push(data);curRptId=data.id;editingRpt=true;
-    fbSave('reports',data.id,data).catch(e=>{console.error(e);toast('⚠ '+(t('save_failed')),'var(--rd)');});
+    renderDash();updateNavBadge();toast(t('saved_toast'));
+  }catch(e){
+    console.error('fbSave error:',e);
+    toast('⚠ '+t('save_failed'),'var(--rd)');
+  } finally {
+    if(saveBtn)saveBtn.disabled=false;
   }
-  renderDash();updateNavBadge();toast(t('saved_toast'));
 }
 
 // Signature modal state
@@ -3942,13 +4034,14 @@ function submitReport(){
   setTimeout(()=>initSigModal('ssigc','ssigwrap'),150);
 }
 
-function doSubmitSigned(){
+async function doSubmitSigned(){
   const sigData=getSigData('ssigc');
   const sigName=document.getElementById('ssig-name').value.trim();
   const sigRole=document.getElementById('ssig-role').value.trim();
   if(!sigData){toast(t('please_draw_signature'),'var(--rd)');return;}
   const nextStatus=(curReportStatus==='Draft'||curReportStatus==='Filling'||curReportStatus==='Rejected')?'Review':curReportStatus;
-  const data={...collectRpt(),status:nextStatus,signature:sigData,sigName,sigRole,submittedAt:new Date().toISOString()};
+  const rawData={...collectRpt(),status:nextStatus,signature:sigData,sigName,sigRole,submittedAt:new Date().toISOString()};
+  const data=await prepareRptForFirestore(rawData);
   const isNew=!(editingRpt&&curRptId);
   if(!isNew){
     const idx=DB.reports.findIndex(r=>r.id===curRptId);
