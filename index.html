@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.24 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.25 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,9 +25,9 @@ const firebaseConfig={apiKey:"AIzaSyAfbJ_RPrRNYjnd3VpxoxKC9NM6GBgbEFk",authDomai
 firebase.initializeApp(firebaseConfig);
 window.fbAuth=firebase.auth();
 window.fbDB=firebase.firestore();
-// Enable offline persistence (modern API)
+// Enable offline persistence
 try{
-  fbDB.settings({cacheSizeBytes:firebase.firestore.CACHE_SIZE_UNLIMITED});
+  fbDB.settings({cacheSizeBytes:firebase.firestore.CACHE_SIZE_UNLIMITED,merge:true});
 }catch(e){}
 fbDB.enablePersistence({synchronizeTabs:true}).catch(err=>{
   if(err.code==='failed-precondition'){console.warn('Persistence: multiple tabs open.');}
