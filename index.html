@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.27 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.28 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3600,7 +3600,7 @@ function openTaskPhotoLB(uid,idx){
   const caps=entry._captions||[];
   lbContext={type:'task-photo',uid,captions:caps};
   lbPhotos=photos;lbCaptions=[...caps];lbIdx=idx;
-  showLBSlide();document.getElementById('lightbox').style.display='flex';
+  showLBSlide();document.getElementById('lightbox').classList.add('op');
 }
 // Agrega una fila de material al formulario de informe
 function addMR(name='',unit='pcs',qty=''){
@@ -3693,7 +3693,25 @@ function upPH(){const n=reportPhotos.length;document.getElementById('bl-ph').tex
 function openLBRaw(i){
   lbPhotos=reportPhotos.map(p=>p.src);
   lbCaptions=reportPhotos.map(p=>p.caption||'');
-  lbIdx=i;renderLB();openMO('mo-lb');
+  lbContext={type:'report-photos'};
+  lbIdx=i;showLBSlide();
+  document.getElementById('lightbox').classList.add('op');
+}
+function openCLILB(itemId,idx){
+  const item=activeCL?.items?.find(i=>i.id===itemId);if(!item)return;
+  lbPhotos=[...(item.photos||[])];
+  lbCaptions=[...(item.photoCaptions||[])];
+  lbContext={type:'cli-photo',itemId};
+  lbIdx=idx;showLBSlide();
+  document.getElementById('lightbox').classList.add('op');
+}
+function openOCCPhotoLB(uid,idx){
+  const entry=document.querySelector('.occ-entry[data-uid="'+uid+'"]');if(!entry)return;
+  lbPhotos=[...(entry._photos||[])];
+  lbCaptions=[...(entry._captions||[])];
+  lbContext={type:'occ-photo',uid};
+  lbIdx=idx;showLBSlide();
+  document.getElementById('lightbox').classList.add('op');
 }
 
 // SIGNATURE — FIXED
@@ -3859,6 +3877,8 @@ function addCLIPhoto(id,e){
     r.onload=ev=>{
       const idx=item.photos.length;
       item.photos.push(ev.target.result);
+      if(!item.photoCaptions)item.photoCaptions=[];
+      item.photoCaptions.push('');
       refreshCLIPhotos(id);
       // Upload immediately
       const rptId=curRptId||getUploadSessionId();
@@ -3871,7 +3891,14 @@ function addCLIPhoto(id,e){
     };r.readAsDataURL(f);
   });
 }
-function rmCLIPhoto(id,idx){const item=activeCL.items.find(i=>i.id===id);if(item&&item.photos){item.photos.splice(idx,1);refreshCLIPhotos(id);}}
+function rmCLIPhoto(id,idx){
+  if(!activeCL)return;
+  const item=activeCL.items.find(i=>i.id===id);
+  if(!item||!item.photos)return;
+  item.photos.splice(idx,1);
+  if(item.photoCaptions)item.photoCaptions.splice(idx,1);
+  refreshCLIPhotos(id);
+}
 function refreshCLIPhotos(id){
   const item=activeCL.items.find(i=>i.id===id);if(!item)return;
   const c=document.getElementById('clip-'+id);if(!c)return;
@@ -4376,11 +4403,14 @@ function doReject(){
   const rptId=_rejectRptId||curRptId;
   const idx=DB.reports.findIndex(r=>r.id===rptId);
   if(idx<0){toast(t('report_not_found'),'var(--rd)');return;}
+  const ex=DB.reports[idx];
+  ex.status='Rejected';
   ex.rejectedBy=currentUser?.name||'Manager';
   ex.rejectedByRole=currentUser?.role||'';
   ex.rejectedAt=new Date().toISOString();
   ex.rejectionReason=reason;
   logActivity(ex,'rejected','report.rejected',{by:currentUser?.name||'Manager',reason});
+  fbSave('reports',ex.id,ex).catch(e=>console.error(e));
   closeMO('mo-reject');
   if(curRptId===rptId)setBBStatus('Rejected');
   renderDash();renderAllReports();updateNavBadge();
@@ -4452,13 +4482,24 @@ function addOCC(type='',time='',desc='',action='',photos=[],captions=[]){
 }
 function renderOCCPhotos(entry){
   const grid=entry.querySelector('.occ-photo-grid');if(!grid)return;
-  const es=currentUser?.lang!=='en';
-  grid.innerHTML=entry._photos.map((src,i)=>`
+  const uid=entry.dataset.uid;
+  grid.innerHTML=(entry._photos||[]).map((src,i)=>`
     <div style="position:relative;width:90px;flex-shrink:0;">
-      <img src="${src}" style="width:90px;height:70px;object-fit:cover;border:1px solid var(--bd);display:block;">
-      <button onclick="this.closest('div').remove();this.closest('.occ-entry')._photos.splice(${i},1);this.closest('.occ-entry')._captions.splice(${i},1);renderOCCPhotos(this.closest('.occ-entry'))" style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,.6);border:none;color:#fff;font-size:9px;cursor:pointer;padding:1px 4px;">✕</button>
-      <input type="text" placeholder="${t('caption_ph2')}" value="${(entry._captions[i]||'')}" oninput="this.closest('.occ-entry')._captions[${i}]=this.value" style="width:100%;background:var(--s2);border:1px solid var(--bd);border-top:none;color:var(--tx);padding:2px 4px;font-size:9px;outline:none;">
+      <img src="${src}" style="width:90px;height:70px;object-fit:cover;border:1px solid var(--bd);display:block;" onclick="openOCCPhotoLB('${uid}',${i})">
+      <button onclick="rmOCCPhoto('${uid}',${i})" style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,.7);border:none;color:#fff;font-size:9px;cursor:pointer;padding:2px 5px;border-radius:2px;">🗑</button>
+      <input type="text" placeholder="${t('caption_ph2')}" value="${E((entry._captions||[])[i]||'')}" oninput="if(this.closest('.occ-entry')._captions)this.closest('.occ-entry')._captions[${i}]=this.value" style="width:100%;background:var(--s2);border:1px solid var(--bd);border-top:none;color:var(--tx);padding:2px 4px;font-size:9px;outline:none;">
     </div>`).join('');
+}
+function rmOCCPhoto(uid,idx){
+  const entry=document.querySelector('.occ-entry[data-uid="'+uid+'"]');
+  if(!entry)return;
+  if(!entry._photos)entry._photos=[];
+  if(!entry._captions)entry._captions=[];
+  entry._photos.splice(idx,1);
+  entry._captions.splice(idx,1);
+  renderOCCPhotos(entry);
+  const camBtn=entry.querySelector('.occ-cam-btn');
+  if(camBtn&&!entry._photos.length){camBtn.style.borderColor='';camBtn.style.color='';}
 }
 function upOCC(){const n=document.querySelectorAll('#r-occ .occ-entry').length;const el=document.getElementById('bl-occ');if(el)el.textContent=n+' '+(n===1?t('entry_single'):t('entry_plural'));}
 
@@ -6014,7 +6055,7 @@ function openLB(photos,captions,idx,context){
   showLBSlide();
   document.getElementById('lightbox').classList.add('op');
 }
-function closeLB(){document.getElementById('lightbox').classList.remove('op');}
+function closeLB(){const lb=document.getElementById('lightbox');lb.classList.remove('op');lb.style.display='';}
 function showLBSlide(){
   const img=document.getElementById('lb-img');
   const capIn=document.getElementById('lb-cap-in');
