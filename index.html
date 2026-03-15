@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.48 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.49 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -953,14 +953,6 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="mh"><div class="mtt" id="clb-title"><span id="lbl-cl-modal-title">☑ Nueva Plantilla</span></div><button class="mcl" onclick="closeMO('mo-clb')">✕</button></div>
   <div class="mb">
     <div class="fg f1" style="margin-bottom:12px;"><div><label id="lbl-cl-name-title">Nombre de Plantilla *</label><input type="text" id="clb-name" placeholder="ej. Inspección de Equipos"></div></div>
-    <div id="clb-sna-section" style="background:var(--s2);border:1px solid var(--bd);padding:10px;margin-bottom:12px;display:none;">
-      <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:7px;"><span id="lbl-cl-answer-opts">ETIQUETAS PARA ÍTEMS DE TIPO Sí/No/N/A</span></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;">
-        <div><label style="font-size:10px;" id="lbl-cl-opt1">Opción 1 (Sí)</label><input type="text" id="clb-sna1" value="Si" style="margin-top:3px;"></div>
-        <div><label style="font-size:10px;" id="lbl-cl-opt2">Opción 2 (No)</label><input type="text" id="clb-sna2" value="No" style="margin-top:3px;"></div>
-        <div><label style="font-size:10px;" id="lbl-cl-opt3">Opción 3 (N/A)</label><input type="text" id="clb-sna3" value="N/A" style="margin-top:3px;"></div>
-      </div>
-    </div>
     <label id="lbl-cl-items">Ítems</label><div id="clb-items" style="margin-top:7px;"></div>
     <button class="adb" onclick="addCLBI()"><span id="lbl-add-cl-item">＋ Agregar Ítem</span></button>
   </div>
@@ -3160,17 +3152,10 @@ function openCLB(id=null){
   document.getElementById('lbl-cl-modal-title').textContent=id?t('cl_modal_edit'):t('cl_modal_new');
   document.getElementById('clb-name').value='';
   document.getElementById('clb-items').innerHTML='';
-  document.getElementById('clb-sna1').value=t('yes_label');
-  document.getElementById('clb-sna2').value=t('no');
-  document.getElementById('clb-sna3').value='N/A';
   if(id){const c=DB.checklists.find(cl=>cl.id===id);if(c){
     document.getElementById('clb-name').value=c.name;
-    document.getElementById('clb-sna1').value=c.snaLabels?.[0]||t('yes_label');
-    document.getElementById('clb-sna2').value=c.snaLabels?.[1]||t('no');
-    document.getElementById('clb-sna3').value=c.snaLabels?.[2]||'N/A';
     c.items.forEach(i=>addCLBI(i.text,keyToCat(i.category),i.type||'sna',i.opts||[]));
-    updateSNASection();
-  }}
+    }}
   else{} // start with empty items — user adds manually
   openMO('mo-clb');
 }
@@ -3232,15 +3217,9 @@ function addCLBI(txt='',cat='General',tp='sna',opts=[]){
     <input type="text" placeholder="${t('item_description_ph')}" class="cl-item-plh" value="${E(txt)}" style="flex:1;min-width:160px;">
     <select class="cs" style="font-size:11px;">${getCats().map((ca,i)=>`<option value="${CATS[i]}"${CATS[i]===cat||ca===cat?' selected':''}>${ca}</option>`).join('')}</select>
     <select class="cs it-type" style="font-size:11px;" onchange="onBItypeChange(this)">${getItemTypes().map(x=>`<option value="${x.v}"${x.v===tp?' selected':''}>${x.l}</option>`).join('')}</select>
-    <button class="ib" onclick="this.closest('.bi').remove();updateSNASection()">✕</button>
+    <button class="ib" onclick="this.closest('.bi').remove()">✕</button>
     ${optsHtml()}`;
   document.getElementById('clb-items').appendChild(d);
-  updateSNASection();
-}
-function updateSNASection(){
-  const hasSna=[...document.querySelectorAll('#clb-items .it-type')].some(s=>s.value==='sna');
-  const sec=document.getElementById('clb-sna-section');
-  if(sec)sec.style.display=hasSna?'block':'none';
 }
 function onBItypeChange(sel){
   const d=sel.closest('.bi');
@@ -3259,7 +3238,6 @@ function onBItypeChange(sel){
     if(optsDiv)optsDiv.remove();
     d._opts=[];
   }
-  updateSNASection();
 }
 function renderBIopts(d){
   const optsDiv=d.querySelector('.bi-opts');if(!optsDiv)return;
@@ -3273,11 +3251,8 @@ function renderBIopts(d){
 }
 function saveCLT(){
   const name=gv('clb-name').trim();if(!name){toast(t('name_required'),'var(--rd)');return;}
-  const snaLabels=[
-    (document.getElementById('clb-sna1').value.trim()||'Si'),
-    (document.getElementById('clb-sna2').value.trim()||'No'),
-    (document.getElementById('clb-sna3').value.trim()||'N/A')
-  ];
+  // SNA labels always use user's language
+  const snaLabels=[t('yes_label')||'Sí', t('no')||'No', 'N/A'];
   const rows=document.querySelectorAll('#clb-items .bi');const items=[];
   rows.forEach((r,i)=>{const itemText=r.querySelector('input.cl-item-plh')?.value.trim(),sels=r.querySelectorAll('select'),cat=sels[0]?.value||'General',tp=sels[1]?.value||'sna';const opts=(r._opts&&r._opts.length)?r._opts.filter(o=>o.trim()):[];if(itemText)items.push({id:'ci'+Date.now()+i,text:itemText,category:catToKey(cat),type:tp,...(opts.length?{opts}:{})});});
   if(!items.length){toast(t('add_at_least_item'),'var(--rd)');return;}
@@ -3930,7 +3905,7 @@ function openCLP(){
 }
 function loadCL(id){
   const cl=DB.checklists.find(c=>c.id===id);if(!cl)return;
-  activeCL={templateId:id,name:cl.name,snaLabels:cl.snaLabels||['Si','No','N/A'],items:cl.items.map(i=>({...i,type:i.type||'sna',checked:false,sna:'',multiSel:[],textAns:'',photos:[],note:''}))};
+  activeCL={templateId:id,name:cl.name,snaLabels:[t('yes_label')||'Sí',t('no')||'No','N/A'],items:cl.items.map(i=>({...i,type:i.type||'sna',checked:false,sna:'',multiSel:[],textAns:'',photos:[],note:''}))};
   renderCLR();closeMO('mo-clpick');toast('✓ '+(t('loaded_label'))+cl.name.toUpperCase());
 }
 
@@ -3942,7 +3917,7 @@ function renderCLR(){
   // Header + progress
   const hdr=document.createElement('div');
   hdr.style.cssText='display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;';
-  const snaL=activeCL.snaLabels||['Si','No','N/A'];
+  const snaL=[t('yes_label')||'Sí', t('no')||'No', 'N/A'];
   hdr.innerHTML=`<strong style="font-family:var(--he);letter-spacing:2px;color:var(--am);text-transform:uppercase;font-size:13px;">${E(activeCL.name)}</strong><span id="cl-pct" style="font-family:var(--mo);font-size:10px;color:var(--mu);">0 / ${activeCL.items.length}</span>`;
   const bar=document.createElement('div');bar.className='cl-bar';
   const fill=document.createElement('div');fill.className='cl-fill';fill.id='cl-fill';fill.style.width='0%';bar.appendChild(fill);
@@ -3982,10 +3957,10 @@ function renderCLR(){
           ${naBtn}
         </div>`;
       } else if(tp==='single'){
-        const opts=item.opts||(activeCL.snaLabels||['Si','No','N/A']);
+        const opts=item.opts||[t('yes_label')||'Sí',t('no')||'No','N/A'];
         ansHtml=`<div class="sna" style="flex-wrap:wrap;">${opts.map(o=>`<button class="sna-btn ${item.singleSel===o?'si on':''}" onclick="setCLISingle('${item.id}','${o}')">${E(o)}</button>`).join('')}${naBtn}</div>`;
       } else if(tp==='multi'){
-        const opts2=item.opts||(activeCL.snaLabels||['Si','No','N/A']);
+        const opts2=item.opts||[t('yes_label')||'Sí',t('no')||'No','N/A'];
         const sel=item.multiSel||[];
         ansHtml=`<div class="sna" style="flex-wrap:wrap;">${opts2.map(o=>`<button class="sna-btn ${sel.includes(o)?'si on':''}" onclick="toggleCLIMulti('${item.id}','${o}')">${E(o)}</button>`).join('')}${naBtn}</div>`;
       } else if(tp==='text'){
