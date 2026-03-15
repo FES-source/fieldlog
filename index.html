@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.28 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.30 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -775,6 +775,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
       <div id="r-cl-render"><div class="emp" id="r-cl-empty"><span id="lbl-no-cl">NO CHECKLIST LOADED</span></div></div>
       <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
         <button class="btn sm bs" style="border-color:var(--am);color:var(--am);" onclick="openCLP()">📂 <span id="lbl-load-cl">Cargar Plantilla</span></button>
+        <button class="btn sm bs" id="btn-clear-cl" style="display:none;border-color:var(--rd);color:var(--rd);" onclick="clearActiveCL()">🗑 <span id="lbl-clear-cl">Quitar Checklist</span></button>
       </div>
     </div>
   </div>
@@ -1441,6 +1442,10 @@ const I18N={
     online_toast:'✅ Conexión restaurada — sincronizando datos',
     photos_pending_upload:'⬆ Fotos pendientes de subir',
     report_deleted_toast:'INFORME ELIMINADO',
+    clear_checklist:'Quitar Checklist',
+    admin_only:'SOLO ADMINISTRADOR',
+    review_short:'En revisión',
+    imported:'Importados',
     manage_users:'👥 Gestionar Usuarios',
 role_customer:'Cliente',
   },
@@ -1772,6 +1777,10 @@ role_customer:'Cliente',
     online_toast:'✅ Connection restored — syncing data',
     photos_pending_upload:'⬆ Photos pending upload',
     report_deleted_toast:'REPORT DELETED',
+    clear_checklist:'Remove Checklist',
+    admin_only:'ADMIN ONLY',
+    review_short:'In Review',
+    imported:'Imported',
     manage_users:'👥 Manage Users',
 role_customer:'Customer',
   },
@@ -2061,6 +2070,10 @@ role_customer:'Customer',
     online_toast:'✅ Conexão restaurada — sincronizando dados',
     photos_pending_upload:'⬆ Fotos pendentes de envio',
     report_deleted_toast:'RELATÓRIO EXCLUÍDO',
+    clear_checklist:'Remover Checklist',
+    admin_only:'SOMENTE ADMINISTRADOR',
+    review_short:'Em revisão',
+    imported:'Importados',
     manage_users:'👥 Gerenciar Usuários',
 role_customer:'Cliente',
   },
@@ -2350,6 +2363,10 @@ role_customer:'Cliente',
     online_toast:'✅ Connessione ripristinata — sincronizzazione dati',
     photos_pending_upload:'⬆ Foto in attesa di caricamento',
     report_deleted_toast:'RAPPORTO ELIMINATO',
+    clear_checklist:'Rimuovi Checklist',
+    admin_only:'SOLO AMMINISTRATORE',
+    review_short:'In revisione',
+    imported:'Importati',
     manage_users:'👥 Gestisci Utenti',
 role_customer:'Cliente',
   },
@@ -2451,6 +2468,13 @@ async function retryPendingPhotos(){
 }
 
 // Generic photo uploader with offline fallback
+
+// Delete a photo from Firebase Storage if it's a Storage URL
+async function deleteFromStorage(url){
+  if(!url||!url.startsWith('https://firebasestorage'))return;
+  try{const ref=fbStorage.refFromURL(url);await fbFns.deleteObject(ref);}
+  catch(e){console.warn('Storage delete failed:',url,e);}
+}
 // Sanitize Storage paths - replace spaces and special chars
 function safePath(str){return (str||'').replace(/[^a-zA-Z0-9._\-\/]/g,'_');}
 
@@ -3289,6 +3313,8 @@ function editR(id){
   renderPhotos();
   // Disabled sections — restore but allow re-enabling if report is editable
   const isEditable=['Draft','Filling','Rejected','Review'].includes(r.status);
+  // If rejected, don't lock sections — user needs to fill them in
+  if(r.status!=='Rejected'){
   (r.disabledSections||[]).forEach(id=>{
     const sec=document.getElementById(id);if(!sec)return;
     sec.classList.add('dis');
@@ -3304,6 +3330,7 @@ function editR(id){
       if(sc)sc.style.pointerEvents='auto';
     }
   });
+  }
   document.getElementById('rml').textContent='// EDITING REPORT';
   document.getElementById('rback').style.display='inline-flex';
   document.getElementById('rback').onclick=()=>{if(curProjId)viewProj(curProjId);else goPage('all-reports');};
@@ -3578,6 +3605,7 @@ function addTaskPhotos(uid,e){
 function rmTaskPhoto(uid,idx){
   const entry=document.querySelector('.task-entry[data-uid="'+uid+'"]');
   if(entry&&entry._photos){
+    deleteFromStorage(entry._photos[idx]); // delete from Storage
     entry._photos.splice(idx,1);
     if(entry._captions)entry._captions.splice(idx,1);
     // Un-highlight camera button if no photos left
@@ -3684,7 +3712,7 @@ function renderPhotos(){
           style="background:var(--sf);border:1px solid var(--bd);color:var(--tx);padding:5px 8px;font-size:12px;outline:none;width:100%;"
           onfocus="this.style.borderColor='var(--am)'" onblur="this.style.borderColor='var(--bd)'">
       </div>
-      <button class="ib" onclick="reportPhotos.splice(${i},1);renderPhotos();upPH();" style="flex-shrink:0;margin-top:2px;">🗑</button>`;
+      <button class="ib" onclick="deleteFromStorage(reportPhotos[${i}]?.src);reportPhotos.splice(${i},1);renderPhotos();upPH();" style="flex-shrink:0;margin-top:2px;">🗑</button>`;
     c.appendChild(row);
   });
   upPH();
@@ -3895,6 +3923,7 @@ function rmCLIPhoto(id,idx){
   if(!activeCL)return;
   const item=activeCL.items.find(i=>i.id===id);
   if(!item||!item.photos)return;
+  deleteFromStorage(item.photos[idx]); // delete from Storage
   item.photos.splice(idx,1);
   if(item.photoCaptions)item.photoCaptions.splice(idx,1);
   refreshCLIPhotos(id);
@@ -3922,9 +3951,21 @@ function toggleCI(id){
   if(row){row.classList.toggle('ck',item.checked);row.querySelector('.cli-cb').textContent=item.checked?'✓':'';}
   updCLP();updCLB();
 }
+function clearActiveCL(){
+  activeCL=null;
+  renderCLR();
+  const clrBtn=document.getElementById('btn-clear-cl');
+  if(clrBtn)clrBtn.style.display='none';
+}
 function updCLB(){
-  if(!activeCL){document.getElementById('bl-cl').textContent='0 / 0';return;}
-  const total=activeCL.items.length,done=activeCL.items.filter(i=>i.sna).length;
+  const clrBtn=document.getElementById('btn-clear-cl');
+  if(!activeCL){
+    document.getElementById('bl-cl').textContent='0 / 0';
+    if(clrBtn)clrBtn.style.display='none';
+    return;
+  }
+  if(clrBtn)clrBtn.style.display='inline-flex';
+  const total=activeCL.items.length,done=activeCL.items.filter(i=>i.sna||i.textAns||i.singleSel||(i.multiSel||[]).length).length;
   const b=document.getElementById('bl-cl');b.textContent=done+' / '+total;
   b.className='bx'+(done===total&&total>0?' g':'');
 }
@@ -4103,13 +4144,14 @@ async function prepareRptForFirestore(data){
       const ph=task.photos||[];
       const ca=task.captions||[];
       if(ph.length){
-        const {urls,caps}=await uploadPhotosArray(ph,ca,`reports/${rptId}/tasks/${i}`);
-        task.photos=urls.filter(u=>u);
-        task.captions=caps;
-      } else {
-        task.photos=[];
-        task.captions=[];
-      }
+        const needsUpload2=ph.some(p=>p&&p.startsWith('data:'));
+        if(needsUpload2){
+          const {urls,caps}=await uploadPhotosArray(ph,ca,`reports/${rptId}/tasks/${i}`);
+          task.photos=urls.filter(u=>u);task.captions=caps;
+        } else {
+          task.photos=ph.filter(p=>p&&p.startsWith('http'));task.captions=ca;
+        }
+      } else {task.photos=[];task.captions=[];}
     }
   }
 
@@ -4120,13 +4162,14 @@ async function prepareRptForFirestore(data){
       const ph=occ.photos||[];
       const ca=occ.captions||[];
       if(ph.length){
-        const {urls,caps}=await uploadPhotosArray(ph,ca,`reports/${rptId}/occurrences/${i}`);
-        occ.photos=urls.filter(u=>u);
-        occ.captions=caps;
-      } else {
-        occ.photos=[];
-        occ.captions=[];
-      }
+        const needsUpload3=ph.some(p=>p&&p.startsWith('data:'));
+        if(needsUpload3){
+          const {urls,caps}=await uploadPhotosArray(ph,ca,`reports/${rptId}/occurrences/${i}`);
+          occ.photos=urls.filter(u=>u);occ.captions=caps;
+        } else {
+          occ.photos=ph.filter(p=>p&&p.startsWith('http'));occ.captions=ca;
+        }
+      } else {occ.photos=[];occ.captions=[];}
     }
   }
 
@@ -4136,9 +4179,15 @@ async function prepareRptForFirestore(data){
       const item=data.checklist.items[i];
       const ph=item.photos||[];
       if(ph.length){
-        const itemKey=item.id?item.id.replace(/[^a-zA-Z0-9]/g,'_'):`cl${i}`;
-        const {urls}=await uploadPhotosArray(ph,[],`reports/${rptId}/checklist/${itemKey}`);
-        item.photos=urls.filter(u=>u);
+        // Only upload photos that are still base64 (not yet uploaded)
+        const needsUpload=ph.some(p=>p&&p.startsWith('data:'));
+        if(needsUpload){
+          const itemKey=item.id?item.id.replace(/[^a-zA-Z0-9]/g,'_'):`cl${i}`;
+          const {urls}=await uploadPhotosArray(ph,[],`reports/${rptId}/checklist/${itemKey}`);
+          item.photos=urls.filter(u=>u);
+        } else {
+          item.photos=ph.filter(p=>p&&p.startsWith('http'));
+        }
       } else {
         item.photos=[];
       }
@@ -4281,7 +4330,7 @@ async function doSubmitSigned(){
   const isNew=!(editingRpt&&curRptId);
   if(!isNew){
     const idx=DB.reports.findIndex(r=>r.id===curRptId);
-    if(idx>-1){const ex=DB.reports[idx];Object.assign(ex,data);logActivity(ex,'submitted','report.submitted');fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(t('save_failed')),'var(--rd)');});}
+    if(idx>-1){const ex=DB.reports[idx];Object.assign(ex,data);logActivity(ex,'submitted','report.submitted');await fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(t('save_failed')),'var(--rd)');});}
   } else {
     data.activityLog=[];data.createdAt=new Date().toISOString();
     logActivity(data,'created','report.created');logActivity(data,'submitted','report.submitted');
@@ -4304,7 +4353,7 @@ function approveReport(){
   setTimeout(()=>initSigModal('asigc','asigwrap'),150);
 }
 
-function doApproveSigned(){
+async function doApproveSigned(){
   const sigData=getSigData('asigc');
   const sigName=document.getElementById('asig-name').value.trim();
   const sigRole=document.getElementById('asig-role').value.trim();
@@ -4319,7 +4368,7 @@ function doApproveSigned(){
   ex.approveSignature=sigData;ex.approvedBy=sigName;ex.approvedByRole=sigRole;ex.approvedAt=new Date().toISOString();
   ex.status=needsCust?'Pending Customer':'Approved';
   logActivity(ex,'approved','report.approved',{by:sigName,pendingCust:!!needsCust});
-  fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(t('save_failed')),'var(--rd)');});closeMO('mo-approve-sig');setBBStatus(ex.status);renderDash();updateNavBadge();
+  await fbSave('reports',ex.id,ex).catch(e=>{console.error(e);toast('⚠ '+(t('save_failed')),'var(--rd)');});closeMO('mo-approve-sig');setBBStatus(ex.status);renderDash();updateNavBadge();
   toast(needsCust?(t('approved_awaiting_customer')):(t('report_approved_toast')),'var(--gn)');
 }
 
@@ -4495,6 +4544,7 @@ function rmOCCPhoto(uid,idx){
   if(!entry)return;
   if(!entry._photos)entry._photos=[];
   if(!entry._captions)entry._captions=[];
+  deleteFromStorage(entry._photos[idx]); // delete from Storage
   entry._photos.splice(idx,1);
   entry._captions.splice(idx,1);
   renderOCCPhotos(entry);
@@ -4886,7 +4936,7 @@ function viewReport(id){
   if(r.labor?.length){const _vlng2=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">👷 ${t('labor')} (${r.labor.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.labor.forEach(w=>{html+=`<div style="display:flex;gap:10px;padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><strong style="flex:1;">${E(w.name)}</strong><span style="color:var(--mu);font-family:var(--mo);font-size:10px;">${E(w.role)}</span>${w.start?`<span style="font-family:var(--mo);font-size:10px;color:var(--mu);">${w.start}–${w.end}</span>`:''}</div>`;});html+='</div>';}
   if(r.tasks?.length){const _vlng=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">📋 ${t('tasks')} (${r.tasks.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.tasks.forEach(t=>{const sc={'Completed':'var(--gn)','In Progress':'var(--am)','Pending':'var(--mu)'}[t.status]||'var(--mu)';html+=`<div style="display:flex;gap:10px;padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><span style="flex:1;">${E(t.desc)}</span><span style="font-family:var(--mo);font-size:9px;color:${sc};">${tStat(t.status)}</span></div>`;});html+='</div>';}
   if(r.equip?.length){const _vlng3=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">🔧 ${t('equipment')} (${r.equip.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.equip.forEach(eq=>{html+=`<div style="display:flex;gap:10px;padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><strong style="flex:1;">${E(eq.desc)}</strong><span style="font-family:var(--mo);font-size:10px;color:var(--mu);">${tEstat(eq.status)}</span></div>`;});html+='</div>';}
-  if(r.occurrences?.length){const _vlng4=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--rd);text-transform:uppercase;margin:10px 0 5px;">⚠ ${t('occurrences')} (${r.occurrences.length})</div>`;r.occurrences.forEach(o=>{html+=`<div style="background:rgba(224,82,82,.05);border:1px solid rgba(224,82,82,.2);border-left:3px solid var(--rd);padding:9px;margin-bottom:5px;font-size:12px;"><div style="font-family:var(--mo);font-size:9px;color:var(--rd);margin-bottom:4px;">${o.type}${o.time?' · '+o.time:''}</div><div>${E(o.desc)}</div>${o.action?`<div style="margin-top:5px;color:var(--mu);font-size:11px;">→ ${E(o.action)}</div>`:''}</div>`;});}
+  if(r.occurrences?.length){html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--rd);text-transform:uppercase;margin:10px 0 5px;">⚠ ${t('occurrences')} (${r.occurrences.length})</div>`;r.occurrences.forEach(o=>{const occPhotos=o.photos||[];html+=`<div style="background:rgba(224,82,82,.05);border:1px solid rgba(224,82,82,.2);border-left:3px solid var(--rd);padding:9px;margin-bottom:5px;font-size:12px;"><div style="font-family:var(--mo);font-size:9px;color:var(--rd);margin-bottom:4px;">${o.type}${o.time?' · '+o.time:''}</div><div>${E(o.desc)}</div>${o.action?`<div style="margin-top:5px;color:var(--mu);font-size:11px;">→ ${E(o.action)}</div>`:''} ${occPhotos.length?`<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;">${occPhotos.map((p,pi)=>`<div style="position:relative;"><img src="${p}" style="width:80px;height:64px;object-fit:cover;border:1px solid var(--bd);cursor:pointer;" onclick="openOCCPhotoLB('view-occ-${r.id}-${o.type}',${pi})">${(o.captions||[])[pi]?`<div style="font-size:8px;color:var(--mu);padding:2px 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px;">${(o.captions||[])[pi]}</div>`:''}</div>`).join('')}</div>`:''}</div>`;});}
   if(clit.length){
     const pct=clit.length?Math.round(done/clit.length*100):0;
     html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">☑ ${t('checklist')}: ${E(r.checklist.name)} (${done}/${clit.length})</div>`;
@@ -4960,7 +5010,7 @@ function viewReport(id){
   // Customer sign-off: show in view for customer role on Pending Customer or Approved (if project needs it)
   const custRejectBtn=document.getElementById('mo-view-cust-reject');
   const projForCustRole=DB.projects?.find(p=>p.id===r.projId);
-  const custCanSign=isCustomerRole()&&(r.status==='Pending Customer'||(r.status==='Approved'&&projForCustRole?.requireCustomerApproval));
+  const custCanSign=isCustomerRole()&&!r.customerSignature&&(r.status==='Pending Customer'||(r.status==='Approved'&&projForCustRole?.requireCustomerApproval));
   if(custCanSign){
     const custSelfBtn=document.getElementById('mo-view-custappr');
     if(custSelfBtn){custSelfBtn.style.display='inline-flex';custSelfBtn.onclick=()=>{closeMO('mo-view');openCustAppr(r.id);};}
@@ -5251,6 +5301,7 @@ function applyLang(){
   _setTxt('lbl-add-occ', t('lbl_add_occ'));
   _setTxt('lbl-no-cl', t('no_checklist_loaded'));
   _setTxt('lbl-load-cl', t('cl_load_btn'));
+  _setTxt('lbl-clear-cl', t('clear_checklist'));
   _setTxt('lbl-load-cl-title', t('cl_load_btn'));
 
   // ── Dynamic counters in section headers ─────────────────
