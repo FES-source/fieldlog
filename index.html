@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.26 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.27 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -189,6 +189,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 .sec.dis .sh{pointer-events:auto;}
 .sec.dis .sc{pointer-events:auto;}
 .sec.dis .sc .tog{pointer-events:auto;opacity:1;}
+.sec.dis .sc input[type=checkbox]{pointer-events:auto;opacity:1;}
 .sh{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer;user-select:none;gap:9px;}
 .sh:hover{background:rgba(245,166,35,.04);}
 .sl{display:flex;align-items:center;gap:9px;flex:1;min-width:0;}
@@ -2450,7 +2451,11 @@ async function retryPendingPhotos(){
 }
 
 // Generic photo uploader with offline fallback
+// Sanitize Storage paths - replace spaces and special chars
+function safePath(str){return (str||'').replace(/[^a-zA-Z0-9._\-\/]/g,'_');}
+
 async function uploadPhotoWithFallback(base64, path, targetObj, targetKey){
+  path=safePath(path); // sanitize before upload
   if(!_isOnline){
     // Queue for later
     _pendingPhotoUploads.push({base64,path,targetObj,targetKey});
@@ -3282,8 +3287,23 @@ function editR(id){
     reportPhotos=r.photos.map((src,i)=>({src,caption:(r.photoCaptions||[])[i]||''}));
   }
   renderPhotos();
-  // Disabled sections
-  (r.disabledSections||[]).forEach(id=>{const sec=document.getElementById(id);if(sec){sec.classList.add('dis');const cb=sec.querySelector('input[type=checkbox]');if(cb)cb.checked=false;}});
+  // Disabled sections — restore but allow re-enabling if report is editable
+  const isEditable=['Draft','Filling','Rejected','Review'].includes(r.status);
+  (r.disabledSections||[]).forEach(id=>{
+    const sec=document.getElementById(id);if(!sec)return;
+    sec.classList.add('dis');
+    sec.classList.remove('op');
+    const cb=sec.querySelector('input[type=checkbox]');
+    if(cb){cb.checked=false;}
+    // If editable, allow the toggle to work so user can re-enable
+    if(isEditable){
+      sec.style.pointerEvents='';  // override the CSS pointer-events:none
+      const sh=sec.querySelector('.sh');
+      const sc=sec.querySelector('.sc');
+      if(sh)sh.style.pointerEvents='auto';
+      if(sc)sc.style.pointerEvents='auto';
+    }
+  });
   document.getElementById('rml').textContent='// EDITING REPORT';
   document.getElementById('rback').style.display='inline-flex';
   document.getElementById('rback').onclick=()=>{if(curProjId)viewProj(curProjId);else goPage('all-reports');};
@@ -3636,7 +3656,7 @@ async function uploadMainPhotos(rptId){
     if(!p?.src||p.src.startsWith('http'))continue; // already URL
     if(!p.src.startsWith('data:'))continue;
     try{
-      const path=`reports/${rptId}/photos/p${i}_${Date.now()}.jpg`;
+      const path=safePath(`reports/${rptId}/photos/p${i}_${Date.now()}.jpg`);
       const ref=fbFns.ref(fbStorage,path);
       await fbFns.uploadString(ref,p.src,'data_url');
       const url=await fbFns.getDownloadURL(ref);
@@ -3898,7 +3918,7 @@ function collectRpt(){
     return{desc:ins[0]?.value||'',status:ins[1]?.value||'',comment,photos,captions:entry._captions||[]};
   }).filter(t=>t.desc);
   const mats=[...document.querySelectorAll('#r-mats .ri')].map(r=>{const ins=r.querySelectorAll('input,select');return{name:ins[0]?.value||'',unit:ins[1]?.value||'',qty:ins[2]?.value||''};}).filter(r=>r.name);
-  const occurrences=[...document.querySelectorAll('#r-occ .occ-entry')].map(el=>({type:el.querySelector('.occ-type')?.value||'',time:el.querySelector('.occ-time')?.value||'',desc:el.querySelector('.occ-desc')?.value||'',action:el.querySelector('.occ-act')?.value||'',photos:el._photos||[],captions:el._captions||[]})).filter(o=>o.desc);
+  const occurrences=[...document.querySelectorAll('#r-occ .occ-entry')].map(el=>{const dispType=el.querySelector('.occ-type')?.value||'';const enIdx=getOccTypes().indexOf(dispType);const enType=enIdx>=0?OCC_TYPES_EN[enIdx]:dispType;return{type:enType,time:el.querySelector('.occ-time')?.value||'',desc:el.querySelector('.occ-desc')?.value||'',action:el.querySelector('.occ-act')?.value||'',photos:el._photos||[],captions:el._captions||[]};}).filter(o=>o.desc);
   const weather=[...document.querySelectorAll('.wp.on')].map(p=>p.getAttribute('data-en')||p.textContent.trim());
   const disabledSections=[...document.querySelectorAll('.sec.dis')].map(s=>s.id);
   const photos=reportPhotos.map(p=>p.src);
@@ -4019,7 +4039,7 @@ async function uploadPhotosArray(photos, captions, pathPrefix){
     // base64 data URL — upload to Storage
     if(typeof p==='string'&&p.startsWith('data:')){
       try{
-        const path=`${pathPrefix}/p${i}_${Date.now()}.jpg`;
+        const path=safePath(`${pathPrefix}/p${i}_${Date.now()}.jpg`);
         const ref=fbFns.ref(fbStorage,path);
         await fbFns.uploadString(ref,p,'data_url');
         const url=await fbFns.getDownloadURL(ref);
@@ -4394,7 +4414,7 @@ function addOCC(type='',time='',desc='',action='',photos=[],captions=[]){
     </div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 80px;gap:8px;margin-bottom:8px;">
-    <div><label>${t('occ_type_lbl')}</label><select class="occ-type" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;">${getOccTypes().map(t=>`<option${t===type?' selected':''}>${t}</option>`).join('')}</select></div>
+    <div><label>${t('occ_type_lbl')}</label><select class="occ-type" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;">${(()=>{const types=getOccTypes();const enIdx=OCC_TYPES_EN.indexOf(type);const localType=enIdx>=0?types[enIdx]:type;return types.map(tt=>`<option${tt===localType?' selected':''}>${tt}</option>`).join('');})()}</select></div>
     <div><label>${t('occ_time_lbl')}</label><input type="time" class="occ-time" value="${E(time)}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;"></div>
   </div>
   <div style="margin-bottom:8px;"><label>${t('occ_desc_lbl')}</label><textarea class="occ-desc" rows="2" placeholder="${t('occ_desc_ph')}" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px;font-size:12px;resize:vertical;">${E(desc)}</textarea></div>
