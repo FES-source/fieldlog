@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.36 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.37 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -4030,10 +4030,10 @@ function collectRpt(){
     const ins=entry.querySelectorAll('.ri input,.ri select');
     const comment=entry.querySelector('.task-comment')?.value||'';
     const photos=entry._photos||[];
-    return{desc:ins[0]?.value||'',status:ins[1]?.value||'',comment,photos,captions:entry._captions||[]};
+    return{uid:entry.dataset.uid||('t'+Date.now()),desc:ins[0]?.value||'',status:ins[1]?.value||'',comment,photos,captions:entry._captions||[]};
   }).filter(t=>t.desc);
   const mats=[...document.querySelectorAll('#r-mats .ri')].map(r=>{const ins=r.querySelectorAll('input,select');return{name:ins[0]?.value||'',unit:ins[1]?.value||'',qty:ins[2]?.value||''};}).filter(r=>r.name);
-  const occurrences=[...document.querySelectorAll('#r-occ .occ-entry')].map(el=>{const dispType=el.querySelector('.occ-type')?.value||'';const enIdx=getOccTypes().indexOf(dispType);const enType=enIdx>=0?OCC_TYPES_EN[enIdx]:dispType;return{type:enType,time:el.querySelector('.occ-time')?.value||'',desc:el.querySelector('.occ-desc')?.value||'',action:el.querySelector('.occ-act')?.value||'',photos:el._photos||[],captions:el._captions||[]};}).filter(o=>o.desc);
+  const occurrences=[...document.querySelectorAll('#r-occ .occ-entry')].map(el=>{const dispType=el.querySelector('.occ-type')?.value||'';const enIdx=getOccTypes().indexOf(dispType);const enType=enIdx>=0?OCC_TYPES_EN[enIdx]:dispType;return{uid:el.dataset.uid||('occ'+Date.now()),type:enType,time:el.querySelector('.occ-time')?.value||'',desc:el.querySelector('.occ-desc')?.value||'',action:el.querySelector('.occ-act')?.value||'',photos:el._photos||[],captions:el._captions||[]};}).filter(o=>o.desc);
   const weather=[...document.querySelectorAll('.wp.on')].map(p=>p.getAttribute('data-en')||p.textContent.trim());
   const disabledSections=[...document.querySelectorAll('.sec.dis')].map(s=>s.id);
   const photos=reportPhotos.map(p=>p.src);
@@ -4198,7 +4198,8 @@ async function prepareRptForFirestore(data){
       if(ph.length){
         const needsUpload2=ph.some(p=>p&&p.startsWith('data:'));
         if(needsUpload2){
-          const {urls,caps}=await uploadPhotosArray(ph,ca,`reports/${rptId}/tasks/${i}`);
+          const taskPath=`reports/${rptId}/tasks/${safePath(task.uid||String(i))}`;
+          const {urls,caps}=await uploadPhotosArray(ph,ca,taskPath);
           task.photos=urls.filter(u=>u);task.captions=caps;
         } else {
           task.photos=ph.filter(p=>p&&p.startsWith('http'));task.captions=ca;
@@ -4216,7 +4217,8 @@ async function prepareRptForFirestore(data){
       if(ph.length){
         const needsUpload3=ph.some(p=>p&&p.startsWith('data:'));
         if(needsUpload3){
-          const {urls,caps}=await uploadPhotosArray(ph,ca,`reports/${rptId}/occurrences/${i}`);
+          const occPath=`reports/${rptId}/occurrences/${safePath(occ.uid||String(i))}`;
+          const {urls,caps}=await uploadPhotosArray(ph,ca,occPath);
           occ.photos=urls.filter(u=>u);occ.captions=caps;
         } else {
           occ.photos=ph.filter(p=>p&&p.startsWith('http'));occ.captions=ca;
