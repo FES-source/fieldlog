@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.44 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.46 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -954,7 +954,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="mb">
     <div class="fg f1" style="margin-bottom:12px;"><div><label id="lbl-cl-name-title">Nombre de Plantilla *</label><input type="text" id="clb-name" placeholder="ej. Inspección de Equipos"></div></div>
     <div style="background:var(--s2);border:1px solid var(--bd);padding:10px;margin-bottom:12px;">
-      <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:7px;"><span id="lbl-cl-answer-opts">ANSWER OPTIONS (Si / No / N/A labels)</span></div>
+      <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:7px;"><span id="lbl-cl-answer-opts">ETIQUETAS PARA ÍTEMS DE TIPO Sí/No/N/A</span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;">
         <div><label style="font-size:10px;" id="lbl-cl-opt1">Opción 1 (Sí)</label><input type="text" id="clb-sna1" value="Si" style="margin-top:3px;"></div>
         <div><label style="font-size:10px;" id="lbl-cl-opt2">Opción 2 (No)</label><input type="text" id="clb-sna2" value="No" style="margin-top:3px;"></div>
@@ -1447,6 +1447,9 @@ const I18N={
     review_short:'En revisión',
     imported:'Importados',
     options_label:'OPCIONES',
+    change_label:'Cambiar',
+    add_evidence_label:'Agregar evidencia',
+    evidence_added:'evidencia(s) adjunta(s)',
     manage_users:'👥 Gestionar Usuarios',
 role_customer:'Cliente',
   },
@@ -1783,6 +1786,9 @@ role_customer:'Cliente',
     review_short:'In Review',
     imported:'Imported',
     options_label:'OPTIONS',
+    change_label:'Change',
+    add_evidence_label:'Add evidence',
+    evidence_added:'evidence added',
     manage_users:'👥 Manage Users',
 role_customer:'Customer',
   },
@@ -2077,6 +2083,9 @@ role_customer:'Customer',
     review_short:'Em revisão',
     imported:'Importados',
     options_label:'OPÇÕES',
+    change_label:'Alterar',
+    add_evidence_label:'Adicionar evidência',
+    evidence_added:'evidência(s) anexada(s)',
     manage_users:'👥 Gerenciar Usuários',
 role_customer:'Cliente',
   },
@@ -2371,6 +2380,9 @@ role_customer:'Cliente',
     review_short:'In revisione',
     imported:'Importati',
     options_label:'OPZIONI',
+    change_label:'Cambia',
+    add_evidence_label:'Aggiungi evidenza',
+    evidence_added:'prova/e allegata/e',
     manage_users:'👥 Gestisci Utenti',
 role_customer:'Cliente',
   },
@@ -3162,32 +3174,36 @@ function openCLB(id=null){
   openMO('mo-clb');
 }
 const ITEM_TYPES_ES=[
-  {v:'sna',l:'Si/No/N/A'},
+  {v:'sna',l:'Sí / No / N/A'},
+  {v:'yesno',l:'Sí / No'},
   {v:'single',l:'Opción única'},
   {v:'multi',l:'Múltiple opción'},
   {v:'text',l:'Texto libre'},
-  {v:'yesno',l:'Sí / No'},
+  {v:'evidence',l:'Evidencia (foto/video)'},
 ];
 const ITEM_TYPES_EN=[
-  {v:'sna',l:'Yes/No/N/A'},
+  {v:'sna',l:'Yes / No / N/A'},
+  {v:'yesno',l:'Yes / No'},
   {v:'single',l:'Single choice'},
   {v:'multi',l:'Multiple choice'},
   {v:'text',l:'Free text'},
-  {v:'yesno',l:'Yes / No'},
+  {v:'evidence',l:'Evidence (photo/video)'},
 ];
 const ITEM_TYPES_PT=[
-  {v:'sna',l:'Sim/Não/N/A'},
+  {v:'sna',l:'Sim / Não / N/A'},
+  {v:'yesno',l:'Sim / Não'},
   {v:'single',l:'Opção única'},
   {v:'multi',l:'Múltipla escolha'},
   {v:'text',l:'Texto livre'},
-  {v:'yesno',l:'Sim / Não'},
+  {v:'evidence',l:'Evidência (foto/vídeo)'},
 ];
 const ITEM_TYPES_IT=[
-  {v:'sna',l:'Sì/No/N/A'},
+  {v:'sna',l:'Sì / No / N/A'},
+  {v:'yesno',l:'Sì / No'},
   {v:'single',l:'Scelta singola'},
   {v:'multi',l:'Scelta multipla'},
   {v:'text',l:'Testo libero'},
-  {v:'yesno',l:'Sì / No'},
+  {v:'evidence',l:'Evidenza (foto/video)'},
 ];
 function getItemTypes(){
   const lang=currentUser?.lang||'es';
@@ -3937,31 +3953,54 @@ function renderCLR(){
       row.className='cli'+(item.checked?' ck':'');
       row.dataset.id=item.id;
       // Build answer UI by type
+      // N/A button for all types
+      const naBtn=`<button class="sna-btn na${item.na?' on':''}" onclick="setCLINA('${item.id}')" style="margin-left:6px;font-size:8px;">${snaL[2]||'N/A'}</button>`;
       let ansHtml='';
-      if(tp==='sna'){
+      if(item.na){
+        ansHtml=`<div class="sna" style="flex-wrap:wrap;align-items:center;">
+          <span style="font-family:var(--mo);font-size:9px;color:var(--am);letter-spacing:1px;">${snaL[2]||'N/A'}</span>
+          <button class="sna-btn na on" onclick="setCLINA('${item.id}')" style="font-size:8px;margin-left:8px;">↩ ${t('change_label')||'Cambiar'}</button>
+        </div>`;
+      } else if(tp==='sna'){
         ansHtml=`<div class="sna" style="flex-wrap:wrap;">
           <button class="sna-btn si ${item.sna==='si'?'on':''}" onclick="setSNA('${item.id}','si')">${E(snaL[0])}</button>
           <button class="sna-btn no ${item.sna==='no'?'on':''}" onclick="setSNA('${item.id}','no')">${E(snaL[1])}</button>
           <button class="sna-btn na ${item.sna==='na'?'on':''}" onclick="setSNA('${item.id}','na')">${E(snaL[2])}</button>
         </div>`;
       } else if(tp==='yesno'){
-        ansHtml=`<div class="sna">
+        ansHtml=`<div class="sna" style="flex-wrap:wrap;align-items:center;">
           <button class="sna-btn si ${item.singleSel==='si'?'on':''}" onclick="setCLISingle('${item.id}','si')">${t('yes_label')}</button>
           <button class="sna-btn no ${item.singleSel==='no'?'on':''}" onclick="setCLISingle('${item.id}','no')">${t('no')}</button>
+          ${naBtn}
         </div>`;
       } else if(tp==='single'){
         const opts=item.opts||(activeCL.snaLabels||['Si','No','N/A']);
-        ansHtml=`<div class="sna" style="flex-wrap:wrap;">${opts.map((o,oi)=>`<button class="sna-btn ${item.singleSel===o?'si on':''}" onclick="setCLISingle('${item.id}','${o}')">${E(o)}</button>`).join('')}
-          <button onclick="addCLIOpt('${item.id}')" style="background:none;border:1px dashed var(--bd);color:var(--mu);font-size:10px;padding:2px 7px;cursor:pointer;">＋</button>
-        </div>`;
+        ansHtml=`<div class="sna" style="flex-wrap:wrap;">${opts.map(o=>`<button class="sna-btn ${item.singleSel===o?'si on':''}" onclick="setCLISingle('${item.id}','${o}')">${E(o)}</button>`).join('')}${naBtn}</div>`;
       } else if(tp==='multi'){
         const opts2=item.opts||(activeCL.snaLabels||['Si','No','N/A']);
         const sel=item.multiSel||[];
-        ansHtml=`<div class="sna" style="flex-wrap:wrap;">${opts2.map((o,oi)=>`<button class="sna-btn ${sel.includes(o)?'si on':''}" onclick="toggleCLIMulti('${item.id}','${o}')">${E(o)}</button>`).join('')}
-          <button onclick="addCLIOpt('${item.id}')" style="background:none;border:1px dashed var(--bd);color:var(--mu);font-size:10px;padding:2px 7px;cursor:pointer;">＋</button>
-        </div>`;
+        ansHtml=`<div class="sna" style="flex-wrap:wrap;">${opts2.map(o=>`<button class="sna-btn ${sel.includes(o)?'si on':''}" onclick="toggleCLIMulti('${item.id}','${o}')">${E(o)}</button>`).join('')}${naBtn}</div>`;
       } else if(tp==='text'){
-        ansHtml=`<input type="text" placeholder="${t('free_text_ph')}" value="${E(item.textAns||'')}" oninput="setCLIText('${item.id}',this.value)" style="width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:5px 8px;font-size:12px;outline:none;border-left:2px solid var(--am);">`;
+        ansHtml=`<div style="display:flex;gap:6px;align-items:center;">
+          <input type="text" placeholder="${t('free_text_ph')}" value="${E(item.textAns||'')}" oninput="setCLIText('${item.id}',this.value)" style="flex:1;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:5px 8px;font-size:12px;outline:none;border-left:2px solid var(--am);">
+          ${naBtn}
+        </div>`;
+      } else if(tp==='evidence'){
+        const evPhotos=item.photos||[];
+        ansHtml=`<div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;flex-wrap:wrap;gap:5px;align-items:center;">
+            ${evPhotos.map((p,pi)=>`<div style="position:relative;width:64px;height:64px;overflow:hidden;">
+              <img src="${p}" style="width:100%;height:100%;object-fit:cover;border:1px solid var(--bd);cursor:pointer;" onclick="openCLILB('${item.id}',${pi})">
+              <button onclick="event.stopPropagation();deleteFromStorage(activeCL.items.find(i=>i.id==='${item.id}')?.photos[${pi}]);activeCL.items.find(i=>i.id==='${item.id}').photos.splice(${pi},1);renderCLR()" style="position:absolute;top:1px;right:1px;background:rgba(0,0,0,.7);border:none;color:#fff;font-size:8px;cursor:pointer;padding:1px 3px;">🗑</button>
+            </div>`).join('')}
+            <label style="cursor:pointer;padding:6px 10px;border:1px dashed var(--am);color:var(--am);font-family:var(--mo);font-size:9px;letter-spacing:1px;">
+              📷 ${t('add_evidence_label')||'AGREGAR'}
+              <input type="file" accept="image/*,video/*" multiple style="display:none;" onchange="setCLIEvidence('${item.id}',this.files);this.value=''">
+            </label>
+            ${evPhotos.length?'':''} ${naBtn}
+          </div>
+          ${evPhotos.length?`<div style="font-family:var(--mo);font-size:8px;color:var(--gn);letter-spacing:1px;">✓ ${evPhotos.length} ${t('evidence_added')||'evidencia(s) adjunta(s)'}</div>`:''}
+        </div>`;
       }
       row.innerHTML=`
         <div class="cli-top" style="${unanswered?'border-left:2px solid var(--rd);padding-left:6px;':'border-left:2px solid var(--gn);padding-left:6px;'}">
@@ -3993,6 +4032,37 @@ function renderCLR(){
 }
 
 
+
+function setCLINA(id){
+  const item=activeCL?.items?.find(i=>i.id===id);if(!item)return;
+  item.na=!item.na;
+  // Clear any existing answer when marking N/A
+  if(item.na){item.sna='';item.singleSel='';item.multiSel=[];item.textAns='';item.checked=false;}
+  renderCLR();
+}
+function setCLIEvidence(id,files){
+  const item=activeCL?.items?.find(i=>i.id===id);if(!item)return;
+  if(!item.photos)item.photos=[];
+  Array.from(files).forEach(f=>{
+    const rd=new FileReader();
+    rd.onload=ev=>{
+      const idx=item.photos.length;
+      item.photos.push(ev.target.result);
+      if(!item.photoCaptions)item.photoCaptions=[];
+      item.photoCaptions.push('');
+      item.evidenceProvided=true;item.checked=true;item.na=false;
+      renderCLR();
+      // Upload immediately
+      const rptId=curRptId||getUploadSessionId();
+      const safeId=(id||'ev').replace(/[^a-zA-Z0-9]/g,'_');
+      (async()=>{
+        const path=safePath(`reports/${rptId}/checklist/${safeId}/p${idx}_${Date.now()}.jpg`);
+        const url=await uploadPhotoWithFallback(ev.target.result,path,item.photos,idx);
+        if(url)renderCLR();
+      })();
+    };rd.readAsDataURL(f);
+  });
+}
 function setSNA(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)return;item.sna=val;item.checked=true;renderCLR();}
 function setCLISingle(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)return;item.singleSel=val;item.checked=true;renderCLR();}
 function toggleCLIMulti(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)return;if(!item.multiSel)item.multiSel=[];const idx=item.multiSel.indexOf(val);if(idx>-1)item.multiSel.splice(idx,1);else item.multiSel.push(val);item.checked=item.multiSel.length>0;renderCLR();}
@@ -4011,7 +4081,7 @@ function togCLI(id){
 }
 function updCLP(){
   if(!activeCL)return;
-  const total=activeCL.items.length,done=activeCL.items.filter(i=>{const tp=i.type||'sna';return tp==='sna'?!!i.sna:tp==='text'?!!i.textAns:tp==='multi'?(i.multiSel||[]).length>0:!!i.singleSel;}).length,pct=total?Math.round(done/total*100):0;
+  const total=activeCL.items.length,done=activeCL.items.filter(i=>{const tp=i.type||'sna';return i.na||(tp==='sna'?!!i.sna:tp==='text'?!!i.textAns:tp==='multi'?(i.multiSel||[]).length>0:tp==='evidence'?(i.photos||[]).length>0:!!i.singleSel);}).length,pct=total?Math.round(done/total*100):0;
   const fl=document.getElementById('cl-fill'),pt=document.getElementById('cl-pct');
   if(fl)fl.style.width=pct+'%';if(pt)pt.textContent=done+' / '+total;
 }
@@ -4437,7 +4507,7 @@ function submitReport(){
   const clEnabled=clSec&&!clSec.classList.contains('dis');
   // If a checklist template is loaded, all items must be answered
   if(clEnabled&&activeCL){
-    const unanswered=activeCL.items.filter(i=>{const tp=i.type||'sna';return tp==='sna'?!i.sna:tp==='text'?!i.textAns:tp==='multi'?!(i.multiSel||[]).length:!i.singleSel;});
+    const unanswered=activeCL.items.filter(i=>{const tp=i.type||'sna';return !i.na&&(tp==='sna'?!i.sna:tp==='text'?!i.textAns:tp==='multi'?!(i.multiSel||[]).length:tp==='evidence'?!(i.photos||[]).length:!i.singleSel);});
     if(unanswered.length>0){toast(t('all_items_must_answer')+' ('+unanswered.length+' '+t('remaining_label')+')','var(--rd)');return;}
   }
   // Pre-fill signer name from current user
@@ -4759,6 +4829,44 @@ async function confirmDelR(){
   }
 }
 
+
+// Universal checklist item answer display
+// Returns {text, color, isAnswered}
+function getItemAnswer(item, snaLabels, lang){
+  const sl=snaLabels||['Sí','No','N/A'];
+  const tp=item.type||'sna';
+  if(item.na) return {text:sl[2]||'N/A',color:'#888',isAnswered:true};
+  if(tp==='sna'){
+    if(item.sna==='si') return {text:sl[0],color:'#2e7d52',isAnswered:true};
+    if(item.sna==='no') return {text:sl[1],color:'#c43c3c',isAnswered:true};
+    if(item.sna==='na') return {text:sl[2],color:'#888',isAnswered:true};
+    return {text:'—',color:'#aaa',isAnswered:false};
+  }
+  if(tp==='yesno'){
+    if(item.singleSel==='si') return {text:sl[0]||'Sí',color:'#2e7d52',isAnswered:true};
+    if(item.singleSel==='no') return {text:sl[1]||'No',color:'#c43c3c',isAnswered:true};
+    return {text:'—',color:'#aaa',isAnswered:false};
+  }
+  if(tp==='single'){
+    if(item.singleSel) return {text:item.singleSel,color:'#2e7d52',isAnswered:true};
+    return {text:'—',color:'#aaa',isAnswered:false};
+  }
+  if(tp==='multi'){
+    const sel=item.multiSel||[];
+    if(sel.length) return {text:sel.join(', '),color:'#2e7d52',isAnswered:true};
+    return {text:'—',color:'#aaa',isAnswered:false};
+  }
+  if(tp==='text'){
+    if(item.textAns) return {text:item.textAns,color:'#333',isAnswered:true};
+    return {text:'—',color:'#aaa',isAnswered:false};
+  }
+  if(tp==='evidence'){
+    const n=(item.photos||[]).length;
+    if(n>0) return {text:'📷 '+n,color:'#2e7d52',isAnswered:true};
+    return {text:'—',color:'#aaa',isAnswered:false};
+  }
+  return {text:'—',color:'#aaa',isAnswered:false};
+}
 // PDF
 function genPDF(id,dataOverride){
   let r=dataOverride;
@@ -4787,11 +4895,13 @@ function genPDF(id,dataOverride){
     const catLbl=keyToCat(cat);
     const catHeader=`<tr><td colspan="2" style="background:#f5f2ed;padding:4px 8px;font-size:9px;letter-spacing:2px;color:#7a7060;text-transform:uppercase;font-weight:700;border:1px solid #e0e0e0;">${cat}</td></tr>`;
     const itemRows=items.map(item=>{
-      const sl=snaLabels;
-      const sna=item.sna==='si'?`<span style="color:#2e7d52;font-weight:700;">${sl[0]}</span>`:item.sna==='no'?`<span style="color:#c43c3c;font-weight:700;">${sl[1]}</span>`:item.sna==='na'?`<span style="color:#888;">${sl[2]}</span>`:'<span style="color:#aaa;">—</span>';
-      const note=item.note?'<div style="font-size:9px;color:#888;margin-top:2px;font-style:italic;">'+(pdfLang==='en'?'Note: ':'Nota: ')+item.note+'</div>':'';
-      const check=item.checked?'<span style="color:#2e7d52;font-weight:700;">✓</span>':'<span style="color:#aaa;">□</span>';
-      return '<tr><td style="padding:5px 8px;border:1px solid #e0e0e0;font-size:10px;line-height:1.5;">'+check+' '+item.text+note+'</td><td style="padding:5px 8px;border:1px solid #e0e0e0;text-align:center;font-size:10px;white-space:nowrap;vertical-align:middle;">'+sna+'</td></tr>';
+      const ans=getItemAnswer(item,snaLabels,pdfLang);
+      const sna=`<span style="color:${ans.color};font-weight:${ans.isAnswered?'700':'400'};">${ans.text}</span>`;
+      const note=item.note?'<div style="font-size:9px;color:#888;margin-top:2px;font-style:italic;">'+(pdfLang==='en'?'Note: ':pdfLang==='pt'?'Nota: ':pdfLang==='it'?'Nota: ':'Nota: ')+item.note+'</div>':'';
+      const check=(item.checked||item.na)?'<span style="color:#2e7d52;font-weight:700;">✓</span>':'<span style="color:#aaa;">□</span>';
+      const tp2=item.type||'sna';
+      const textInCell=tp2==='text'&&item.textAns?'<div style="font-size:9px;color:#555;margin-top:2px;font-style:italic;">'+item.textAns+'</div>':'';
+      return '<tr><td style="padding:5px 8px;border:1px solid #e0e0e0;font-size:10px;line-height:1.5;">'+check+' '+item.text+note+textInCell+'</td><td style="padding:5px 8px;border:1px solid #e0e0e0;text-align:center;font-size:10px;white-space:nowrap;vertical-align:middle;">'+sna+'</td></tr>';
     }).join('');
     return catHeader+itemRows;
   }).join('');
@@ -4801,7 +4911,7 @@ function genPDF(id,dataOverride){
   const clPhotoEvidenceHTML=clPhotoItems.map(item=>{
     const pairs=[];
     for(let pi=0;pi<item.photos.length;pi+=2)pairs.push(item.photos.slice(pi,pi+2));
-    const snaTxt=item.sna==='si'?(t('yes_label')):item.sna==='no'?'No':item.sna==='na'?'N/A':'-';
+    const _ans=getItemAnswer(item,snaLabels,pdfLang);const snaTxt=_ans.text;
     const check=item.checked?'✓ ':'□ ';
     const pairHTML=pairs.map(pair=>{
       const imgs=pair.map(p=>'<div style="border:1px solid #ddd;overflow:hidden;"><img src="'+p+'" style="width:100%;height:190px;object-fit:cover;display:block;"></div>').join('');
@@ -5089,7 +5199,7 @@ function viewReport(id){
     const pct=clit.length?Math.round(done/clit.length*100):0;
     html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">☑ ${t('checklist')}: ${E(r.checklist.name)} (${done}/${clit.length})</div>`;
     html+=`<div style="background:var(--s2);height:4px;margin-bottom:6px;"><div style="width:${pct}%;height:100%;background:var(--gn);"></div></div>`;
-    Object.entries(grps).forEach(([cat,items])=>{html+=`<div style="font-family:var(--mo);font-size:8px;letter-spacing:2px;color:var(--mu);padding:4px 0;border-bottom:1px solid var(--bd);text-transform:uppercase;">${keyToCat(cat)}</div>`;items.forEach(it=>{const sna=it.sna==='si'?`<span style="color:var(--gn);">${t('yes_label')}</span>`:it.sna==='no'?'<span style="color:var(--rd);">No</span>':it.sna==='na'?'<span style="color:var(--mu);">N/A</span>':"";const photos=(it.photos||[]).map(p=>`<img src="${p}" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--bd);margin-right:3px;">`).join('');html+=`<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:11px;align-items:flex-start;"><span style="color:${it.checked?'var(--gn)':'var(--mu)'};">${it.checked?'✓':'□'}</span><div style="flex:1;">${E(it.text)}${photos?`<div style="margin-top:4px;">${photos}</div>`:''}</div>${sna}</div>`;});});
+    Object.entries(grps).forEach(([cat,items])=>{html+=`<div style="font-family:var(--mo);font-size:8px;letter-spacing:2px;color:var(--mu);padding:4px 0;border-bottom:1px solid var(--bd);text-transform:uppercase;">${keyToCat(cat)}</div>`;items.forEach(it=>{const _a=getItemAnswer(it,r.checklist?.snaLabels,currentUser?.lang||'es');const sna=`<span style="color:${_a.color};font-weight:${_a.isAnswered?'600':'400'};font-size:11px;">${_a.text}</span>`;const photos=(it.photos||[]).filter(p=>p).map((p,pi)=>`<img src="${p}" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--bd);margin-right:3px;cursor:pointer;" onclick="openCLILB('${it.id}',${pi})">`).join('');const textNote=((it.type||'sna')==='text'&&it.textAns&&!_a.isAnswered)?'':'';html+=`<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:11px;align-items:flex-start;"><span style="color:${(it.checked||it.na)?'var(--gn)':'var(--mu)'};">${(it.checked||it.na)?'✓':'□'}</span><div style="flex:1;">${E(it.text)}${photos?`<div style="margin-top:4px;">${photos}</div>`:''}</div>${sna}</div>`;});});
   }
   const pdata=r.photoData||(r.photos||[]).map((src,i)=>({src,caption:(r.photoCaptions||[])[i]||''}));
   if(pdata.length){
