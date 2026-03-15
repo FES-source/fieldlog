@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.42 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.44 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1446,6 +1446,7 @@ const I18N={
     admin_only:'SOLO ADMINISTRADOR',
     review_short:'En revisión',
     imported:'Importados',
+    options_label:'OPCIONES',
     manage_users:'👥 Gestionar Usuarios',
 role_customer:'Cliente',
   },
@@ -1781,6 +1782,7 @@ role_customer:'Cliente',
     admin_only:'ADMIN ONLY',
     review_short:'In Review',
     imported:'Imported',
+    options_label:'OPTIONS',
     manage_users:'👥 Manage Users',
 role_customer:'Customer',
   },
@@ -2074,6 +2076,7 @@ role_customer:'Customer',
     admin_only:'SOMENTE ADMINISTRADOR',
     review_short:'Em revisão',
     imported:'Importados',
+    options_label:'OPÇÕES',
     manage_users:'👥 Gerenciar Usuários',
 role_customer:'Cliente',
   },
@@ -2367,6 +2370,7 @@ role_customer:'Cliente',
     admin_only:'SOLO AMMINISTRATORE',
     review_short:'In revisione',
     imported:'Importati',
+    options_label:'OPZIONI',
     manage_users:'👥 Gestisci Utenti',
 role_customer:'Cliente',
   },
@@ -3152,7 +3156,7 @@ function openCLB(id=null){
     document.getElementById('clb-sna1').value=c.snaLabels?.[0]||t('yes_label');
     document.getElementById('clb-sna2').value=c.snaLabels?.[1]||t('no');
     document.getElementById('clb-sna3').value=c.snaLabels?.[2]||'N/A';
-    c.items.forEach(i=>addCLBI(i.text,keyToCat(i.category),i.type||'sna'));
+    c.items.forEach(i=>addCLBI(i.text,keyToCat(i.category),i.type||'sna',i.opts||[]));
   }}
   else{addCLBI('',keyToCat('Safety'),'sna');addCLBI('',keyToCat('General'),'sna');}
   openMO('mo-clb');
@@ -3192,14 +3196,56 @@ function getItemTypes(){
   if(lang==='it') return ITEM_TYPES_IT;
   return ITEM_TYPES_ES;
 }
-function addCLBI(txt='',cat='General',tp='sna'){
-  const d=document.createElement('div');d.className='bi';d.style.flexWrap='wrap';
+function addCLBI(txt='',cat='General',tp='sna',opts=[]){
+  const d=document.createElement('div');d.className='bi';d.style.cssText='flex-wrap:wrap;gap:5px;';
+  d._opts=[...opts];
+  const optsHtml=()=>{
+    if(tp!=='single'&&tp!=='multi')return '';
+    const vals=d._opts.length?d._opts:[];
+    return `<div class="bi-opts" style="width:100%;padding:5px 0 2px 20px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;">
+      <span style="font-family:var(--mo);font-size:8px;color:var(--mu);letter-spacing:1px;">${t('options_label')||'OPCIONES'}:</span>
+      ${vals.map((o,oi)=>`<div style="display:flex;align-items:center;gap:2px;">
+        <input type="text" value="${E(o)}" oninput="updateBIopt(this,${oi})" style="width:80px;font-size:10px;padding:2px 5px;background:var(--sf);border:1px solid var(--bd);color:var(--tx);outline:none;">
+        <button onclick="removeBIopt(this,${oi})" style="background:none;border:none;color:var(--rd);cursor:pointer;font-size:10px;padding:0 2px;">✕</button>
+      </div>`).join('')}
+      <button onclick="addBIopt(this)" style="font-size:10px;padding:2px 7px;background:none;border:1px dashed var(--bd);color:var(--am);cursor:pointer;">＋</button>
+    </div>`;
+  };
   d.innerHTML=`<span style="color:var(--mu);font-size:12px;">⠿</span>
     <input type="text" placeholder="${t('item_description_ph')}" class="cl-item-plh" value="${E(txt)}" style="flex:1;min-width:160px;">
     <select class="cs" style="font-size:11px;">${getCats().map((ca,i)=>`<option value="${CATS[i]}"${CATS[i]===cat||ca===cat?' selected':''}>${ca}</option>`).join('')}</select>
-    <select class="cs it-type" style="font-size:11px;">${getItemTypes().map(x=>`<option value="${x.v}"${x.v===tp?' selected':''}>${x.l}</option>`).join('')}</select>
-    <button class="ib" onclick="this.closest('.bi').remove()">✕</button>`;
+    <select class="cs it-type" style="font-size:11px;" onchange="onBItypeChange(this)">${getItemTypes().map(x=>`<option value="${x.v}"${x.v===tp?' selected':''}>${x.l}</option>`).join('')}</select>
+    <button class="ib" onclick="this.closest('.bi').remove()">✕</button>
+    ${optsHtml()}`;
   document.getElementById('clb-items').appendChild(d);
+}
+function onBItypeChange(sel){
+  const d=sel.closest('.bi');
+  const tp=sel.value;
+  let optsDiv=d.querySelector('.bi-opts');
+  if(tp==='single'||tp==='multi'){
+    if(!d._opts)d._opts=[];
+    if(!optsDiv){
+      optsDiv=document.createElement('div');
+      optsDiv.className='bi-opts';
+      optsDiv.style.cssText='width:100%;padding:5px 0 2px 20px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;';
+      d.appendChild(optsDiv);
+    }
+    renderBIopts(d);
+  } else {
+    if(optsDiv)optsDiv.remove();
+    d._opts=[];
+  }
+}
+function renderBIopts(d){
+  const optsDiv=d.querySelector('.bi-opts');if(!optsDiv)return;
+  const opts=d._opts||[];
+  optsDiv.innerHTML=`<span style="font-family:var(--mo);font-size:8px;color:var(--mu);letter-spacing:1px;">${t('options_label')||'OPCIONES'}:</span>
+    ${opts.map((o,oi)=>`<div style="display:flex;align-items:center;gap:2px;">
+      <input type="text" value="${E(o)}" oninput="this.closest('.bi')._opts[${oi}]=this.value" style="width:80px;font-size:10px;padding:2px 5px;background:var(--sf);border:1px solid var(--bd);color:var(--tx);outline:none;">
+      <button onclick="this.closest('.bi')._opts.splice(${oi},1);renderBIopts(this.closest('.bi'))" style="background:none;border:none;color:var(--rd);cursor:pointer;font-size:10px;padding:0 2px;">✕</button>
+    </div>`).join('')}
+    <button onclick="this.closest('.bi')._opts.push('');renderBIopts(this.closest('.bi'))" style="font-size:10px;padding:2px 7px;background:none;border:1px dashed var(--bd);color:var(--am);cursor:pointer;">＋</button>`;
 }
 function saveCLT(){
   const name=gv('clb-name').trim();if(!name){toast(t('name_required'),'var(--rd)');return;}
@@ -3209,7 +3255,7 @@ function saveCLT(){
     (document.getElementById('clb-sna3').value.trim()||'N/A')
   ];
   const rows=document.querySelectorAll('#clb-items .bi');const items=[];
-  rows.forEach((r,i)=>{const itemText=r.querySelector('input').value.trim(),sels=r.querySelectorAll('select'),cat=sels[0]?.value||'General',tp=sels[1]?.value||'sna';if(itemText)items.push({id:'ci'+Date.now()+i,text:itemText,category:catToKey(cat),type:tp});});
+  rows.forEach((r,i)=>{const itemText=r.querySelector('input.cl-item-plh')?.value.trim(),sels=r.querySelectorAll('select'),cat=sels[0]?.value||'General',tp=sels[1]?.value||'sna';const opts=(r._opts&&r._opts.length)?r._opts.filter(o=>o.trim()):[];if(itemText)items.push({id:'ci'+Date.now()+i,text:itemText,category:catToKey(cat),type:tp,...(opts.length?{opts}:{})});});
   if(!items.length){toast(t('add_at_least_item'),'var(--rd)');return;}
   if(editCL){const ecl=DB.checklists.find(c=>c.id===editCL);Object.assign(ecl,{name,items,snaLabels});fbSave('checklists',editCL,ecl).catch(console.error);toast(t('updated_toast'));}
   else{const ncl={id:'cl'+Date.now(),name,items,snaLabels};DB.checklists.push(ncl);fbSave('checklists',ncl.id,ncl).catch(console.error);toast(t('template_saved'));}
@@ -4029,6 +4075,8 @@ function clearActiveCL(){
   renderCLR();
   const clrBtn=document.getElementById('btn-clear-cl');
   if(clrBtn)clrBtn.style.display='none';
+  // Sync to Firestore immediately
+  if(editingRpt&&curRptId)saveReport(true);
 }
 function updCLB(){
   const clrBtn=document.getElementById('btn-clear-cl');
