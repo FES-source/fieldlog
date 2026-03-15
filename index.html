@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.31 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.32 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3433,25 +3433,38 @@ function onPC(){
   if(p.location)document.getElementById('r-loc').value=p.location;
   updateRID();
 }
+
+// Generate unique immutable report ID
+function generateRptUID(){
+  const ts=Date.now().toString(36).toUpperCase().slice(-6);
+  const rnd=Math.random().toString(36).toUpperCase().slice(2,6);
+  return 'RPT-'+ts+'-'+rnd;
+}
+// Generate human-readable display name (used for PDF title + visible label)
+function generateRptDisplayName(projName,projCode,date,num){
+  const code=(projCode||'XXX').toUpperCase();
+  const d=(date||new Date().toISOString().split('T')[0]).replace(/-/g,'');
+  const name=(projName||'').replace(/[^a-zA-Z0-9 ]/g,'').trim().slice(0,30);
+  return 'RPT-'+(name?name+'-':'')+code+'-'+d+'-'+num;
+}
 function updateRID(){
   const s=document.getElementById('r-proj');
+  const projName=s.selectedOptions[0]?.textContent||'';
   const code=(s.selectedOptions[0]?.dataset?.code||'XXX').toUpperCase();
-  const d=(gv('r-date')||'00000000').replace(/-/g,'');
+  const date=gv('r-date')||new Date().toISOString().split('T')[0];
   const projRpts=DB.reports.filter(r=>r.projId===s.value);
   if(editingRpt&&curRptId){
+    // Report already exists — update displayName only, never change UID
     const existing=DB.reports.find(r=>r.id===curRptId);
     if(existing){
-      // Rebuild ID if date or project changed (user edited after autosave)
-      const newId='RPT-'+code+'-'+d+'-'+(existing.num||projRpts.length+1);
-      existing.id=newId;
-      curRptId=newId;
-      document.getElementById('rrid').textContent=newId;
+      existing.displayName=generateRptDisplayName(projName,code,date,existing.num||1);
+      document.getElementById('rrid').textContent=existing.displayName;
       return;
     }
   }
-  // New report not yet saved
+  // New report — show proposed displayName (UID generated on first save)
   const num=projRpts.length+1;
-  document.getElementById('rrid').textContent='RPT-'+code+'-'+d+'-'+num;
+  document.getElementById('rrid').textContent=generateRptDisplayName(projName,code,date,num);
 }
 
 // ROWS
@@ -4001,9 +4014,14 @@ function collectRpt(){
   const projRpts=DB.reports.filter(r=>r.projId===projId);
   const existingRpt=editingRpt?DB.reports.find(r=>r.id===curRptId):null;
   const num=existingRpt?.num||(projRpts.length+1);
-  const ridEl=document.getElementById('rrid');
+  // UID = immutable Firestore doc ID; displayName = human-readable label
+  const uid=existingRpt?.id||(editingRpt&&curRptId?curRptId:generateRptUID());
+  const s2=document.getElementById('r-proj');
+  const code2=(s2.selectedOptions[0]?.dataset?.code||'XXX').toUpperCase();
+  const projName2=s2.selectedOptions[0]?.textContent||projName;
+  const displayName=generateRptDisplayName(projName2,code2,gv('r-date'),num);
   return{
-    id:ridEl.textContent,num,
+    id:uid,num,displayName,
     projId,projName,
     date:gv('r-date'),shiftStart:gv('r-start'),shiftEnd:gv('r-end'),
     supervisor:gv('r-super'),client:gv('r-client'),location:gv('r-loc'),siteName:gv('r-site-name'),siteAddr:gv('r-site-addr'),siteEnabled:document.getElementById('tog-site')?.checked||false,
@@ -4245,6 +4263,9 @@ async function saveReport(isDraft=false){
       logActivity(clean,'created','report.created');
       DB.reports.push(clean);curRptId=clean.id;editingRpt=true;
       await fbSave('reports',clean.id,clean);
+      // Update display to show the saved displayName
+      const ridEl2=document.getElementById('rrid');
+      if(ridEl2&&clean.displayName)ridEl2.textContent=clean.displayName;
     }
     renderDash();updateNavBadge();if(!isDraft)toast(t('saved_toast'));
   }catch(e){
@@ -4564,7 +4585,7 @@ function delR(id){
   const r=DB.reports.find(x=>x.id===id);
   if(!r)return;
   _delRPendingId=id;
-  document.getElementById('del-rpt-id-lbl').textContent=r.id;
+  document.getElementById('del-rpt-id-lbl').textContent=r.displayName||r.id;
   document.getElementById('del-rpt-date-lbl').textContent=r.date||'—';
   document.getElementById('del-rpt-pw').value='';
   document.getElementById('del-rpt-err').style.display='none';
@@ -4749,7 +4770,7 @@ tr:nth-child(even) td{background:#fafafa;}
     <div><div class="logo">Field<span>Log</span></div><div class="cov-sub">${pt('daily_report')}</div></div>
   </div>
   <div style="display:flex;align-items:flex-end;gap:14px;">
-    <div class="cov-r"><div class="cov-id">${r.id}</div><div class="cov-dt">${r.date?new Date(r.date+'T12:00:00').toLocaleDateString(LOCALE_MAP[pdfLang]||'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}):''}</div></div>
+    <div class="cov-r"><div class="cov-id">${r.displayName||r.id}</div><div class="cov-dt">${r.date?new Date(r.date+'T12:00:00').toLocaleDateString(LOCALE_MAP[pdfLang]||'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}):''}</div></div>
     ${proj&&proj.logo2?`<img src="${proj.logo2}" style="height:42px;max-width:90px;object-fit:contain;">`:''}
     ${custObj?.logo?`<img src="${custObj.logo}" style="height:42px;max-width:90px;object-fit:contain;">` :''}
   </div>
@@ -4779,7 +4800,7 @@ ${!r.disabledSections?.includes('sec-job')?`
 <div class="sec-title">${pt('report_info')}</div>
 <table>
   <tr><th>${pt('report_id_lbl')}</th><th>${pt('report_number')}</th><th>${pt('date')}</th><th>${pt('status')}</th></tr>
-  <tr><td><strong>${r.id}</strong></td><td>#${r.num||'—'}</td><td>${r.date||'—'}</td><td style="color:${statusColor};font-weight:700;">${(RSTATUS_ALL[pdfLang]||RSTATUS_ES)[r.status]||r.status||'—'}</td></tr>
+  <tr><td><strong>${r.displayName||r.id}</strong></td><td>#${r.num||'—'}</td><td>${r.date||'—'}</td><td style="color:${statusColor};font-weight:700;">${(RSTATUS_ALL[pdfLang]||RSTATUS_ES)[r.status]||r.status||'—'}</td></tr>
 </table>
 <div class="sec-title">${pt('report_info')}</div>
 <div class="g2">
@@ -4898,7 +4919,7 @@ ${photoGrid}`:''}
   </div>`:''}
 </div>
 
-<div class="ft"><span>FIELDLOG · ${pt('daily_report')}</span><span>${r.id}</span><span id="ft-gen">${pt('generated')} ${new Date().toLocaleString(LOCALE_MAP[pdfLang]||'en-US')}</span></div>
+<div class="ft"><span>FIELDLOG · ${pt('daily_report')}</span><span>${r.displayName||r.id}</span><span id="ft-gen">${pt('generated')} ${new Date().toLocaleString(LOCALE_MAP[pdfLang]||'en-US')}</span></div>
 </div><!-- /content -->
 </td></tr></tbody></table>
 <scr'+'ipt>
