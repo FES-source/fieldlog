@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.41 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.42 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3209,7 +3209,7 @@ function saveCLT(){
     (document.getElementById('clb-sna3').value.trim()||'N/A')
   ];
   const rows=document.querySelectorAll('#clb-items .bi');const items=[];
-  rows.forEach((r,i)=>{const itemText=r.querySelector('input').value.trim(),sels=r.querySelectorAll('select'),cat=sels[0]?.value||'General',tp=sels[1]?.value||'sna';if(itemText)items.push({id:'ci'+Date.now()+i,text:itemText,category:cat,type:tp});});
+  rows.forEach((r,i)=>{const itemText=r.querySelector('input').value.trim(),sels=r.querySelectorAll('select'),cat=sels[0]?.value||'General',tp=sels[1]?.value||'sna';if(itemText)items.push({id:'ci'+Date.now()+i,text:itemText,category:catToKey(cat),type:tp});});
   if(!items.length){toast(t('add_at_least_item'),'var(--rd)');return;}
   if(editCL){const ecl=DB.checklists.find(c=>c.id===editCL);Object.assign(ecl,{name,items,snaLabels});fbSave('checklists',editCL,ecl).catch(console.error);toast(t('updated_toast'));}
   else{const ncl={id:'cl'+Date.now(),name,items,snaLabels};DB.checklists.push(ncl);fbSave('checklists',ncl.id,ncl).catch(console.error);toast(t('template_saved'));}
@@ -3878,10 +3878,11 @@ function renderCLR(){
   const fill=document.createElement('div');fill.className='cl-fill';fill.id='cl-fill';fill.style.width='0%';bar.appendChild(fill);
   c.insertBefore(hdr,emp);c.insertBefore(bar,emp);
   // Group by category
-  const groups={};activeCL.items.forEach(item=>{if(!groups[item.category])groups[item.category]=[];groups[item.category].push(item);});
+  const groups={};activeCL.items.forEach(item=>{const k=item.category||'General';if(!groups[k])groups[k]=[];groups[k].push(item);});
   Object.entries(groups).forEach(([cat,items])=>{
+    const catDisplay=keyToCat(cat);
     const g=document.createElement('div');
-    g.innerHTML=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:3px;color:var(--mu);border-bottom:1px solid var(--bd);padding-bottom:3px;margin:10px 0 5px;text-transform:uppercase;">${E(cat)}</div>`;
+    g.innerHTML=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:3px;color:var(--mu);border-bottom:1px solid var(--bd);padding-bottom:3px;margin:10px 0 5px;text-transform:uppercase;">${E(catDisplay||cat)}</div>`;
     items.forEach(item=>{
       const tp=item.type||'sna';
       const hasAns=tp==='sna'?!!item.sna:tp==='text'?!!item.textAns:tp==='multi'?(item.multiSel||[]).length>0:!!item.singleSel;
@@ -4733,8 +4734,9 @@ function genPDF(id,dataOverride){
   const statusColor={'Draft':'#888','Filling':'#c97800','Review':'#c43c3c','Approved':'#2e7d52','Pending Customer':'#6495ed','Rejected':'#c43c3c'}[r.status||'Draft']||'#888';
 
   // Group checklist by category – NO inline photos in table
-  const groups={};clit.forEach(item=>{if(!groups[item.category])groups[item.category]=[];groups[item.category].push(item);});
+  const groups={};clit.forEach(item=>{const k=item.category||'General';if(!groups[k])groups[k]=[];groups[k].push(item);});
   const clGroupedRows=Object.entries(groups).map(([cat,items])=>{
+    const catLbl=keyToCat(cat);
     const catHeader=`<tr><td colspan="2" style="background:#f5f2ed;padding:4px 8px;font-size:9px;letter-spacing:2px;color:#7a7060;text-transform:uppercase;font-weight:700;border:1px solid #e0e0e0;">${cat}</td></tr>`;
     const itemRows=items.map(item=>{
       const sl=snaLabels;
@@ -5018,7 +5020,7 @@ function viewReport(id){
   const r=DB.reports.find(rp=>rp.id===id);if(!r)return;
   const clit=r.checklist?.items||[];
   const done=clit.filter(i=>i.checked).length;
-  const grps={};clit.forEach(it=>{if(!grps[it.category])grps[it.category]=[];grps[it.category].push(it);});
+  const grps={};clit.forEach(it=>{const k=it.category||'General';if(!grps[k])grps[k]=[];grps[k].push(it);});
   const statusColor={'Draft':'var(--mu)','Filling':'var(--am)','Review':'var(--rd)','Approved':'var(--gn)'}[r.status||'Draft'];
   let html=`
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
