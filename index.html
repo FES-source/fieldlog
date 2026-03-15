@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.21 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.23 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,6 +25,11 @@ const firebaseConfig={apiKey:"AIzaSyAfbJ_RPrRNYjnd3VpxoxKC9NM6GBgbEFk",authDomai
 firebase.initializeApp(firebaseConfig);
 window.fbAuth=firebase.auth();
 window.fbDB=firebase.firestore();
+// Enable offline persistence so the app works without internet
+fbDB.enablePersistence({synchronizeTabs:true}).catch(err=>{
+  if(err.code==='failed-precondition'){console.warn('Persistence unavailable (multiple tabs).');}
+  else if(err.code==='unimplemented'){console.warn('Browser does not support persistence.');}
+});
 window.fbStorage=firebase.storage();
 window.fbFns={
   signInWithEmailAndPassword:(auth,email,pass)=>auth.signInWithEmailAndPassword(email,pass),
@@ -465,6 +470,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   </div>
   <div class="tb-right">
     <div class="clk"><div id="cd"></div><b id="ct"></b></div>
+    <div id="conn-dot" title="Online" style="width:8px;height:8px;border-radius:50%;background:var(--gn);flex-shrink:0;transition:background .3s;"></div>
     <button id="theme-btn" onclick="cycleTheme()" title="Cambiar tema" style="background:none;border:1px solid var(--bd);color:var(--mu);font-size:14px;padding:3px 8px;cursor:pointer;line-height:1;border-radius:0;" aria-label="Theme">🌑</button>
     <div class="uav" id="uav" onclick="toggleUMenu()">
       <span id="uav-init">?</span>
@@ -840,6 +846,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
     <div class="bbs">STATUS: <b id="bb-st">DRAFT</b></div>
     <button class="btn xs bs" onclick="openActivityLog()" title="Activity log" style="font-size:9px;letter-spacing:1px;padding:3px 8px;">📋 Log</button>
+    <span id="autosave-ind" style="font-family:var(--mo);font-size:9px;letter-spacing:1px;color:var(--mu);"></span>
   </div>
   <div style="display:flex;gap:7px;">
     <button class="btn sm bs" onclick="genPDF(null)">📄 PDF</button>
@@ -1431,6 +1438,11 @@ const I18N={
     cust_user_projects_hint:'Selecciona qué proyectos de esta empresa puede ver este usuario.',
     no_cust_projects_hint:'Este cliente no tiene proyectos asignados aún. Asígnalos desde la pestaña Clientes.',
     saving_label:'Guardando...',
+    autosaved_at:'Autoguardado a las',offline_label:'SIN CONEXIÓN',online_label:'EN LÍNEA',
+    offline_toast:'📵 Sin conexión — los datos se guardarán cuando vuelvas a estar en línea',
+    online_toast:'✅ Conexión restaurada — sincronizando datos',
+    photos_pending_upload:'⬆ Fotos pendientes de subir',
+    report_deleted_toast:'INFORME ELIMINADO',
     manage_users:'👥 Gestionar Usuarios',
 role_customer:'Cliente',
   },
@@ -1757,6 +1769,11 @@ role_customer:'Cliente',
     cust_user_projects_hint:'Select which projects from this company this user can see.',
     no_cust_projects_hint:'This customer has no assigned projects yet. Assign them from the Customers tab.',
     saving_label:'Saving...',
+    autosaved_at:'Autosaved at',offline_label:'OFFLINE',online_label:'ONLINE',
+    offline_toast:'📵 No connection — data will sync when back online',
+    online_toast:'✅ Connection restored — syncing data',
+    photos_pending_upload:'⬆ Photos pending upload',
+    report_deleted_toast:'REPORT DELETED',
     manage_users:'👥 Manage Users',
 role_customer:'Customer',
   },
@@ -2041,6 +2058,11 @@ role_customer:'Customer',
     cust_user_projects_hint:'Selecione quais projetos desta empresa este usuário pode ver.',
     no_cust_projects_hint:'Este cliente não tem projetos atribuídos ainda. Atribua-os na aba Clientes.',
     saving_label:'Salvando...',
+    autosaved_at:'Salvo automaticamente às',offline_label:'SEM CONEXÃO',online_label:'ONLINE',
+    offline_toast:'📵 Sem conexão — os dados serão salvos quando a conexão voltar',
+    online_toast:'✅ Conexão restaurada — sincronizando dados',
+    photos_pending_upload:'⬆ Fotos pendentes de envio',
+    report_deleted_toast:'RELATÓRIO EXCLUÍDO',
     manage_users:'👥 Gerenciar Usuários',
 role_customer:'Cliente',
   },
@@ -2325,6 +2347,11 @@ role_customer:'Cliente',
     cust_user_projects_hint:'Seleziona quali progetti di questa azienda può vedere questo utente.',
     no_cust_projects_hint:'Questo cliente non ha ancora progetti assegnati. Assegnali dalla scheda Clienti.',
     saving_label:'Salvataggio...',
+    autosaved_at:'Salvato automaticamente alle',offline_label:'OFFLINE',online_label:'ONLINE',
+    offline_toast:'📵 Nessuna connessione — i dati saranno sincronizzati quando tornerai online',
+    online_toast:'✅ Connessione ripristinata — sincronizzazione dati',
+    photos_pending_upload:'⬆ Foto in attesa di caricamento',
+    report_deleted_toast:'RAPPORTO ELIMINATO',
     manage_users:'👥 Gestisci Utenti',
 role_customer:'Cliente',
   },
@@ -2351,6 +2378,103 @@ let curRptId=null,editingRpt=false;
 let curProjId=null;
 let sgCanvas=null,sgCtx=null,sgDrawing=false,sgMarked=false;
 let curReportStatus='Draft';
+// ── Autosave ────────────────────────────────────────────────────────
+let _autosaveTimer=null,_autosaveEnabled=false,_lastAutosaveAt=null;
+function startAutosave(){
+  stopAutosave();_autosaveEnabled=true;
+  _autosaveTimer=setInterval(async()=>{
+    if(!_autosaveEnabled)return;
+    if(document.getElementById('page-report')?.style.display==='none')return;
+    if(!document.getElementById('r-proj')?.value)return;
+    try{
+      await saveReport(true);
+      _lastAutosaveAt=new Date();
+      const ind=document.getElementById('autosave-ind');
+      if(ind){
+        const loc=LOCALE_MAP?.[currentUser?.lang||'es']||'es-CL';
+        ind.textContent='✓ '+t('autosaved_at')+' '+_lastAutosaveAt.toLocaleTimeString(loc,{hour:'2-digit',minute:'2-digit'});
+        ind.style.color='var(--gn)';
+        setTimeout(()=>{if(ind)ind.textContent='';},4000);
+      }
+    }catch(e){console.warn('Autosave failed:',e);}
+  },60000);
+}
+function stopAutosave(){
+  _autosaveEnabled=false;
+  if(_autosaveTimer){clearInterval(_autosaveTimer);_autosaveTimer=null;}
+}
+
+// ── Connectivity detection ────────────────────────────────────────────
+let _isOnline=navigator.onLine;
+let _pendingPhotoUploads=[]; // [{base64, path, targetObj, targetKey}]
+
+function updateConnDot(){
+  const dot=document.getElementById('conn-dot');
+  if(!dot)return;
+  dot.style.background=_isOnline?'var(--gn)':'var(--rd)';
+  dot.title=_isOnline?t('online_label'):t('offline_label');
+}
+
+function handleOnline(){
+  _isOnline=true;
+  updateConnDot();
+  toast(t('online_toast'),'var(--gn)');
+  // Retry any pending photo uploads
+  if(_pendingPhotoUploads.length){
+    toast(t('photos_pending_upload')+': '+_pendingPhotoUploads.length,'var(--am)');
+    retryPendingPhotos();
+  }
+}
+
+function handleOffline(){
+  _isOnline=false;
+  updateConnDot();
+  toast(t('offline_toast'),'var(--am)');
+}
+
+async function retryPendingPhotos(){
+  const queue=[..._pendingPhotoUploads];
+  _pendingPhotoUploads=[];
+  for(const item of queue){
+    try{
+      const ref=fbFns.ref(fbStorage,item.path);
+      await fbFns.uploadString(ref,item.base64,'data_url');
+      const url=await fbFns.getDownloadURL(ref);
+      // Update the target object
+      if(item.targetObj&&item.targetKey!==undefined){
+        item.targetObj[item.targetKey]=url;
+      }
+      console.log('✓ Retried upload:',item.path);
+    }catch(e){
+      console.error('Retry upload failed:',item.path,e);
+      _pendingPhotoUploads.push(item); // re-queue
+    }
+  }
+}
+
+// Generic photo uploader with offline fallback
+async function uploadPhotoWithFallback(base64, path, targetObj, targetKey){
+  if(!_isOnline){
+    // Queue for later
+    _pendingPhotoUploads.push({base64,path,targetObj,targetKey});
+    return null; // return null = keep base64 in place
+  }
+  try{
+    const ref=fbFns.ref(fbStorage,path);
+    await fbFns.uploadString(ref,base64,'data_url');
+    const url=await fbFns.getDownloadURL(ref);
+    if(targetObj&&targetKey!==undefined)targetObj[targetKey]=url;
+    return url;
+  }catch(e){
+    console.error('Upload failed, queuing:',path,e);
+    _pendingPhotoUploads.push({base64,path,targetObj,targetKey});
+    return null;
+  }
+}
+
+window.addEventListener('online',handleOnline);
+window.addEventListener('offline',handleOffline);
+
 // Auth
 // Lightbox
 let lbPhotos=[],lbCaptions=[],lbIdx=0,lbContext=null;
@@ -2381,6 +2505,7 @@ function goPage(p){
   const pel=document.getElementById('page-'+p);if(pel)pel.classList.add('on');
   const nel=document.querySelector('[data-p="'+p+'"]');if(nel)nel.classList.add('on');
   document.getElementById('bb').style.display=p==='report'?'flex':'none';
+  if(p!=='report')stopAutosave(); // stop autosave when leaving report page
   if(p==='projects')renderProjs();
   if(p==='taskforce')renderWorkers();
   if(p==='materials')renderMats();
@@ -3105,6 +3230,7 @@ function startNewReport(projId=null){
   document.querySelector('[data-p="report"]')?.classList.add('on');
   setTimeout(initSig,100);
   updateRID();
+  startAutosave();
 }
 
 function editR(id){
@@ -3118,6 +3244,7 @@ function editR(id){
   }
   curRptId=id;editingRpt=true;activeCL=null;curReportStatus=r.status||'Draft';
   resetRF();
+  startAutosave();
   // Restore fields
   if(r.projId)document.getElementById('r-proj').value=r.projId;
   document.getElementById('r-date').value=r.date||'';
@@ -3415,12 +3542,19 @@ function addTaskPhotos(uid,e){
   Array.from(e.target.files).forEach(f=>{
     const rd=new FileReader();
     rd.onload=ev=>{
-      entry._photos.push(ev.target.result);
+      const idx=entry._photos.length;
+      entry._photos.push(ev.target.result); // push base64 placeholder
       entry._captions.push('');
-      // Highlight the camera button when photos exist
       const camBtn=entry.querySelector('.task-cam-btn');
       if(camBtn){camBtn.style.borderColor='var(--am)';camBtn.style.color='var(--am)';}
       renderTaskPhotoGallery();
+      // Upload immediately
+      const rptId=curRptId||getUploadSessionId();
+      (async()=>{
+        const path=`reports/${rptId}/tasks/${uid}/p${idx}_${Date.now()}.jpg`;
+        const url=await uploadPhotoWithFallback(ev.target.result,path,entry._photos,idx);
+        if(url)renderTaskPhotoGallery();
+      })();
     };rd.readAsDataURL(f);
   });
 }
@@ -3477,52 +3611,58 @@ function addPhotos(e){
   Array.from(e.target.files).forEach(f=>{
     const rd=new FileReader();
     rd.onload=ev=>{
+      const idx=reportPhotos.length;
       reportPhotos.push({src:ev.target.result,caption:'',uploading:true});
-      const idx=reportPhotos.length-1;
       renderPhotos();
-      uploadPhotoToStorage(ev.target.result, idx);
+      uploadMainPhotoNow(ev.target.result,idx);
     };
     rd.readAsDataURL(f);
   });
+  e.target.value='';
 }
 
-async function uploadPhotoToStorage(base64, idx){
-  try{
-    const sessionId=getUploadSessionId();
-    const path=`reports/${sessionId}/photo_${idx}_${Date.now()}.jpg`;
-    const ref=fbFns.ref(fbStorage,path);
-    await fbFns.uploadString(ref,base64,'data_url');
-    const url=await fbFns.getDownloadURL(ref);
-    if(reportPhotos[idx]){
-      reportPhotos[idx].src=url;
-      reportPhotos[idx].uploading=false;
-      renderPhotos();
-    }
-  }catch(e){
-    console.error('Photo upload failed:',e);
-    if(reportPhotos[idx]){
-      reportPhotos[idx].uploading=false;
-      // Keep base64 as fallback
-    }
-    renderPhotos();
-    toast(t('photo_upload_failed'),'var(--rd)');
+async function uploadMainPhotoNow(base64,idx){
+  const rptId=curRptId||getUploadSessionId();
+  const path=`reports/${rptId}/photos/p${idx}_${Date.now()}.jpg`;
+  const url=await uploadPhotoWithFallback(base64,path,null,null);
+  if(reportPhotos[idx]){
+    if(url)reportPhotos[idx].src=url;
+    reportPhotos[idx].uploading=false;
+  }
+  renderPhotos();
+}
+
+// Upload any remaining base64 main photos (fallback on save)
+async function uploadMainPhotos(rptId){
+  for(let i=0;i<reportPhotos.length;i++){
+    const p=reportPhotos[i];
+    if(!p?.src||p.src.startsWith('http'))continue; // already URL
+    if(!p.src.startsWith('data:'))continue;
+    try{
+      const path=`reports/${rptId}/photos/p${i}_${Date.now()}.jpg`;
+      const ref=fbFns.ref(fbStorage,path);
+      await fbFns.uploadString(ref,p.src,'data_url');
+      const url=await fbFns.getDownloadURL(ref);
+      reportPhotos[i].src=url;
+      reportPhotos[i].uploading=false;
+      console.log('✓ Uploaded deferred main photo:',path);
+    }catch(err){console.error('Deferred main photo upload failed:',i,err);}
   }
 }
 function renderPhotos(){
   const c=document.getElementById('r-photos');c.innerHTML='';
-  const _en=currentUser?.lang==='en';
   reportPhotos.forEach((p,i)=>{
     const row=document.createElement('div');
     row.style.cssText='display:flex;gap:9px;align-items:flex-start;background:var(--s2);border:1px solid var(--bd);padding:8px;';
-    const isUploading=p.uploading;
+    const isUp=p.uploading;
     row.innerHTML=`
       <div style="flex-shrink:0;width:88px;height:66px;overflow:hidden;border:1px solid var(--bd);cursor:pointer;position:relative;" onclick="openLBRaw(${i})">
-        <img src="${p.src}" style="width:100%;height:100%;object-fit:cover;${isUploading?'opacity:0.5;':''}">
-        ${isUploading?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.4);font-family:var(--mo);font-size:8px;color:var(--am);letter-spacing:1px;">${_en?'UPLOADING...':'SUBIENDO...'}</div>`:''}
+        <img src="${p.src}" style="width:100%;height:100%;object-fit:cover;${isUp?'opacity:0.5;':''}">
+        ${isUp?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);font-family:var(--mo);font-size:8px;color:var(--am);letter-spacing:1px;">⬆ ${t('uploading_label')}</div>`:''}
       </div>
       <div style="flex:1;display:flex;flex-direction:column;gap:5px;">
-        <div style="font-family:var(--mo);font-size:8px;color:${isUploading?'var(--am)':'var(--mu)'};letter-spacing:2px;">${isUploading?(_en?'⬆ UPLOADING...':'⬆ SUBIENDO...'):'PHOTO '+(i+1)}</div>
-        <input type="text" placeholder="${_en?'Caption or title...':'Título o descripción...'}" value="${E(p.caption)}"
+        <div style="font-family:var(--mo);font-size:8px;color:${isUp?'var(--am)':'var(--mu)'};letter-spacing:2px;">${isUp?'⬆ '+t('uploading_label'):t('photos')+' '+(i+1)}</div>
+        <input type="text" placeholder="${t('photo_caption_ph')}" value="${E(p.caption)}"
           oninput="reportPhotos[${i}].caption=this.value"
           style="background:var(--sf);border:1px solid var(--bd);color:var(--tx);padding:5px 8px;font-size:12px;outline:none;width:100%;"
           onfocus="this.style.borderColor='var(--am)'" onblur="this.style.borderColor='var(--bd)'">
@@ -3532,12 +3672,12 @@ function renderPhotos(){
   });
   upPH();
 }
+function upPH(){const n=reportPhotos.length;document.getElementById('bl-ph').textContent=n+' '+t('photos').toLowerCase();}
 function openLBRaw(i){
   lbPhotos=reportPhotos.map(p=>p.src);
   lbCaptions=reportPhotos.map(p=>p.caption||'');
   lbIdx=i;renderLB();openMO('mo-lb');
 }
-function upPH(){const n=reportPhotos.length;const es3=currentUser?.lang!=='en';document.getElementById('bl-ph').textContent=n+' '+(es3?'foto':'photo')+(n!==1?'s':'');}
 
 // SIGNATURE — FIXED
 function initSig(){
@@ -3697,7 +3837,22 @@ function setCLINote(id,val){const item=activeCL.items.find(i=>i.id===id);if(item
 function addCLIPhoto(id,e){
   const item=activeCL.items.find(i=>i.id===id);if(!item)return;
   if(!item.photos)item.photos=[];
-  Array.from(e.target.files).forEach(f=>{const r=new FileReader();r.onload=ev=>{item.photos.push(ev.target.result);refreshCLIPhotos(id);};r.readAsDataURL(f);});
+  Array.from(e.target.files).forEach(f=>{
+    const r=new FileReader();
+    r.onload=ev=>{
+      const idx=item.photos.length;
+      item.photos.push(ev.target.result);
+      refreshCLIPhotos(id);
+      // Upload immediately
+      const rptId=curRptId||getUploadSessionId();
+      const safeId=(id||'cl').replace(/[^a-zA-Z0-9]/g,'_');
+      (async()=>{
+        const path=`reports/${rptId}/checklist/${safeId}/p${idx}_${Date.now()}.jpg`;
+        const url=await uploadPhotoWithFallback(ev.target.result,path,item.photos,idx);
+        if(url)refreshCLIPhotos(id);
+      })();
+    };r.readAsDataURL(f);
+  });
 }
 function rmCLIPhoto(id,idx){const item=activeCL.items.find(i=>i.id===id);if(item&&item.photos){item.photos.splice(idx,1);refreshCLIPhotos(id);}}
 function refreshCLIPhotos(id){
@@ -3892,6 +4047,11 @@ async function prepareRptForFirestore(data){
   // Use report ID as Storage folder (consistent across saves)
   const rptId=data.id||getUploadSessionId();
 
+  // ── 0. Main report photos (registro fotográfico) ──────────────────
+  await uploadMainPhotos(rptId);
+  data.photos=reportPhotos.map(p=>p.src).filter(s=>s&&s.startsWith('http'));
+  data.photoCaptions=reportPhotos.map(p=>p.caption||'');
+
   // ── 1. Task photos ─────────────────────────────────────────────────
   if(data.tasks){
     for(let i=0;i<data.tasks.length;i++){
@@ -3966,16 +4126,11 @@ async function prepareRptForFirestore(data){
   return clean(data);
 }
 
-async function saveReport(){
+async function saveReport(isDraft=false){
   const data=collectRpt();
-  // Warn if main photos still uploading
-  if(reportPhotos.some(p=>p.uploading)){
-    toast(t('photos_still_uploading'),'var(--am)');
-    return;
-  }
   const saveBtn=document.getElementById('bb-save-btn-lbl');
-  if(saveBtn)saveBtn.disabled=true;
-  toast('⏳ '+t('saving_label'),'var(--mu)');
+  if(!isDraft&&saveBtn)saveBtn.disabled=true;
+  if(!isDraft)toast('⏳ '+t('saving_label'),'var(--mu)');
   try{
     const clean=await prepareRptForFirestore(data);
     const isNew=!(editingRpt&&curRptId);
@@ -3993,7 +4148,7 @@ async function saveReport(){
       DB.reports.push(clean);curRptId=clean.id;editingRpt=true;
       await fbSave('reports',clean.id,clean);
     }
-    renderDash();updateNavBadge();toast(t('saved_toast'));
+    renderDash();updateNavBadge();if(!isDraft)toast(t('saved_toast'));
   }catch(e){
     console.error('fbSave error:',e);
     toast('⚠ '+t('save_failed'),'var(--rd)');
@@ -4254,7 +4409,23 @@ function addOCC(type='',time='',desc='',action='',photos=[],captions=[]){
   const fileInput=d.querySelector('.occ-file-input');
   fileInput.addEventListener('change',e=>{
     const files=Array.from(e.target.files);
-    files.forEach(f=>{const fr=new FileReader();fr.onload=ev=>{d._photos.push(ev.target.result);d._captions.push('');renderOCCPhotos(d);camBtn.style.borderColor='var(--am)';camBtn.style.color='var(--am)';};fr.readAsDataURL(f);});
+    files.forEach(f=>{
+      const fr=new FileReader();
+      fr.onload=ev=>{
+        const idx=d._photos.length;
+        d._photos.push(ev.target.result);
+        d._captions.push('');
+        renderOCCPhotos(d);
+        camBtn.style.borderColor='var(--am)';camBtn.style.color='var(--am)';
+        // Upload immediately
+        const rptId=curRptId||getUploadSessionId();
+        (async()=>{
+          const path=`reports/${rptId}/occurrences/${uid}/p${idx}_${Date.now()}.jpg`;
+          const url=await uploadPhotoWithFallback(ev.target.result,path,d._photos,idx);
+          if(url)renderOCCPhotos(d);
+        })();
+      };fr.readAsDataURL(f);
+    });
     fileInput.value='';
   });
   camBtn.addEventListener('click',()=>fileInput.click());
@@ -4280,18 +4451,18 @@ function delR(id){
   const r=DB.reports.find(x=>x.id===id);
   if(!r)return;
   _delRPendingId=id;
-  const _en=currentUser?.lang==='en';
-  // Populate confirmation modal
   document.getElementById('del-rpt-id-lbl').textContent=r.id;
   document.getElementById('del-rpt-date-lbl').textContent=r.date||'—';
   document.getElementById('del-rpt-pw').value='';
   document.getElementById('del-rpt-err').style.display='none';
+  // Always reset confirm button state
+  const btn=document.getElementById('del-rpt-confirm-btn');
+  if(btn){btn.disabled=false;btn.textContent='🗑 '+t('delete');}
   applyLang();
   openMO('mo-del-rpt');
   setTimeout(()=>document.getElementById('del-rpt-pw').focus(),200);
 }
 async function confirmDelR(){
-  const _en=currentUser?.lang==='en';
   const input=document.getElementById('del-rpt-pw').value.trim();
   const errEl=document.getElementById('del-rpt-err');
   const btn=document.getElementById('del-rpt-confirm-btn');
@@ -4301,12 +4472,11 @@ async function confirmDelR(){
     errEl.textContent=t('type_to_confirm');
     errEl.style.display='block';return;
   }
-  btn.disabled=true;btn.textContent=_en?'Deleting...':'Eliminando...';
+  btn.disabled=true;btn.textContent=t('saving_label');
   errEl.style.display='none';
   try{
     const id=_delRPendingId;
     const r=DB.reports.find(x=>x.id===id);
-    // Delete photos from Storage
     if(r){
       const allPhotos=[
         ...(r.photos||[]),
@@ -4324,13 +4494,13 @@ async function confirmDelR(){
     closeMO('mo-del-rpt');
     renderDash();renderAllReports();updateNavBadge();
     if(curProjId)renderPDReports();
-    toast(_en?'🗑 REPORT DELETED':'🗑 INFORME ELIMINADO','var(--rd)');
+    toast('🗑 '+t('report_deleted_toast'),'var(--rd)');
   }catch(e){
     console.error(e);
-    errEl.textContent=_en?'Delete failed — try again':'Error al eliminar — intenta de nuevo';
+    errEl.textContent=t('save_failed');
     errEl.style.display='block';
     btn.disabled=false;
-    btn.textContent=_en?'🗑 Delete':'🗑 Eliminar';
+    btn.textContent='🗑 '+t('delete');
   }
 }
 
@@ -4783,6 +4953,7 @@ async function doLogin(){
 }
 // ── setupUserSession — called after login OR session restore ───────────
 async function setupUserSession(user){
+  updateConnDot(); // initialize connectivity dot
   if(!currentUser.lang)currentUser.lang='es';
   document.getElementById('login-screen').style.display='none';
   document.getElementById('uav-init').textContent=user.name.charAt(0).toUpperCase();
