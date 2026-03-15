@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.39 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.40 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -4584,6 +4584,8 @@ function addOCC(type='',time='',desc='',action='',photos=[],captions=[]){
         const idx=d._photos.length;
         d._photos.push(ev.target.result);
         d._captions.push('');
+        if(!d._uploading)d._uploading=[];
+        d._uploading[idx]=true;
         renderOCCPhotos(d);
         camBtn.style.borderColor='var(--am)';camBtn.style.color='var(--am)';
         // Upload immediately
@@ -4591,7 +4593,8 @@ function addOCC(type='',time='',desc='',action='',photos=[],captions=[]){
         (async()=>{
           const path=`reports/${rptId}/occurrences/${uid}/p${idx}_${Date.now()}.jpg`;
           const url=await uploadPhotoWithFallback(ev.target.result,path,d._photos,idx);
-          if(url)renderOCCPhotos(d);
+          d._uploading[idx]=false;
+          renderOCCPhotos(d);
         })();
       };fr.readAsDataURL(f);
     });
@@ -4605,12 +4608,17 @@ function addOCC(type='',time='',desc='',action='',photos=[],captions=[]){
 function renderOCCPhotos(entry){
   const grid=entry.querySelector('.occ-photo-grid');if(!grid)return;
   const uid=entry.dataset.uid;
-  grid.innerHTML=(entry._photos||[]).map((src,i)=>`
-    <div style="position:relative;width:90px;flex-shrink:0;">
-      <img src="${src}" style="width:90px;height:70px;object-fit:cover;border:1px solid var(--bd);display:block;" onclick="openOCCPhotoLB('${uid}',${i})">
-      <button onclick="rmOCCPhoto('${uid}',${i})" style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,.7);border:none;color:#fff;font-size:9px;cursor:pointer;padding:2px 5px;border-radius:2px;">🗑</button>
-      <input type="text" placeholder="${t('caption_ph2')}" value="${E((entry._captions||[])[i]||'')}" oninput="if(this.closest('.occ-entry')._captions)this.closest('.occ-entry')._captions[${i}]=this.value" style="width:100%;background:var(--s2);border:1px solid var(--bd);border-top:none;color:var(--tx);padding:2px 4px;font-size:9px;outline:none;">
-    </div>`).join('');
+  grid.innerHTML=(entry._photos||[]).map((src,i)=>{
+    const isUp=(entry._uploading||[])[i];
+    return`<div style="position:relative;width:90px;flex-shrink:0;">
+      <div style="position:relative;width:90px;height:70px;overflow:hidden;">
+        <img src="${src}" style="width:90px;height:70px;object-fit:cover;border:1px solid var(--bd);display:block;${isUp?'opacity:0.5;':''}" onclick="${isUp?'':"openOCCPhotoLB('${uid}',${i})"}">
+        ${isUp?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);font-family:var(--mo);font-size:8px;color:var(--am);letter-spacing:1px;text-align:center;">⬆<br>${t('uploading_label')}</div>`:
+          `<button onclick="rmOCCPhoto('${uid}',${i})" style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,.7);border:none;color:#fff;font-size:9px;cursor:pointer;padding:2px 5px;border-radius:2px;">🗑</button>`}
+      </div>
+      <input type="text" placeholder="${t('caption_ph2')}" value="${E((entry._captions||[])[i]||'')}" oninput="if(this.closest('.occ-entry')._captions)this.closest('.occ-entry')._captions[${i}]=this.value" style="width:100%;background:var(--s2);border:1px solid var(--bd);border-top:none;color:var(--tx);padding:2px 4px;font-size:9px;outline:none;" ${isUp?'disabled':''}>
+    </div>`;
+  }).join('');
 }
 function rmOCCEntry(btn){
   const entry=btn.closest('.occ-entry');
