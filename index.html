@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.33 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.34 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3311,6 +3311,16 @@ function editR(id){
     reportPhotos=r.photos.map((src,i)=>({src,caption:(r.photoCaptions||[])[i]||''}));
   }
   renderPhotos();
+  // If report has photos, ensure the section is enabled regardless of disabledSections
+  if(reportPhotos.length){
+    const photoSec=document.getElementById('sec-photos');
+    if(photoSec){
+      photoSec.classList.remove('dis');
+      photoSec.classList.add('op');
+      const cb=photoSec.querySelector('input[type=checkbox]');
+      if(cb)cb.checked=true;
+    }
+  }
   // Disabled sections — restore but allow re-enabling if report is editable
   const isEditable=['Draft','Filling','Rejected','Review'].includes(r.status);
   // If rejected, don't lock sections — user needs to fill them in
@@ -3417,7 +3427,7 @@ function resetRF(){
   document.getElementById('bl-occ').textContent=t('0_entries');
   reportPhotos=[];renderPhotos();_uploadSessionId=null;
   // Section enables
-  const onByDef=['sec-weather','sec-labor','sec-equip','sec-tasks','sec-mats','sec-checklist','sec-notes'];
+  const onByDef=['sec-weather','sec-labor','sec-equip','sec-tasks','sec-mats','sec-checklist','sec-photos','sec-notes'];
   ['sec-weather','sec-labor','sec-equip','sec-tasks','sec-mats','sec-incidents','sec-checklist','sec-photos','sec-notes'].forEach(id=>{
     const sec=document.getElementById(id);if(!sec)return;
     sec.classList.remove('dis');
