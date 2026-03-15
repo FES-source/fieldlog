@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.20 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.21 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3856,71 +3856,108 @@ function openActivityLog(){
 async function uploadPhotosArray(photos, captions, pathPrefix){
   if(!photos||!photos.length)return{urls:[],caps:captions||[]};
   const urls=[];
+  const caps=[...(captions||[])];
   for(let i=0;i<photos.length;i++){
     const p=photos[i];
-    if(!p)continue;
-    // Already a URL (https://...) — keep as is
-    if(typeof p==='string'&&p.startsWith('http')){urls.push(p);continue;}
-    // base64 — upload to Storage
+    if(!p){urls.push('');continue;}
+    // Already a Storage URL — keep as is
+    if(typeof p==='string'&&(p.startsWith('https://')||p.startsWith('http://'))){
+      urls.push(p);continue;
+    }
+    // base64 data URL — upload to Storage
     if(typeof p==='string'&&p.startsWith('data:')){
       try{
-        const path=`${pathPrefix}/photo_${i}_${Date.now()}.jpg`;
+        const path=`${pathPrefix}/p${i}_${Date.now()}.jpg`;
         const ref=fbFns.ref(fbStorage,path);
         await fbFns.uploadString(ref,p,'data_url');
         const url=await fbFns.getDownloadURL(ref);
         urls.push(url);
-      }catch(e){console.error('Photo upload failed:',e);urls.push(p);}
+        console.log('✓ Uploaded photo to Storage:',path);
+      }catch(e){
+        console.error('Photo upload failed:',pathPrefix,i,e);
+        // Don't include base64 in Firestore — too large
+        urls.push('');
+        toast('⚠ '+t('photo_upload_failed'),'var(--rd)');
+      }
     } else {
-      urls.push(typeof p==='string'?p:'');
+      // Unknown format — skip
+      urls.push('');
     }
   }
-  return{urls,caps:captions||[]};
+  return{urls,caps};
 }
 
-// Strip non-Firestore-serializable data from report before saving
+// Strip non-Firestore-serializable data and upload all photos to Storage
 async function prepareRptForFirestore(data){
-  const sessionId=getUploadSessionId();
-  // ── 1. Task photos ────────────────────────────────────────────────
+  // Use report ID as Storage folder (consistent across saves)
+  const rptId=data.id||getUploadSessionId();
+
+  // ── 1. Task photos ─────────────────────────────────────────────────
   if(data.tasks){
     for(let i=0;i<data.tasks.length;i++){
       const task=data.tasks[i];
-      if(task.photos&&task.photos.length){
-        const {urls,caps}=await uploadPhotosArray(task.photos,task.captions,`reports/${sessionId}/task_${i}`);
-        task.photos=urls;task.captions=caps;
-      } else {task.photos=[];task.captions=[];}
+      const ph=task.photos||[];
+      const ca=task.captions||[];
+      if(ph.length){
+        const {urls,caps}=await uploadPhotosArray(ph,ca,`reports/${rptId}/tasks/${i}`);
+        task.photos=urls.filter(u=>u);
+        task.captions=caps;
+      } else {
+        task.photos=[];
+        task.captions=[];
+      }
     }
   }
-  // ── 2. Occurrence photos ──────────────────────────────────────────
+
+  // ── 2. Occurrence photos ───────────────────────────────────────────
   if(data.occurrences){
     for(let i=0;i<data.occurrences.length;i++){
       const occ=data.occurrences[i];
-      if(occ.photos&&occ.photos.length){
-        const {urls,caps}=await uploadPhotosArray(occ.photos,occ.captions,`reports/${sessionId}/occ_${i}`);
-        occ.photos=urls;occ.captions=caps;
-      } else {occ.photos=[];occ.captions=[];}
+      const ph=occ.photos||[];
+      const ca=occ.captions||[];
+      if(ph.length){
+        const {urls,caps}=await uploadPhotosArray(ph,ca,`reports/${rptId}/occurrences/${i}`);
+        occ.photos=urls.filter(u=>u);
+        occ.captions=caps;
+      } else {
+        occ.photos=[];
+        occ.captions=[];
+      }
     }
   }
-  // ── 3. Checklist item photos ──────────────────────────────────────
+
+  // ── 3. Checklist item photos ───────────────────────────────────────
   if(data.checklist&&data.checklist.items){
     for(let i=0;i<data.checklist.items.length;i++){
       const item=data.checklist.items[i];
-      if(item.photos&&item.photos.length){
-        const {urls}=await uploadPhotosArray(item.photos,[],`reports/${sessionId}/cl_${i}`);
-        item.photos=urls;
-      } else {item.photos=[];}
+      const ph=item.photos||[];
+      if(ph.length){
+        const itemKey=item.id?item.id.replace(/[^a-zA-Z0-9]/g,'_'):`cl${i}`;
+        const {urls}=await uploadPhotosArray(ph,[],`reports/${rptId}/checklist/${itemKey}`);
+        item.photos=urls.filter(u=>u);
+      } else {
+        item.photos=[];
+      }
+      // Also handle photoCaptions if present
+      if(!item.photoCaptions)item.photoCaptions=[];
       // Remove any non-serializable fields
       delete item._file;
     }
   }
-  // ── 4. Strip photoData (File objects) ────────────────────────────
-  delete data.photoData;
-  // ── 5. Ensure all values are Firestore-safe (no undefined) ───────
+
+  // ── 4. Strip non-serializable fields ──────────────────────────────
+  delete data.photoData;   // File objects
+
+  // ── 5. Deep-clean: remove undefined, functions, File objects ──────
   const clean=(obj)=>{
-    if(Array.isArray(obj))return obj.map(clean).filter(v=>v!==undefined);
-    if(obj&&typeof obj==='object'){
+    if(obj instanceof File||obj instanceof Blob)return null;
+    if(Array.isArray(obj))return obj.map(clean).filter(v=>v!=null);
+    if(obj&&typeof obj==='object'&&!(obj instanceof Date)){
       const r={};
       for(const[k,v]of Object.entries(obj)){
-        if(v!==undefined&&typeof v!=='function')r[k]=clean(v);
+        if(v===undefined||typeof v==='function')continue;
+        const cv=clean(v);
+        if(cv!==null)r[k]=cv;
       }
       return r;
     }
