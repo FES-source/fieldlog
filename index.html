@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.37 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.38 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3648,6 +3648,8 @@ function rmTaskEntry(btn){
   entry.remove();
   upB('r-tasks','bl-t','task');
   renderTaskPhotoGallery();
+  // Trigger silent save so DB stays in sync with DOM
+  if(editingRpt&&curRptId)saveReport(true);
 }
 function rmTaskPhoto(uid,idx){
   const entry=document.querySelector('.task-entry[data-uid="'+uid+'"]');
@@ -4546,7 +4548,7 @@ function addOCC(type='',time='',desc='',action='',photos=[],captions=[]){
     <span style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--rd);">⚠ ${t('sec_occurrence')}</span>
     <div style="display:flex;gap:6px;">
       <button class="ib occ-cam-btn" title="${t('add_photos_occ2')}" style="${photos.length?'border-color:var(--am);color:var(--am);':''}">📷</button>
-      <button class="ib" onclick="this.closest('.occ-entry').remove();upOCC()">✕ ${t('delete')}</button>
+      <button class="ib" onclick="rmOCCEntry(this)">✕ ${t('delete')}</button>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 80px;gap:8px;margin-bottom:8px;">
@@ -4595,6 +4597,14 @@ function renderOCCPhotos(entry){
       <button onclick="rmOCCPhoto('${uid}',${i})" style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,.7);border:none;color:#fff;font-size:9px;cursor:pointer;padding:2px 5px;border-radius:2px;">🗑</button>
       <input type="text" placeholder="${t('caption_ph2')}" value="${E((entry._captions||[])[i]||'')}" oninput="if(this.closest('.occ-entry')._captions)this.closest('.occ-entry')._captions[${i}]=this.value" style="width:100%;background:var(--s2);border:1px solid var(--bd);border-top:none;color:var(--tx);padding:2px 4px;font-size:9px;outline:none;">
     </div>`).join('');
+}
+function rmOCCEntry(btn){
+  const entry=btn.closest('.occ-entry');
+  if(!entry)return;
+  (entry._photos||[]).forEach(p=>deleteFromStorage(p));
+  entry.remove();
+  upOCC();
+  if(editingRpt&&curRptId)saveReport(true);
 }
 function rmOCCPhoto(uid,idx){
   const entry=document.querySelector('.occ-entry[data-uid="'+uid+'"]');
