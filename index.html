@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.40 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.41 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3311,6 +3311,15 @@ function editR(id){
     reportPhotos=r.photos.map((src,i)=>({src,caption:(r.photoCaptions||[])[i]||''}));
   }
   renderPhotos();
+  // If report has occurrences, ensure sec-incidents is enabled
+  if((r.occurrences?.length||r.incDesc)){
+    const incSec=document.getElementById('sec-incidents');
+    if(incSec){
+      incSec.classList.remove('dis');incSec.classList.add('op');
+      const cb=incSec.querySelector('input[type=checkbox]');
+      if(cb)cb.checked=true;
+    }
+  }
   // If report has photos, ensure the section is enabled regardless of disabledSections
   if(reportPhotos.length){
     const photoSec=document.getElementById('sec-photos');
@@ -3427,7 +3436,7 @@ function resetRF(){
   document.getElementById('bl-occ').textContent=t('0_entries');
   reportPhotos=[];renderPhotos();_uploadSessionId=null;
   // Section enables
-  const onByDef=['sec-weather','sec-labor','sec-equip','sec-tasks','sec-mats','sec-checklist','sec-photos','sec-notes'];
+  const onByDef=['sec-weather','sec-labor','sec-equip','sec-tasks','sec-mats','sec-incidents','sec-checklist','sec-photos','sec-notes'];
   ['sec-weather','sec-labor','sec-equip','sec-tasks','sec-mats','sec-incidents','sec-checklist','sec-photos','sec-notes'].forEach(id=>{
     const sec=document.getElementById(id);if(!sec)return;
     sec.classList.remove('dis');
