@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.46 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.48 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -953,7 +953,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="mh"><div class="mtt" id="clb-title"><span id="lbl-cl-modal-title">☑ Nueva Plantilla</span></div><button class="mcl" onclick="closeMO('mo-clb')">✕</button></div>
   <div class="mb">
     <div class="fg f1" style="margin-bottom:12px;"><div><label id="lbl-cl-name-title">Nombre de Plantilla *</label><input type="text" id="clb-name" placeholder="ej. Inspección de Equipos"></div></div>
-    <div style="background:var(--s2);border:1px solid var(--bd);padding:10px;margin-bottom:12px;">
+    <div id="clb-sna-section" style="background:var(--s2);border:1px solid var(--bd);padding:10px;margin-bottom:12px;display:none;">
       <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:7px;"><span id="lbl-cl-answer-opts">ETIQUETAS PARA ÍTEMS DE TIPO Sí/No/N/A</span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;">
         <div><label style="font-size:10px;" id="lbl-cl-opt1">Opción 1 (Sí)</label><input type="text" id="clb-sna1" value="Si" style="margin-top:3px;"></div>
@@ -3169,8 +3169,9 @@ function openCLB(id=null){
     document.getElementById('clb-sna2').value=c.snaLabels?.[1]||t('no');
     document.getElementById('clb-sna3').value=c.snaLabels?.[2]||'N/A';
     c.items.forEach(i=>addCLBI(i.text,keyToCat(i.category),i.type||'sna',i.opts||[]));
+    updateSNASection();
   }}
-  else{addCLBI('',keyToCat('Safety'),'sna');addCLBI('',keyToCat('General'),'sna');}
+  else{} // start with empty items — user adds manually
   openMO('mo-clb');
 }
 const ITEM_TYPES_ES=[
@@ -3231,9 +3232,15 @@ function addCLBI(txt='',cat='General',tp='sna',opts=[]){
     <input type="text" placeholder="${t('item_description_ph')}" class="cl-item-plh" value="${E(txt)}" style="flex:1;min-width:160px;">
     <select class="cs" style="font-size:11px;">${getCats().map((ca,i)=>`<option value="${CATS[i]}"${CATS[i]===cat||ca===cat?' selected':''}>${ca}</option>`).join('')}</select>
     <select class="cs it-type" style="font-size:11px;" onchange="onBItypeChange(this)">${getItemTypes().map(x=>`<option value="${x.v}"${x.v===tp?' selected':''}>${x.l}</option>`).join('')}</select>
-    <button class="ib" onclick="this.closest('.bi').remove()">✕</button>
+    <button class="ib" onclick="this.closest('.bi').remove();updateSNASection()">✕</button>
     ${optsHtml()}`;
   document.getElementById('clb-items').appendChild(d);
+  updateSNASection();
+}
+function updateSNASection(){
+  const hasSna=[...document.querySelectorAll('#clb-items .it-type')].some(s=>s.value==='sna');
+  const sec=document.getElementById('clb-sna-section');
+  if(sec)sec.style.display=hasSna?'block':'none';
 }
 function onBItypeChange(sel){
   const d=sel.closest('.bi');
@@ -3252,6 +3259,7 @@ function onBItypeChange(sel){
     if(optsDiv)optsDiv.remove();
     d._opts=[];
   }
+  updateSNASection();
 }
 function renderBIopts(d){
   const optsDiv=d.querySelector('.bi-opts');if(!optsDiv)return;
