@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.32 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.33 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3444,8 +3444,12 @@ function generateRptUID(){
 function generateRptDisplayName(projName,projCode,date,num){
   const code=(projCode||'XXX').toUpperCase();
   const d=(date||new Date().toISOString().split('T')[0]).replace(/-/g,'');
-  const name=(projName||'').replace(/[^a-zA-Z0-9 ]/g,'').trim().slice(0,30);
-  return 'RPT-'+(name?name+'-':'')+code+'-'+d+'-'+num;
+  // Strip "(code)" suffix, take first meaningful word, max 12 chars, no special chars
+  const baseName=(projName||'').replace(/\s*\([^)]*\)\s*$/,'').trim();
+  const shortName=baseName.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚüÜñÑ ]/g,'').trim()
+    .split(/\s+/).filter(w=>w.length>2)[0]||'RPT';
+  const nameClean=shortName.toUpperCase().slice(0,10);
+  return 'RPT-'+nameClean+'-'+code+'-'+d+'-'+num;
 }
 function updateRID(){
   const s=document.getElementById('r-proj');
