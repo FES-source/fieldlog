@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.49 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.50 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3160,7 +3160,6 @@ function openCLB(id=null){
   openMO('mo-clb');
 }
 const ITEM_TYPES_ES=[
-  {v:'sna',l:'Sí / No / N/A'},
   {v:'yesno',l:'Sí / No'},
   {v:'single',l:'Opción única'},
   {v:'multi',l:'Múltiple opción'},
@@ -3168,7 +3167,6 @@ const ITEM_TYPES_ES=[
   {v:'evidence',l:'Evidencia (foto/video)'},
 ];
 const ITEM_TYPES_EN=[
-  {v:'sna',l:'Yes / No / N/A'},
   {v:'yesno',l:'Yes / No'},
   {v:'single',l:'Single choice'},
   {v:'multi',l:'Multiple choice'},
@@ -3176,7 +3174,6 @@ const ITEM_TYPES_EN=[
   {v:'evidence',l:'Evidence (photo/video)'},
 ];
 const ITEM_TYPES_PT=[
-  {v:'sna',l:'Sim / Não / N/A'},
   {v:'yesno',l:'Sim / Não'},
   {v:'single',l:'Opção única'},
   {v:'multi',l:'Múltipla escolha'},
@@ -3184,7 +3181,6 @@ const ITEM_TYPES_PT=[
   {v:'evidence',l:'Evidência (foto/vídeo)'},
 ];
 const ITEM_TYPES_IT=[
-  {v:'sna',l:'Sì / No / N/A'},
   {v:'yesno',l:'Sì / No'},
   {v:'single',l:'Scelta singola'},
   {v:'multi',l:'Scelta multipla'},
@@ -3944,16 +3940,11 @@ function renderCLR(){
           <span style="font-family:var(--mo);font-size:9px;color:var(--am);letter-spacing:1px;">${snaL[2]||'N/A'}</span>
           <button class="sna-btn na on" onclick="setCLINA('${item.id}')" style="font-size:8px;margin-left:8px;">↩ ${t('change_label')||'Cambiar'}</button>
         </div>`;
-      } else if(tp==='sna'){
-        ansHtml=`<div class="sna" style="flex-wrap:wrap;">
-          <button class="sna-btn si ${item.sna==='si'?'on':''}" onclick="setSNA('${item.id}','si')">${E(snaL[0])}</button>
-          <button class="sna-btn no ${item.sna==='no'?'on':''}" onclick="setSNA('${item.id}','no')">${E(snaL[1])}</button>
-          <button class="sna-btn na ${item.sna==='na'?'on':''}" onclick="setSNA('${item.id}','na')">${E(snaL[2])}</button>
-        </div>`;
-      } else if(tp==='yesno'){
+      } else if(tp==='yesno'||tp==='sna'){
+        const _yn=item.singleSel||item.sna||'';
         ansHtml=`<div class="sna" style="flex-wrap:wrap;align-items:center;">
-          <button class="sna-btn si ${item.singleSel==='si'?'on':''}" onclick="setCLISingle('${item.id}','si')">${t('yes_label')}</button>
-          <button class="sna-btn no ${item.singleSel==='no'?'on':''}" onclick="setCLISingle('${item.id}','no')">${t('no')}</button>
+          <button class="sna-btn si ${_yn==='si'?'on':''}" onclick="setCLISingle('${item.id}','si');if(activeCL)activeCL.items.find(i=>i.id==='${item.id}').sna='si';">${t('yes_label')}</button>
+          <button class="sna-btn no ${_yn==='no'?'on':''}" onclick="setCLISingle('${item.id}','no');if(activeCL)activeCL.items.find(i=>i.id==='${item.id}').sna='no';">${t('no')}</button>
           ${naBtn}
         </div>`;
       } else if(tp==='single'){
@@ -4064,7 +4055,7 @@ function togCLI(id){
 }
 function updCLP(){
   if(!activeCL)return;
-  const total=activeCL.items.length,done=activeCL.items.filter(i=>{const tp=i.type||'sna';return i.na||(tp==='sna'?!!i.sna:tp==='text'?!!i.textAns:tp==='multi'?(i.multiSel||[]).length>0:tp==='evidence'?(i.photos||[]).length>0:!!i.singleSel);}).length,pct=total?Math.round(done/total*100):0;
+  const total=activeCL.items.length,done=activeCL.items.filter(i=>{const tp=i.type||'sna';return i.na||((tp==='sna'||tp==='yesno')?(!!i.sna||!!i.singleSel):tp==='text'?!!i.textAns:tp==='multi'?(i.multiSel||[]).length>0:tp==='evidence'?(i.photos||[]).length>0:!!i.singleSel);}).length,pct=total?Math.round(done/total*100):0;
   const fl=document.getElementById('cl-fill'),pt=document.getElementById('cl-pct');
   if(fl)fl.style.width=pct+'%';if(pt)pt.textContent=done+' / '+total;
 }
@@ -4123,13 +4114,17 @@ function toggleCI(id){
   if(row){row.classList.toggle('ck',item.checked);row.querySelector('.cli-cb').textContent=item.checked?'✓':'';}
   updCLP();updCLB();
 }
-function clearActiveCL(){
+async function clearActiveCL(){
   activeCL=null;
   renderCLR();
   const clrBtn=document.getElementById('btn-clear-cl');
   if(clrBtn)clrBtn.style.display='none';
-  // Sync to Firestore immediately
-  if(editingRpt&&curRptId)saveReport(true);
+  // Explicitly null checklist in DB.reports before saving
+  if(editingRpt&&curRptId){
+    const existing=DB.reports.find(r=>r.id===curRptId);
+    if(existing)existing.checklist=null;
+    await saveReport(true);
+  }
 }
 function updCLB(){
   const clrBtn=document.getElementById('btn-clear-cl');
@@ -4490,7 +4485,7 @@ function submitReport(){
   const clEnabled=clSec&&!clSec.classList.contains('dis');
   // If a checklist template is loaded, all items must be answered
   if(clEnabled&&activeCL){
-    const unanswered=activeCL.items.filter(i=>{const tp=i.type||'sna';return !i.na&&(tp==='sna'?!i.sna:tp==='text'?!i.textAns:tp==='multi'?!(i.multiSel||[]).length:tp==='evidence'?!(i.photos||[]).length:!i.singleSel);});
+    const unanswered=activeCL.items.filter(i=>{const tp=i.type||'sna';return !i.na&&((tp==='sna'||tp==='yesno')?(!i.sna&&!i.singleSel):tp==='text'?!i.textAns:tp==='multi'?!(i.multiSel||[]).length:tp==='evidence'?!(i.photos||[]).length:!i.singleSel);});
     if(unanswered.length>0){toast(t('all_items_must_answer')+' ('+unanswered.length+' '+t('remaining_label')+')','var(--rd)');return;}
   }
   // Pre-fill signer name from current user
@@ -4819,15 +4814,11 @@ function getItemAnswer(item, snaLabels, lang){
   const sl=snaLabels||['Sí','No','N/A'];
   const tp=item.type||'sna';
   if(item.na) return {text:sl[2]||'N/A',color:'#888',isAnswered:true};
-  if(tp==='sna'){
-    if(item.sna==='si') return {text:sl[0],color:'#2e7d52',isAnswered:true};
-    if(item.sna==='no') return {text:sl[1],color:'#c43c3c',isAnswered:true};
-    if(item.sna==='na') return {text:sl[2],color:'#888',isAnswered:true};
-    return {text:'—',color:'#aaa',isAnswered:false};
-  }
-  if(tp==='yesno'){
-    if(item.singleSel==='si') return {text:sl[0]||'Sí',color:'#2e7d52',isAnswered:true};
-    if(item.singleSel==='no') return {text:sl[1]||'No',color:'#c43c3c',isAnswered:true};
+  if(tp==='sna'||tp==='yesno'){  // sna kept for backward compat
+    const ans=item.singleSel||item.sna;
+    if(ans==='si') return {text:sl[0]||'Sí',color:'#2e7d52',isAnswered:true};
+    if(ans==='no') return {text:sl[1]||'No',color:'#c43c3c',isAnswered:true};
+    if(ans==='na') return {text:sl[2]||'N/A',color:'#888',isAnswered:true};
     return {text:'—',color:'#aaa',isAnswered:false};
   }
   if(tp==='single'){
