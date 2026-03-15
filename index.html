@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.30 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.31 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3437,14 +3437,19 @@ function updateRID(){
   const s=document.getElementById('r-proj');
   const code=(s.selectedOptions[0]?.dataset?.code||'XXX').toUpperCase();
   const d=(gv('r-date')||'00000000').replace(/-/g,'');
-  // Compute report number for this project
   const projRpts=DB.reports.filter(r=>r.projId===s.value);
   if(editingRpt&&curRptId){
-    // Editing: keep existing ID
     const existing=DB.reports.find(r=>r.id===curRptId);
-    if(existing){document.getElementById('rrid').textContent=existing.id;return;}
+    if(existing){
+      // Rebuild ID if date or project changed (user edited after autosave)
+      const newId='RPT-'+code+'-'+d+'-'+(existing.num||projRpts.length+1);
+      existing.id=newId;
+      curRptId=newId;
+      document.getElementById('rrid').textContent=newId;
+      return;
+    }
   }
-  // New report: generate unique ID with sequential number to avoid same-day collisions
+  // New report not yet saved
   const num=projRpts.length+1;
   document.getElementById('rrid').textContent='RPT-'+code+'-'+d+'-'+num;
 }
