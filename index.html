@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.72 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.73 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -4986,7 +4986,7 @@ body{font-family:'Lato',sans-serif;font-size:11px;color:#1a1a1a;background:#fff;
 .logo span{color:#e8e0d0;}
 .cov-sub{font-size:10px;letter-spacing:0.5px;color:#7a7060;margin-top:2px;font-family:'Lato',sans-serif;}
 .cov-r{text-align:right;}
-.cov-id{font-family:monospace;font-size:10px;color:#f5a623;letter-spacing:2px;}
+.cov-id{font-family:'Lato',sans-serif;font-size:10px;color:#f5a623;letter-spacing:1px;}
 .cov-dt{font-size:9px;color:#7a7060;margin-top:3px;}
 .status-bar{background:${statusColor};color:#fff;text-align:center;padding:3px;font-family:'Lato',sans-serif;font-size:10px;letter-spacing:0.5px;text-transform:uppercase;}
 .sec-title{font-family:'Lato',sans-serif;font-size:12px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#f5a623;border-left:3px solid #f5a623;padding:4px 8px;margin:14px 0 7px;background:#faf7f2;}
@@ -5031,7 +5031,7 @@ tr:nth-child(even) td{background:#fafafa;}
   @page{
     @bottom-center{
       content:'— ' counter(page) ' —';
-      font-family:monospace;font-size:8px;color:#bbb;letter-spacing:2px;
+      font-family:'Lato',sans-serif;font-size:8px;color:#bbb;letter-spacing:2px;
     }
   }
 }
@@ -5060,8 +5060,8 @@ ${r.status==='Rejected'&&r.rejectionReason?`<div style="background:#fff0f0;borde
   </div>
   <div style="display:flex;align-items:center;gap:10px;">
     <div style="text-align:right;">
-      <div style="font-family:monospace;font-size:8px;color:#c97800;letter-spacing:1px;">${r.id}</div>
-      <div style="font-family:monospace;font-size:7px;color:#aaa;">${r.date||''}</div>
+      <div style="font-family:'Lato',sans-serif;font-size:8px;color:#c97800;letter-spacing:0.5px;">${r.id}</div>
+      <div style="font-family:'Lato',sans-serif;font-size:8px;color:#aaa;">${r.date||''}</div>
     </div>
     ${custLogoHTML}
     ${logo2HTML}
@@ -5084,7 +5084,7 @@ ${!r.disabledSections?.includes('sec-job')?`
   <div class="fl"><div class="fl-l">${pt('shift')} ${pt('start')}</div><div class="fl-v">${r.shiftStart||'—'}</div></div>
   <div class="fl"><div class="fl-l">${pt('shift')} ${pt('end')}</div><div class="fl-v">${r.shiftEnd||'—'}</div></div>
 </div>
-${(r.siteEnabled||(r.siteName||r.siteAddr))?`<div style="border-left:3px solid #f5a623;padding:7px 10px;margin-top:8px;background:rgba(245,166,35,.06);"><div style="font-size:9px;letter-spacing:1px;font-family:monospace;color:#c47a00;margin-bottom:5px;text-transform:uppercase;">📍 ${pdfLang==='en'?'Work Site':'Sitio de Trabajo'}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;"><div class="fl"><div class="fl-l">${pdfLang==='en'?'Site Name':'Nombre del Sitio'}</div><div class="fl-v">${r.siteName||'\u2014'}</div></div><div class="fl"><div class="fl-l">${pdfLang==='en'?'Site Address':'Dirección del Sitio'}</div><div class="fl-v">${r.siteAddr||'\u2014'}</div></div></div></div>`:''}`:''}
+${(r.siteEnabled||(r.siteName||r.siteAddr))?`<div style="border-left:3px solid #f5a623;padding:7px 10px;margin-top:8px;background:rgba(245,166,35,.06);"><div style="font-size:9px;letter-spacing:1px;font-family:'Lato',sans-serif;color:#c47a00;margin-bottom:5px;text-transform:uppercase;">📍 ${pdfLang==='en'?'Work Site':'Sitio de Trabajo'}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;"><div class="fl"><div class="fl-l">${pdfLang==='en'?'Site Name':'Nombre del Sitio'}</div><div class="fl-v">${r.siteName||'\u2014'}</div></div><div class="fl"><div class="fl-l">${pdfLang==='en'?'Site Address':'Dirección del Sitio'}</div><div class="fl-v">${r.siteAddr||'\u2014'}</div></div></div></div>`:''}`:''}
 
 ${!r.disabledSections?.includes('sec-weather')&&(r.weather?.length||r.temp)?`
 <div class="sec-title">${pt('weather')}</div>
@@ -5145,7 +5145,7 @@ ${!r.disabledSections?.includes('sec-incidents')&&(r.occurrences?.length||r.incD
 <div class="sec-title">${pt('incidents')}${r.occurrences?.length?' ('+r.occurrences.length+')':''}</div>
 ${(r.occurrences?.length?r.occurrences:[r.incDesc?{type:r.incType||'Near miss',time:r.incTime||'',desc:r.incDesc,action:r.incAct||''}:null]).filter(Boolean).map((o,i)=>`
 <div style="border-left:3px solid #c43c3c;padding:7px 10px;margin-bottom:8px;background:#fff8f8;page-break-inside:avoid;">
-  <div style="font-size:9px;letter-spacing:1px;color:#c43c3c;font-family:monospace;margin-bottom:4px;text-transform:uppercase;">${o.type||'Occurrence'}${o.time?' · '+o.time:''}</div>
+  <div style="font-size:9px;letter-spacing:1px;color:#c43c3c;font-family:'Lato',sans-serif;margin-bottom:4px;text-transform:uppercase;">${o.type||'Occurrence'}${o.time?' · '+o.time:''}</div>
   <div style="font-size:11px;margin-bottom:4px;">${o.desc||'—'}</div>
   ${o.action?`<div style="font-size:10px;color:#666;">→ ${pt('corrective_action')}: `+o.action+'</div>':''}
   ${(o.photos||[]).length?`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:8px;">${(o.photos||[]).map((p,pi)=>`<div style="border:1px solid #ddd;overflow:hidden;"><img src="${p}" style="width:100%;height:160px;object-fit:cover;display:block;">${(o.captions||[])[pi]?`<div style="padding:3px 6px;font-size:9px;color:#555;border-top:1px solid #eee;">${(o.captions||[])[pi]}</div>`:''}</div>`).join('')}</div>`:''}
@@ -5178,17 +5178,17 @@ ${photoGrid}`:''}
   <div class="sig-box">
     ${sig?`<img src="${sig}">`:'<span style="font-size:9px;color:#ccc;margin-bottom:8px;">—</span>'}
     <div class="sig-lbl">${r.sigName?(r.sigName+(r.sigRole?' · '+r.sigRole:'')):pt('submitted_by')}</div>
-    ${r.submittedAt?`<div style="font-size:7px;color:#bbb;font-family:monospace;margin-top:2px;">${new Date(r.submittedAt).toLocaleDateString(LOCALE_MAP[pdfLang]||'en-US')}</div>`:''}
+    ${r.submittedAt?`<div style="font-size:7px;color:#bbb;font-family:'Lato',sans-serif;margin-top:2px;">${new Date(r.submittedAt).toLocaleDateString(LOCALE_MAP[pdfLang]||'en-US')}</div>`:''}
   </div>
   <div class="sig-box">
     ${r.approveSignature?`<img src="${r.approveSignature}">`:'<span style="font-size:9px;color:#ccc;margin-bottom:8px;">—</span>'}
     <div class="sig-lbl">${r.approvedBy?(r.approvedBy+(r.approvedByRole?' · '+r.approvedByRole:'')):pt('approved_by')}</div>
-    ${r.approvedAt?`<div style="font-size:7px;color:#bbb;font-family:monospace;margin-top:2px;">${new Date(r.approvedAt).toLocaleDateString(LOCALE_MAP[pdfLang]||'en-US')}</div>`:''}
+    ${r.approvedAt?`<div style="font-size:7px;color:#bbb;font-family:'Lato',sans-serif;margin-top:2px;">${new Date(r.approvedAt).toLocaleDateString(LOCALE_MAP[pdfLang]||'en-US')}</div>`:''}
   </div>
   ${proj?.requireCustomerApproval?`<div class="sig-box">
     ${r.customerSignature?`<img src="${r.customerSignature}">`:'<span style="font-size:9px;color:#ccc;margin-bottom:8px;">—</span>'}
     <div class="sig-lbl">${r.customerName?(r.customerName+(r.customerRole?' · '+r.customerRole:'')):pt('customer_signoff')}</div>
-    ${r.customerApprovedAt?`<div style="font-size:7px;color:#bbb;font-family:monospace;margin-top:2px;">${new Date(r.customerApprovedAt).toLocaleDateString(LOCALE_MAP[pdfLang]||'en-US')}</div>`:''}
+    ${r.customerApprovedAt?`<div style="font-size:7px;color:#bbb;font-family:'Lato',sans-serif;margin-top:2px;">${new Date(r.customerApprovedAt).toLocaleDateString(LOCALE_MAP[pdfLang]||'en-US')}</div>`:''}
   </div>`:''}
 </div>
 
