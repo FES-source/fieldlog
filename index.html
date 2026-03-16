@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.60 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.61 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -4009,7 +4009,7 @@ function renderCLR(){
           <span class="cli-cat">${E(keyToCat(item.category))}</span>
           <button style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:11px;padding:0 4px;margin-top:1px;" onclick="event.stopPropagation();togCLI('${item.id}')" title="Fotos / Nota">📷</button>
         </div>
-        <div class="cli-extras" style="${(item._expanded||(item.photos||[]).length>0)?'':'display:none;'}">
+        <div class="cli-extras" style="${(item._expanded||(item.photos||[]).length>0)?'display:block;':'display:none;'}">
           <div class="cli-photo-zone" style="position:relative;">
             <input type="file" accept="image/*" multiple onchange="addCLIPhoto('${item.id}',event)">
             📷 ADJUNTAR FOTOS — CLICK PARA VER/AÑADIR DESCRIPCIÓN
