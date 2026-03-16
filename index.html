@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.50 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.51 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3961,19 +3961,23 @@ function renderCLR(){
         </div>`;
       } else if(tp==='evidence'){
         const evPhotos=item.photos||[];
+        const evUp=item._uploading||[];
         ansHtml=`<div style="display:flex;flex-direction:column;gap:6px;">
           <div style="display:flex;flex-wrap:wrap;gap:5px;align-items:center;">
-            ${evPhotos.map((p,pi)=>`<div style="position:relative;width:64px;height:64px;overflow:hidden;">
-              <img src="${p}" style="width:100%;height:100%;object-fit:cover;border:1px solid var(--bd);cursor:pointer;" onclick="openCLILB('${item.id}',${pi})">
-              <button onclick="event.stopPropagation();deleteFromStorage(activeCL.items.find(i=>i.id==='${item.id}')?.photos[${pi}]);activeCL.items.find(i=>i.id==='${item.id}').photos.splice(${pi},1);renderCLR()" style="position:absolute;top:1px;right:1px;background:rgba(0,0,0,.7);border:none;color:#fff;font-size:8px;cursor:pointer;padding:1px 3px;">🗑</button>
-            </div>`).join('')}
+            ${evPhotos.map((p,pi)=>{const isUp=!!evUp[pi];return`<div style="position:relative;width:64px;height:64px;overflow:hidden;">
+              <img src="${p}" style="width:100%;height:100%;object-fit:cover;border:1px solid var(--bd);${isUp?'opacity:0.5;':''}cursor:pointer;" onclick="${isUp?'':'openCLILB(\''+item.id+'\','+pi+')'}">
+              ${isUp
+                ?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);font-family:var(--mo);font-size:7px;color:var(--am);letter-spacing:1px;text-align:center;">⬆<br>${t('uploading_label')}</div>`
+                :`<button onclick="event.stopPropagation();deleteFromStorage(activeCL.items.find(i=>i.id==='${item.id}')?.photos[${pi}]);activeCL.items.find(i=>i.id==='${item.id}').photos.splice(${pi},1);if(activeCL.items.find(i=>i.id==='${item.id}')._uploading)activeCL.items.find(i=>i.id==='${item.id}')._uploading.splice(${pi},1);renderCLR()" style="position:absolute;top:1px;right:1px;background:rgba(0,0,0,.7);border:none;color:#fff;font-size:8px;cursor:pointer;padding:1px 3px;">🗑</button>`
+              }
+            </div>`;}).join('')}
             <label style="cursor:pointer;padding:6px 10px;border:1px dashed var(--am);color:var(--am);font-family:var(--mo);font-size:9px;letter-spacing:1px;">
               📷 ${t('add_evidence_label')||'AGREGAR'}
               <input type="file" accept="image/*,video/*" multiple style="display:none;" onchange="setCLIEvidence('${item.id}',this.files);this.value=''">
             </label>
-            ${evPhotos.length?'':''} ${naBtn}
+            ${naBtn}
           </div>
-          ${evPhotos.length?`<div style="font-family:var(--mo);font-size:8px;color:var(--gn);letter-spacing:1px;">✓ ${evPhotos.length} ${t('evidence_added')||'evidencia(s) adjunta(s)'}</div>`:''}
+          ${evPhotos.length?`<div style="font-family:var(--mo);font-size:8px;color:var(--gn);letter-spacing:1px;">✓ ${evPhotos.filter((_,i)=>!evUp[i]).length} ${t('evidence_added')||'evidencia(s) adjunta(s)'}</div>`:''}
         </div>`;
       }
       row.innerHTML=`
@@ -4017,22 +4021,24 @@ function setCLINA(id){
 function setCLIEvidence(id,files){
   const item=activeCL?.items?.find(i=>i.id===id);if(!item)return;
   if(!item.photos)item.photos=[];
+  if(!item.photoCaptions)item.photoCaptions=[];
+  if(!item._uploading)item._uploading=[];
   Array.from(files).forEach(f=>{
     const rd=new FileReader();
     rd.onload=ev=>{
       const idx=item.photos.length;
       item.photos.push(ev.target.result);
-      if(!item.photoCaptions)item.photoCaptions=[];
       item.photoCaptions.push('');
+      item._uploading[idx]=true;
       item.evidenceProvided=true;item.checked=true;item.na=false;
       renderCLR();
-      // Upload immediately
       const rptId=curRptId||getUploadSessionId();
       const safeId=(id||'ev').replace(/[^a-zA-Z0-9]/g,'_');
       (async()=>{
         const path=safePath(`reports/${rptId}/checklist/${safeId}/p${idx}_${Date.now()}.jpg`);
         const url=await uploadPhotoWithFallback(ev.target.result,path,item.photos,idx);
-        if(url)renderCLR();
+        item._uploading[idx]=false;
+        renderCLR();
       })();
     };rd.readAsDataURL(f);
   });
