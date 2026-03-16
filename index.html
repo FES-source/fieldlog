@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.62 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.63 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2701,7 +2701,7 @@ function rptRow(r,withProj=false){
     ${photos.length?`<div class="rr-photo-count">📷 ${photos.length}</div>`:''}
     <div class="rr-photo-count"><span class="st-${(r.status||'draft').toLowerCase().replace(/ /g,'-')}">${tRptStatus(r.status||'Draft')}</span></div>
     <div class="rr-actions">
-      ${!isCust?(()=>{const lk=isReportLocked(r);const _en=currentUser?.lang==='en';if(lk==='customer')return`<span class="bx" style="font-family:var(--mo);font-size:8px;border-color:var(--gn);color:var(--gn);">🔒 ${_en?'CLOSED':'CERRADO'}</span>`;if(lk==='approved')return '';return`<button class="ib ed" onclick="editR('${r.id}')">✏ ${_en?'Edit':'Editar'}</button>`;})():''}
+      ${!isCust?(()=>{const lk=isReportLocked(r);const _en=currentUser?.lang==='en';if(lk==='customer')return`<span class="bx" style="font-family:var(--mo);font-size:8px;border-color:var(--gn);color:var(--gn);">🔒 ${_en?'CLOSED':'CERRADO'}</span>`;if(lk==='approved')return`<span class="bx" style="font-family:var(--mo);font-size:8px;border-color:var(--gn);color:var(--gn);">🔒 ${_en?'CLOSED':'CERRADO'}</span>`;return`<button class="ib ed" onclick="editR('${r.id}')">✏ ${_en?'Edit':'Editar'}</button>`;})():''}
       <button class="ib" onclick="viewReport('${r.id}')">👁 ${t('view_label')}</button>
       ${!isCust?`<button class="ib gn" onclick="genPDF('${r.id}')">📄 PDF</button>`:''}
       ${isCust&&r.status==='Pending Customer'?`<button class="ib" style="background:rgba(100,149,237,.15);border-color:#6495ed;color:#6495ed;" onclick="openCustAppr('${r.id}')">🤝 ${t('sign_label')}</button><button class="ib" style="border-color:var(--am);color:var(--am);" onclick="openCustReject('${r.id}')">↩ ${t('correct_label')}</button>`:''}
