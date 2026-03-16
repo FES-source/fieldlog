@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.54 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.55 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -238,7 +238,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 .cli.expanded .cli-extras{display:block;}
 /* Si/No/N-A for checklist */
 .sna{display:flex;gap:6px;margin-bottom:7px;}
-.sna-btn{font-family:var(--mo);font-size:9px;letter-spacing:1px;padding:3px 8px;border:1px solid var(--bd);background:var(--sf);color:var(--mu);cursor:pointer;transition:all .15s;}
+.sna-btn{font-family:var(--mo);font-size:9px;letter-spacing:1px;padding:3px 10px;border:1px solid var(--bd);background:var(--sf);color:var(--mu);cursor:pointer;transition:all .15s;white-space:nowrap;min-width:0;}
 .sna-btn:hover{border-color:var(--am);}
 .sna-btn.si.on{background:rgba(61,186,120,.12);border-color:var(--gn);color:var(--gn);}
 .sna-btn.no.on{background:rgba(224,82,82,.12);border-color:var(--rd);color:var(--rd);}
@@ -3154,7 +3154,7 @@ function openCLB(id=null){
   document.getElementById('clb-items').innerHTML='';
   if(id){const c=DB.checklists.find(cl=>cl.id===id);if(c){
     document.getElementById('clb-name').value=c.name;
-    c.items.forEach(i=>addCLBI(i.text,keyToCat(i.category),i.type||'sna',i.opts||[]));
+    c.items.forEach(i=>addCLBI(i.text,keyToCat(i.category),i.type||'yesno',i.opts||[]));
     }}
   else{} // start with empty items — user adds manually
   openMO('mo-clb');
@@ -3194,7 +3194,7 @@ function getItemTypes(){
   if(lang==='it') return ITEM_TYPES_IT;
   return ITEM_TYPES_ES;
 }
-function addCLBI(txt='',cat='General',tp='sna',opts=[]){
+function addCLBI(txt='',cat='General',tp='yesno',opts=[]){
   const d=document.createElement('div');d.className='bi';d.style.cssText='flex-wrap:wrap;gap:5px;';
   d._opts=[...opts];
   const optsHtml=()=>{
@@ -3235,6 +3235,10 @@ function onBItypeChange(sel){
     d._opts=[];
   }
 }
+// Global helpers for optsHtml() inline handlers (called when editing existing single/multi items)
+function updateBIopt(inp,oi){const d=inp.closest('.bi');if(d&&d._opts)d._opts[oi]=inp.value;}
+function removeBIopt(btn,oi){const d=btn.closest('.bi');if(!d||!d._opts)return;d._opts.splice(oi,1);renderBIopts(d);}
+function addBIopt(btn){const d=btn.closest('.bi');if(!d)return;if(!d._opts)d._opts=[];d._opts.push('');renderBIopts(d);}
 function renderBIopts(d){
   const optsDiv=d.querySelector('.bi-opts');if(!optsDiv)return;
   const opts=d._opts||[];
