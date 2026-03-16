@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.55 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.56 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -228,7 +228,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 .cli{background:var(--s2);border:1px solid var(--bd);margin-bottom:4px;transition:border-color .15s;}
 .cli:hover{border-color:rgba(245,166,35,.3);}
 .cli.ck{border-color:rgba(61,186,120,.25);background:rgba(61,186,120,.04);}
-.cli-top{display:flex;align-items:center;gap:8px;padding:8px 10px;cursor:pointer;user-select:none;}
+.cli-top{display:flex;gap:8px;padding:8px 10px;cursor:pointer;user-select:none;}
 .cli-cb{width:16px;height:16px;border:2px solid var(--bd);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;background:var(--sf);transition:all .15s;}
 .cli.ck .cli-cb{background:var(--gn);border-color:var(--gn);color:#000;}
 .cli-txt{flex:1;font-size:12px;line-height:1.4;}
@@ -3992,15 +3992,15 @@ function renderCLR(){
         </div>`;
       }
       row.innerHTML=`
-        <div class="cli-top" style="${unanswered?'border-left:2px solid var(--rd);padding-left:6px;':'border-left:2px solid var(--gn);padding-left:6px;'}">
-          <div class="cli-cb" style="color:${unanswered?'var(--rd)':'var(--gn)'};">${unanswered?'○':'✓'}</div>
-          <div style="flex:1;">
+        <div class="cli-top" style="${unanswered?'border-left:2px solid var(--rd);':'border-left:2px solid var(--gn);'}padding-left:8px;align-items:flex-start;">
+          <div class="cli-cb" style="color:${unanswered?'var(--rd)':'var(--gn)'};margin-top:2px;">${unanswered?'○':'✓'}</div>
+          <div style="flex:1;min-width:0;">
             <div class="cli-txt">${E(item.text)}</div>
             <div style="margin-top:5px;">${ansHtml}</div>
             ${unanswered?`<div style="font-family:var(--mo);font-size:8px;color:var(--rd);letter-spacing:1px;margin-top:3px;">⚠ ${t('required_label')}</div>`:''}
           </div>
-          <span class="cli-cat">${E(item.category)}</span>
-          <button style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:11px;padding:0 4px;" onclick="event.stopPropagation();togCLI('${item.id}')" title="Fotos / Nota">📷</button>
+          <span class="cli-cat">${E(keyToCat(item.category))}</span>
+          <button style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:11px;padding:0 4px;margin-top:1px;" onclick="event.stopPropagation();togCLI('${item.id}')" title="Fotos / Nota">📷</button>
         </div>
         <div class="cli-extras" style="${(item._expanded||(item.photos||[]).length>0)?'':'display:none;'}">
           <div class="cli-photo-zone" style="position:relative;">
