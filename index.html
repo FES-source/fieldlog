@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.70 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.71 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,7 +89,7 @@ body{background:var(--bg);color:var(--tx);font-family:var(--bo);min-height:100vh
 .logo{font-family:var(--he);font-size:20px;font-weight:900;letter-spacing:3px;color:var(--am);text-transform:uppercase;cursor:pointer;user-select:none;}
 .logo span{color:var(--tx);}
 .tb-right{display:flex;align-items:center;gap:14px;}
-.clk{font-family:var(--mo);font-size:10px;color:var(--mu2);text-align:right;line-height:1.7;display:none;}
+.clk{font-family:var(--bo);font-size:11px;color:var(--mu2);text-align:right;line-height:1.7;display:none;}
 .clk b{color:var(--am);}
 @media(min-width:600px){.clk{display:block;}}
 .hbtn{background:none;border:1px solid var(--bd);color:var(--mu);font-size:14px;width:32px;height:32px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -117,7 +117,7 @@ body{background:var(--bg);color:var(--tx);font-family:var(--bo);min-height:100vh
 /* ── PAGE HEADER ── */
 .ph{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px;gap:10px;flex-wrap:wrap;}
 .pht{font-family:var(--he);font-size:30px;font-weight:900;letter-spacing:1px;text-transform:uppercase;line-height:1;}
-.pht small{display:block;font-family:var(--mo);font-size:9px;color:var(--am);letter-spacing:3px;margin-bottom:4px;}
+.pht small{display:block;font-family:var(--bo);font-size:10px;color:var(--am);letter-spacing:0.5px;margin-bottom:4px;}
 .pha{display:flex;gap:7px;flex-wrap:wrap;align-items:center;}
 
 /* ── CARDS ── */
@@ -233,7 +233,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 .cli.ck .cli-cb{background:var(--gn);border-color:var(--gn);color:#000;}
 .cli-txt{flex:1;font-size:12px;line-height:1.4;}
 .cli.ck .cli-txt{color:var(--mu);text-decoration:line-through;}
-.cli-cat{font-family:var(--mo);font-size:8px;letter-spacing:1px;padding:2px 5px;border:1px solid var(--bd);color:var(--mu);text-transform:uppercase;flex-shrink:0;}
+.cli-cat{font-family:var(--bo);font-size:9px;letter-spacing:0;padding:2px 5px;border:1px solid var(--bd);color:var(--mu);text-transform:uppercase;flex-shrink:0;}
 .cli-extras{padding:0 10px 8px 34px;display:none;}
 .cli.expanded .cli-extras{display:block;}
 /* Si/No/N-A for checklist */
@@ -244,7 +244,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 .sna-btn.no.on{background:rgba(224,82,82,.12);border-color:var(--rd);color:var(--rd);}
 .sna-btn.na.on{background:rgba(245,166,35,.12);border-color:var(--am);color:var(--am);}
 /* Photo zone for CLI */
-.cli-photo-zone{border:1px dashed var(--bd);padding:10px;text-align:center;cursor:pointer;transition:all .15s;position:relative;font-family:var(--mo);font-size:9px;color:var(--mu);letter-spacing:1.5px;}
+.cli-photo-zone{border:1px dashed var(--bd);padding:10px;text-align:center;cursor:pointer;transition:all .15s;position:relative;font-family:var(--bo);font-size:11px;color:var(--mu);letter-spacing:0;}
 .cli-photo-zone:hover{border-color:var(--am);color:var(--am);}
 .cli-photo-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
 .cli-photos{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px;}
@@ -269,7 +269,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 /* ── SIGNATURE ── */
 .sig-wrap{position:relative;margin-top:11px;background:var(--bg);border:1px solid var(--bd);line-height:0;overflow:hidden;}
 #sgc{display:block;touch-action:none;cursor:crosshair;}
-.sig-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--mo);font-size:10px;color:var(--mu);letter-spacing:2px;pointer-events:none;}
+.sig-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--bo);font-size:12px;color:var(--mu);letter-spacing:0;pointer-events:none;}
 
 /* ── MODAL ── */
 .mo{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:600;display:none;align-items:center;justify-content:center;padding:14px;}
@@ -289,7 +289,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 .bbs b{color:var(--gn);}
 
 /* ── TOAST ── */
-.toast{position:fixed;bottom:64px;right:16px;background:var(--gn);color:#000;font-family:var(--mo);font-size:10px;letter-spacing:2px;padding:9px 14px;z-index:900;transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none;max-width:280px;text-transform:uppercase;}
+.toast{position:fixed;bottom:64px;right:16px;background:var(--gn);color:#000;font-family:var(--bo);font-size:11px;letter-spacing:0;padding:9px 14px;z-index:900;transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none;max-width:280px;text-transform:uppercase;}
 .toast.sh{transform:translateY(0);opacity:1;}
 
 /* ── STAT CARDS ── */
@@ -298,9 +298,9 @@ tr:hover td{background:rgba(255,255,255,.018);}
 .sv::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--am);}
 .sv.sg{background:linear-gradient(135deg,rgba(61,186,120,.08),transparent);}
 .sv.sg::after{background:var(--gn);}
-.svl{font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;margin-bottom:5px;}
+.svl{font-family:var(--bo);font-size:10px;letter-spacing:0.5px;color:var(--mu);text-transform:uppercase;margin-bottom:5px;}
 .svv{font-family:var(--he);font-size:26px;font-weight:900;line-height:1;color:var(--am);}
-.svs{font-family:var(--mo);font-size:9px;color:var(--mu);margin-top:2px;}
+.svs{font-family:var(--bo);font-size:10px;color:var(--mu);margin-top:2px;}
 
 /* ── PROJECT CARD ── */
 .pc{background:var(--sf);border:1px solid var(--bd);padding:14px;margin-bottom:8px;transition:all .15s;position:relative;}
@@ -308,7 +308,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 .pc:hover{background:rgba(245,166,35,.02);}
 .pc-top{display:flex;align-items:flex-start;gap:10px;justify-content:space-between;flex-wrap:wrap;}
 .pc-name{font-family:var(--he);font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
-.pc-meta{font-family:var(--mo);font-size:10px;color:var(--mu);margin-top:5px;line-height:1.9;}
+.pc-meta{font-family:var(--bo);font-size:11px;color:var(--mu);margin-top:5px;line-height:1.9;}
 
 /* ── REPORT ROW ── */
 .rr{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--s2);border:1px solid var(--bd);margin-bottom:5px;transition:all .15s;}
@@ -317,13 +317,13 @@ tr:hover td{background:rgba(255,255,255,.018);}
 .rr-info{flex:1;min-width:0;}
 .rr-date{font-family:var(--mo);font-size:11px;color:var(--am);letter-spacing:1px;}
 .rr-proj{font-size:12px;color:var(--mu2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.rr-summary{font-family:var(--mo);font-size:10px;color:var(--mu);margin-top:3px;}
+.rr-summary{font-family:var(--bo);font-size:11px;color:var(--mu);margin-top:3px;}
 .rr-actions{display:flex;gap:4px;flex-shrink:0;align-items:center;}
-.rr-photo-count{font-family:var(--mo);font-size:10px;color:var(--mu);display:flex;align-items:center;gap:3px;margin-right:4px;}
+.rr-photo-count{font-family:var(--bo);font-size:11px;color:var(--mu);display:flex;align-items:center;gap:3px;margin-right:4px;}
 
 /* ── MEMBER PILL ── */
 .mpi{display:inline-flex;align-items:center;gap:5px;background:var(--s2);border:1px solid var(--bd);padding:4px 9px;margin:2px;font-size:11px;}
-.mro{font-family:var(--mo);font-size:8px;color:var(--am);letter-spacing:1px;}
+.mro{font-family:var(--bo);font-size:10px;color:var(--am);letter-spacing:0;}
 .mrm{background:none;border:none;color:var(--mu);cursor:pointer;font-size:10px;padding:0 0 0 3px;}
 .mrm:hover{color:var(--rd);}
 
@@ -334,7 +334,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
 .cs{background:var(--sf);border:1px solid var(--bd);color:var(--tx);font-family:var(--bo);font-size:11px;padding:3px 5px;width:105px;}
 
 /* ── CUSTOMIZE BAR ── */
-.cbar{background:var(--abg);border:1px dashed var(--ad);padding:8px 13px;font-family:var(--mo);font-size:9px;color:var(--ad);letter-spacing:1px;margin-bottom:12px;}
+.cbar{background:var(--abg);border:1px dashed var(--ad);padding:8px 13px;font-family:var(--bo);font-size:11px;color:var(--ad);letter-spacing:0;margin-bottom:12px;}
 
 /* ── EMPTY ── */
 .emp{text-align:center;padding:34px 18px;font-family:var(--bo);font-size:12px;color:var(--mu);letter-spacing:0;border:2px dashed var(--bd);}
@@ -344,14 +344,14 @@ tr:hover td{background:rgba(255,255,255,.018);}
 .dv{height:1px;background:var(--bd);margin:14px 0;}
 
 /* ── RID ── */
-.rid2{font-family:var(--mo);font-size:10px;color:var(--mu);background:var(--sf);border:1px solid var(--bd);padding:5px 10px;}
+.rid2{font-family:var(--bo);font-size:11px;color:var(--mu);background:var(--sf);border:1px solid var(--bd);padding:5px 10px;}
 
 /* ── PROJECT OVERVIEW ── */
 .proj-overview{display:grid;grid-template-columns:1fr 2fr;gap:14px;margin-bottom:20px;}
 @media(max-width:700px){.proj-overview{grid-template-columns:1fr;}}
 .po-img{background:var(--s2);border:1px solid var(--bd);height:160px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;}
 .po-img img{width:100%;height:100%;object-fit:cover;}
-.po-img-ph{font-family:var(--mo);font-size:10px;color:var(--mu);letter-spacing:2px;}
+.po-img-ph{font-family:var(--bo);font-size:11px;color:var(--mu);letter-spacing:0;}
 
 @keyframes fd{from{opacity:0;transform:translateY(-5px);}to{opacity:1;transform:translateY(0);}}
 @media(max-width:680px){
@@ -375,12 +375,12 @@ tr:hover td{background:rgba(255,255,255,.018);}
 .umenu.op{display:block;}
 .um-hd{padding:10px 14px 8px;border-bottom:1px solid var(--bd);}
 .um-nm{font-size:12px;font-weight:700;color:var(--tx);}
-.um-rl{font-family:var(--mo);font-size:9px;color:var(--am);letter-spacing:1px;margin-top:2px;}
+.um-rl{font-family:var(--bo);font-size:10px;color:var(--am);letter-spacing:0;margin-top:2px;}
 .um-it{padding:9px 14px;font-family:var(--bo);font-size:11px;letter-spacing:0;text-transform:uppercase;color:var(--mu);cursor:pointer;transition:all .15s;}
 .um-it:hover{color:var(--tx);background:rgba(255,255,255,.03);}
 .um-sep{height:1px;background:var(--bd);}
 /* ── USERS PAGE ── */
-.rbadge{font-family:var(--mo);font-size:9px;padding:2px 7px;letter-spacing:1px;display:inline-block;}
+.rbadge{font-family:var(--bo);font-size:10px;padding:2px 7px;letter-spacing:0;display:inline-block;}
 .rb-admin{background:rgba(245,166,35,.15);border:1px solid var(--am);color:var(--am);}
 .rb-manager{background:rgba(78,142,245,.1);border:1px solid var(--bl);color:var(--bl);}
 .rb-tech{background:rgba(61,186,120,.08);border:1px solid var(--gn);color:var(--gn);}
@@ -398,11 +398,11 @@ tr:hover td{background:rgba(255,255,255,.018);}
 .lb-cap-row{display:flex;gap:0;margin-bottom:4px;}
 .lb-cap-row input{flex:1;background:var(--s2);border:1px solid var(--bd);color:var(--tx);font-family:var(--bo);font-size:13px;padding:8px 12px;outline:none;}
 .lb-cap-row input:focus{border-color:var(--am);}
-.lb-save-btn{background:var(--am);border:1px solid var(--am);color:#000;font-family:var(--mo);font-size:10px;letter-spacing:1px;padding:8px 14px;cursor:pointer;white-space:nowrap;}
+.lb-save-btn{background:var(--am);border:1px solid var(--am);color:#000;font-family:var(--bo);font-size:11px;letter-spacing:0;padding:8px 14px;cursor:pointer;white-space:nowrap;}
 .lb-close{position:absolute;top:14px;right:14px;background:none;border:1px solid var(--bd);color:var(--mu);cursor:pointer;font-size:16px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
 .lb-close:hover{border-color:var(--rd);color:var(--rd);}
 .lb-nav{display:flex;align-items:center;gap:12px;margin-top:10px;}
-.lb-ctr{font-family:var(--mo);font-size:10px;color:var(--mu);}
+.lb-ctr{font-family:var(--bo);font-size:11px;color:var(--mu);}
 .lb-caption-display{font-size:11px;color:var(--mu2);font-style:italic;text-align:center;min-height:16px;}
 /* ── PHOTO THUMB w/caption ── */
 .pthumb{position:relative;aspect-ratio:1;background:var(--s2);border:1px solid var(--bd);overflow:hidden;cursor:pointer;}
@@ -534,11 +534,11 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="ph">
     <div class="pht"><small id="ph-ar-small">// HISTORIAL</small><span id="ph-ar-title">Informes</span></div>
     <div class="pha">
-      <input type="text" id="ar-search" placeholder="Buscar supervisor, fecha..." oninput="renderAllReports()" style="font-family:var(--mo);font-size:10px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);width:160px;letter-spacing:1px;">
-      <select id="ar-filter-proj" onchange="renderAllReports()" style="font-family:var(--mo);font-size:10px;letter-spacing:1px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);max-width:180px;">
+      <input type="text" id="ar-search" placeholder="Buscar supervisor, fecha..." oninput="renderAllReports()" style="font-family:var(--bo);font-size:10px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);width:160px;letter-spacing:1px;">
+      <select id="ar-filter-proj" onchange="renderAllReports()" style="font-family:var(--bo);font-size:10px;letter-spacing:1px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);max-width:180px;">
         <option value="" id="opt-all-projects">Todos los proyectos</option>
       </select>
-      <select id="ar-filter-status" onchange="renderAllReports()" style="font-family:var(--mo);font-size:10px;letter-spacing:1px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);">
+      <select id="ar-filter-status" onchange="renderAllReports()" style="font-family:var(--bo);font-size:10px;letter-spacing:1px;padding:6px 10px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);">
         <option value="" id="opt-all-statuses">Todos los estados</option>
         <option value="Draft" id="ar-opt-draft">Borrador</option>
         <option value="Filling" id="ar-opt-filling">Llenando</option>
@@ -550,7 +550,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
       <button class="btn bp" onclick="startNewReport(null)">＋ <span id="lbl-new-report-ar">Nuevo Informe</span></button>
     </div>
   </div>
-  <div style="font-family:var(--mo);font-size:10px;color:var(--mu);margin-bottom:10px;letter-spacing:1px;display:flex;gap:14px;flex-wrap:wrap;">
+  <div style="font-family:var(--bo);font-size:10px;color:var(--mu);margin-bottom:10px;letter-spacing:1px;display:flex;gap:14px;flex-wrap:wrap;">
     <span id="ar-counts"></span>
   </div>
   <div id="ar-list"></div>
@@ -597,9 +597,9 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="sg" id="pd-stats" style="grid-template-columns:repeat(auto-fit,minmax(100px,1fr));"></div>
   <!-- Nav tabs -->
   <div style="display:flex;border-bottom:1px solid var(--bd);margin-bottom:14px;">
-    <div class="pd-tab on" data-tab="overview" onclick="switchPDTab('overview')" style="font-family:var(--mo);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px 15px;cursor:pointer;border:1px solid transparent;border-bottom:none;color:var(--mu);transition:all .15s;margin-bottom:-1px;" data-i18n="overview"><span>Resumen</span></div>
-    <div class="pd-tab" data-tab="reports" onclick="switchPDTab('reports')" style="font-family:var(--mo);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px 15px;cursor:pointer;border:1px solid transparent;border-bottom:none;color:var(--mu);transition:all .15s;margin-bottom:-1px;" data-i18n="reports"><span>Informes</span></div>
-    <div class="pd-tab" data-tab="photos" onclick="switchPDTab('photos')" style="font-family:var(--mo);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px 15px;cursor:pointer;border:1px solid transparent;border-bottom:none;color:var(--mu);transition:all .15s;margin-bottom:-1px;" data-i18n="photos"><span>Fotos</span></div>
+    <div class="pd-tab on" data-tab="overview" onclick="switchPDTab('overview')" style="font-family:var(--bo);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px 15px;cursor:pointer;border:1px solid transparent;border-bottom:none;color:var(--mu);transition:all .15s;margin-bottom:-1px;" data-i18n="overview"><span>Resumen</span></div>
+    <div class="pd-tab" data-tab="reports" onclick="switchPDTab('reports')" style="font-family:var(--bo);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px 15px;cursor:pointer;border:1px solid transparent;border-bottom:none;color:var(--mu);transition:all .15s;margin-bottom:-1px;" data-i18n="reports"><span>Informes</span></div>
+    <div class="pd-tab" data-tab="photos" onclick="switchPDTab('photos')" style="font-family:var(--bo);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:8px 15px;cursor:pointer;border:1px solid transparent;border-bottom:none;color:var(--mu);transition:all .15s;margin-bottom:-1px;" data-i18n="photos"><span>Fotos</span></div>
   </div>
   <div id="pd-panel-overview"></div>
   <div id="pd-panel-reports" style="display:none;"></div>
@@ -674,9 +674,9 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="cbar" id="cbar-toggle">⚙ TOGGLE SECTIONS ON/OFF — DISABLED SECTIONS ARE EXCLUDED FROM PDF</div>
   <!-- Rejection reason banner — shown when editing a rejected report -->
   <div id="r-reject-banner" style="display:none;background:rgba(224,82,82,.1);border:1px solid rgba(224,82,82,.4);border-left:4px solid var(--rd);padding:11px 16px;margin-bottom:14px;">
-    <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--rd);margin-bottom:5px;">⚠ REPORT REJECTED — PLEASE CORRECT AND RESUBMIT</div>
+    <div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--rd);margin-bottom:5px;">⚠ REPORT REJECTED — PLEASE CORRECT AND RESUBMIT</div>
     <div id="r-reject-reason" style="font-size:12px;color:var(--tx);"></div>
-    <div id="r-reject-by" style="font-family:var(--mo);font-size:9px;color:var(--mu);margin-top:4px;"></div>
+    <div id="r-reject-by" style="font-family:var(--bo);font-size:9px;color:var(--mu);margin-top:4px;"></div>
   </div>
 
   <!-- JOB INFO -->
@@ -688,7 +688,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
       <div class="fg" style="margin-top:10px;"><div><label id="lbl-r-client">Cliente / Propietario</label><input type="text" id="r-client" placeholder="Empresa o persona"></div><div><label id="lbl-r-loc">Ubicación / Dirección</label><input type="text" id="r-loc" placeholder="Dirección o referencia GPS"></div></div>
       <div id="site-row" style="margin-top:10px;display:none;">
         <div style="border:1px solid var(--bd);border-left:3px solid var(--am);padding:10px 12px;background:rgba(245,166,35,.04);">
-          <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);margin-bottom:8px;" id="lbl-site-hdr">📍 SITIO DE TRABAJO</div>
+          <div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--am);margin-bottom:8px;" id="lbl-site-hdr">📍 SITIO DE TRABAJO</div>
           <div class="fg f2">
             <div><label id="lbl-r-site-name">Nombre del Sitio</label><input type="text" id="r-site-name" placeholder="ej. Tienda Gabriela Mistral"></div>
             <div><label id="lbl-r-site-addr">Dirección del Sitio</label><input type="text" id="r-site-addr" placeholder="ej. Av. Gabriela Mistral 890, Temuco"></div>
@@ -696,7 +696,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
         </div>
       </div>
       <div style="margin-top:8px;">
-        <label style="display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-family:var(--mo);font-size:9px;letter-spacing:1px;color:var(--mu2);user-select:none;">
+        <label style="display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-family:var(--bo);font-size:9px;letter-spacing:1px;color:var(--mu2);user-select:none;">
           <input type="checkbox" id="tog-site" onchange="togSiteRow(this)" style="display:none;">
           <span id="site-toggle-icon" style="width:28px;height:15px;background:var(--bd);border-radius:8px;display:inline-block;position:relative;transition:background .2s;"><span style="position:absolute;top:2px;left:2px;width:11px;height:11px;background:#fff;border-radius:50%;transition:left .2s;display:block;"></span></span>
           <span id="lbl-site-toggle-txt">+ AGREGAR SITIO ESPECÍFICO</span>
@@ -745,7 +745,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
       <button class="adb" onclick="addTR()">＋ <span id="lbl-add-task">Agregar Tarea</span></button>
       <!-- Task Photo Gallery — shown below task list -->
       <div id="task-photo-gallery" style="display:none;margin-top:14px;border-top:1px solid var(--bd);padding-top:12px;">
-        <div style="font-family:var(--mo);font-size:9px;letter-spacing:3px;color:var(--am);margin-bottom:10px;"><span id="lbl-task-photos">📷 FOTOS DE TAREAS</span></div>
+        <div style="font-family:var(--bo);font-size:9px;letter-spacing:3px;color:var(--am);margin-bottom:10px;"><span id="lbl-task-photos">📷 FOTOS DE TAREAS</span></div>
         <div id="task-photo-gallery-inner"></div>
       </div>
     </div>
@@ -784,7 +784,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div class="sec" id="sec-photos">
     <div class="sh" onclick="togS('sec-photos')"><div class="sl"><span class="si">📷</span><span class="st2" id="sec-photos-label">Registro Fotográfico</span><span class="bx" id="bl-ph" style="margin-left:6px;">0 photos</span></div><div class="sc"><label class="tog" onclick="event.stopPropagation()"><input type="checkbox" onchange="togSE('sec-photos',this)"><span class="tt"></span></label><span class="schev">▼</span></div></div>
     <div class="sb">
-      <div class="pzone"><input type="file" accept="image/*" multiple onchange="addPhotos(event)"><div style="font-size:24px;">📸</div><div style="font-family:var(--mo);font-size:9px;color:var(--mu);letter-spacing:2px;margin-top:5px;"><span id="lbl-photo-drop">TOCA O ARRASTRA FOTOS AQUÍ</span></div></div>
+      <div class="pzone"><input type="file" accept="image/*" multiple onchange="addPhotos(event)"><div style="font-size:24px;">📸</div><div style="font-family:var(--bo);font-size:9px;color:var(--mu);letter-spacing:2px;margin-top:5px;"><span id="lbl-photo-drop">TOCA O ARRASTRA FOTOS AQUÍ</span></div></div>
       <div id="r-photos" style="margin-top:8px;display:flex;flex-direction:column;gap:7px;"></div>
     </div>
   </div>
@@ -832,7 +832,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   </div>
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
     <input type="text" id="cust-search" placeholder="🔍  Buscar clientes..." oninput="renderCustomers()" style="flex:1;min-width:160px;max-width:320px;">
-    <span class="bx" id="cust-cnt" style="font-family:var(--mo);font-size:10px;">0 clientes</span>
+    <span class="bx" id="cust-cnt" style="font-family:var(--bo);font-size:10px;">0 clientes</span>
   </div>
   <div id="cust-list"></div>
   <div class="emp" id="cust-emp" style="display:none;"><div class="eic">🤝</div><span id="cust-emp-txt">AÚN NO HAY CLIENTES</span></div>
@@ -845,7 +845,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
     <div class="bbs">STATUS: <b id="bb-st">DRAFT</b></div>
     <button class="btn xs bs" onclick="openActivityLog()" title="Activity log" style="font-size:9px;letter-spacing:1px;padding:3px 8px;">📋 Log</button>
-    <span id="autosave-ind" style="font-family:var(--mo);font-size:9px;letter-spacing:1px;color:var(--mu);"></span>
+    <span id="autosave-ind" style="font-family:var(--bo);font-size:9px;letter-spacing:1px;color:var(--mu);"></span>
   </div>
   <div style="display:flex;gap:7px;">
     <button class="btn sm bs" onclick="genPDF(null)">📄 PDF</button>
@@ -871,13 +871,13 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="fg" style="margin-top:10px;"><div><label data-i18n="project_location">Ubicación / Dirección</label><input type="text" id="p-loc" placeholder="Dirección del sitio"></div></div>
     <div class="fg f1" style="margin-top:10px;"><div><label data-i18n="project_desc">Descripción / Alcance</label><textarea id="p-desc" placeholder="Alcance o notas del proyecto..."></textarea></div></div>
     <div class="dv"></div>
-    <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:7px;" data-i18n="project_logos">LOGOS DEL PROYECTO</div>
+    <div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:7px;" data-i18n="project_logos">LOGOS DEL PROYECTO</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
       <div>
         <label data-i18n="logo_contractor">Logo 1 (Empresa / Contratista)</label>
         <div class="logo-upload-zone" id="p-logo1-zone" onclick="document.getElementById('p-logo1-inp').click()" style="margin-top:4px;height:70px;border:1px dashed var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--s2);position:relative;overflow:hidden;">
           <img id="p-logo1-prev" src="" style="max-height:60px;max-width:100%;display:none;object-fit:contain;">
-          <span id="p-logo1-lbl" style="font-family:var(--mo);font-size:9px;color:var(--mu);letter-spacing:2px;" data-i18n="upload">+ SUBIR</span>
+          <span id="p-logo1-lbl" style="font-family:var(--bo);font-size:9px;color:var(--mu);letter-spacing:2px;" data-i18n="upload">+ SUBIR</span>
           <button id="p-logo1-rm" onclick="event.stopPropagation();clearLogo(1)" style="display:none;position:absolute;top:3px;right:3px;background:var(--rd);border:none;color:#fff;cursor:pointer;font-size:9px;padding:1px 5px;">✕</button>
         </div>
         <input type="file" id="p-logo1-inp" accept="image/*" style="display:none" onchange="loadLogo(1,event)">
@@ -886,7 +886,7 @@ tr:hover td{background:rgba(255,255,255,.018);}
         <label data-i18n="logo_owner">Logo 2 (Cliente / Propietario)</label>
         <div class="logo-upload-zone" id="p-logo2-zone" onclick="document.getElementById('p-logo2-inp').click()" style="margin-top:4px;height:70px;border:1px dashed var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--s2);position:relative;overflow:hidden;">
           <img id="p-logo2-prev" src="" style="max-height:60px;max-width:100%;display:none;object-fit:contain;">
-          <span id="p-logo2-lbl" style="font-family:var(--mo);font-size:9px;color:var(--mu);letter-spacing:2px;" data-i18n="upload">+ SUBIR</span>
+          <span id="p-logo2-lbl" style="font-family:var(--bo);font-size:9px;color:var(--mu);letter-spacing:2px;" data-i18n="upload">+ SUBIR</span>
           <button id="p-logo2-rm" onclick="event.stopPropagation();clearLogo(2)" style="display:none;position:absolute;top:3px;right:3px;background:var(--rd);border:none;color:#fff;cursor:pointer;font-size:9px;padding:1px 5px;">✕</button>
         </div>
         <input type="file" id="p-logo2-inp" accept="image/*" style="display:none" onchange="loadLogo(2,event)">
@@ -895,13 +895,13 @@ tr:hover td{background:rgba(255,255,255,.018);}
     <div class="dv"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
       <div>
-        <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);" data-i18n="customer_approval_step">PASO DE APROBACIÓN DEL CLIENTE</div>
+        <div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--mu);" data-i18n="customer_approval_step">PASO DE APROBACIÓN DEL CLIENTE</div>
         <div style="font-size:11px;color:var(--mu2);margin-top:2px;" data-i18n="customer_approval_desc">Requiere firma del cliente después de la aprobación del supervisor</div>
       </div>
       <label class="tog"><input type="checkbox" id="p-cust-appr"><span class="tt"></span></label>
     </div>
     <div class="dv"></div>
-    <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:7px;" data-i18n="assigned_team">MIEMBROS ASIGNADOS AL EQUIPO</div>
+    <div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:7px;" data-i18n="assigned_team">MIEMBROS ASIGNADOS AL EQUIPO</div>
     <div id="p-mdisp" style="margin-bottom:8px;min-height:24px;"></div>
     <div style="display:flex;gap:7px;"><select id="p-msel" style="flex:1;font-size:12px;"><option value="" id="opt-add-taskforce">— Agregar de Cuadrilla —</option></select><button class="btn sm bs" onclick="addPM()"><span id="lbl-add-member-btn">+ Agregar</span></button></div>
   </div>
@@ -990,13 +990,13 @@ tr:hover td{background:rgba(255,255,255,.018);}
     </div>
     <div class="dv"></div>
     <div id="u-proj-section">
-      <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:4px;" id="u-proj-section-label">ACCESO A PROYECTOS</div>
+      <div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:4px;" id="u-proj-section-label">ACCESO A PROYECTOS</div>
       <div style="font-size:10px;color:var(--mu2);margin-bottom:8px;" id="u-proj-section-hint"></div>
       <div id="u-proj-grid" class="pg-perm"></div>
     </div>
     <div id="u-perm-section">
       <div class="dv"></div>
-      <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:8px;" data-i18n="user_permissions">PERMISOS</div>
+      <div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:8px;" data-i18n="user_permissions">PERMISOS</div>
       <div id="u-perm-grid" class="pg-perm"></div>
     </div>
   </div>
@@ -1026,18 +1026,18 @@ tr:hover td{background:rgba(255,255,255,.018);}
       <div><label id="lbl-cm-notes">Notas</label><input type="text" id="cm-notes" placeholder="Observaciones..."></div>
     </div>
     <div class="dv"></div>
-    <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:7px;" id="lbl-cust-logo-sec">LOGO DEL CLIENTE</div>
+    <div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:7px;" id="lbl-cust-logo-sec">LOGO DEL CLIENTE</div>
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
       <div class="logo-upload-zone" id="cm-logo-zone" onclick="document.getElementById('cm-logo-inp').click()" style="width:120px;height:70px;border:1px dashed var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--s2);position:relative;overflow:hidden;flex-shrink:0;">
         <img id="cm-logo-prev" src="" style="max-height:60px;max-width:100%;display:none;object-fit:contain;">
-        <span id="cm-logo-lbl" style="font-family:var(--mo);font-size:9px;color:var(--mu);letter-spacing:2px;">+ SUBIR</span>
+        <span id="cm-logo-lbl" style="font-family:var(--bo);font-size:9px;color:var(--mu);letter-spacing:2px;">+ SUBIR</span>
         <button id="cm-logo-rm" onclick="event.stopPropagation();clearCustLogo()" style="display:none;position:absolute;top:3px;right:3px;background:var(--rd);border:none;color:#fff;cursor:pointer;font-size:9px;padding:1px 5px;">✕</button>
       </div>
       <input type="file" id="cm-logo-inp" accept="image/*" style="display:none" onchange="loadCustLogo(event)">
       <div style="font-size:11px;color:var(--mu2);" id="lbl-cust-logo-hint">Este logo aparecerá en los informes de los proyectos asignados a este cliente.</div>
     </div>
     <div class="dv"></div>
-    <div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:8px;" id="lbl-cm-proj-sec">PROYECTOS ASIGNADOS AL CLIENTE</div>
+    <div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--mu);margin-bottom:8px;" id="lbl-cm-proj-sec">PROYECTOS ASIGNADOS AL CLIENTE</div>
     <div id="cm-proj-grid" class="pg-perm"></div>
   </div>
   <div class="mf"><button class="btn bs" onclick="closeMO('mo-cust')" id="btn-cust-cancel" data-i18n="cancel">Cancelar</button><button class="btn bp" onclick="saveCust()" id="btn-cust-save">Guardar Cliente</button></div>
@@ -2705,7 +2705,7 @@ function rptRow(r,withProj=false){
     ${totalPhotos?`<div class="rr-photo-count">📷 ${totalPhotos}</div>`:''}
     <div class="rr-photo-count"><span class="st-${(r.status||'draft').toLowerCase().replace(/ /g,'-')}">${tRptStatus(r.status||'Draft')}</span></div>
     <div class="rr-actions">
-      ${!isCust?(()=>{const lk=isReportLocked(r);const _en=currentUser?.lang==='en';if(lk==='customer')return`<span class="bx" style="font-family:var(--mo);font-size:8px;border-color:var(--gn);color:var(--gn);">🔒 ${_en?'CLOSED':'CERRADO'}</span>`;if(lk==='approved')return`<span class="bx" style="font-family:var(--mo);font-size:8px;border-color:var(--gn);color:var(--gn);">🔒 ${_en?'CLOSED':'CERRADO'}</span>`;return`<button class="ib ed" onclick="editR('${r.id}')">✏ ${_en?'Edit':'Editar'}</button>`;})():''}
+      ${!isCust?(()=>{const lk=isReportLocked(r);const _en=currentUser?.lang==='en';if(lk==='customer')return`<span class="bx" style="font-family:var(--bo);font-size:8px;border-color:var(--gn);color:var(--gn);">🔒 ${_en?'CLOSED':'CERRADO'}</span>`;if(lk==='approved')return`<span class="bx" style="font-family:var(--bo);font-size:8px;border-color:var(--gn);color:var(--gn);">🔒 ${_en?'CLOSED':'CERRADO'}</span>`;return`<button class="ib ed" onclick="editR('${r.id}')">✏ ${_en?'Edit':'Editar'}</button>`;})():''}
       <button class="ib" onclick="viewReport('${r.id}')">👁 ${t('view_label')}</button>
       ${!isCust?`<button class="ib gn" onclick="genPDF('${r.id}')">📄 PDF</button>`:''}
       ${isCust&&r.status==='Pending Customer'?`<button class="ib" style="background:rgba(100,149,237,.15);border-color:#6495ed;color:#6495ed;" onclick="openCustAppr('${r.id}')">🤝 ${t('sign_label')}</button><button class="ib" style="border-color:var(--am);color:var(--am);" onclick="openCustReject('${r.id}')">↩ ${t('correct_label')}</button>`:''}
@@ -2956,17 +2956,17 @@ function renderPDOverview(){
   const alertHtml=isOverdue2?
     `<div style="background:rgba(224,82,82,.12);border:1px solid var(--rd);border-left:4px solid var(--rd);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
       <span style="font-size:20px;">⚠️</span>
-      <div><div style="font-family:var(--mo);font-size:10px;color:var(--rd);letter-spacing:2px;font-weight:700;">PROYECTO ATRASADO</div>
+      <div><div style="font-family:var(--bo);font-size:10px;color:var(--rd);letter-spacing:2px;font-weight:700;">PROYECTO ATRASADO</div>
       <div style="font-size:11px;color:var(--mu2);margin-top:2px;">${currentUser?.lang==='en'?`The deadline was ${p.end} — ${Math.abs(daysLeft)} days ago. Status is still "${p.status}".`:`La fecha de término fue el ${p.end} — ${Math.abs(daysLeft)} días atrás. El estado sigue como "${p.status}".`}</div></div>
     </div>`:
     (daysLeft!==null&&daysLeft<=14&&p.status!=='Completed'&&p.status!=='Cancelled')?
     `<div style="background:rgba(245,166,35,.08);border:1px solid var(--am);border-left:4px solid var(--am);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
       <span style="font-size:20px;">⚡</span>
-      <div><div style="font-family:var(--mo);font-size:10px;color:var(--am);letter-spacing:2px;font-weight:700;">PRÓXIMO A VENCER</div>
+      <div><div style="font-family:var(--bo);font-size:10px;color:var(--am);letter-spacing:2px;font-weight:700;">PRÓXIMO A VENCER</div>
       <div style="font-size:11px;color:var(--mu2);margin-top:2px;">${currentUser?.lang==='en'?`${daysLeft} day${daysLeft!==1?'s':''} remaining until deadline (${p.end}).`:`Quedan ${daysLeft} día${daysLeft!==1?'s':''} para el término (${p.end}).`}</div></div>
     </div>`:'';
   const progHtml=pct2!==null?`<div style="margin-top:10px;">
-    <div style="display:flex;justify-content:space-between;font-family:var(--mo);font-size:9px;color:var(--mu);letter-spacing:1px;margin-bottom:4px;">
+    <div style="display:flex;justify-content:space-between;font-family:var(--bo);font-size:9px;color:var(--mu);letter-spacing:1px;margin-bottom:4px;">
       <span>PROGRESO DE PLAZO</span><span>${pct2}%</span>
     </div>
     <div style="height:6px;background:var(--s2);border:1px solid var(--bd);">
@@ -2990,9 +2990,9 @@ function renderPDOverview(){
         <div class="ch"><div class="ct">👷 Equipo Asignado</div><span class="bx">${mn.length}</span></div>
         <div class="cb" style="padding-top:8px;">
           ${mn.length?mn.map(w=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--bd);">
-            <div style="flex:1;"><div style="font-size:12px;font-weight:600;">${E(w.name)}</div><div style="font-family:var(--mo);font-size:9px;color:var(--mu);">${E(w.role)}</div></div>
+            <div style="flex:1;"><div style="font-size:12px;font-weight:600;">${E(w.name)}</div><div style="font-family:var(--bo);font-size:9px;color:var(--mu);">${E(w.role)}</div></div>
             <span class="bx ${w.status==='Active'?'g':w.status==='On Leave'?'a':'r'}">${w.status==="Active"?(currentUser?.lang==="en"?"Active":"Activo"):w.status==="On Leave"?(currentUser?.lang==="en"?"On Leave":"Con permiso"):(currentUser?.lang==="en"?"Inactive":"Inactivo")}</span>
-          </div>`).join(''):'<div style="font-family:var(--mo);font-size:10px;color:var(--mu);padding:10px 0;">SIN MIEMBROS ASIGNADOS</div>'}
+          </div>`).join(''):'<div style="font-family:var(--bo);font-size:10px;color:var(--mu);padding:10px 0;">SIN MIEMBROS ASIGNADOS</div>'}
         </div>
       </div>
     </div>
@@ -3005,7 +3005,7 @@ function renderPDOverview(){
   `;
 }
 
-function infoRow(lbl,val){return val?`<div style="display:flex;gap:10px;padding:4px 0;border-bottom:1px solid var(--bd);font-size:12px;"><span style="font-family:var(--mo);font-size:9px;color:var(--mu);width:70px;flex-shrink:0;letter-spacing:1px;">${lbl}</span><span style="color:var(--tx);">${E(val)}</span></div>`:''}
+function infoRow(lbl,val){return val?`<div style="display:flex;gap:10px;padding:4px 0;border-bottom:1px solid var(--bd);font-size:12px;"><span style="font-family:var(--bo);font-size:9px;color:var(--mu);width:70px;flex-shrink:0;letter-spacing:1px;">${lbl}</span><span style="color:var(--tx);">${E(val)}</span></div>`:''}
 
 function renderPDReports(){
   const rpts=DB.reports.filter(r=>r.projId===curProjId);
@@ -3013,7 +3013,7 @@ function renderPDReports(){
   if(!rpts.length){c.innerHTML=`<div class="emp"><div class="eic">📋</div>${t('no_reports_project')}</div>`;return;}
   c.innerHTML=`
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-      <div style="font-family:var(--mo);font-size:10px;color:var(--mu);letter-spacing:1px;">
+      <div style="font-family:var(--bo);font-size:10px;color:var(--mu);letter-spacing:1px;">
         ${rpts.length} ${t('report')||'informe'}${rpts.length!==1?'s':''} · 
         ${t('approved')||'Aprobados'}: ${rpts.filter(r=>r.status==='Approved').length} · 
         ${t('review_short')||'En revisión'}: ${rpts.filter(r=>r.status==='Review').length}
@@ -3028,7 +3028,7 @@ function renderPDPhotos(){
   const allPhotos=rpts.flatMap(r=>(r.photos||[]).map(p=>({src:p,date:r.date,rid:r.id})));
   const c=document.getElementById('pd-panel-photos');
   if(!allPhotos.length){c.innerHTML=`<div class="emp"><div class="eic">📷</div>${t('no_photos')}</div>`;return;}
-  c.innerHTML=`<div class="pgrid">${allPhotos.map(p=>`<div class="pthumb"><img src="${p.src}"><div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);font-family:var(--mo);font-size:8px;color:var(--mu);padding:2px 4px;">${p.date||''}</div></div>`).join('')}</div>`;
+  c.innerHTML=`<div class="pgrid">${allPhotos.map(p=>`<div class="pthumb"><img src="${p.src}"><div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);font-family:var(--bo);font-size:8px;color:var(--mu);padding:2px 4px;">${p.date||''}</div></div>`).join('')}</div>`;
 }
 
 // ═══════════════════════════════════════════════
@@ -3064,9 +3064,9 @@ function renderWorkers(){
   if(!wks.length){tb.innerHTML='';em.style.display=DB.workers.length?'none':'block';if(!DB.workers.length)em.style.display='block';else{em.innerHTML=t('no_results_label');em.style.display='block';}return;}
   em.style.display='none';
   tb.innerHTML=wks.map(w=>`<tr>
-    <td><strong>${E(w.name)}</strong>${w.empId?` <span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${E(w.empId)}</span>`:''}</td>
+    <td><strong>${E(w.name)}</strong>${w.empId?` <span style="font-family:var(--bo);font-size:9px;color:var(--mu);">${E(w.empId)}</span>`:''}</td>
     <td>${E(w.role)}</td>
-    <td style="font-family:var(--mo);font-size:10px;color:var(--mu);">${w.phone||w.email||'—'}</td>
+    <td style="font-family:var(--bo);font-size:10px;color:var(--mu);">${w.phone||w.email||'—'}</td>
     <td><span class="bx ${w.status==='Active'?'g':w.status==='On Leave'?'a':'r'}">${w.status==="Active"?(currentUser?.lang==="en"?"Active":"Activo"):w.status==="On Leave"?(currentUser?.lang==="en"?"On Leave":"Con permiso"):(currentUser?.lang==="en"?"Inactive":"Inactivo")}</span></td>
     <td style="white-space:nowrap;"><button class="ib ed" onclick="openWM('${w.id}')">✏</button><button class="ib" onclick="delW('${w.id}')">🗑</button></td>
   </tr>`).join('');
@@ -3106,10 +3106,10 @@ function renderMats(){
   if(!mats.length){tb.innerHTML='';em.style.display='block';em.innerHTML=DB.materials.length?`<div class="eic">🔍</div>${_matLng?'NO RESULTS':'SIN RESULTADOS'}`:`<div class="eic">📦</div>${_matLng?'NO MATERIALS YET':'SIN MATERIALES AÚN'}`;return;}
   em.style.display='none';
   tb.innerHTML=mats.map(m=>`<tr>
-    <td><strong>${E(m.name)}</strong>${m.notes?`<br><span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${E(m.notes)}</span>`:''}</td>
+    <td><strong>${E(m.name)}</strong>${m.notes?`<br><span style="font-family:var(--bo);font-size:9px;color:var(--mu);">${E(m.notes)}</span>`:''}</td>
     <td><span class="bx">${E(m.cat)}</span></td>
-    <td style="font-family:var(--mo);font-size:11px;">${E(m.unit)}</td>
-    <td style="font-family:var(--mo);font-size:11px;">${m.qty||'—'}</td>
+    <td style="font-family:var(--bo);font-size:11px;">${E(m.unit)}</td>
+    <td style="font-family:var(--bo);font-size:11px;">${m.qty||'—'}</td>
     <td style="white-space:nowrap;"><button class="ib ed" onclick="openMM('${m.id}')">✏</button><button class="ib" onclick="delM('${m.id}')">🗑</button></td>
   </tr>`).join('');
 }
@@ -3205,7 +3205,7 @@ function addCLBI(txt='',cat='General',tp='yesno',opts=[]){
     if(tp!=='single'&&tp!=='multi')return '';
     const vals=d._opts.length?d._opts:[];
     return `<div class="bi-opts" style="width:100%;padding:5px 0 2px 20px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;">
-      <span style="font-family:var(--mo);font-size:8px;color:var(--mu);letter-spacing:1px;">${t('options_label')||'OPCIONES'}:</span>
+      <span style="font-family:var(--bo);font-size:8px;color:var(--mu);letter-spacing:1px;">${t('options_label')||'OPCIONES'}:</span>
       ${vals.map((o,oi)=>`<div style="display:flex;align-items:center;gap:2px;">
         <input type="text" value="${E(o)}" oninput="updateBIopt(this,${oi})" style="width:80px;font-size:10px;padding:2px 5px;background:var(--sf);border:1px solid var(--bd);color:var(--tx);outline:none;">
         <button onclick="removeBIopt(this,${oi})" style="background:none;border:none;color:var(--rd);cursor:pointer;font-size:10px;padding:0 2px;">✕</button>
@@ -3246,7 +3246,7 @@ function addBIopt(btn){const d=btn.closest('.bi');if(!d)return;if(!d._opts)d._op
 function renderBIopts(d){
   const optsDiv=d.querySelector('.bi-opts');if(!optsDiv)return;
   const opts=d._opts||[];
-  optsDiv.innerHTML=`<span style="font-family:var(--mo);font-size:8px;color:var(--mu);letter-spacing:1px;">${t('options_label')||'OPCIONES'}:</span>
+  optsDiv.innerHTML=`<span style="font-family:var(--bo);font-size:8px;color:var(--mu);letter-spacing:1px;">${t('options_label')||'OPCIONES'}:</span>
     ${opts.map((o,oi)=>`<div style="display:flex;align-items:center;gap:2px;">
       <input type="text" value="${E(o)}" oninput="this.closest('.bi')._opts[${oi}]=this.value" style="width:80px;font-size:10px;padding:2px 5px;background:var(--sf);border:1px solid var(--bd);color:var(--tx);outline:none;">
       <button onclick="this.closest('.bi')._opts.splice(${oi},1);renderBIopts(this.closest('.bi'))" style="background:none;border:none;color:var(--rd);cursor:pointer;font-size:10px;padding:0 2px;">✕</button>
@@ -3274,7 +3274,7 @@ function renderCLTs(){
       <div style="display:flex;gap:5px;align-items:center;"><button class="ib ed" onclick="event.stopPropagation();openCLB('${cl.id}')">✏</button><button class="ib" onclick="event.stopPropagation();delCLT('${cl.id}')">🗑</button><span class="chv">▼</span></div>
     </div>
     <div class="cbody" style="padding:8px 16px 12px;">
-      ${cl.items.map(i=>`<div style="font-size:11px;padding:4px 0;border-bottom:1px solid var(--bd);display:flex;gap:7px;align-items:center;">□ ${E(i.text)}<span style="font-family:var(--mo);font-size:8px;color:var(--mu);margin-left:auto;letter-spacing:1px;">${E(i.category)}</span></div>`).join('')}
+      ${cl.items.map(i=>`<div style="font-size:11px;padding:4px 0;border-bottom:1px solid var(--bd);display:flex;gap:7px;align-items:center;">□ ${E(i.text)}<span style="font-family:var(--bo);font-size:8px;color:var(--mu);margin-left:auto;letter-spacing:1px;">${E(i.category)}</span></div>`).join('')}
     </div>
   </div>`).join('');
 }
@@ -3653,8 +3653,8 @@ function renderTaskPhotoGallery(){
     const caps=entry._captions||[];
     return`<div style="margin-bottom:16px;">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-        <span style="font-family:var(--mo);font-size:9px;letter-spacing:1px;color:var(--mu);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">▸ ${E(desc)}</span>
-        <label style="font-family:var(--mo);font-size:9px;letter-spacing:1px;color:var(--am);cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border:1px solid var(--am);background:var(--abg);white-space:nowrap;">
+        <span style="font-family:var(--bo);font-size:9px;letter-spacing:1px;color:var(--mu);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">▸ ${E(desc)}</span>
+        <label style="font-family:var(--bo);font-size:9px;letter-spacing:1px;color:var(--am);cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border:1px solid var(--am);background:var(--abg);white-space:nowrap;">
           ${t('add_photos_label')}
           <input type="file" accept="image/*" multiple style="display:none;" onchange="addTaskPhotos('${uid}',event)">
         </label>
@@ -3664,13 +3664,13 @@ function renderTaskPhotoGallery(){
           <div style="position:relative;width:160px;height:160px;overflow:hidden;cursor:pointer;" onclick="openTaskPhotoLB('${uid}',${i})">
             <img src="${p}" style="width:100%;height:100%;object-fit:cover;${isUp?'opacity:0.5;':''}">
             ${isUp
-              ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);font-family:var(--mo);font-size:9px;color:var(--am);letter-spacing:1px;text-align:center;">⬆<br>${t('uploading_label')}</div>`
+              ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);font-family:var(--bo);font-size:9px;color:var(--am);letter-spacing:1px;text-align:center;">⬆<br>${t('uploading_label')}</div>`
               : `<button onclick="event.stopPropagation();rmTaskPhoto('${uid}',${i})" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,.7);border:1px solid var(--rd);color:var(--rd);font-size:10px;cursor:pointer;padding:2px 6px;border-radius:2px;line-height:1;">🗑</button>`
             }
           </div>
           <input type="text" placeholder="${t('photo_desc_ph')}" value="${E(cap)}" oninput="setTaskPhotoCaption('${uid}',${i},this.value)" style="width:160px;font-size:10px;padding:3px 5px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);outline:none;" ${isUp?'disabled':''}>
         </div>`;}).join('')}
-        ${!photos.length?`<div style="font-family:var(--mo);font-size:9px;color:var(--mu);padding:8px 0;letter-spacing:1px;">${t('no_photos_button')}</div>`:''}
+        ${!photos.length?`<div style="font-family:var(--bo);font-size:9px;color:var(--mu);padding:8px 0;letter-spacing:1px;">${t('no_photos_button')}</div>`:''}
       </div>
     </div>`;
   }).join('<div style="height:1px;background:var(--bd);margin:8px 0 14px;"></div>');
@@ -3829,10 +3829,10 @@ function renderPhotos(){
     row.innerHTML=`
       <div style="flex-shrink:0;width:88px;height:66px;overflow:hidden;border:1px solid var(--bd);cursor:pointer;position:relative;" onclick="openLBRaw(${i})">
         <img src="${p.src}" style="width:100%;height:100%;object-fit:cover;${isUp?'opacity:0.5;':''}">
-        ${isUp?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);font-family:var(--mo);font-size:8px;color:var(--am);letter-spacing:1px;">⬆ ${t('uploading_label')}</div>`:''}
+        ${isUp?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);font-family:var(--bo);font-size:8px;color:var(--am);letter-spacing:1px;">⬆ ${t('uploading_label')}</div>`:''}
       </div>
       <div style="flex:1;display:flex;flex-direction:column;gap:5px;">
-        <div style="font-family:var(--mo);font-size:8px;color:${isUp?'var(--am)':'var(--mu)'};letter-spacing:2px;">${isUp?'⬆ '+t('uploading_label'):t('photos')+' '+(i+1)}</div>
+        <div style="font-family:var(--bo);font-size:8px;color:${isUp?'var(--am)':'var(--mu)'};letter-spacing:2px;">${isUp?'⬆ '+t('uploading_label'):t('photos')+' '+(i+1)}</div>
         <input type="text" placeholder="${t('photo_caption_ph')}" value="${E(p.caption)}"
           oninput="reportPhotos[${i}].caption=this.value"
           style="background:var(--sf);border:1px solid var(--bd);color:var(--tx);padding:5px 8px;font-size:12px;outline:none;width:100%;"
@@ -3927,7 +3927,7 @@ function renderCLR(){
   const hdr=document.createElement('div');
   hdr.style.cssText='display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;';
   const snaL=[t('yes_label')||'Sí', t('no')||'No', 'N/A'];
-  hdr.innerHTML=`<strong style="font-family:var(--he);letter-spacing:2px;color:var(--am);text-transform:uppercase;font-size:13px;">${E(activeCL.name)}</strong><span id="cl-pct" style="font-family:var(--mo);font-size:10px;color:var(--mu);">0 / ${activeCL.items.length}</span>`;
+  hdr.innerHTML=`<strong style="font-family:var(--he);letter-spacing:2px;color:var(--am);text-transform:uppercase;font-size:13px;">${E(activeCL.name)}</strong><span id="cl-pct" style="font-family:var(--bo);font-size:10px;color:var(--mu);">0 / ${activeCL.items.length}</span>`;
   const bar=document.createElement('div');bar.className='cl-bar';
   const fill=document.createElement('div');fill.className='cl-fill';fill.id='cl-fill';fill.style.width='0%';bar.appendChild(fill);
   c.insertBefore(hdr,emp);c.insertBefore(bar,emp);
@@ -3936,7 +3936,7 @@ function renderCLR(){
   Object.entries(groups).forEach(([cat,items])=>{
     const catDisplay=keyToCat(cat);
     const g=document.createElement('div');
-    g.innerHTML=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:3px;color:var(--mu);border-bottom:1px solid var(--bd);padding-bottom:3px;margin:10px 0 5px;text-transform:uppercase;">${E(catDisplay||cat)}</div>`;
+    g.innerHTML=`<div style="font-family:var(--bo);font-size:9px;letter-spacing:3px;color:var(--mu);border-bottom:1px solid var(--bd);padding-bottom:3px;margin:10px 0 5px;text-transform:uppercase;">${E(catDisplay||cat)}</div>`;
     items.forEach(item=>{
       // Auto-expand items that already have photos (persisted or just added)
       if((item.photos||[]).length>0)item._expanded=true;
@@ -3959,7 +3959,7 @@ function renderCLR(){
       let ansHtml='';
       if(item.na){
         ansHtml=`<div class="sna" style="flex-wrap:wrap;align-items:center;">
-          <span style="font-family:var(--mo);font-size:9px;color:var(--am);letter-spacing:1px;">${snaL[2]||'N/A'}</span>
+          <span style="font-family:var(--bo);font-size:9px;color:var(--am);letter-spacing:1px;">${snaL[2]||'N/A'}</span>
           <button class="sna-btn na on" onclick="setCLINA('${item.id}')" style="font-size:8px;margin-left:8px;">↩ ${t('change_label')||'Cambiar'}</button>
         </div>`;
       } else if(tp==='yesno'||tp==='sna'){
@@ -3989,17 +3989,17 @@ function renderCLR(){
             ${evPhotos.map((p,pi)=>{const isUp=!!evUp[pi];return`<div style="position:relative;width:64px;height:64px;overflow:hidden;">
               <img src="${p}" style="width:100%;height:100%;object-fit:cover;border:1px solid var(--bd);${isUp?'opacity:0.5;':''}cursor:pointer;" onclick="${isUp?'':'openCLILB(\''+item.id+'\','+pi+')'}">
               ${isUp
-                ?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);font-family:var(--mo);font-size:7px;color:var(--am);letter-spacing:1px;text-align:center;">⬆<br>${t('uploading_label')}</div>`
+                ?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);font-family:var(--bo);font-size:7px;color:var(--am);letter-spacing:1px;text-align:center;">⬆<br>${t('uploading_label')}</div>`
                 :`<button onclick="event.stopPropagation();deleteFromStorage(activeCL.items.find(i=>i.id==='${item.id}')?.photos[${pi}]);activeCL.items.find(i=>i.id==='${item.id}').photos.splice(${pi},1);if(activeCL.items.find(i=>i.id==='${item.id}')._uploading)activeCL.items.find(i=>i.id==='${item.id}')._uploading.splice(${pi},1);renderCLR()" style="position:absolute;top:1px;right:1px;background:rgba(0,0,0,.7);border:none;color:#fff;font-size:8px;cursor:pointer;padding:1px 3px;">🗑</button>`
               }
             </div>`;}).join('')}
-            <label style="cursor:pointer;padding:6px 10px;border:1px dashed var(--am);color:var(--am);font-family:var(--mo);font-size:9px;letter-spacing:1px;">
+            <label style="cursor:pointer;padding:6px 10px;border:1px dashed var(--am);color:var(--am);font-family:var(--bo);font-size:9px;letter-spacing:1px;">
               📷 ${t('add_evidence_label')||'AGREGAR'}
               <input type="file" accept="image/*,video/*" multiple style="display:none;" onchange="setCLIEvidence('${item.id}',this.files);this.value=''">
             </label>
             ${naBtn}
           </div>
-          ${evPhotos.length?`<div style="font-family:var(--mo);font-size:8px;color:var(--gn);letter-spacing:1px;">✓ ${evPhotos.filter((_,i)=>!evUp[i]).length} ${t('evidence_added')||'evidencia(s) adjunta(s)'}</div>`:''}
+          ${evPhotos.length?`<div style="font-family:var(--bo);font-size:8px;color:var(--gn);letter-spacing:1px;">✓ ${evPhotos.filter((_,i)=>!evUp[i]).length} ${t('evidence_added')||'evidencia(s) adjunta(s)'}</div>`:''}
         </div>`;
       }
       row.innerHTML=`
@@ -4008,7 +4008,7 @@ function renderCLR(){
           <div style="flex:1;min-width:0;">
             <div class="cli-txt">${E(item.text)}</div>
             <div style="margin-top:5px;">${ansHtml}</div>
-            ${unanswered?`<div class="cli-req" style="font-family:var(--mo);font-size:8px;color:var(--rd);letter-spacing:1px;margin-top:3px;">⚠ ${t('required_label')}</div>`:''}
+            ${unanswered?`<div class="cli-req" style="font-family:var(--bo);font-size:8px;color:var(--rd);letter-spacing:1px;margin-top:3px;">⚠ ${t('required_label')}</div>`:''}
           </div>
           <span class="cli-cat">${E(keyToCat(item.category))}</span>
           <button style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:11px;padding:0 4px;margin-top:1px;" onclick="event.stopPropagation();togCLI('${item.id}')" title="Fotos / Nota">📷</button>
@@ -4022,7 +4022,7 @@ function renderCLR(){
             ${(item.photos||[]).map((p,pi)=>{
               const cap=(item.photoCaptions||[])[pi]||'';
               const isUp=!!(item._uploading||[])[pi];
-              const spinnerHtml=isUp?'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);font-family:var(--mo);font-size:7px;color:var(--am);letter-spacing:1px;text-align:center;">⬆<br>'+t('uploading_label')+'</div>':'';
+              const spinnerHtml=isUp?'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);font-family:var(--bo);font-size:7px;color:var(--am);letter-spacing:1px;text-align:center;">⬆<br>'+t('uploading_label')+'</div>':'';
               const rmvHtml=isUp?'':'<div class="rmv" onclick="event.stopPropagation();rmCLIPhoto(\''+item.id+'\','+pi+')">🗑</div>'+(cap?'<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);font-size:8px;color:#ddd;padding:2px 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+cap+'</div>':'');
               return'<div class="cli-pt"'+(isUp?'':' onclick="openCLILB(\''+item.id+'\','+pi+')"')+' style="'+(isUp?'cursor:default;':'')+'"><img src="'+p+'" style="width:100%;height:100%;object-fit:cover;'+(isUp?'opacity:0.5;':'')+'">'+spinnerHtml+rmvHtml+'</div>';
             }).join('')}
@@ -4155,7 +4155,7 @@ function refreshCLIPhotos(id){
     const cap=(item.photoCaptions||[])[pi]||'';
     const isUp=!!(item._uploading||[])[pi];
     const spinnerHtml=isUp
-      ?'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);font-family:var(--mo);font-size:7px;color:var(--am);letter-spacing:1px;text-align:center;">⬆<br>'+t('uploading_label')+'</div>'
+      ?'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);font-family:var(--bo);font-size:7px;color:var(--am);letter-spacing:1px;text-align:center;">⬆<br>'+t('uploading_label')+'</div>'
       :'<div class="rmv" onclick="event.stopPropagation();rmCLIPhoto(\''+id+'\','+pi+')">🗑</div>'+(cap?'<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);font-size:8px;color:#ddd;padding:2px 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+cap+'</div>':'');
     return'<div class="cli-pt"'+(isUp?'':' onclick="openCLILB(\''+id+'\','+pi+')"')+' style="'+(isUp?'cursor:default;':'')+'"><img src="'+p+'" style="width:100%;height:100%;object-fit:cover;'+(isUp?'opacity:0.5;':'')+'">'+spinnerHtml+'</div>';
   }).join('');
@@ -4320,10 +4320,10 @@ function openActivityLog(){
       <div style="font-size:18px;flex-shrink:0;width:26px;text-align:center;">${actionIcons[e.action]||'📌'}</div>
       <div style="flex:1;">
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-          <span style="font-family:var(--mo);font-size:10px;color:${actionColors[e.action]||'var(--mu)'};letter-spacing:2px;text-transform:uppercase;">${actionLabels[e.action]||e.action}</span>
-          <span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${new Date(e.ts).toLocaleString()}</span>
+          <span style="font-family:var(--bo);font-size:10px;color:${actionColors[e.action]||'var(--mu)'};letter-spacing:2px;text-transform:uppercase;">${actionLabels[e.action]||e.action}</span>
+          <span style="font-family:var(--bo);font-size:9px;color:var(--mu);">${new Date(e.ts).toLocaleString()}</span>
         </div>
-        <div style="font-size:12px;margin-top:3px;">${E(e.user)} <span style="font-family:var(--mo);font-size:9px;color:var(--mu);">(${e.role})</span></div>
+        <div style="font-size:12px;margin-top:3px;">${E(e.user)} <span style="font-family:var(--bo);font-size:9px;color:var(--mu);">(${e.role})</span></div>
         ${e.noteKey||e.note?`<div style="font-size:11px;color:var(--mu2);margin-top:2px;font-style:italic;">${E(translateNote(e, uLang))}</div>`:''}
       </div>
     </div>`).join('')
@@ -4732,7 +4732,7 @@ function addOCC(type='',time='',desc='',action='',photos=[],captions=[]){
   d._photos=[...photos];d._captions=[...captions];
   d.style.cssText='background:rgba(224,82,82,.05);border:1px solid rgba(224,82,82,.25);border-left:3px solid var(--rd);padding:10px;margin-bottom:8px;';
   d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-    <span style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--rd);">⚠ ${t('sec_occurrence')}</span>
+    <span style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--rd);">⚠ ${t('sec_occurrence')}</span>
     <div style="display:flex;gap:6px;">
       <button class="ib occ-cam-btn" title="${t('add_photos_occ2')}" style="${photos.length?'border-color:var(--am);color:var(--am);':''}">📷</button>
       <button class="ib" onclick="rmOCCEntry(this)">✕ ${t('delete')}</button>
@@ -4786,7 +4786,7 @@ function renderOCCPhotos(entry){
     return`<div style="position:relative;width:90px;flex-shrink:0;">
       <div style="position:relative;width:90px;height:70px;overflow:hidden;">
         <img src="${src}" style="width:90px;height:70px;object-fit:cover;border:1px solid var(--bd);display:block;${isUp?'opacity:0.5;':''}" onclick="${isUp?'':"openOCCPhotoLB('${uid}',${i})"}">
-        ${isUp?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);font-family:var(--mo);font-size:8px;color:var(--am);letter-spacing:1px;text-align:center;">⬆<br>${t('uploading_label')}</div>`:
+        ${isUp?`<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);font-family:var(--bo);font-size:8px;color:var(--am);letter-spacing:1px;text-align:center;">⬆<br>${t('uploading_label')}</div>`:
           `<button onclick="rmOCCPhoto('${uid}',${i})" style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,.7);border:none;color:#fff;font-size:9px;cursor:pointer;padding:2px 5px;border-radius:2px;">🗑</button>`}
       </div>
       <input type="text" placeholder="${t('caption_ph2')}" value="${E((entry._captions||[])[i]||'')}" oninput="if(this.closest('.occ-entry')._captions)this.closest('.occ-entry')._captions[${i}]=this.value" style="width:100%;background:var(--s2);border:1px solid var(--bd);border-top:none;color:var(--tx);padding:2px 4px;font-size:9px;outline:none;" ${isUp?'disabled':''}>
@@ -4978,18 +4978,18 @@ function genPDF(id,dataOverride){
 
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${r.id}</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Barlow',sans-serif;font-size:11px;color:#1a1a1a;background:#fff;line-height:1.4;}
+body{font-family:'Lato',sans-serif;font-size:11px;color:#1a1a1a;background:#fff;line-height:1.4;}
 .cover{background:#0f0f0f;color:#e8e0d0;padding:22px 28px;display:flex;justify-content:space-between;align-items:flex-end;min-height:40mm;}
-.logo{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;letter-spacing:3px;color:#f5a623;}
+.logo{font-family:'Lato',sans-serif;font-size:24px;font-weight:900;letter-spacing:1px;color:#f5a623;}
 .logo span{color:#e8e0d0;}
 .cov-sub{font-size:9px;letter-spacing:3px;color:#7a7060;margin-top:2px;}
 .cov-r{text-align:right;}
 .cov-id{font-family:monospace;font-size:10px;color:#f5a623;letter-spacing:2px;}
 .cov-dt{font-size:9px;color:#7a7060;margin-top:3px;}
 .status-bar{background:${statusColor};color:#fff;text-align:center;padding:3px;font-family:monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;}
-.sec-title{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#f5a623;border-left:3px solid #f5a623;padding:4px 8px;margin:14px 0 7px;background:#faf7f2;}
+.sec-title{font-family:'Lato',sans-serif;font-size:12px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#f5a623;border-left:3px solid #f5a623;padding:4px 8px;margin:14px 0 7px;background:#faf7f2;}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:7px 14px;margin-bottom:7px;}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px 14px;margin-bottom:7px;}
 .fl{margin-bottom:3px;}
@@ -5054,7 +5054,7 @@ ${r.status==='Rejected'&&r.rejectionReason?`<div style="background:#fff0f0;borde
   <div style="display:flex;align-items:center;gap:10px;">
     ${logo1HTML}
     <div>
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:900;letter-spacing:2px;color:#c97800;text-transform:uppercase;">${pt('daily_report')}</div>
+      <div style="font-family:'Lato',sans-serif;font-size:11px;font-weight:900;letter-spacing:0.5px;color:#c97800;text-transform:uppercase;">${pt('daily_report')}</div>
       <div style="font-family:monospace;font-size:7px;color:#aaa;letter-spacing:1px;">${r.projName||''}</div>
     </div>
   </div>
@@ -5224,40 +5224,40 @@ function viewReport(id){
   let html=`
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
       <div><div style="font-family:var(--he);font-size:20px;font-weight:900;letter-spacing:1px;text-transform:uppercase;">${E(r.projName||'—')}</div>
-        <div style="font-family:var(--mo);font-size:10px;color:var(--mu);margin-top:3px;">${r.id} · ${t('report_number')}${r.num||'?'} · ${r.date||'—'}</div></div>
-      <span style="color:${statusColor};font-family:var(--mo);font-size:9px;border:1px solid ${statusColor};padding:3px 10px;letter-spacing:2px;">${tRptStatus(r.status||'Draft')}</span>
+        <div style="font-family:var(--bo);font-size:10px;color:var(--mu);margin-top:3px;">${r.id} · ${t('report_number')}${r.num||'?'} · ${r.date||'—'}</div></div>
+      <span style="color:${statusColor};font-family:var(--bo);font-size:9px;border:1px solid ${statusColor};padding:3px 10px;letter-spacing:2px;">${tRptStatus(r.status||'Draft')}</span>
     </div>`;
   html+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px 14px;background:var(--s2);border:1px solid var(--bd);padding:11px;margin-bottom:11px;">
-    ${vRow(t('supervisor'),r.supervisor)}${vRow(t('client'),r.client)}${vRow(t('location'),r.location)}${(r.siteEnabled||(r.siteName||r.siteAddr))?`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);margin:8px 0 4px;">📍 ${t('site_name')?.toUpperCase()||'SITIO DE TRABAJO'}</div>${vRow(t('site_name'),r.siteName||'—')}${vRow(t('site_address'),r.siteAddr||'—')}`:''}${vRow(t('shift'),(r.shiftStart||'')+'–'+(r.shiftEnd||''))}
+    ${vRow(t('supervisor'),r.supervisor)}${vRow(t('client'),r.client)}${vRow(t('location'),r.location)}${(r.siteEnabled||(r.siteName||r.siteAddr))?`<div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--am);margin:8px 0 4px;">📍 ${t('site_name')?.toUpperCase()||'SITIO DE TRABAJO'}</div>${vRow(t('site_name'),r.siteName||'—')}${vRow(t('site_address'),r.siteAddr||'—')}`:''}${vRow(t('shift'),(r.shiftStart||'')+'–'+(r.shiftEnd||''))}
     ${r.weather?.length?vRow(t('weather'),tWeatherArr(r.weather).join(' · ')):''}${r.temp?vRow(t('temperature'),r.temp):''}
     ${r.approvedBy?vRow(t('approved_by')||'Approved by',r.approvedBy):''}
   </div>`;
-  if(r.labor?.length){const _vlng2=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">👷 ${t('labor')} (${r.labor.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.labor.forEach(w=>{html+=`<div style="display:flex;gap:10px;padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><strong style="flex:1;">${E(w.name)}</strong><span style="color:var(--mu);font-family:var(--mo);font-size:10px;">${E(w.role)}</span>${w.start?`<span style="font-family:var(--mo);font-size:10px;color:var(--mu);">${w.start}–${w.end}</span>`:''}</div>`;});html+='</div>';}
-  if(r.tasks?.length){const _vlng=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">📋 ${t('tasks')} (${r.tasks.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.tasks.forEach(t=>{const sc={'Completed':'var(--gn)','In Progress':'var(--am)','Pending':'var(--mu)'}[t.status]||'var(--mu)';const tphotos=t.photos||[];html+=`<div style="padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><div style="display:flex;gap:10px;"><span style="flex:1;">${E(t.desc)}${t.comment?`<div style="font-size:10px;color:var(--mu2);margin-top:2px;font-style:italic;">${E(t.comment)}</div>`:''}</span><span style="font-family:var(--mo);font-size:9px;color:${sc};white-space:nowrap;">${tStat(t.status)}</span></div>${tphotos.length?`<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;">${tphotos.map((p,pi)=>`<img src="${p}" style="width:80px;height:64px;object-fit:cover;border:1px solid var(--bd);cursor:pointer;" onclick="openLB(${JSON.stringify(tphotos)},[],${pi},'view-task')">`).join('')}</div>`:''}</div>`;});html+='</div>';}
-  if(r.equip?.length){const _vlng3=currentUser?.lang||'es';html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">🔧 ${t('equipment')} (${r.equip.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.equip.forEach(eq=>{html+=`<div style="display:flex;gap:10px;padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><strong style="flex:1;">${E(eq.desc)}</strong><span style="font-family:var(--mo);font-size:10px;color:var(--mu);">${tEstat(eq.status)}</span></div>`;});html+='</div>';}
-  if(r.occurrences?.length){html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--rd);text-transform:uppercase;margin:10px 0 5px;">⚠ ${t('occurrences')} (${r.occurrences.length})</div>`;r.occurrences.forEach(o=>{const occPhotos=o.photos||[];html+=`<div style="background:rgba(224,82,82,.05);border:1px solid rgba(224,82,82,.2);border-left:3px solid var(--rd);padding:9px;margin-bottom:5px;font-size:12px;"><div style="font-family:var(--mo);font-size:9px;color:var(--rd);margin-bottom:4px;">${o.type}${o.time?' · '+o.time:''}</div><div>${E(o.desc)}</div>${o.action?`<div style="margin-top:5px;color:var(--mu);font-size:11px;">→ ${E(o.action)}</div>`:''} ${occPhotos.length?`<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;">${occPhotos.map((p,pi)=>`<div style="position:relative;"><img src="${p}" style="width:80px;height:64px;object-fit:cover;border:1px solid var(--bd);cursor:pointer;" onclick="openOCCPhotoLB('view-occ-${r.id}-${o.type}',${pi})">${(o.captions||[])[pi]?`<div style="font-size:8px;color:var(--mu);padding:2px 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px;">${(o.captions||[])[pi]}</div>`:''}</div>`).join('')}</div>`:''}</div>`;});}
+  if(r.labor?.length){const _vlng2=currentUser?.lang||'es';html+=`<div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">👷 ${t('labor')} (${r.labor.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.labor.forEach(w=>{html+=`<div style="display:flex;gap:10px;padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><strong style="flex:1;">${E(w.name)}</strong><span style="color:var(--mu);font-family:var(--bo);font-size:10px;">${E(w.role)}</span>${w.start?`<span style="font-family:var(--bo);font-size:10px;color:var(--mu);">${w.start}–${w.end}</span>`:''}</div>`;});html+='</div>';}
+  if(r.tasks?.length){const _vlng=currentUser?.lang||'es';html+=`<div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">📋 ${t('tasks')} (${r.tasks.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.tasks.forEach(t=>{const sc={'Completed':'var(--gn)','In Progress':'var(--am)','Pending':'var(--mu)'}[t.status]||'var(--mu)';const tphotos=t.photos||[];html+=`<div style="padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><div style="display:flex;gap:10px;"><span style="flex:1;">${E(t.desc)}${t.comment?`<div style="font-size:10px;color:var(--mu2);margin-top:2px;font-style:italic;">${E(t.comment)}</div>`:''}</span><span style="font-family:var(--bo);font-size:9px;color:${sc};white-space:nowrap;">${tStat(t.status)}</span></div>${tphotos.length?`<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;">${tphotos.map((p,pi)=>`<img src="${p}" style="width:80px;height:64px;object-fit:cover;border:1px solid var(--bd);cursor:pointer;" onclick="openLB(${JSON.stringify(tphotos)},[],${pi},'view-task')">`).join('')}</div>`:''}</div>`;});html+='</div>';}
+  if(r.equip?.length){const _vlng3=currentUser?.lang||'es';html+=`<div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">🔧 ${t('equipment')} (${r.equip.length})</div><div style="background:var(--s2);border:1px solid var(--bd);">`;r.equip.forEach(eq=>{html+=`<div style="display:flex;gap:10px;padding:6px 10px;border-bottom:1px solid var(--bd);font-size:12px;"><strong style="flex:1;">${E(eq.desc)}</strong><span style="font-family:var(--bo);font-size:10px;color:var(--mu);">${tEstat(eq.status)}</span></div>`;});html+='</div>';}
+  if(r.occurrences?.length){html+=`<div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--rd);text-transform:uppercase;margin:10px 0 5px;">⚠ ${t('occurrences')} (${r.occurrences.length})</div>`;r.occurrences.forEach(o=>{const occPhotos=o.photos||[];html+=`<div style="background:rgba(224,82,82,.05);border:1px solid rgba(224,82,82,.2);border-left:3px solid var(--rd);padding:9px;margin-bottom:5px;font-size:12px;"><div style="font-family:var(--bo);font-size:9px;color:var(--rd);margin-bottom:4px;">${o.type}${o.time?' · '+o.time:''}</div><div>${E(o.desc)}</div>${o.action?`<div style="margin-top:5px;color:var(--mu);font-size:11px;">→ ${E(o.action)}</div>`:''} ${occPhotos.length?`<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:7px;">${occPhotos.map((p,pi)=>`<div style="position:relative;"><img src="${p}" style="width:80px;height:64px;object-fit:cover;border:1px solid var(--bd);cursor:pointer;" onclick="openOCCPhotoLB('view-occ-${r.id}-${o.type}',${pi})">${(o.captions||[])[pi]?`<div style="font-size:8px;color:var(--mu);padding:2px 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px;">${(o.captions||[])[pi]}</div>`:''}</div>`).join('')}</div>`:''}</div>`;});}
   if(clit.length){
     const pct=clit.length?Math.round(done/clit.length*100):0;
-    html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">☑ ${t('checklist')}: ${E(r.checklist.name)} (${done}/${clit.length})</div>`;
+    html+=`<div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">☑ ${t('checklist')}: ${E(r.checklist.name)} (${done}/${clit.length})</div>`;
     html+=`<div style="background:var(--s2);height:4px;margin-bottom:6px;"><div style="width:${pct}%;height:100%;background:var(--gn);"></div></div>`;
-    Object.entries(grps).forEach(([cat,items])=>{html+=`<div style="font-family:var(--mo);font-size:8px;letter-spacing:2px;color:var(--mu);padding:4px 0;border-bottom:1px solid var(--bd);text-transform:uppercase;">${keyToCat(cat)}</div>`;items.forEach(it=>{const _a=getItemAnswer(it,r.checklist?.snaLabels,currentUser?.lang||'es');const sna=`<span style="color:${_a.color};font-weight:${_a.isAnswered?'600':'400'};font-size:11px;">${_a.text}</span>`;const photos=(it.photos||[]).filter(p=>p).map((p,pi)=>`<img src="${p}" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--bd);margin-right:3px;cursor:pointer;" onclick="openCLILB('${it.id}',${pi})">`).join('');const textNote=((it.type||'sna')==='text'&&it.textAns&&!_a.isAnswered)?'':'';html+=`<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:11px;align-items:flex-start;"><span style="color:${(it.checked||it.na)?'var(--gn)':'var(--mu)'};">${(it.checked||it.na)?'✓':'□'}</span><div style="flex:1;">${E(it.text)}${photos?`<div style="margin-top:4px;">${photos}</div>`:''}</div>${sna}</div>`;});});
+    Object.entries(grps).forEach(([cat,items])=>{html+=`<div style="font-family:var(--bo);font-size:8px;letter-spacing:2px;color:var(--mu);padding:4px 0;border-bottom:1px solid var(--bd);text-transform:uppercase;">${keyToCat(cat)}</div>`;items.forEach(it=>{const _a=getItemAnswer(it,r.checklist?.snaLabels,currentUser?.lang||'es');const sna=`<span style="color:${_a.color};font-weight:${_a.isAnswered?'600':'400'};font-size:11px;">${_a.text}</span>`;const photos=(it.photos||[]).filter(p=>p).map((p,pi)=>`<img src="${p}" style="width:44px;height:44px;object-fit:cover;border:1px solid var(--bd);margin-right:3px;cursor:pointer;" onclick="openCLILB('${it.id}',${pi})">`).join('');const textNote=((it.type||'sna')==='text'&&it.textAns&&!_a.isAnswered)?'':'';html+=`<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:11px;align-items:flex-start;"><span style="color:${(it.checked||it.na)?'var(--gn)':'var(--mu)'};">${(it.checked||it.na)?'✓':'□'}</span><div style="flex:1;">${E(it.text)}${photos?`<div style="margin-top:4px;">${photos}</div>`:''}</div>${sna}</div>`;});});
   }
   const pdata=r.photoData||(r.photos||[]).map((src,i)=>({src,caption:(r.photoCaptions||[])[i]||''}));
   if(pdata.length){
-    html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">📷 ${t('photos')} (${pdata.length})</div>`;
+    html+=`<div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">📷 ${t('photos')} (${pdata.length})</div>`;
     html+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">`;
-    pdata.forEach(p=>{html+=`<div style="border:1px solid var(--bd);overflow:hidden;"><img src="${p.src}" style="width:100%;height:130px;object-fit:cover;display:block;">${p.caption?`<div style="font-family:var(--mo);font-size:9px;padding:4px 6px;color:var(--mu2);border-top:1px solid var(--bd);">${E(p.caption)}</div>`:''}</div>`;});
+    pdata.forEach(p=>{html+=`<div style="border:1px solid var(--bd);overflow:hidden;"><img src="${p.src}" style="width:100%;height:130px;object-fit:cover;display:block;">${p.caption?`<div style="font-family:var(--bo);font-size:9px;padding:4px 6px;color:var(--mu2);border-top:1px solid var(--bd);">${E(p.caption)}</div>`:''}</div>`;});
     html+=`</div>`;
   }
-  if(r.notes){html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">📝 ${t('notes_label')}</div><div style="font-size:12px;padding:8px;background:var(--s2);border:1px solid var(--bd);">${E(r.notes)}</div>`;}
+  if(r.notes){html+=`<div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">📝 ${t('notes_label')}</div><div style="font-size:12px;padding:8px;background:var(--s2);border:1px solid var(--bd);">${E(r.notes)}</div>`;}
   // Signatures
   const hasSigs=r.signature||r.approveSignature||r.customerSignature;
   if(hasSigs){
-    html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">✍ ${t('signatures')}</div>`;
+    html+=`<div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:10px 0 5px;">✍ ${t('signatures')}</div>`;
     html+=`<div style="display:grid;grid-template-columns:repeat(${r.customerSignature?3:2},1fr);gap:10px;">`;
-    if(r.signature){html+=`<div style="border:1px solid var(--bd);padding:8px;text-align:center;"><img src="${r.signature}" style="max-height:60px;max-width:100%;object-fit:contain;filter:invert(1) sepia(1) saturate(5) hue-rotate(5deg);"><div style="font-family:var(--mo);font-size:9px;color:var(--mu);margin-top:4px;border-top:1px solid var(--bd);padding-top:3px;">${r.sigName||''}${r.sigRole?' · '+r.sigRole:''}</div></div>`;}
-    if(r.approveSignature){html+=`<div style="border:1px solid var(--bd);padding:8px;text-align:center;"><img src="${r.approveSignature}" style="max-height:60px;max-width:100%;object-fit:contain;filter:invert(1) sepia(1) saturate(5) hue-rotate(5deg);"><div style="font-family:var(--mo);font-size:9px;color:var(--mu);margin-top:4px;border-top:1px solid var(--bd);padding-top:3px;">${r.approvedBy||''}${r.approvedByRole?' · '+r.approvedByRole:''}</div></div>`;}
-    if(r.customerSignature){html+=`<div style="border:1px solid var(--bd);padding:8px;text-align:center;"><img src="${r.customerSignature}" style="max-height:60px;max-width:100%;object-fit:contain;filter:invert(1) sepia(1) saturate(5) hue-rotate(5deg);"><div style="font-family:var(--mo);font-size:9px;color:var(--mu);margin-top:4px;border-top:1px solid var(--bd);padding-top:3px;">${r.customerName||''}${r.customerRole?' · '+r.customerRole:''}</div></div>`;}
+    if(r.signature){html+=`<div style="border:1px solid var(--bd);padding:8px;text-align:center;"><img src="${r.signature}" style="max-height:60px;max-width:100%;object-fit:contain;filter:invert(1) sepia(1) saturate(5) hue-rotate(5deg);"><div style="font-family:var(--bo);font-size:9px;color:var(--mu);margin-top:4px;border-top:1px solid var(--bd);padding-top:3px;">${r.sigName||''}${r.sigRole?' · '+r.sigRole:''}</div></div>`;}
+    if(r.approveSignature){html+=`<div style="border:1px solid var(--bd);padding:8px;text-align:center;"><img src="${r.approveSignature}" style="max-height:60px;max-width:100%;object-fit:contain;filter:invert(1) sepia(1) saturate(5) hue-rotate(5deg);"><div style="font-family:var(--bo);font-size:9px;color:var(--mu);margin-top:4px;border-top:1px solid var(--bd);padding-top:3px;">${r.approvedBy||''}${r.approvedByRole?' · '+r.approvedByRole:''}</div></div>`;}
+    if(r.customerSignature){html+=`<div style="border:1px solid var(--bd);padding:8px;text-align:center;"><img src="${r.customerSignature}" style="max-height:60px;max-width:100%;object-fit:contain;filter:invert(1) sepia(1) saturate(5) hue-rotate(5deg);"><div style="font-family:var(--bo);font-size:9px;color:var(--mu);margin-top:4px;border-top:1px solid var(--bd);padding-top:3px;">${r.customerName||''}${r.customerRole?' · '+r.customerRole:''}</div></div>`;}
     html+=`</div>`;
   }
   // Activity log
@@ -5268,11 +5268,11 @@ function viewReport(id){
     
     
     const vwLogTitle=t('activity_log_title');
-    html+=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:14px 0 6px;">📋 ${vwLogTitle}</div><div style="background:var(--s2);border:1px solid var(--bd);">`;
+    html+=`<div style="font-family:var(--bo);font-size:9px;letter-spacing:2px;color:var(--am);text-transform:uppercase;margin:14px 0 6px;">📋 ${vwLogTitle}</div><div style="background:var(--s2);border:1px solid var(--bd);">`;
     log.forEach(e=>{html+=`<div style="display:flex;gap:10px;padding:7px 10px;border-bottom:1px solid var(--bd);align-items:flex-start;font-size:11px;">
-      <span style="font-family:var(--mo);font-size:9px;color:${actionColors[e.action]||'var(--mu)'};letter-spacing:1px;text-transform:uppercase;width:68px;flex-shrink:0;">${vwActLabels[e.action]||e.action}</span>
-      <div style="flex:1;"><span style="font-weight:600;">${E(e.user)}</span><span style="font-family:var(--mo);font-size:9px;color:var(--mu);margin-left:6px;">(${e.role})</span>${(e.noteKey||e.note)?`<span style="color:var(--mu2);margin-left:6px;font-size:10px;">— ${E(translateNote(e, currentUser?.lang||'es'))}</span>`:''}</div>
-      <span style="font-family:var(--mo);font-size:9px;color:var(--mu);flex-shrink:0;">${new Date(e.ts).toLocaleString()}</span>
+      <span style="font-family:var(--bo);font-size:9px;color:${actionColors[e.action]||'var(--mu)'};letter-spacing:1px;text-transform:uppercase;width:68px;flex-shrink:0;">${vwActLabels[e.action]||e.action}</span>
+      <div style="flex:1;"><span style="font-weight:600;">${E(e.user)}</span><span style="font-family:var(--bo);font-size:9px;color:var(--mu);margin-left:6px;">(${e.role})</span>${(e.noteKey||e.note)?`<span style="color:var(--mu2);margin-left:6px;font-size:10px;">— ${E(translateNote(e, currentUser?.lang||'es'))}</span>`:''}</div>
+      <span style="font-family:var(--bo);font-size:9px;color:var(--mu);flex-shrink:0;">${new Date(e.ts).toLocaleString()}</span>
     </div>`;});
     html+='</div>';
   }
@@ -5319,7 +5319,7 @@ function viewReport(id){
   }
   openMO('mo-view');
 }
-function vRow(l,v){return v?`<div><div style="font-family:var(--mo);font-size:8px;color:var(--mu);letter-spacing:2px;">${l}</div><div style="font-size:12px;font-weight:600;margin-top:2px;">${E(v)}</div></div>`:'';}
+function vRow(l,v){return v?`<div><div style="font-family:var(--bo);font-size:8px;color:var(--mu);letter-spacing:2px;">${l}</div><div style="font-size:12px;font-weight:600;margin-top:2px;">${E(v)}</div></div>`:'';}
 
 // ═══════════════════════════════════════════════
 // UTILS
@@ -6060,7 +6060,7 @@ function refreshUPerms(){
     pg.innerHTML=DB.projects.length?DB.projects.map(p=>{
       const checked=user&&(user.projects||[]).includes(p.id)?'checked':'';
       return`<label class="pi"><input type="checkbox" value="${p.id}" ${checked}> ${E(p.name)}</label>`;
-    }).join(''):`<div style="font-family:var(--mo);font-size:9px;color:var(--mu);">${noProj}</div>`;
+    }).join(''):`<div style="font-family:var(--bo);font-size:9px;color:var(--mu);">${noProj}</div>`;
   }
   // Perms grid
   const permg=document.getElementById('u-perm-grid');
@@ -6154,10 +6154,10 @@ function renderUsers(){
     const isMe=u.id===currentUser?.id;
     const custName=u.customerId?DB.customers.find(c=>c.id===u.customerId)?.name:'';
     return`<tr>
-      <td><strong>${E(u.username)}</strong>${isMe?` <span style="font-family:var(--mo);font-size:9px;color:var(--am);">(${t('you_label')})</span>`:''}</td>
-      <td>${E(u.name)}${custName?`<br><span style="font-family:var(--mo);font-size:9px;color:#6495ed;">🤝 ${E(custName)}</span>`:''}</td>
+      <td><strong>${E(u.username)}</strong>${isMe?` <span style="font-family:var(--bo);font-size:9px;color:var(--am);">(${t('you_label')})</span>`:''}</td>
+      <td>${E(u.name)}${custName?`<br><span style="font-family:var(--bo);font-size:9px;color:#6495ed;">🤝 ${E(custName)}</span>`:''}</td>
       <td><span class="rbadge ${rmap[u.role]||''}">${u.role}</span></td>
-      <td style="font-size:11px;color:var(--mu2);">${u.role==='admin'?`<span style="color:var(--am);font-family:var(--mo);font-size:9px;">${t('all_label')}</span>`:(projNames||'—')}</td>
+      <td style="font-size:11px;color:var(--mu2);">${u.role==='admin'?`<span style="color:var(--am);font-family:var(--bo);font-size:9px;">${t('all_label')}</span>`:(projNames||'—')}</td>
       <td><span class="bx ${u.status==='Active'?'g':'r'}">${u.status==='Active'?(currentUser?.lang==='en'?t('active'):t('active')):(currentUser?.lang==='en'?t('inactive'):t('inactive'))}</span></td>
       <td style="white-space:nowrap;">
         <button class="ib ed" onclick="openUM('${u.id}')">✏</button>
@@ -6254,11 +6254,11 @@ function openCustM(id=null){
     pg.innerHTML=DB.projects.length?DB.projects.map(p=>{
       const checked=(c?.projects||[]).includes(p.id)?'checked':'';
       return`<label class="pi"><input type="checkbox" value="${p.id}" ${checked}> ${E(p.name)}</label>`;
-    }).join(''):`<div style="font-family:var(--mo);font-size:9px;color:var(--mu);">${noProjs}</div>`;
+    }).join(''):`<div style="font-family:var(--bo);font-size:9px;color:var(--mu);">${noProjs}</div>`;
   } else {
     pg.innerHTML=DB.projects.length?DB.projects.map(p=>
       `<label class="pi"><input type="checkbox" value="${p.id}"> ${E(p.name)}</label>`
-    ).join(''):`<div style="font-family:var(--mo);font-size:9px;color:var(--mu);">${noProjs}</div>`;
+    ).join(''):`<div style="font-family:var(--bo);font-size:9px;color:var(--mu);">${noProjs}</div>`;
   }
   applyLang();
   openMO('mo-cust');
@@ -6326,7 +6326,7 @@ function refreshUCustProjs(){
     pg.innerHTML=custProjs.length?custProjs.map(p=>{
       const checked=user&&(user.projects||[]).includes(p.id)?'checked':'';
       return`<label class="pi"><input type="checkbox" value="${p.id}" ${checked}> ${E(p.name)}</label>`;
-    }).join(''):`<div style="font-family:var(--mo);font-size:9px;color:var(--mu);">${noProjs}</div>`;
+    }).join(''):`<div style="font-family:var(--bo);font-size:9px;color:var(--mu);">${noProjs}</div>`;
   } else {
     ps.style.display='none';
     pg.innerHTML='';
@@ -6358,14 +6358,14 @@ function renderCustomers(){
     const projHtml=projs.length?projs.map(p=>{
       const overdue=p.end&&new Date(p.end+'T23:59:00')<new Date()&&p.status!=='Completed'&&p.status!=='Cancelled';
       return`<span class="bx" style="cursor:pointer;${overdue?'border-color:var(--rd);color:var(--rd);':''}" onclick="viewProj('${p.id}')" title="${E(p.name+(overdue?' — ATRASADO':''))}">${E(p.name)}${p.status?` <span style="opacity:.6;font-size:8px;">${p.status}</span>`:''}</span>`;
-    }).join(''):`<span style="font-family:var(--mo);font-size:9px;color:var(--mu);">${es?(t('no_projects_text')):'No projects'}</span>`;
+    }).join(''):`<span style="font-family:var(--bo);font-size:9px;color:var(--mu);">${es?(t('no_projects_text')):'No projects'}</span>`;
     return`<div class="pc" style="margin-bottom:10px;">
       <div class="pc-top">
         <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
           ${c.logo?`<img src="${c.logo}" style="height:38px;max-width:70px;object-fit:contain;border:1px solid var(--bd);background:var(--s2);padding:3px;flex-shrink:0;">`:'<div style="width:38px;height:38px;background:var(--s2);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🤝</div>'}
           <div style="flex:1;min-width:0;">
             <div style="font-family:var(--he);font-size:15px;font-weight:700;letter-spacing:1px;">${E(c.name)}</div>
-            <div style="font-family:var(--mo);font-size:9px;color:var(--mu);margin-top:2px;">
+            <div style="font-family:var(--bo);font-size:9px;color:var(--mu);margin-top:2px;">
               ${c.email?`✉ ${E(c.email)}&nbsp;&nbsp;`:''}${c.phone?`☎ ${E(c.phone)}&nbsp;&nbsp;`:''}
               ${userCnt} ${es?`usuario${userCnt!==1?'s':''}`:`user${userCnt!==1?'s':''}`}&nbsp;·&nbsp;
               ${projs.length} ${es?`proyecto${projs.length!==1?'s':''}`:`project${projs.length!==1?'s':''}`}&nbsp;·&nbsp;
@@ -6379,7 +6379,7 @@ function renderCustomers(){
         </div>
       </div>
       ${projs.length>0?`<div style="margin-top:8px;">
-        <div style="font-family:var(--mo);font-size:8px;color:var(--mu);letter-spacing:2px;margin-bottom:5px;">${t('projects_lbl')}</div>
+        <div style="font-family:var(--bo);font-size:8px;color:var(--mu);letter-spacing:2px;margin-bottom:5px;">${t('projects_lbl')}</div>
         <div style="display:flex;flex-wrap:wrap;gap:5px;">${projHtml}</div>
       </div>`:''}
       ${c.notes?`<div style="font-size:11px;color:var(--mu2);margin-top:6px;font-style:italic;">${E(c.notes)}</div>`:''}
@@ -6544,20 +6544,20 @@ document.getElementById('lin-u').addEventListener('keydown',e=>{if(e.key==='Ente
   <div class="mh"><div class="mtt" id="del-rpt-title">🗑 Eliminar Informe</div><button class="mcl" onclick="closeMO('mo-del-rpt')">✕</button></div>
   <div class="mb">
     <div style="background:rgba(224,82,82,.08);border:1px solid var(--rd);border-left:3px solid var(--rd);padding:10px 12px;margin-bottom:14px;">
-      <div style="font-family:var(--mo);font-size:9px;color:var(--rd);letter-spacing:2px;margin-bottom:4px;">⚠ <span id="del-rpt-warn">ACCIÓN IRREVERSIBLE</span></div>
+      <div style="font-family:var(--bo);font-size:9px;color:var(--rd);letter-spacing:2px;margin-bottom:4px;">⚠ <span id="del-rpt-warn">ACCIÓN IRREVERSIBLE</span></div>
       <div style="font-size:11px;color:var(--mu2);" id="del-rpt-desc">Este informe y todas sus fotos serán eliminados permanentemente.</div>
     </div>
-    <div style="font-family:var(--mo);font-size:10px;color:var(--mu);margin-bottom:14px;">
+    <div style="font-family:var(--bo);font-size:10px;color:var(--mu);margin-bottom:14px;">
       <span id="del-rpt-lbl-id">Informe:</span> <strong style="color:var(--tx);" id="del-rpt-id-lbl">—</strong>
       &nbsp;·&nbsp;
       <span id="del-rpt-lbl-date">Fecha:</span> <strong style="color:var(--tx);" id="del-rpt-date-lbl">—</strong>
     </div>
     <label id="del-rpt-lbl-pw" style="font-size:11px;line-height:1.6;"></label>
     <input type="text" id="del-rpt-pw" autocomplete="off" spellcheck="false"
-      style="width:100%;margin-top:8px;background:var(--s2);border:1px solid var(--bd);border-left:2px solid var(--rd);color:var(--rd);padding:8px;font-size:14px;font-family:var(--mo);letter-spacing:2px;outline:none;text-transform:uppercase;"
+      style="width:100%;margin-top:8px;background:var(--s2);border:1px solid var(--bd);border-left:2px solid var(--rd);color:var(--rd);padding:8px;font-size:14px;font-family:var(--bo);letter-spacing:2px;outline:none;text-transform:uppercase;"
       oninput="this.value=this.value.toUpperCase()"
       onkeydown="if(event.key==='Enter')confirmDelR()">
-    <div id="del-rpt-err" style="display:none;color:var(--rd);font-family:var(--mo);font-size:10px;margin-top:6px;letter-spacing:1px;"></div>
+    <div id="del-rpt-err" style="display:none;color:var(--rd);font-family:var(--bo);font-size:10px;margin-top:6px;letter-spacing:1px;"></div>
   </div>
   <div class="mf">
     <button class="btn bs" onclick="closeMO('mo-del-rpt')" id="del-rpt-cancel">Cancelar</button>
