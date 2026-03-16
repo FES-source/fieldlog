@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.59 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.60 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3934,6 +3934,8 @@ function renderCLR(){
     const g=document.createElement('div');
     g.innerHTML=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:3px;color:var(--mu);border-bottom:1px solid var(--bd);padding-bottom:3px;margin:10px 0 5px;text-transform:uppercase;">${E(catDisplay||cat)}</div>`;
     items.forEach(item=>{
+      // Auto-expand items that already have photos (persisted or just added)
+      if((item.photos||[]).length>0)item._expanded=true;
       const tp=item.type||'sna';
       const _yn=item.singleSel||item.sna||'';
       const hasAns=item.na||(
