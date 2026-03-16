@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.63 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.64 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2687,6 +2687,10 @@ function renderAllReports(){
 
 function rptRow(r,withProj=false){
   const photos=r.photos||[];
+  const clPhotos=(r.checklist?.items||[]).flatMap(i=>i.photos||[]);
+  const taskPhotos=(r.labor||[]).flatMap(e=>(e.tasks||[]).flatMap(t=>t.photos||[]));
+  const occPhotos=(r.occurrences||[]).flatMap(o=>o.photos||[]);
+  const totalPhotos=photos.length+clPhotos.length+taskPhotos.length+occPhotos.length;
   const clItems=r.checklist?.items||[];
   const clDone=clItems.filter(i=>i.checked).length;
   const projName=withProj?(DB.projects.find(p=>p.id===r.projId)?.name||r.projName||'—'):'';
@@ -2698,7 +2702,7 @@ function rptRow(r,withProj=false){
       ${withProj&&projName?`<div class="rr-proj">${E(projName)}</div>`:''}
       <div class="rr-summary">${r.laborCount||0} ${t('workers_label')} · ${r.taskCount||0} ${t('tasks_label')}${clItems.length?` · ☑ ${clDone}/${clItems.length}`:''}</div>
     </div>
-    ${photos.length?`<div class="rr-photo-count">📷 ${photos.length}</div>`:''}
+    ${totalPhotos?`<div class="rr-photo-count">📷 ${totalPhotos}</div>`:''}
     <div class="rr-photo-count"><span class="st-${(r.status||'draft').toLowerCase().replace(/ /g,'-')}">${tRptStatus(r.status||'Draft')}</span></div>
     <div class="rr-actions">
       ${!isCust?(()=>{const lk=isReportLocked(r);const _en=currentUser?.lang==='en';if(lk==='customer')return`<span class="bx" style="font-family:var(--mo);font-size:8px;border-color:var(--gn);color:var(--gn);">🔒 ${_en?'CLOSED':'CERRADO'}</span>`;if(lk==='approved')return`<span class="bx" style="font-family:var(--mo);font-size:8px;border-color:var(--gn);color:var(--gn);">🔒 ${_en?'CLOSED':'CERRADO'}</span>`;return`<button class="ib ed" onclick="editR('${r.id}')">✏ ${_en?'Edit':'Editar'}</button>`;})():''}
