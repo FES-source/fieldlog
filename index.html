@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.73 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.74 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1336,7 +1336,7 @@ const I18N={
     lbl_add_equip:'Agregar Equipo',lbl_add_task:'Agregar Tarea',
     lbl_add_occ:'Agregar Ocurrencia',lbl_add_mat:'Agregar Material',lbl_import_cat:'Importar Catálogo',
     no_checklist:'SIN CHECKLIST CARGADO',no_materials_yet:'SIN MATERIALES AÚN',no_templates_yet:'SIN PLANTILLAS AÚN',
-    report_id_lbl:'ID Informe',
+    report_id_lbl:'ID Informe',report_id_section:'Identificación del Informe',
     sec_weather:'Clima',sec_labor:'Mano de Obra',sec_equip:'Equipos',
     sec_tasks:'Tareas y Actividades',sec_mats:'Materiales Utilizados',
     sec_incidents:'Incidentes y Ocurrencias',sec_checklist:'Checklist de Verificación',
@@ -1675,7 +1675,7 @@ role_customer:'Cliente',
     lbl_add_equip:'Add Equipment',lbl_add_task:'Add Task',
     lbl_add_occ:'Add Occurrence',lbl_add_mat:'Add Material',lbl_import_cat:'Import Catalog',
     no_checklist:'NO CHECKLIST LOADED',no_materials_yet:'NO MATERIALS YET',no_templates_yet:'NO TEMPLATES YET',
-    report_id_lbl:'Report ID',
+    report_id_lbl:'Report ID',report_id_section:'Report Identification',
     sec_weather:'Weather',sec_labor:'Labor',sec_equip:'Equipment',
     sec_tasks:'Tasks & Activities',sec_mats:'Materials Used',
     sec_incidents:'Incidents & Occurrences',sec_checklist:'Verification Checklist',
@@ -1963,7 +1963,7 @@ role_customer:'Customer',
     cl_ph_name:'ex. Inspeção de Equipamentos',
     daily_report:'RELATÓRIO DIÁRIO DE CAMPO',report_number:'Relatório #',date:'Data',
     rejected_by:'Rejeitado por',rejection_reason:'Motivo da rejeição',
-    report_info:'Informações do Relatório',report_id_lbl:'ID Relatório',
+    report_info:'Informações do Relatório',report_id_lbl:'ID Relatório',report_id_section:'Identificação do Relatório',
     weather:'Clima',labor:'Mão de obra',equipment:'Equipamentos',
     tasks:'Tarefas e Atividades',task_description:'Descrição da tarefa',activity:'Atividades',
     materials_used:'Materiais Utilizados',incidents:'Incidentes',
@@ -2248,7 +2248,7 @@ role_customer:'Cliente',
     lbl_add_equip:'Aggiungi Attrezzatura',lbl_add_task:'Aggiungi Attività',
     lbl_add_occ:'Aggiungi Occorrenza',lbl_add_mat:'Aggiungi Materiale',lbl_import_cat:'Importa Catalogo',
     no_checklist:'NESSUNA CHECKLIST CARICATA',no_materials_yet:'NESSUN MATERIALE ANCORA',no_templates_yet:'NESSUN MODELLO ANCORA',
-    report_id_lbl:'ID Rapporto',
+    report_id_lbl:'ID Rapporto',report_id_section:'Identificazione del Rapporto',
     sec_weather:'Meteo',sec_labor:'Manodopera',sec_equip:'Attrezzatura',
     sec_tasks:'Attività',sec_mats:'Materiali Utilizzati',
     sec_incidents:'Incidenti e Occorrenze',sec_checklist:'Checklist di Verifica',
@@ -5070,7 +5070,7 @@ ${r.status==='Rejected'&&r.rejectionReason?`<div style="background:#fff0f0;borde
 <div class="content">
 
 ${!r.disabledSections?.includes('sec-job')?`
-<div class="sec-title">${pt('report_info')}</div>
+<div class="sec-title">${pt('report_id_section')}</div>
 <table>
   <tr><th>${pt('report_id_lbl')}</th><th>${pt('report_number')}</th><th>${pt('date')}</th><th>${pt('status')}</th></tr>
   <tr><td><strong>${r.displayName||r.id}</strong></td><td>#${r.num||'—'}</td><td>${r.date||'—'}</td><td style="color:${statusColor};font-weight:700;">${(RSTATUS_ALL[pdfLang]||RSTATUS_ES)[r.status]||r.status||'—'}</td></tr>
