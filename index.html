@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.52 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.53 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3998,13 +3998,19 @@ function renderCLR(){
           <span class="cli-cat">${E(item.category)}</span>
           <button style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:11px;padding:0 4px;" onclick="event.stopPropagation();togCLI('${item.id}')" title="Fotos / Nota">📷</button>
         </div>
-        <div class="cli-extras" style="${item._expanded?'':'display:none;'}">
+        <div class="cli-extras" style="${(item._expanded||(item.photos||[]).length>0)?'':'display:none;'}">
           <div class="cli-photo-zone" style="position:relative;">
             <input type="file" accept="image/*" multiple onchange="addCLIPhoto('${item.id}',event)">
             📷 ADJUNTAR FOTOS — CLICK PARA VER/AÑADIR DESCRIPCIÓN
           </div>
           <div class="cli-photos" id="clip-${item.id}" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
-            ${(item.photos||[]).map((p,pi)=>{const cap=(item.photoCaptions||[])[pi]||'';return`<div class="cli-pt" onclick="openCLILB('${item.id}',${pi})"><img src="${p}" style="width:100%;height:100%;object-fit:cover;"><div class="rmv" onclick="event.stopPropagation();rmCLIPhoto('${item.id}',${pi})">🗑</div>${cap?`<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);font-size:8px;color:#ddd;padding:2px 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${cap}</div>`:''}</div>`;}).join('')}
+            ${(item.photos||[]).map((p,pi)=>{
+              const cap=(item.photoCaptions||[])[pi]||'';
+              const isUp=!!(item._uploading||[])[pi];
+              const spinnerHtml=isUp?'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);font-family:var(--mo);font-size:7px;color:var(--am);letter-spacing:1px;text-align:center;">⬆<br>'+t('uploading_label')+'</div>':'';
+              const rmvHtml=isUp?'':'<div class="rmv" onclick="event.stopPropagation();rmCLIPhoto(\''+item.id+'\','+pi+')">🗑</div>'+(cap?'<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);font-size:8px;color:#ddd;padding:2px 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+cap+'</div>':'');
+              return'<div class="cli-pt"'+(isUp?'':' onclick="openCLILB(\''+item.id+'\','+pi+')"')+' style="'+(isUp?'cursor:default;':'')+'"><img src="'+p+'" style="width:100%;height:100%;object-fit:cover;'+(isUp?'opacity:0.5;':'')+'">'+spinnerHtml+rmvHtml+'</div>';
+            }).join('')}
           </div>
           <input type="text" placeholder="${t('note_item_ph')}" value="${E(item.note||'')}" onchange="setCLINote('${item.id}',this.value)" style="margin-top:7px;font-size:11px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:4px 7px;width:100%;outline:none;">
         </div>`;
