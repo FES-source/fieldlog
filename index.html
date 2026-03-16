@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.53 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.54 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -4141,6 +4141,12 @@ function toggleCI(id){
   updCLP();updCLB();
 }
 async function clearActiveCL(){
+  // Delete all photos from Storage before clearing
+  if(activeCL){
+    (activeCL.items||[]).forEach(item=>{
+      (item.photos||[]).forEach(p=>deleteFromStorage(p));
+    });
+  }
   activeCL=null;
   renderCLR();
   const clrBtn=document.getElementById('btn-clear-cl');
