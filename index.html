@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.57 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.59 | Build: 2026-03-16 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3349,7 +3349,12 @@ function editR(id){
   (r.occurrences||[]).forEach(o=>addOCC(o.type,o.time,o.desc,o.action,o.photos||[],o.captions||[]));
   if(!(r.occurrences?.length)&&r.incDesc)addOCC(r.incType||'Near miss',r.incTime||'',r.incDesc,r.incAct||'');
   // Checklist
-  if(r.checklist){activeCL=JSON.parse(JSON.stringify(r.checklist));renderCLR();}
+  if(r.checklist){
+    activeCL=JSON.parse(JSON.stringify(r.checklist));
+    // Auto-expand items that have photos saved
+    (activeCL.items||[]).forEach(item=>{if((item.photos||[]).length>0)item._expanded=true;});
+    renderCLR();
+  }
   // Photos — restore using new reportPhotos array
   reportPhotos=(r.photoData||[]);
   if(!reportPhotos.length&&r.photos?.length){
@@ -3997,7 +4002,7 @@ function renderCLR(){
           <div style="flex:1;min-width:0;">
             <div class="cli-txt">${E(item.text)}</div>
             <div style="margin-top:5px;">${ansHtml}</div>
-            ${unanswered?`<div style="font-family:var(--mo);font-size:8px;color:var(--rd);letter-spacing:1px;margin-top:3px;">⚠ ${t('required_label')}</div>`:''}
+            ${unanswered?`<div class="cli-req" style="font-family:var(--mo);font-size:8px;color:var(--rd);letter-spacing:1px;margin-top:3px;">⚠ ${t('required_label')}</div>`:''}
           </div>
           <span class="cli-cat">${E(keyToCat(item.category))}</span>
           <button style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:11px;padding:0 4px;margin-top:1px;" onclick="event.stopPropagation();togCLI('${item.id}')" title="Fotos / Nota">📷</button>
@@ -4063,7 +4068,27 @@ function setCLIEvidence(id,files){
 function setSNA(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)return;item.sna=val;item.checked=true;renderCLR();}
 function setCLISingle(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)return;item.singleSel=val;item.checked=true;renderCLR();}
 function toggleCLIMulti(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)return;if(!item.multiSel)item.multiSel=[];const idx=item.multiSel.indexOf(val);if(idx>-1)item.multiSel.splice(idx,1);else item.multiSel.push(val);item.checked=item.multiSel.length>0;renderCLR();}
-function setCLIText(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)return;item.textAns=val;item.checked=!!val.trim();}
+function setCLIText(id,val){const item=activeCL.items.find(i=>i.id===id);if(!item)return;item.textAns=val;item.checked=!!val.trim();updCLIRow(id);updCLP();updCLB();}
+// Update a single row's visual state (border, icon, required label) without full re-render
+function updCLIRow(id){
+  const item=activeCL?.items?.find(i=>i.id===id);if(!item)return;
+  const row=document.querySelector('.cli[data-id="'+id+'"]');if(!row)return;
+  const tp=item.type||'yesno';
+  const hasAns=item.na||(
+    tp==='yesno'||tp==='sna'?!!(item.singleSel||item.sna):
+    tp==='text'?!!(item.textAns||'').trim():
+    tp==='multi'?(item.multiSel||[]).length>0:
+    tp==='evidence'?(item.photos||[]).length>0:
+    !!item.singleSel
+  );
+  const top=row.querySelector('.cli-top');
+  const cb=row.querySelector('.cli-cb');
+  const req=row.querySelector('.cli-req');
+  if(top){top.style.borderLeft=hasAns?'2px solid var(--gn)':'2px solid var(--rd)';}
+  if(cb){cb.style.color=hasAns?'var(--gn)':'var(--rd)';cb.textContent=hasAns?'✓':'○';}
+  if(req){req.style.display=hasAns?'none':'';}
+  if(hasAns)row.classList.add('ck');else row.classList.remove('ck');
+}
 function addCLIOpt(id){const item=activeCL.items.find(i=>i.id===id);if(!item)return;const v=prompt(t('new_option_prompt'));if(!v)return;if(!item.opts)item.opts=activeCL.snaLabels?[...activeCL.snaLabels]:['Si','No','N/A'];item.opts.push(v.trim());renderCLR();}
 function togCLI(id){
   if(!activeCL)return;
