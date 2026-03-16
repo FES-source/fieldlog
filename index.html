@@ -1,4 +1,4 @@
-<!-- FieldLog v1.6.51 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
+<!-- FieldLog v1.6.52 | Build: 2026-03-14 | Firebase + PWA | 4 Languages — Complete i18n Architecture -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3926,7 +3926,14 @@ function renderCLR(){
     g.innerHTML=`<div style="font-family:var(--mo);font-size:9px;letter-spacing:3px;color:var(--mu);border-bottom:1px solid var(--bd);padding-bottom:3px;margin:10px 0 5px;text-transform:uppercase;">${E(catDisplay||cat)}</div>`;
     items.forEach(item=>{
       const tp=item.type||'sna';
-      const hasAns=tp==='sna'?!!item.sna:tp==='text'?!!item.textAns:tp==='multi'?(item.multiSel||[]).length>0:!!item.singleSel;
+      const _yn=item.singleSel||item.sna||'';
+      const hasAns=item.na||(
+        tp==='yesno'||tp==='sna'?!!_yn:
+        tp==='text'?!!(item.textAns||'').trim():
+        tp==='multi'?(item.multiSel||[]).length>0:
+        tp==='evidence'?(item.photos||[]).length>0:
+        !!item.singleSel
+      );
       const unanswered=!hasAns;
       const row=document.createElement('div');
       row.className='cli'+(item.checked?' ck':'');
@@ -4076,14 +4083,17 @@ function addCLIPhoto(id,e){
       item.photos.push(ev.target.result);
       if(!item.photoCaptions)item.photoCaptions=[];
       item.photoCaptions.push('');
+      if(!item._uploading)item._uploading=[];
+      item._uploading[idx]=true;
       refreshCLIPhotos(id);
       // Upload immediately
       const rptId=curRptId||getUploadSessionId();
       const safeId=(id||'cl').replace(/[^a-zA-Z0-9]/g,'_');
       (async()=>{
-        const path=`reports/${rptId}/checklist/${safeId}/p${idx}_${Date.now()}.jpg`;
+        const path=safePath(`reports/${rptId}/checklist/${safeId}/p${idx}_${Date.now()}.jpg`);
         const url=await uploadPhotoWithFallback(ev.target.result,path,item.photos,idx);
-        if(url)refreshCLIPhotos(id);
+        item._uploading[idx]=false;
+        refreshCLIPhotos(id);
       })();
     };r.readAsDataURL(f);
   });
@@ -4102,7 +4112,11 @@ function refreshCLIPhotos(id){
   const c=document.getElementById('clip-'+id);if(!c)return;
   c.innerHTML=(item.photos||[]).map((p,pi)=>{
     const cap=(item.photoCaptions||[])[pi]||'';
-    return`<div class="cli-pt" onclick="openCLILB('${id}',${pi})"><img src="${p}" style="width:100%;height:100%;object-fit:cover;"><div class="rmv" onclick="event.stopPropagation();rmCLIPhoto('${id}',${pi})">🗑</div>${cap?`<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);font-size:8px;color:#ddd;padding:2px 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${cap}</div>`:''}</div>`;
+    const isUp=!!(item._uploading||[])[pi];
+    const spinnerHtml=isUp
+      ?'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);font-family:var(--mo);font-size:7px;color:var(--am);letter-spacing:1px;text-align:center;">⬆<br>'+t('uploading_label')+'</div>'
+      :'<div class="rmv" onclick="event.stopPropagation();rmCLIPhoto(\''+id+'\','+pi+')">🗑</div>'+(cap?'<div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);font-size:8px;color:#ddd;padding:2px 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+cap+'</div>':'');
+    return'<div class="cli-pt"'+(isUp?'':' onclick="openCLILB(\''+id+'\','+pi+')"')+' style="'+(isUp?'cursor:default;':'')+'"><img src="'+p+'" style="width:100%;height:100%;object-fit:cover;'+(isUp?'opacity:0.5;':'')+'">'+spinnerHtml+'</div>';
   }).join('');
   // Make sure the extras panel is visible when there are photos
   const row=document.querySelector('.cli[data-id="'+id+'"]');
